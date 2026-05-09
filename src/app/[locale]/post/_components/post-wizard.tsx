@@ -428,35 +428,30 @@ function Step1({
       {/* Price + currency + period */}
       <div>
         <label className={labelCls}>{t("priceLabel")}</label>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_7rem_8rem] gap-2">
           <input
             type="number"
             min={0}
+            inputMode="numeric"
             placeholder="0"
             value={draft.price}
             onChange={(e) => update({ price: e.target.value })}
-            className={[inputCls, "flex-1"].join(" ")}
+            className={[inputCls, "min-w-0 w-full"].join(" ")}
           />
           <select
             value={draft.currency}
             onChange={(e) => update({ currency: e.target.value as CurrencyKey })}
             aria-label={t("currencyLabel")}
-            className={[
-              inputCls,
-              "w-24 cursor-pointer",
-            ].join(" ")}
+            className={[inputCls, "cursor-pointer w-full"].join(" ")}
           >
-            <option value="USD">USD</option>
             <option value="SDG">SDG</option>
+            <option value="USD">USD</option>
           </select>
           <select
             value={draft.period}
             onChange={(e) => update({ period: e.target.value as PeriodKey })}
             aria-label={t("periodLabel")}
-            className={[
-              inputCls,
-              "w-32 cursor-pointer",
-            ].join(" ")}
+            className={[inputCls, "cursor-pointer w-full"].join(" ")}
           >
             <option value="month">{t("pricePeriodMonth")}</option>
             <option value="year">{t("pricePeriodYear")}</option>

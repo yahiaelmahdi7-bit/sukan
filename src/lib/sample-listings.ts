@@ -100,7 +100,61 @@ export type Listing = {
   ownerNameAr: string;
   ownerJoinedYear: number;
   photoSlots: number;
+  imageUrl?: string;
 };
+
+// Curated Unsplash images per property type. Hand-picked to avoid generic
+// Western suburbia and lean toward warm-toned, MENA-friendly aesthetics.
+// Replace with real photos uploaded to Supabase Storage when listings go live.
+const STOCK_IMAGES: Record<PropertyType, string[]> = {
+  apartment: [
+    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=1200&auto=format&fit=crop&q=80",
+  ],
+  house: [
+    "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&auto=format&fit=crop&q=80",
+  ],
+  villa: [
+    "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&auto=format&fit=crop&q=80",
+  ],
+  studio: [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&auto=format&fit=crop&q=80",
+  ],
+  shop: [
+    "https://images.unsplash.com/photo-1567521464027-f127ff144326?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=1200&auto=format&fit=crop&q=80",
+  ],
+  office: [
+    "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200&auto=format&fit=crop&q=80",
+  ],
+  land: [
+    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&auto=format&fit=crop&q=80",
+  ],
+  warehouse: [
+    "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=1200&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=1200&auto=format&fit=crop&q=80",
+  ],
+};
+
+export function getListingImage(listing: Listing): string {
+  if (listing.imageUrl) return listing.imageUrl;
+  const pool = STOCK_IMAGES[listing.propertyType];
+  if (!pool || pool.length === 0) return STOCK_IMAGES.apartment[0];
+  const seed = Array.from(listing.id).reduce(
+    (s, c) => s + c.charCodeAt(0),
+    0,
+  );
+  return pool[seed % pool.length];
+}
 
 // 22 seed listings spanning all 18 Sudan states.
 // Prices anchored to public 2026 Sudan property market references; bilingual content

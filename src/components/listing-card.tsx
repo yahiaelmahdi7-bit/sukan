@@ -1,12 +1,15 @@
+import Image from "next/image";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import SukanMark from "@/components/sukan-mark";
+import FavoriteButton from "@/components/favorite-button";
 import {
+  getListingImage,
   getLocaleCity,
   getLocaleTitle,
   type Listing,
 } from "@/lib/sample-listings";
 import type { Locale } from "@/i18n/routing";
+
 
 export default function ListingCard({ listing }: { listing: Listing }) {
   const locale = useLocale() as Locale;
@@ -20,22 +23,29 @@ export default function ListingCard({ listing }: { listing: Listing }) {
       href={`/listings/${listing.id}`}
       className="group block overflow-hidden rounded-[var(--radius-card)] border border-gold/15 bg-earth-soft transition duration-200 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-2xl hover:shadow-black/30"
     >
-      <div className="card-watermark relative aspect-[4/3] w-full">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <SukanMark
-            size={120}
-            monochrome="gold"
-            className="opacity-15 transition group-hover:opacity-25"
-          />
-        </div>
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-earth">
+        <Image
+          src={getListingImage(listing)}
+          alt={title}
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition duration-500 group-hover:scale-[1.04]"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-t from-earth/60 via-earth/0 to-earth/0"
+        />
         {listing.tier === "featured" && (
           <span className="absolute top-3 ltr:left-3 rtl:right-3 rounded-pill bg-gold px-3 py-1 text-xs font-semibold uppercase tracking-wider text-earth">
             {t("listing.featured")}
           </span>
         )}
-        <span className="absolute top-3 ltr:right-3 rtl:left-3 rounded-pill bg-earth/80 px-3 py-1 text-xs uppercase tracking-wider text-parchment backdrop-blur-sm">
+        <span className="absolute bottom-3 ltr:right-3 rtl:left-3 rounded-pill bg-earth/80 px-3 py-1 text-xs uppercase tracking-wider text-parchment backdrop-blur-sm">
           {t(`propertyType.${listing.propertyType}`)}
         </span>
+        <div className="absolute top-3 ltr:right-3 rtl:left-3 z-10 pointer-events-auto">
+          <FavoriteButton listingId={listing.id} size="sm" />
+        </div>
       </div>
 
       <div className="p-5">

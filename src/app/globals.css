@@ -14,9 +14,19 @@
   --color-terracotta-deep: #9d2f0f;
   --color-gold: #c8873a;
   --color-gold-bright: #e0a857;
-  --color-sand: #2b231a;
+  --color-gold-dk: #a06520;
+  --color-sand: #f0e6d0;
+  --color-sand-dk: #d6c4a0;
   --color-mute: #5a4f42;
   --color-mute-soft: #8c7c69;
+
+  /* Light-mode semantic tokens */
+  --color-cream: #fdf8f0;
+  --color-cream-deep: #f8efdb;
+  --color-card: #ffffff;
+  --color-ink: #12100c;
+  --color-ink-soft: #5a3c20;
+  --color-ink-mid: #7a5530;
 
   --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-lato), system-ui, -apple-system, sans-serif;
@@ -32,12 +42,12 @@
    ─────────────────────────────────────────────────────────────── */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
-  background: var(--color-earth);
-  color: var(--color-parchment);
+  background: var(--color-cream);
+  color: var(--color-ink);
 }
 
 html[dir="rtl"] {
@@ -49,8 +59,12 @@ html[dir="ltr"] {
 }
 
 body {
-  background: var(--color-earth);
-  color: var(--color-parchment);
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(circle at 12% -8%, rgba(232, 184, 75, 0.10), transparent 42%),
+    radial-gradient(circle at 92% 6%, rgba(200, 64, 26, 0.06), transparent 38%);
+  background-attachment: fixed;
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -73,6 +87,16 @@ html[dir="rtl"] .font-display {
   color: var(--color-earth);
 }
 
+.bg-cream-grain {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(rgba(122, 85, 48, 0.06) 1px, transparent 1px),
+    radial-gradient(rgba(200, 135, 58, 0.05) 1px, transparent 1px);
+  background-size: 16px 16px, 24px 24px;
+  background-position: 0 0, 8px 8px;
+  color: var(--color-ink);
+}
+
 .wave-divider {
   display: block;
   width: 100%;
@@ -86,7 +110,7 @@ html[dir="rtl"] .font-display {
   background-color: var(--color-sand);
   background-image: linear-gradient(
     135deg,
-    rgba(200, 135, 58, 0.08) 0%,
+    rgba(200, 135, 58, 0.12) 0%,
     transparent 60%
   );
   position: relative;

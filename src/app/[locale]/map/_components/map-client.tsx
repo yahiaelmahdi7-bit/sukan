@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { MapMarker } from "@/components/leaflet-map";
+import type { MapMarker, TileSet } from "@/components/leaflet-map";
 
 const LeafletMap = dynamic(() => import("@/components/leaflet-map"), {
   ssr: false,
@@ -21,12 +21,16 @@ export default function MapClient({
   markers,
   height = "100%",
   interactive = true,
+  tileSet,
+  onMarkerClick,
 }: {
   center: [number, number];
   zoom: number;
   markers: MapMarker[];
   height?: string;
   interactive?: boolean;
+  tileSet?: TileSet;
+  onMarkerClick?: (id: string) => void;
 }) {
   return (
     <LeafletMap
@@ -35,6 +39,8 @@ export default function MapClient({
       markers={markers}
       height={height}
       interactive={interactive}
+      tileSet={tileSet}
+      onMarkerClick={onMarkerClick}
     />
   );
 }

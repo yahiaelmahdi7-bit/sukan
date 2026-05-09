@@ -1,7 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { Heart } from "lucide-react";
 import SukanMark from "@/components/sukan-mark";
 import LocaleToggle from "@/components/locale-toggle";
+import SavedNavBadge from "@/components/saved-nav-badge";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/[locale]/(auth)/actions";
 
@@ -35,10 +37,19 @@ export default async function Navbar() {
         <Link
           href="/"
           className="flex items-center gap-3 text-parchment hover:text-gold-bright transition"
+          title="Sukan · سُكَن"
         >
-          <SukanMark size={36} title={brand("name")} />
-          <span className="font-display text-2xl tracking-wide">
-            {brand("name")}
+          <SukanMark size={40} title={brand("name")} />
+          <span className="flex flex-col leading-none">
+            <span
+              className="font-display text-xl tracking-wide"
+              style={{ fontFamily: "var(--font-arabic)" }}
+            >
+              سُكَن
+            </span>
+            <span className="font-display text-sm italic text-mute-soft tracking-wider">
+              Sukan
+            </span>
           </span>
         </Link>
 
@@ -48,6 +59,14 @@ export default async function Navbar() {
             className="text-sm text-parchment hover:text-gold-bright transition"
           >
             {t("browse")}
+          </Link>
+          <Link
+            href="/saved"
+            className="relative flex items-center gap-1.5 text-sm text-parchment hover:text-gold-bright transition"
+          >
+            <Heart size={14} strokeWidth={1.8} aria-hidden />
+            {t("saved")}
+            <SavedNavBadge />
           </Link>
           <Link
             href="/post"

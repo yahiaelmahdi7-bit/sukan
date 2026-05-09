@@ -10,6 +10,7 @@ import ListingCard from "@/components/listing-card";
 import { sampleListings, getListingById, type Listing } from "@/lib/sample-listings";
 import ListingLocationMap from "./_components/listing-location-map";
 import InquiryButton from "@/components/inquiry-button";
+import StaySafeCard from "@/components/stay-safe-card";
 
 /* ─────────────────────────────────────────────────────────
    Metadata
@@ -304,6 +305,7 @@ export default async function ListingDetailPage({
                 listing={listing}
                 className="rounded-[var(--radius-pill)] border border-gold/30 bg-earth-soft hover:bg-gold/10 text-parchment font-medium px-5 py-3 text-sm transition-colors"
               />
+              <StaySafeCard />
             </div>
           </div>
 

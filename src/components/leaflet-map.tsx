@@ -1,12 +1,12 @@
 'use client';
 
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type * as L from 'leaflet';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type MarkerVariant = 'state' | 'listing' | 'pin';
+export type MarkerVariant = 'state' | 'listing' | 'pin' | 'priceLabel';
 
 export interface MapMarker {
   id: string;
@@ -17,7 +17,12 @@ export interface MapMarker {
   count?: number;
   /** Popup HTML string — used for listing markers */
   popupHtml?: string;
+  // priceLabel variant extras
+  priceLabel?: string;
+  tone?: 'rent' | 'sale' | 'featured';
 }
+
+export type TileSet = 'satellite' | 'street';
 
 export interface LeafletMapProps {
   center: [number, number];
@@ -30,6 +35,10 @@ export interface LeafletMapProps {
   /** When false, disables zoom/pan — good for static previews */
   interactive?: boolean;
   className?: string;
+  /** Tile layer to use: 'satellite' (Esri) or 'street' (OSM). Default: 'street' */
+  tileSet?: TileSet;
+  /** Called when a priceLabel variant marker is clicked, with the marker id */
+  onMarkerClick?: (id: string) => void;
 }
 
 // ─── Marker icon HTML helpers ─────────────────────────────────────────────────
@@ -125,6 +134,85 @@ function pinIconHtml(): string {
   </div>`;
 }
 
+function priceLabelIconHtml(priceLabel: string, tone: 'rent' | 'sale' | 'featured'): string {
+  let bg: string;
+  let color: string;
+  let prefix: string;
+  let animClass: string;
+
+  switch (tone) {
+    case 'rent':
+      bg = 'linear-gradient(135deg, #2A8B4F, #1A6B3A)';
+      color = '#FDF8F0';
+      prefix = '';
+      animClass = '';
+      break;
+    case 'sale':
+      bg = 'linear-gradient(135deg, #E55A30, #C8401A)';
+      color = '#FDF8F0';
+      prefix = '';
+      animClass = '';
+      break;
+    case 'featured':
+    default:
+      bg = 'linear-gradient(135deg, #E8B84B, #C8873A)';
+      color = '#12100C';
+      prefix = '★ ';
+      animClass = 'sukan-pin-pulse';
+      break;
+  }
+
+  const text = `${prefix}${priceLabel}`;
+
+  return `<div class="${animClass}" style="
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    filter:drop-shadow(0 3px 10px rgba(0,0,0,0.55));
+    cursor:pointer;
+  ">
+    <div class="sukan-price-pin" style="
+      background:${bg};
+      color:${color};
+      font-size:11px;
+      font-weight:700;
+      font-family:system-ui,-apple-system,sans-serif;
+      letter-spacing:0.02em;
+      white-space:nowrap;
+      min-width:64px;
+      padding:6px 12px;
+      border-radius:999px;
+      text-align:center;
+      border:1.5px solid rgba(255,255,255,0.25);
+      line-height:1.2;
+      transition:transform 0.15s ease, box-shadow 0.15s ease;
+    ">${text}</div>
+    <div style="
+      width:0;
+      height:0;
+      border-left:5px solid transparent;
+      border-right:5px solid transparent;
+      border-top:7px solid ${tone === 'rent' ? '#1A6B3A' : tone === 'sale' ? '#C8401A' : '#C8873A'};
+      margin-top:-1px;
+    "></div>
+  </div>`;
+}
+
+// ─── Tile layer URLs ───────────────────────────────────────────────────────────
+
+const TILE_LAYERS = {
+  satellite: {
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    maxZoom: 19,
+  },
+  street: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+  },
+} as const;
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function LeafletMap({
@@ -136,21 +224,23 @@ export default function LeafletMap({
   height = '400px',
   interactive = true,
   className = '',
+  tileSet = 'street',
+  onMarkerClick,
 }: LeafletMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const [activeTile, setActiveTile] = useState<TileSet>(tileSet);
+  // Keep a ref in sync so the toggle button closure always sees the latest value
+  const activeTileRef = useRef<TileSet>(tileSet);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Leaflet is CJS/browser-only — dynamic import to avoid SSR
     let map: L.Map;
 
     (async () => {
-      // Leaflet ships CJS with a `.default` re-export in ESM interop,
-      // but the @types/leaflet package types the namespace directly.
-      // We import the whole module and use it as the namespace.
       const leafletModule = await import('leaflet');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const L = (leafletModule.default ?? leafletModule) as typeof import('leaflet');
@@ -172,16 +262,14 @@ export default function LeafletMap({
 
       mapRef.current = map;
 
-      // OpenStreetMap tiles — dark-friendly "Stadia Alidade Smooth Dark"
-      // Falls back to OSM standard which is light; we overlay a CSS tint below
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
+      // Initial tile layer
+      const cfg = TILE_LAYERS[activeTileRef.current];
+      tileLayerRef.current = L.tileLayer(cfg.url, {
+        attribution: cfg.attribution,
+        maxZoom: cfg.maxZoom,
       }).addTo(map);
 
-      // Add markers
-      addMarkers(L, map, markers, draggable, onMarkerDrag);
+      addMarkers(L, map, markers, draggable, onMarkerDrag, onMarkerClick);
     })();
 
     return () => {
@@ -189,10 +277,29 @@ export default function LeafletMap({
         mapRef.current.remove();
         mapRef.current = null;
         markersRef.current = [];
+        tileLayerRef.current = null;
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Swap tile layer when activeTile changes (after initial mount)
+  useEffect(() => {
+    activeTileRef.current = activeTile;
+    if (!mapRef.current || !tileLayerRef.current) return;
+    (async () => {
+      const leafletModule = await import('leaflet');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const L = (leafletModule.default ?? leafletModule) as typeof import('leaflet');
+      tileLayerRef.current?.remove();
+      const cfg = TILE_LAYERS[activeTile];
+      tileLayerRef.current = L.tileLayer(cfg.url, {
+        attribution: cfg.attribution,
+        maxZoom: cfg.maxZoom,
+      }).addTo(mapRef.current!);
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTile]);
 
   // Re-sync markers when they change (without remounting the whole map)
   useEffect(() => {
@@ -201,10 +308,9 @@ export default function LeafletMap({
       const leafletModule = await import('leaflet');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const L = (leafletModule.default ?? leafletModule) as typeof import('leaflet');
-      // Remove existing markers
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
-      addMarkers(L, mapRef.current!, markers, draggable, onMarkerDrag);
+      addMarkers(L, mapRef.current!, markers, draggable, onMarkerDrag, onMarkerClick);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markers]);
@@ -215,6 +321,7 @@ export default function LeafletMap({
     markers: MapMarker[],
     draggable: boolean,
     onMarkerDrag?: (pos: [number, number]) => void,
+    onMarkerClick?: (id: string) => void,
   ) {
     markers.forEach((m) => {
       let iconHtml: string;
@@ -235,6 +342,18 @@ export default function LeafletMap({
           iconAnchor = [12, 12];
           popupAnchor = [0, -16];
           break;
+        case 'priceLabel': {
+          const label = m.priceLabel ?? '';
+          const tone = m.tone ?? 'sale';
+          iconHtml = priceLabelIconHtml(label, tone);
+          // Width is dynamic; use a wide enough default. The icon itself
+          // is absolutely positioned via the anchor — anchor at horizontal
+          // center + bottom of the downward triangle pointer.
+          iconSize = [100, 40];
+          iconAnchor = [50, 40];
+          popupAnchor = [0, -44];
+          break;
+        }
         case 'pin':
         default:
           iconHtml = pinIconHtml();
@@ -293,13 +412,19 @@ export default function LeafletMap({
         });
       }
 
-      if (m.href && m.variant === 'state') {
+      // Click handling — priceLabel variant fires callback; state variant navigates
+      if (m.variant === 'priceLabel' && onMarkerClick) {
+        marker.on('click', () => {
+          onMarkerClick(m.id);
+        });
+        marker.on('add', () => {
+          const el = marker.getElement();
+          if (el) el.style.cursor = 'pointer';
+        });
+      } else if (m.href && m.variant === 'state') {
         marker.on('click', () => {
           window.location.href = m.href!;
         });
-        // Cursor affordance
-        const el = marker.getElement?.();
-        if (el) el.style.cursor = 'pointer';
         marker.on('add', () => {
           const el = marker.getElement();
           if (el) el.style.cursor = 'pointer';
@@ -311,9 +436,22 @@ export default function LeafletMap({
     });
   }
 
+  // Public flyTo — exposed via a callback ref pattern used by MapWithPanel
+  // We expose this via a data attribute on the container so MapWithPanel can
+  // call it without needing a full forwardRef dance.
+  useEffect(() => {
+    if (!containerRef.current) return;
+    // Attach a callable flyTo to the DOM node so parent components can call it
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (containerRef.current as any).__sukanFlyTo = (lat: number, lng: number, z = 14) => {
+      if (mapRef.current) {
+        mapRef.current.flyTo([lat, lng], z, { duration: 0.8 });
+      }
+    };
+  });
+
   return (
     <>
-      {/* Leaflet tooltip/popup overrides — injected into the page head via a style tag */}
       <style>{`
         .sukan-tooltip .leaflet-tooltip {
           background: transparent !important;
@@ -353,12 +491,56 @@ export default function LeafletMap({
           background: transparent;
           border: none;
         }
+        /* Price-label pin hover */
+        .sukan-price-pin:hover {
+          transform: scale(1.15) translateY(-3px);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+        /* Featured pulse animation */
+        @keyframes sukanPinPulse {
+          0%   { transform: scale(1);    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.55)); }
+          50%  { transform: scale(1.06); filter: drop-shadow(0 5px 16px rgba(232,184,75,0.55)); }
+          100% { transform: scale(1);    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.55)); }
+        }
+        .sukan-pin-pulse {
+          animation: sukanPinPulse 2.4s ease-in-out infinite;
+        }
       `}</style>
-      <div
-        ref={containerRef}
-        style={{ height, width: '100%' }}
-        className={`rounded-[var(--radius-card)] overflow-hidden ${className}`}
-      />
+      <div style={{ position: 'relative', height, width: '100%' }}>
+        <div
+          ref={containerRef}
+          style={{ height: '100%', width: '100%' }}
+          className={`rounded-[var(--radius-card)] overflow-hidden ${className}`}
+        />
+        {/* Layer toggle button — bottom-end, only shown in interactive mode */}
+        {interactive && (
+          <button
+            onClick={() => setActiveTile((prev) => prev === 'satellite' ? 'street' : 'satellite')}
+            style={{
+              position: 'absolute',
+              bottom: '16px',
+              right: '16px',
+              zIndex: 1000,
+              background: 'rgba(18,16,12,0.88)',
+              border: '1.5px solid rgba(200,135,58,0.55)',
+              color: '#E0A857',
+              fontFamily: 'system-ui,-apple-system,sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              padding: '6px 14px',
+              borderRadius: '999px',
+              cursor: 'pointer',
+              backdropFilter: 'blur(6px)',
+              whiteSpace: 'nowrap',
+              transition: 'background 0.15s, border-color 0.15s',
+            }}
+            aria-label={activeTile === 'satellite' ? 'Switch to street map' : 'Switch to satellite view'}
+          >
+            {activeTile === 'satellite' ? '🗺 Street' : '🛰 Satellite'}
+          </button>
+        )}
+      </div>
     </>
   );
 }

@@ -49,30 +49,30 @@ export default async function HomePage({
         {/* ─────────────────────────────────────────────────────────
             1. HERO
         ───────────────────────────────────────────────────────── */}
-        <section className="relative bg-earth overflow-hidden">
+        <section className="relative bg-cream overflow-hidden">
           {/* Ambient gold haze — top-end corner */}
           <div
             aria-hidden
             className="pointer-events-none absolute -top-32 end-0 w-[600px] h-[600px] rounded-full"
             style={{
               background:
-                "radial-gradient(ellipse at 70% 30%, rgba(200,135,58,0.18) 0%, transparent 70%)",
+                "radial-gradient(ellipse at 70% 30%, rgba(200,135,58,0.14) 0%, transparent 70%)",
             }}
           />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             {/* Eyebrow */}
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold-dk">
               {t("brand.tagline")}
             </p>
 
             {/* Headline */}
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-tight text-parchment max-w-3xl mb-4">
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-tight text-ink max-w-3xl mb-4">
               {t("hero.tenantTitle")}
             </h1>
 
             {/* Subtitle */}
-            <p className="text-lg text-mute-soft max-w-xl mb-12">
+            <p className="text-lg text-ink-mid max-w-xl mb-12">
               {t("hero.tenantSubtitle")}
             </p>
 
@@ -83,26 +83,26 @@ export default async function HomePage({
                 <HeroSearch />
 
                 {/* AI match — opens chat modal in-place */}
-                <AIMatchButton className="inline-flex items-center gap-2 self-start rounded-pill border border-gold/40 px-5 py-2.5 text-sm font-medium text-gold transition hover:border-gold hover:bg-gold/10">
+                <AIMatchButton className="inline-flex items-center gap-2 self-start rounded-pill border border-gold/40 px-5 py-2.5 text-sm font-medium text-gold-dk transition hover:border-gold hover:bg-gold/10">
                   {t("hero.aiMatchTeaser")}
                 </AIMatchButton>
               </div>
 
               {/* Right: landlord CTA (2/5) */}
               <div className="lg:col-span-2 relative">
-                <div className="bg-parchment text-earth rounded-[var(--radius-card)] p-6 overflow-hidden">
+                <div className="bg-cream-deep text-ink rounded-[var(--radius-card)] p-6 overflow-hidden border border-terracotta/15 shadow-[0_8px_28px_rgba(18,16,12,0.08)]">
                   {/* Watermark logo */}
                   <SukanMark
                     monochrome="terracotta"
                     size={48}
-                    className="absolute top-4 end-4 opacity-30"
+                    className="absolute top-4 end-4 opacity-25"
                   />
 
-                  <h2 className="font-display text-2xl md:text-3xl leading-snug text-earth mb-3 pe-12">
+                  <h2 className="font-display text-2xl md:text-3xl leading-snug text-ink mb-3 pe-12">
                     {t("hero.landlordTitle")}
                   </h2>
 
-                  <p className="text-mute text-sm leading-relaxed mb-6">
+                  <p className="text-ink-soft text-sm leading-relaxed mb-6">
                     {t("hero.landlordSubtitle")}
                   </p>
 
@@ -122,7 +122,7 @@ export default async function HomePage({
                   <div className="text-center">
                     <Link
                       href="/post"
-                      className="text-xs text-mute hover:text-earth transition-colors"
+                      className="text-xs text-ink-mid hover:text-ink transition-colors"
                     >
                       {t("hero.orPostWeb")}
                     </Link>

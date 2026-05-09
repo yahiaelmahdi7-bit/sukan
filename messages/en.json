@@ -1,11 +1,13 @@
 {
   "brand": {
     "name": "Sukan",
-    "tagline": "Sudan's home for housing",
+    "tagline": "Where every home finds its family",
+    "taglineSubtle": "Sudan's home for housing",
     "languageToggle": "العربية"
   },
   "nav": {
     "browse": "Browse",
+    "saved": "Saved",
     "post": "Post a property",
     "diaspora": "For diaspora",
     "about": "About",
@@ -289,7 +291,15 @@
     "viewState": "Browse {state} →",
     "listingsHere": "{count, plural, =0 {no listings} one {1 listing} other {# listings}}",
     "noListings": "No listings yet",
-    "legendTitle": "Most active states"
+    "legendTitle": "Map legend",
+    "legendRent": "For rent",
+    "legendSale": "For sale",
+    "legendFeatured": "Featured",
+    "satellite": "Satellite",
+    "street": "Street",
+    "toggleList": "List",
+    "hideList": "Hide list",
+    "flyToListing": "Find on map"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -576,5 +586,24 @@
     "hiringBody": "We're a small, remote-first Sudanese diaspora team. If you're passionate about Sudan, real estate, and building things that matter — we'd love to hear from you. Drop us a line at hello@sukan.app with the subject line 'Joining the team'.",
     "officeTitle": "Office address",
     "officeBody": "We operate remotely for now. A Khartoum office is coming — watch this space."
+  },
+  "favorites": {
+    "add": "Save listing",
+    "remove": "Remove from saved",
+    "title": "Saved listings",
+    "subtitle": "Listings you've saved for later",
+    "emptyTitle": "No saved listings yet",
+    "emptyBody": "Tap the heart on any listing to save it here.",
+    "browseCta": "Browse listings",
+    "signInPrompt": "Sign in to keep your saved listings across devices",
+    "clearAll": "Clear all"
+  },
+  "safety": {
+    "title": "Stay safe",
+    "tip1": "Inspect the property in person before paying anything.",
+    "tip2": "Never wire money or send mobile money to someone you haven't met.",
+    "tip3": "Verify ownership documents — check the deed and seller's ID.",
+    "tip4": "Contact through Sukan's WhatsApp link so we have a record of the conversation.",
+    "report": "If something feels off, report it →"
   }
 }
