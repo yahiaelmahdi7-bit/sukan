@@ -9,6 +9,7 @@ import Footer from "@/components/footer";
 import ListingCard from "@/components/listing-card";
 import { sampleListings, getListingById, type Listing } from "@/lib/sample-listings";
 import ListingLocationMap from "./_components/listing-location-map";
+import InquiryButton from "@/components/inquiry-button";
 
 /* ─────────────────────────────────────────────────────────
    Metadata
@@ -292,12 +293,16 @@ export default async function ListingDetailPage({
             </div>
 
             {/* Right: Contact CTA (desktop inline, mobile sticky) */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 flex flex-col gap-3">
               <ContactCta
                 waUrl={waUrl}
                 telUrl={telUrl}
                 t={t}
                 sticky={false}
+              />
+              <InquiryButton
+                listing={listing}
+                className="rounded-[var(--radius-pill)] border border-gold/30 bg-earth-soft hover:bg-gold/10 text-parchment font-medium px-5 py-3 text-sm transition-colors"
               />
             </div>
           </div>
@@ -306,7 +311,13 @@ export default async function ListingDetailPage({
           <div
             className="lg:hidden fixed bottom-0 start-0 end-0 z-40 bg-earth border-t border-gold/10 px-4 py-3 shadow-[0_-4px_24px_rgba(0,0,0,0.5)]"
           >
-            <ContactCta waUrl={waUrl} telUrl={telUrl} t={t} sticky />
+            <div className="flex flex-col gap-2">
+              <ContactCta waUrl={waUrl} telUrl={telUrl} t={t} sticky />
+              <InquiryButton
+                listing={listing}
+                className="w-full rounded-[var(--radius-pill)] border border-gold/30 text-parchment text-xs py-2 hover:bg-gold/10 transition-colors"
+              />
+            </div>
           </div>
 
           {/* Spacer so sticky bar doesn't overlap last section on mobile */}

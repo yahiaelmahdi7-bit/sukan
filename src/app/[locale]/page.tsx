@@ -13,6 +13,7 @@ import HeroStats from "@/components/hero-stats";
 import NumberedStep from "@/components/numbered-step";
 import TestimonialCard from "@/components/testimonial-card";
 import DiasporaCallout from "@/components/diaspora-callout";
+import AIMatchButton from "@/components/ai-match-button";
 import { sampleListings } from "@/lib/sample-listings";
 import HeroSearch from "@/components/hero-search";
 
@@ -81,15 +82,10 @@ export default async function HomePage({
               <div className="lg:col-span-3 flex flex-col gap-3">
                 <HeroSearch />
 
-                {/* AI match teaser */}
-                <p className="text-sm">
-                  <Link
-                    href="/match"
-                    className="text-gold hover:text-gold-bright transition-colors"
-                  >
-                    {t("hero.aiMatchTeaser")}
-                  </Link>
-                </p>
+                {/* AI match — opens chat modal in-place */}
+                <AIMatchButton className="inline-flex items-center gap-2 self-start rounded-pill border border-gold/40 px-5 py-2.5 text-sm font-medium text-gold transition hover:border-gold hover:bg-gold/10">
+                  {t("hero.aiMatchTeaser")}
+                </AIMatchButton>
               </div>
 
               {/* Right: landlord CTA (2/5) */}
