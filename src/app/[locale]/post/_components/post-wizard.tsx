@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useTransition, useId, useRef } from "react";
 import { useTranslations } from "next-intl";
+import PostMap from "./post-map";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -39,7 +40,7 @@ type CurrencyKey = "USD" | "SDG";
 type PeriodKey = "month" | "year" | "total";
 type PurposeKey = "rent" | "sale";
 type TierKey = "standard" | "featured";
-type PaymentKey = "stripe" | "bank";
+type PaymentKey = "stripe" | "bankak" | "cashi" | "mbok" | "bank" | "whatsapp";
 
 export interface PostDraft {
   // Step 1
@@ -56,6 +57,8 @@ export interface PostDraft {
   city: string;
   neighborhood: string;
   address: string;
+  pinLat: number | null;
+  pinLng: number | null;
   // Step 3
   photos: string[]; // object URLs (ephemeral, not serialized)
   // Step 4
@@ -77,6 +80,8 @@ const INITIAL_DRAFT: PostDraft = {
   city: "",
   neighborhood: "",
   address: "",
+  pinLat: null,
+  pinLng: null,
   photos: [],
   tier: "standard",
   payment: "stripe",
@@ -492,7 +497,13 @@ function Step2({
         <label className={labelCls}>{t("stateLabel")}</label>
         <select
           value={draft.state}
-          onChange={(e) => update({ state: e.target.value as StateKey })}
+          onChange={(e) =>
+            update({
+              state: e.target.value as StateKey,
+              pinLat: null,
+              pinLng: null,
+            })
+          }
           className={[inputCls, "cursor-pointer"].join(" ")}
         >
           <option value="">{t("selectState")}</option>
@@ -546,43 +557,40 @@ function Step2({
         />
       </div>
 
-      {/* Map placeholder */}
-      {/* TODO: integrate Leaflet OpenStreetMap with draggable marker */}
+      {/* Live draggable map */}
       <div>
-        <div
-          className="w-full rounded-[var(--radius-card)] border-2 border-dashed border-gold/30 bg-sand/40 flex items-center justify-center"
-          style={{ height: 320 }}
-          role="img"
-          aria-label={t("mapHint")}
-        >
-          <div className="text-center px-6">
-            {/* Simple map pin SVG */}
-            <svg
-              viewBox="0 0 24 24"
-              width="40"
-              height="40"
-              fill="none"
-              className="mx-auto mb-3 text-gold/60"
-              aria-hidden
-            >
-              <path
-                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
-                fill="currentColor"
-                fillOpacity={0.3}
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
-              <circle cx="12" cy="9" r="2.5" fill="currentColor" />
-            </svg>
-            <p className="text-mute-soft text-sm">{t("mapHint")}</p>
-            {coords && (
-              <p className="mt-2 text-xs text-gold/70 font-mono tabular-nums">
-                {draft.state ? st(draft.state as StateKey) : ""}{" "}
-                {coords[0].toFixed(4)}°N, {coords[1].toFixed(4)}°E
-              </p>
-            )}
+        <p className="text-xs text-mute-soft mb-2">{t("mapHint")}</p>
+        {coords ? (
+          <PostMap
+            center={[
+              draft.pinLat ?? coords[0],
+              draft.pinLng ?? coords[1],
+            ]}
+            pin={[
+              draft.pinLat ?? coords[0],
+              draft.pinLng ?? coords[1],
+            ]}
+            onPinDrag={([lat, lng]) => update({ pinLat: lat, pinLng: lng })}
+          />
+        ) : (
+          <div
+            className="w-full rounded-[var(--radius-card)] border-2 border-dashed border-gold/30 bg-sand/40 flex items-center justify-center"
+            style={{ height: 360 }}
+            role="img"
+            aria-label={t("mapHint")}
+          >
+            <p className="text-mute-soft text-sm px-6 text-center">
+              {t("selectState")}
+            </p>
           </div>
-        </div>
+        )}
+        {coords && (
+          <p className="mt-2 text-xs text-gold/70 font-mono tabular-nums">
+            {draft.state ? st(draft.state as StateKey) : ""}{" "}
+            {(draft.pinLat ?? coords[0]).toFixed(4)}°N,{" "}
+            {(draft.pinLng ?? coords[1]).toFixed(4)}°E
+          </p>
+        )}
       </div>
     </div>
   );
@@ -902,30 +910,47 @@ function Step4({
             <h3 className="text-xs font-semibold uppercase tracking-wider text-mute-soft mb-3">
               {t("paymentTitle")}
             </h3>
-            <div className="space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(
                 [
-                  { value: "stripe", label: t("payStripe") },
-                  { value: "bank", label: t("payBank") },
-                ] as { value: PaymentKey; label: string }[]
-              ).map(({ value, label }) => (
+                  { value: "stripe", label: t("payStripe"), badge: "USD" },
+                  { value: "bankak", label: t("payBankak"), badge: "SDG" },
+                  { value: "cashi", label: t("payCashi"), badge: "SDG" },
+                  { value: "mbok", label: t("payMbok"), badge: "SDG" },
+                  { value: "bank", label: t("payBank"), badge: "SDG" },
+                  { value: "whatsapp", label: t("payWhatsapp"), badge: "—" },
+                ] as { value: PaymentKey; label: string; badge: string }[]
+              ).map(({ value, label, badge }) => (
                 <label
                   key={value}
-                  className="flex items-center gap-3 cursor-pointer"
+                  className={[
+                    "flex items-center justify-between gap-3 cursor-pointer rounded-md border px-4 py-3 transition-colors",
+                    draft.payment === value
+                      ? "border-terracotta bg-terracotta/10"
+                      : "border-gold/20 bg-earth hover:border-gold/40",
+                  ].join(" ")}
                 >
-                  <input
-                    type="radio"
-                    name="payment"
-                    value={value}
-                    checked={draft.payment === value}
-                    onChange={() => update({ payment: value })}
-                    className="accent-gold"
-                  />
-                  <span className="text-sm text-parchment">{label}</span>
+                  <span className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      name="payment"
+                      value={value}
+                      checked={draft.payment === value}
+                      onChange={() => update({ payment: value })}
+                      className="accent-terracotta"
+                    />
+                    <span className="text-sm text-parchment">{label}</span>
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wider text-mute-soft">
+                    {badge}
+                  </span>
                 </label>
               ))}
             </div>
           </div>
+
+          {/* Per-method instructions */}
+          <PaymentInstructions method={draft.payment} />
 
           {/* Terms */}
           <label className="flex items-start gap-3 cursor-pointer">
@@ -946,6 +971,104 @@ function Step4({
       </div>
     </div>
   );
+}
+
+// ─── Payment instructions panel ──────────────────────────────────────────────
+//
+// MVP: real payment APIs aren't wired (no public Bankak/Cashi/mBOK SDK). We
+// surface manual transfer instructions; admin-side verification will flip the
+// listing from `pending_payment` → `active` once funds arrive.
+
+const SUKAN_PAYMENT_DETAILS = {
+  bankak: { account: "1234 5678 9012", reference: "SUKAN-{id}" },
+  cashi: { phone: "+249 91 200 0000", reference: "SUKAN-{id}" },
+  mbok: { phone: "+249 91 200 0001", reference: "SUKAN-{id}" },
+  bank: { account: "Bank of Khartoum 0001-2345-6789", reference: "SUKAN-{id}" },
+  whatsapp: { phone: "+249 91 234 5678" },
+} as const;
+
+function PaymentInstructions({ method }: { method: PaymentKey }) {
+  const t = useTranslations("post");
+
+  if (method === "stripe") return null;
+
+  const baseCls =
+    "rounded-md border border-gold/20 bg-earth/60 p-4 text-xs text-mute-soft leading-relaxed";
+
+  if (method === "bankak") {
+    const d = SUKAN_PAYMENT_DETAILS.bankak;
+    return (
+      <div className={baseCls}>
+        <p className="text-parchment font-semibold mb-1">{t("payInstructionsBankak")}</p>
+        <p>
+          {t("payInstructionsAccount")}:{" "}
+          <span className="font-mono text-parchment">{d.account}</span>
+        </p>
+        <p>
+          {t("payInstructionsReference")}:{" "}
+          <span className="font-mono text-parchment">{d.reference}</span>
+        </p>
+      </div>
+    );
+  }
+
+  if (method === "cashi" || method === "mbok") {
+    const d = SUKAN_PAYMENT_DETAILS[method];
+    return (
+      <div className={baseCls}>
+        <p className="text-parchment font-semibold mb-1">
+          {method === "cashi" ? t("payInstructionsCashi") : t("payInstructionsMbok")}
+        </p>
+        <p>
+          {t("payInstructionsPhone")}:{" "}
+          <span className="font-mono text-parchment">{d.phone}</span>
+        </p>
+        <p>
+          {t("payInstructionsReference")}:{" "}
+          <span className="font-mono text-parchment">{d.reference}</span>
+        </p>
+      </div>
+    );
+  }
+
+  if (method === "bank") {
+    const d = SUKAN_PAYMENT_DETAILS.bank;
+    return (
+      <div className={baseCls}>
+        <p className="text-parchment font-semibold mb-1">{t("payInstructionsBank")}</p>
+        <p>
+          {t("payInstructionsAccount")}:{" "}
+          <span className="font-mono text-parchment">{d.account}</span>
+        </p>
+        <p>
+          {t("payInstructionsReference")}:{" "}
+          <span className="font-mono text-parchment">{d.reference}</span>
+        </p>
+      </div>
+    );
+  }
+
+  if (method === "whatsapp") {
+    const d = SUKAN_PAYMENT_DETAILS.whatsapp;
+    const waUrl = `https://wa.me/${d.phone.replace(/\D/g, "")}?text=${encodeURIComponent("I'd like to pay for a Sukan listing")}`;
+    return (
+      <div className={baseCls}>
+        <p className="text-parchment font-semibold mb-1">{t("payInstructionsWhatsapp")}</p>
+        <p className="mb-2">{t("payInstructionsWhatsappBody")}</p>
+        <a
+          href={waUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-pill px-4 py-2 text-xs font-semibold text-white"
+          style={{ backgroundColor: "#25d366" }}
+        >
+          {t("payInstructionsWhatsappCta")}
+        </a>
+      </div>
+    );
+  }
+
+  return null;
 }
 
 // ─── Success state ────────────────────────────────────────────────────────────

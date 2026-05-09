@@ -21,9 +21,9 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   return (
     <Link
       href={`/listings/${listing.id}`}
-      className="group block overflow-hidden rounded-[var(--radius-card)] border border-gold/15 bg-earth-soft transition duration-200 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-2xl hover:shadow-black/30"
+      className="group block overflow-hidden rounded-[var(--radius-card)] border border-sand-dk bg-card transition duration-200 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[0_8px_28px_rgba(18,16,12,0.12)]"
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-earth">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-sand">
         <Image
           src={getListingImage(listing)}
           alt={title}
@@ -33,14 +33,14 @@ export default function ListingCard({ listing }: { listing: Listing }) {
         />
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-earth/60 via-earth/0 to-earth/0"
+          className="absolute inset-0 bg-gradient-to-t from-ink/30 via-ink/0 to-ink/0"
         />
         {listing.tier === "featured" && (
           <span className="absolute top-3 ltr:left-3 rtl:right-3 rounded-pill bg-gold px-3 py-1 text-xs font-semibold uppercase tracking-wider text-earth">
             {t("listing.featured")}
           </span>
         )}
-        <span className="absolute bottom-3 ltr:right-3 rtl:left-3 rounded-pill bg-earth/80 px-3 py-1 text-xs uppercase tracking-wider text-parchment backdrop-blur-sm">
+        <span className="absolute bottom-3 ltr:right-3 rtl:left-3 rounded-pill bg-ink/80 px-3 py-1 text-xs uppercase tracking-wider text-cream backdrop-blur-sm">
           {t(`propertyType.${listing.propertyType}`)}
         </span>
         <div className="absolute top-3 ltr:right-3 rtl:left-3 z-10 pointer-events-auto">
@@ -50,18 +50,18 @@ export default function ListingCard({ listing }: { listing: Listing }) {
 
       <div className="p-5">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="font-display text-xl text-parchment line-clamp-1">
+          <h3 className="font-display text-xl text-ink line-clamp-1">
             {title}
           </h3>
-          <span className="rounded-pill border border-gold/30 px-3 py-0.5 text-[10px] uppercase tracking-wider text-mute-soft whitespace-nowrap">
+          <span className="rounded-pill border border-sand-dk bg-sand px-3 py-0.5 text-[10px] uppercase tracking-wider text-ink-mid whitespace-nowrap">
             {t(`states.${listing.state}`)}
           </span>
         </div>
 
-        <p className="mt-1 text-sm text-mute-soft line-clamp-1">{city}</p>
+        <p className="mt-1 text-sm text-ink-mid line-clamp-1">{city}</p>
 
         <div className="mt-4 flex items-baseline gap-2">
-          <span className="font-display text-2xl text-gold-bright">
+          <span className="font-display text-2xl text-terracotta">
             {format.number(listing.priceUsd, {
               style: "currency",
               currency: "USD",
@@ -69,7 +69,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
             })}
           </span>
           {listing.period !== "total" && (
-            <span className="text-xs text-mute-soft">
+            <span className="text-xs text-ink-mid">
               {listing.period === "month"
                 ? t("listing.perMonth")
                 : t("listing.perYear")}
@@ -77,7 +77,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           )}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-mute-soft">
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-ink-mid">
           {listing.bedrooms !== undefined && (
             <span>{t("listing.bedroomsShort", { count: listing.bedrooms })}</span>
           )}

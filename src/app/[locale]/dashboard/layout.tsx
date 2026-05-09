@@ -1,9 +1,11 @@
+import { redirect } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import LocaleToggle from "@/components/locale-toggle";
 import SukanMark from "@/components/sukan-mark";
 import SidebarNav from "./_components/sidebar-nav";
 import MobileNavToggle from "./_components/mobile-nav-toggle";
 import { getMockUser } from "./_data/mock-user";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardLayout({
   children,
@@ -16,8 +18,20 @@ export default async function DashboardLayout({
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
 
-  const user = getMockUser();
-  const userName = locale === "ar" ? user.full_name_ar : user.full_name_en;
+  // Auth guard — anonymous users get bounced to sign-in
+  const supabase = await createClient();
+  const {
+    data: { user: authUser },
+  } = await supabase.auth.getUser();
+  if (!authUser) {
+    redirect(`/${locale}/sign-in?next=/${locale}/dashboard`);
+  }
+
+  // Real user metadata, fall back to mock helpers for display fields not yet in DB
+  const mockUser = getMockUser();
+  const meta = authUser.user_metadata as { full_name?: string } | undefined;
+  const realName = meta?.full_name?.trim() || authUser.email || mockUser.full_name_en;
+  const userName = locale === "ar" ? mockUser.full_name_ar : realName;
   const signOutLabel = t("signOut");
 
   return (

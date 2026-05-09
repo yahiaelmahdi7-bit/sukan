@@ -9,38 +9,38 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-24 border-t border-gold/10 bg-earth-deep">
+    <footer className="mt-24 border-t border-sand-dk bg-cream-deep">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3">
               <SukanMark size={40} title={brand("name")} />
-              <span className="font-display text-2xl text-parchment">
+              <span className="font-display text-2xl text-ink">
                 {brand("name")}
               </span>
             </div>
-            <p className="mt-4 max-w-md text-sm text-mute-soft">
+            <p className="mt-4 max-w-md text-sm text-ink-mid">
               {brand("tagline")}
             </p>
-            <p className="mt-6 text-xs uppercase tracking-widest text-gold/70">
+            <p className="mt-6 text-xs uppercase tracking-widest text-gold-dk">
               {t("madeIn")}
             </p>
           </div>
 
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-gold/70">
+            <h4 className="text-xs uppercase tracking-widest text-gold-dk">
               {nav("browse")}
             </h4>
-            <ul className="mt-4 space-y-2 text-sm text-parchment">
+            <ul className="mt-4 space-y-2 text-sm text-ink-soft">
               <li>
-                <Link href="/" className="hover:text-gold-bright transition">
+                <Link href="/" className="hover:text-terracotta transition">
                   {nav("browse")}
                 </Link>
               </li>
               <li>
                 <Link
                   href="/post"
-                  className="hover:text-gold-bright transition"
+                  className="hover:text-terracotta transition"
                 >
                   {nav("post")}
                 </Link>
@@ -48,7 +48,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/diaspora"
-                  className="hover:text-gold-bright transition"
+                  className="hover:text-terracotta transition"
                 >
                   {nav("diaspora")}
                 </Link>
@@ -56,7 +56,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="hover:text-gold-bright transition"
+                  className="hover:text-terracotta transition"
                 >
                   {nav("about")}
                 </Link>
@@ -65,14 +65,14 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-gold/70">
+            <h4 className="text-xs uppercase tracking-widest text-gold-dk">
               {t("contact")}
             </h4>
-            <ul className="mt-4 space-y-2 text-sm text-parchment">
+            <ul className="mt-4 space-y-2 text-sm text-ink-soft">
               <li>
                 <Link
                   href="/privacy"
-                  className="hover:text-gold-bright transition"
+                  className="hover:text-terracotta transition"
                 >
                   {t("privacy")}
                 </Link>
@@ -80,7 +80,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="hover:text-gold-bright transition"
+                  className="hover:text-terracotta transition"
                 >
                   {t("terms")}
                 </Link>
@@ -88,7 +88,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="hover:text-gold-bright transition"
+                  className="hover:text-terracotta transition"
                 >
                   {t("contact")}
                 </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-gold/10 pt-6 text-xs text-mute-soft sm:flex-row sm:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-sand-dk pt-6 text-xs text-ink-mid sm:flex-row sm:items-center">
           <span>
             © {year} {brand("name")}. {t("rights")}.
           </span>

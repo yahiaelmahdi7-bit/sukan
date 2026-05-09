@@ -25,12 +25,12 @@ export default function DiasporaCallout({
       </Pill>
 
       {/* Headline */}
-      <h2 className="font-display text-4xl md:text-5xl text-parchment leading-tight">
+      <h2 className="font-display text-4xl md:text-5xl text-ink leading-tight">
         {title}
       </h2>
 
       {/* Subtitle */}
-      <p className="text-mute-soft text-lg leading-[1.8] max-w-lg">
+      <p className="text-ink-mid text-lg leading-[1.8] max-w-lg">
         {subtitle}
       </p>
 
@@ -50,7 +50,7 @@ export default function DiasporaCallout({
         {/* Ghost — gold outline */}
         <Link
           href="/match"
-          className="inline-flex items-center justify-center rounded-[var(--radius-pill)] border border-gold/50 px-7 py-3 text-sm font-semibold text-gold hover:border-gold hover:text-gold-bright transition-colors"
+          className="inline-flex items-center justify-center rounded-[var(--radius-pill)] border border-gold/50 px-7 py-3 text-sm font-semibold text-gold-dk hover:border-gold hover:text-gold transition-colors"
         >
           {matchCta}
         </Link>

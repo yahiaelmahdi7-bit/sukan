@@ -257,15 +257,15 @@ export default async function ListingsPage({
         <StickyBar total={total} />
 
         {/* ─── Header band ─────────────────────────────────────────────────── */}
-        <div className="bg-earth-soft py-14">
+        <div className="bg-cream py-14 border-b border-sand-dk">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold/70">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-dk">
               {t("browse.eyebrow")}
             </p>
-            <h1 className="font-display text-5xl text-parchment md:text-6xl">
+            <h1 className="font-display text-5xl text-ink md:text-6xl">
               {t("browse.title")}
             </h1>
-            <p className="mt-3 text-lg text-mute-soft">
+            <p className="mt-3 text-lg text-ink-mid">
               {t("browse.resultCount", { count: total })}
             </p>
           </div>
@@ -276,7 +276,7 @@ export default async function ListingsPage({
           <div className="lg:flex lg:gap-10">
             {/* ─── Desktop sidebar ─────────────────────────────────────────── */}
             <aside className="hidden lg:block lg:w-72 lg:shrink-0">
-              <div className="sticky top-20 h-fit overflow-y-auto rounded-xl border border-gold/10 bg-earth-soft p-6">
+              <div className="sticky top-20 h-fit overflow-y-auto rounded-xl border border-sand-dk bg-card shadow-sm p-6">
                 <FilterSidebar />
               </div>
             </aside>
@@ -292,7 +292,7 @@ export default async function ListingsPage({
 
               {/* Results header row: count + view toggle + sort */}
               <div className="mb-7 flex items-center justify-between gap-4">
-                <p className="text-sm text-mute-soft">
+                <p className="text-sm text-ink-mid">
                   {total > 0
                     ? t("browse.showingRange", { from, to, total })
                     : ""}
@@ -326,12 +326,12 @@ export default async function ListingsPage({
                   {parsed.page > 1 ? (
                     <Link
                       href={buildPageHref(rawSearchParams, parsed.page - 1)}
-                      className="min-h-[40px] min-w-[40px] rounded-md border border-gold/25 bg-earth-soft px-4 py-2 text-sm text-parchment transition hover:border-gold/60 hover:bg-gold/10"
+                      className="min-h-[40px] min-w-[40px] rounded-md border border-sand-dk bg-card px-4 py-2 text-sm text-ink transition hover:border-gold/60 hover:bg-gold/10"
                     >
                       {t("browse.prevPage")}
                     </Link>
                   ) : (
-                    <span className="min-h-[40px] min-w-[40px] cursor-default rounded-md border border-gold/10 bg-earth px-4 py-2 text-sm text-mute-soft opacity-40">
+                    <span className="min-h-[40px] min-w-[40px] cursor-default rounded-md border border-sand-dk bg-sand px-4 py-2 text-sm text-ink-mid opacity-40">
                       {t("browse.prevPage")}
                     </span>
                   )}
@@ -339,7 +339,7 @@ export default async function ListingsPage({
                   {/* Page numbers */}
                   {pageNumsWithGaps.map((n, idx) =>
                     n === -1 ? (
-                      <span key={`gap-${idx}`} className="px-2 text-sm text-mute-soft">
+                      <span key={`gap-${idx}`} className="px-2 text-sm text-ink-mid">
                         …
                       </span>
                     ) : (
@@ -350,8 +350,8 @@ export default async function ListingsPage({
                         aria-current={n === parsed.page ? "page" : undefined}
                         className={`flex min-h-[40px] min-w-[40px] items-center justify-center rounded-md border text-sm transition ${
                           n === parsed.page
-                            ? "border-terracotta bg-terracotta text-parchment font-semibold"
-                            : "border-gold/20 bg-earth-soft text-mute-soft hover:border-gold/50 hover:text-parchment"
+                            ? "border-terracotta bg-terracotta text-cream font-semibold"
+                            : "border-sand-dk bg-card text-ink-mid hover:border-gold/50 hover:text-ink"
                         }`}
                       >
                         {n}
@@ -363,12 +363,12 @@ export default async function ListingsPage({
                   {parsed.page < totalPages ? (
                     <Link
                       href={buildPageHref(rawSearchParams, parsed.page + 1)}
-                      className="min-h-[40px] min-w-[40px] rounded-md border border-gold/25 bg-earth-soft px-4 py-2 text-sm text-parchment transition hover:border-gold/60 hover:bg-gold/10"
+                      className="min-h-[40px] min-w-[40px] rounded-md border border-sand-dk bg-card px-4 py-2 text-sm text-ink transition hover:border-gold/60 hover:bg-gold/10"
                     >
                       {t("browse.nextPage")}
                     </Link>
                   ) : (
-                    <span className="min-h-[40px] min-w-[40px] cursor-default rounded-md border border-gold/10 bg-earth px-4 py-2 text-sm text-mute-soft opacity-40">
+                    <span className="min-h-[40px] min-w-[40px] cursor-default rounded-md border border-sand-dk bg-sand px-4 py-2 text-sm text-ink-mid opacity-40">
                       {t("browse.nextPage")}
                     </span>
                   )}

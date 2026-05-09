@@ -9,11 +9,11 @@ export interface PillProps {
 
 const VARIANT_CLASSES: Record<PillProps["variant"], string> = {
   terracotta:
-    "bg-terracotta/15 text-terracotta border border-terracotta/35",
+    "bg-terracotta/15 text-terracotta border border-terracotta/30",
   gold:
-    "bg-gold/15 text-gold border border-gold/35",
+    "bg-gold/15 text-gold-dk border border-gold/30",
   muted:
-    "bg-mute/15 text-parchment border border-mute-soft/40",
+    "bg-sand text-ink border border-sand-dk",
 };
 
 const SIZE_CLASSES: Record<NonNullable<PillProps["size"]>, string> = {

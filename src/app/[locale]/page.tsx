@@ -144,7 +144,7 @@ export default async function HomePage({
         {/* ─────────────────────────────────────────────────────────
             3. FEATURED LISTINGS
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth py-20">
+        <section className="bg-cream py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionHeader
               eyebrow={t("listing.featured")}
@@ -163,7 +163,7 @@ export default async function HomePage({
         {/* ─────────────────────────────────────────────────────────
             4. BROWSE ALL LISTINGS
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth-soft py-20">
+        <section className="bg-cream-grain py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionHeader
               title={t("nav.browse")}
@@ -179,12 +179,12 @@ export default async function HomePage({
               ].map((label) => (
                 <span
                   key={label}
-                  className="rounded-[var(--radius-pill)] border border-gold/20 px-4 py-1.5 text-xs text-mute-soft"
+                  className="rounded-[var(--radius-pill)] border border-sand-dk px-4 py-1.5 text-xs text-ink-mid bg-card"
                 >
                   {label}
                 </span>
               ))}
-              <span className="rounded-[var(--radius-pill)] border border-gold/20 px-4 py-1.5 text-xs text-mute-soft">
+              <span className="rounded-[var(--radius-pill)] border border-sand-dk px-4 py-1.5 text-xs text-ink-mid bg-card">
                 &lt;$500/mo
               </span>
             </div>
@@ -201,7 +201,7 @@ export default async function HomePage({
             5. HOW SUKAN WORKS
         ───────────────────────────────────────────────────────── */}
         <WaveDivider flip intensity="subtle" />
-        <section className="bg-parchment-grain py-24">
+        <section className="bg-card py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionHeader
               title={t("howItWorks.title")}
@@ -235,7 +235,7 @@ export default async function HomePage({
         {/* ─────────────────────────────────────────────────────────
             6. SUDAN STATES MAP BAND
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth py-24">
+        <section className="bg-cream py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionHeader
               eyebrow={t("map.eyebrow")}
@@ -254,7 +254,7 @@ export default async function HomePage({
             7. TRUST BAND
         ───────────────────────────────────────────────────────── */}
         <WaveDivider flip intensity="subtle" />
-        <section className="bg-earth-soft py-24">
+        <section className="bg-cream-grain py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center mb-10">
               {(
@@ -265,18 +265,18 @@ export default async function HomePage({
                 ] as const
               ).map(({ key, Icon }) => (
                 <div key={key} className="flex flex-col items-center gap-3">
-                  <Icon size={36} className="text-gold" strokeWidth={1.5} />
-                  <p className="font-semibold text-parchment text-base">{t(key)}</p>
+                  <Icon size={36} className="text-terracotta" strokeWidth={1.5} />
+                  <p className="font-semibold text-ink text-base">{t(key)}</p>
                 </div>
               ))}
             </div>
 
             {/* Stats row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-gold/10 pt-8 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-sand-dk pt-8 text-center">
               {(
                 ["trust.stat1", "trust.stat2", "trust.stat3"] as const
               ).map((key) => (
-                <p key={key} className="text-xs text-mute-soft uppercase tracking-wider">
+                <p key={key} className="text-xs text-ink-mid uppercase tracking-wider">
                   {t(key)}
                 </p>
               ))}
@@ -288,7 +288,7 @@ export default async function HomePage({
             8. TESTIMONIALS
         ───────────────────────────────────────────────────────── */}
         <WaveDivider intensity="subtle" />
-        <section className="bg-earth py-24">
+        <section className="bg-sand py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionHeader
               eyebrow={t("testimonials.eyebrow")}
@@ -317,7 +317,7 @@ export default async function HomePage({
             9. DIASPORA CALLOUT
         ───────────────────────────────────────────────────────── */}
         <WaveDivider flip intensity="subtle" />
-        <section className="bg-earth-soft">
+        <section className="bg-cream-deep">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <DiasporaCallout
               eyebrow={t("diaspora.eyebrow")}

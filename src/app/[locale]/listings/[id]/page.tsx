@@ -159,7 +159,7 @@ export default async function ListingDetailPage({
     <>
       <Navbar />
 
-      <main className="bg-earth min-h-screen">
+      <main className="bg-cream min-h-screen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
 
           {/* ─────────────────────────────────────────────────────────
@@ -167,20 +167,20 @@ export default async function ListingDetailPage({
           ───────────────────────────────────────────────────────── */}
           <nav
             aria-label="breadcrumb"
-            className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-mute-soft"
+            className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-ink-mid"
           >
-            <Link href="/" className="hover:text-parchment transition-colors">
+            <Link href="/" className="hover:text-ink transition-colors">
               {t("listing.browseAll")}
             </Link>
             <span aria-hidden className="opacity-50">/</span>
             <Link
               href={`/listings?state=${listing.state}`}
-              className="hover:text-parchment transition-colors"
+              className="hover:text-ink transition-colors"
             >
               {stateLabel}
             </Link>
             <span aria-hidden className="opacity-50">/</span>
-            <span className="text-parchment/70 line-clamp-1 max-w-[200px]">{localTitle}</span>
+            <span className="text-ink/70 line-clamp-1 max-w-[200px]">{localTitle}</span>
           </nav>
 
           {/* ─────────────────────────────────────────────────────────
@@ -238,36 +238,36 @@ export default async function ListingDetailPage({
             <div className="lg:col-span-2 flex flex-col gap-4">
 
               {/* Title */}
-              <h1 className="font-display text-4xl md:text-5xl text-parchment leading-tight">
+              <h1 className="font-display text-4xl md:text-5xl text-ink leading-tight">
                 {localTitle}
               </h1>
 
               {/* Classification pills row */}
               <div className="flex flex-wrap gap-2 items-center">
                 {/* State pill */}
-                <span className="rounded-[var(--radius-pill)] border border-gold/40 px-4 py-1.5 text-xs text-gold">
+                <span className="rounded-[var(--radius-pill)] border border-sand-dk bg-sand px-4 py-1.5 text-xs text-ink-soft">
                   {stateLabel}
                 </span>
 
                 {/* Property type pill */}
-                <span className="rounded-[var(--radius-pill)] border border-gold/40 px-4 py-1.5 text-xs text-gold">
+                <span className="rounded-[var(--radius-pill)] border border-sand-dk bg-sand px-4 py-1.5 text-xs text-ink-soft">
                   {t(`propertyType.${listing.propertyType}`)}
                 </span>
 
                 {/* Purpose pill — terracotta for rent, gold for sale */}
                 {listing.purpose === "rent" ? (
-                  <span className="rounded-[var(--radius-pill)] bg-terracotta/20 border border-terracotta/40 px-4 py-1.5 text-xs text-terracotta font-semibold">
+                  <span className="rounded-[var(--radius-pill)] bg-terracotta/15 border border-terracotta/40 px-4 py-1.5 text-xs text-terracotta font-semibold">
                     {t("hero.rent")}
                   </span>
                 ) : (
-                  <span className="rounded-[var(--radius-pill)] bg-gold/10 border border-gold/40 px-4 py-1.5 text-xs text-gold-bright font-semibold">
+                  <span className="rounded-[var(--radius-pill)] bg-gold/15 border border-gold/40 px-4 py-1.5 text-xs text-gold-dk font-semibold">
                     {t("hero.sale")}
                   </span>
                 )}
 
                 {/* Featured badge */}
                 {listing.tier === "featured" && (
-                  <span className="rounded-[var(--radius-pill)] bg-gold/15 border border-gold/50 px-4 py-1.5 text-xs text-gold-bright font-semibold uppercase tracking-wide">
+                  <span className="rounded-[var(--radius-pill)] bg-gold/15 border border-gold/40 px-4 py-1.5 text-xs text-gold-dk font-semibold uppercase tracking-wide">
                     ★ {t("listing.featured")}
                   </span>
                 )}
@@ -276,14 +276,14 @@ export default async function ListingDetailPage({
               {/* Price block */}
               <div className="flex flex-col gap-1">
                 <div className="flex items-end gap-2">
-                  <span className="font-display text-4xl text-gold-bright">
+                  <span className="font-display text-4xl text-terracotta">
                     {priceUsdFormatted}
                   </span>
-                  <span className="text-mute-soft text-sm mb-1.5">{periodSuffix}</span>
+                  <span className="text-ink-mid text-sm mb-1.5">{periodSuffix}</span>
                 </div>
 
                 {listing.priceSdg != null && (
-                  <p className="text-mute-soft text-sm">
+                  <p className="text-ink-mid text-sm">
                     {t("listing.sdgAmount", {
                       amount: format.number(listing.priceSdg, { maximumFractionDigits: 0 }),
                     })}
@@ -303,7 +303,7 @@ export default async function ListingDetailPage({
               />
               <InquiryButton
                 listing={listing}
-                className="rounded-[var(--radius-pill)] border border-gold/30 bg-earth-soft hover:bg-gold/10 text-parchment font-medium px-5 py-3 text-sm transition-colors"
+                className="rounded-[var(--radius-pill)] border border-sand-dk bg-sand hover:bg-gold/10 text-ink font-medium px-5 py-3 text-sm transition-colors"
               />
               <StaySafeCard />
             </div>
@@ -311,13 +311,13 @@ export default async function ListingDetailPage({
 
           {/* Mobile sticky CTA */}
           <div
-            className="lg:hidden fixed bottom-0 start-0 end-0 z-40 bg-earth border-t border-gold/10 px-4 py-3 shadow-[0_-4px_24px_rgba(0,0,0,0.5)]"
+            className="lg:hidden fixed bottom-0 start-0 end-0 z-40 bg-cream border-t border-sand-dk px-4 py-3 shadow-[0_-4px_24px_rgba(18,16,12,0.12)]"
           >
             <div className="flex flex-col gap-2">
               <ContactCta waUrl={waUrl} telUrl={telUrl} t={t} sticky />
               <InquiryButton
                 listing={listing}
-                className="w-full rounded-[var(--radius-pill)] border border-gold/30 text-parchment text-xs py-2 hover:bg-gold/10 transition-colors"
+                className="w-full rounded-[var(--radius-pill)] border border-sand-dk text-ink text-xs py-2 hover:bg-gold/10 transition-colors"
               />
             </div>
           </div>
@@ -330,12 +330,12 @@ export default async function ListingDetailPage({
           ───────────────────────────────────────────────────────── */}
           <section className="mb-10" aria-labelledby="specs-heading">
             <div
-              className="grid grid-cols-2 lg:grid-cols-5 gap-4 rounded-[var(--radius-card)] bg-earth-soft border border-gold/10 px-6 py-5"
+              className="grid grid-cols-2 lg:grid-cols-5 gap-4 rounded-[var(--radius-card)] bg-card border border-sand-dk px-6 py-5 shadow-[0_4px_16px_rgba(18,16,12,0.06)]"
             >
               {specs.map(({ label, value }) => (
                 <div key={label} className="flex flex-col gap-1">
-                  <span className="text-xs text-mute-soft uppercase tracking-wider">{label}</span>
-                  <span className="text-parchment font-semibold text-base">{value}</span>
+                  <span className="text-xs text-ink-mid uppercase tracking-wider">{label}</span>
+                  <span className="text-ink font-semibold text-base">{value}</span>
                 </div>
               ))}
             </div>
@@ -347,22 +347,22 @@ export default async function ListingDetailPage({
           <section className="mb-10" aria-labelledby="desc-heading">
             <h2
               id="desc-heading"
-              className="font-display text-3xl text-parchment mb-5"
+              className="font-display text-3xl text-ink mb-5"
             >
               {t("listing.description")}
             </h2>
 
             {/* Primary language — larger */}
-            <p className="text-parchment text-base leading-relaxed whitespace-pre-line">
+            <p className="text-ink text-base leading-relaxed whitespace-pre-line">
               {localDesc}
             </p>
 
             {/* Divider */}
-            <hr className="border-gold/10 my-4" />
+            <hr className="border-sand-dk my-4" />
 
             {/* Secondary language — smaller, muted */}
             <p
-              className="text-mute-soft text-sm leading-relaxed whitespace-pre-line"
+              className="text-ink-mid text-sm leading-relaxed whitespace-pre-line"
               lang={isRtl ? "en" : "ar"}
               dir={isRtl ? "ltr" : "rtl"}
             >
@@ -377,7 +377,7 @@ export default async function ListingDetailPage({
             <section className="mb-10" aria-labelledby="amenities-heading">
               <h2
                 id="amenities-heading"
-                className="font-display text-3xl text-parchment mb-5"
+                className="font-display text-3xl text-ink mb-5"
               >
                 {t("listing.amenities")}
               </h2>
@@ -386,7 +386,7 @@ export default async function ListingDetailPage({
                 {listing.amenities.map((amenity) => (
                   <span
                     key={amenity}
-                    className="flex items-center gap-2 bg-earth-soft border border-gold/20 rounded-[var(--radius-pill)] px-4 py-2 text-sm text-parchment"
+                    className="flex items-center gap-2 bg-sand border border-sand-dk rounded-[var(--radius-pill)] px-4 py-2 text-sm text-ink"
                   >
                     <SukanMark monochrome="terracotta" size={14} />
                     {t(`amenity.${amenity}`)}
@@ -402,7 +402,7 @@ export default async function ListingDetailPage({
           <section className="mb-10" aria-labelledby="location-heading">
             <h2
               id="location-heading"
-              className="font-display text-3xl text-parchment mb-5"
+              className="font-display text-3xl text-ink mb-5"
             >
               {t("listing.location")}
             </h2>
@@ -421,10 +421,10 @@ export default async function ListingDetailPage({
             />
 
             {/* Location text — below the map so the map is the visual anchor */}
-            <p className="text-mute-soft text-sm mt-4">
+            <p className="text-ink-mid text-sm mt-4">
               {listing.neighborhood ? `${listing.neighborhood}, ` : ""}
               {listing.city},{" "}
-              <span className="text-parchment/80">{stateLabel}</span>,{" "}
+              <span className="text-ink/80">{stateLabel}</span>,{" "}
               Sudan
               <span className="ms-3 text-xs opacity-50">
                 {listing.latitude.toFixed(4)}° N, {listing.longitude.toFixed(4)}° E
@@ -438,23 +438,23 @@ export default async function ListingDetailPage({
           <section className="mb-12" aria-labelledby="owner-heading">
             <h2
               id="owner-heading"
-              className="font-display text-3xl text-parchment mb-5"
+              className="font-display text-3xl text-ink mb-5"
             >
               {t("listing.aboutOwner")}
             </h2>
 
-            <div className="flex items-center gap-5 rounded-[var(--radius-card)] bg-earth-soft border border-gold/10 px-6 py-5">
+            <div className="flex items-center gap-5 rounded-[var(--radius-card)] bg-cream-deep border border-sand-dk px-6 py-5 shadow-[0_4px_16px_rgba(18,16,12,0.06)]">
               {/* Avatar circle */}
-              <div className="flex-none w-14 h-14 rounded-full bg-sand border border-gold/20 flex items-center justify-center">
+              <div className="flex-none w-14 h-14 rounded-full bg-sand border border-sand-dk flex items-center justify-center">
                 <SukanMark monochrome="gold" size={56} className="opacity-60" />
               </div>
 
               {/* Name + joined */}
               <div className="flex-1 min-w-0">
-                <p className="font-display text-xl text-parchment leading-tight truncate">
+                <p className="font-display text-xl text-ink leading-tight truncate">
                   {listing.ownerName}
                 </p>
-                <p className="text-mute-soft text-sm mt-0.5">
+                <p className="text-ink-mid text-sm mt-0.5">
                   {t("listing.onSukanSince", { year: listing.ownerJoinedYear })}
                 </p>
               </div>
@@ -464,7 +464,7 @@ export default async function ListingDetailPage({
                 href={waUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-none rounded-[var(--radius-pill)] border border-gold/40 text-gold text-xs px-4 py-2 hover:bg-gold/10 transition-colors"
+                className="flex-none rounded-[var(--radius-pill)] border border-gold/40 text-gold-dk text-xs px-4 py-2 hover:bg-gold/10 transition-colors"
               >
                 {t("listing.contact")}
               </a>
@@ -478,7 +478,7 @@ export default async function ListingDetailPage({
             <section aria-labelledby="similar-heading">
               <h2
                 id="similar-heading"
-                className="font-display text-3xl text-parchment mb-6"
+                className="font-display text-3xl text-ink mb-6"
               >
                 {t("listing.similar")}
               </h2>
@@ -524,7 +524,7 @@ function ContactCta({
           href={waUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment font-semibold px-4 py-3 text-sm transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-cream font-semibold px-4 py-3 text-sm transition-colors"
         >
           {/* WhatsApp icon (inline SVG path, no external deps) */}
           <WhatsAppIcon />
@@ -532,7 +532,7 @@ function ContactCta({
         </a>
         <a
           href={telUrl}
-          className="flex-none rounded-[var(--radius-pill)] border border-gold/40 text-gold px-4 py-3 text-sm hover:bg-gold/10 transition-colors"
+          className="flex-none rounded-[var(--radius-pill)] border border-sand-dk text-ink-soft px-4 py-3 text-sm hover:bg-gold/10 transition-colors"
         >
           {t("listing.callOwner")}
         </a>
@@ -542,13 +542,13 @@ function ContactCta({
 
   // Full card for desktop right column
   return (
-    <div className="rounded-[var(--radius-card)] bg-earth-soft border border-gold/15 p-6 flex flex-col gap-4 sticky top-6">
+    <div className="rounded-[var(--radius-card)] bg-card border border-sand-dk p-6 flex flex-col gap-4 sticky top-6 shadow-[0_8px_28px_rgba(18,16,12,0.08)]">
       {/* Primary: WhatsApp */}
       <a
         href={waUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment font-semibold px-5 py-3.5 text-sm transition-colors"
+        className="flex items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-cream font-semibold px-5 py-3.5 text-sm transition-colors"
       >
         <WhatsAppIcon />
         {t("listing.contactWhatsapp")}
@@ -557,7 +557,7 @@ function ContactCta({
       {/* Secondary: call */}
       <a
         href={telUrl}
-        className="flex items-center justify-center rounded-[var(--radius-pill)] border border-gold/40 text-gold px-5 py-3 text-sm hover:bg-gold/10 transition-colors"
+        className="flex items-center justify-center rounded-[var(--radius-pill)] border border-sand-dk text-ink-soft px-5 py-3 text-sm hover:bg-gold/10 transition-colors"
       >
         {t("listing.callOwner")}
       </a>
@@ -566,7 +566,7 @@ function ContactCta({
       <div className="flex gap-2 justify-center pt-1">
         <button
           type="button"
-          className="flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-gold/15 px-4 py-2 text-xs text-mute-soft hover:text-parchment hover:border-gold/30 transition-colors"
+          className="flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-sand-dk px-4 py-2 text-xs text-ink-mid hover:text-ink hover:border-gold/40 transition-colors"
           aria-label={t("listing.saveListing")}
         >
           <SaveIcon />
@@ -574,7 +574,7 @@ function ContactCta({
         </button>
         <button
           type="button"
-          className="flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-gold/15 px-4 py-2 text-xs text-mute-soft hover:text-parchment hover:border-gold/30 transition-colors"
+          className="flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-sand-dk px-4 py-2 text-xs text-ink-mid hover:text-ink hover:border-gold/40 transition-colors"
           aria-label={t("listing.shareListing")}
         >
           <ShareIcon />

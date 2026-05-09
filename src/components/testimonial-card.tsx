@@ -15,12 +15,12 @@ export default function TestimonialCard({
   const ruleColor =
     accent === "terracotta" ? "bg-terracotta/40" : "bg-gold/40";
   const authorColor =
-    accent === "terracotta" ? "text-terracotta" : "text-gold";
+    accent === "terracotta" ? "text-terracotta" : "text-gold-dk";
 
   return (
-    <div className="bg-earth-soft border border-gold/15 rounded-[var(--radius-card)] p-7 flex flex-col gap-5">
+    <div className="bg-card border border-sand-dk rounded-[var(--radius-card)] p-7 flex flex-col gap-5 shadow-[0_4px_16px_rgba(18,16,12,0.06)]">
       {/* Quote */}
-      <p className="italic text-parchment text-lg leading-[1.7] flex-1">
+      <p className="italic text-ink text-lg leading-[1.7] flex-1">
         {quote}
       </p>
 
@@ -33,7 +33,7 @@ export default function TestimonialCard({
           {author}
         </p>
         {location && (
-          <p className="text-xs text-mute-soft mt-0.5">{location}</p>
+          <p className="text-xs text-ink-mid mt-0.5">{location}</p>
         )}
       </div>
     </div>
