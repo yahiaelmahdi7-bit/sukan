@@ -25,7 +25,7 @@ export async function signIn(
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/dashboard");
 }
 
 // ─── Sign Up ─────────────────────────────────────────────────────────────────
@@ -46,6 +46,7 @@ export async function signUp(
     password,
     options: {
       data: { full_name: fullName, role },
+      emailRedirectTo: `${SITE_URL}/auth/callback?next=/${locale}/dashboard`,
     },
   });
 

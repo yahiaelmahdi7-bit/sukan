@@ -1,11 +1,33 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import SukanMark from "@/components/sukan-mark";
 import LocaleToggle from "@/components/locale-toggle";
+import { createClient } from "@/lib/supabase/server";
+import { signOut } from "@/app/[locale]/(auth)/actions";
 
-export default function Navbar() {
-  const t = useTranslations("nav");
-  const brand = useTranslations("brand");
+export default async function Navbar() {
+  const t = await getTranslations("nav");
+  const brand = await getTranslations("brand");
+
+  let userInitials: string | null = null;
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const meta = user.user_metadata as { full_name?: string } | undefined;
+      const name = meta?.full_name?.trim() || user.email || "";
+      userInitials = name
+        .split(/[\s@.]+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((s) => s[0]?.toUpperCase() ?? "")
+        .join("") || "U";
+    }
+  } catch {
+    userInitials = null;
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-gold/10 bg-earth/80 backdrop-blur-md">
@@ -22,7 +44,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-8 md:flex">
           <Link
-            href="/"
+            href="/listings"
             className="text-sm text-parchment hover:text-gold-bright transition"
           >
             {t("browse")}
@@ -49,12 +71,36 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <LocaleToggle />
-          <Link
-            href="/sign-in"
-            className="hidden rounded-pill border border-gold/40 px-4 py-1.5 text-sm text-parchment hover:bg-gold/10 transition sm:inline-block"
-          >
-            {t("signIn")}
-          </Link>
+
+          {userInitials ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="hidden sm:inline-flex items-center gap-2 rounded-pill border border-gold/30 px-3 py-1.5 text-sm text-parchment hover:bg-gold/10 transition"
+              >
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gold text-earth text-xs font-semibold">
+                  {userInitials}
+                </span>
+                <span className="hidden lg:inline">Dashboard</span>
+              </Link>
+              <form action={signOut}>
+                <button
+                  type="submit"
+                  className="hidden sm:inline-block rounded-pill border border-gold/20 px-3 py-1.5 text-xs text-mute-soft hover:text-parchment hover:border-gold/40 transition"
+                >
+                  {t("signOut") ?? "Sign out"}
+                </button>
+              </form>
+            </>
+          ) : (
+            <Link
+              href="/sign-in"
+              className="hidden rounded-pill border border-gold/40 px-4 py-1.5 text-sm text-parchment hover:bg-gold/10 transition sm:inline-block"
+            >
+              {t("signIn")}
+            </Link>
+          )}
+
           <Link
             href="/post"
             className="rounded-pill bg-terracotta px-4 py-1.5 text-sm font-semibold text-parchment hover:bg-terracotta-deep transition"

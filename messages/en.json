@@ -9,7 +9,9 @@
     "post": "Post a property",
     "diaspora": "For diaspora",
     "about": "About",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "dashboard": "Dashboard"
   },
   "hero": {
     "tenantTitle": "Find a home in Sudan",
