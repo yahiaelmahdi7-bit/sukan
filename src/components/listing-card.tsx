@@ -18,7 +18,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   return (
     <Link
       href={`/listings/${listing.id}`}
-      className="group block overflow-hidden rounded-[var(--radius-card)] border border-gold/15 bg-earth-soft transition hover:border-gold/40 hover:shadow-2xl hover:shadow-black/40"
+      className="group block overflow-hidden rounded-[var(--radius-card)] border border-gold/15 bg-earth-soft transition duration-200 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-2xl hover:shadow-black/30"
     >
       <div className="card-watermark relative aspect-[4/3] w-full">
         <div className="absolute inset-0 flex items-center justify-center">

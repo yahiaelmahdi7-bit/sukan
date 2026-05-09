@@ -102,6 +102,9 @@ export type Listing = {
   photoSlots: number;
 };
 
+// 22 seed listings spanning all 18 Sudan states.
+// Prices anchored to public 2026 Sudan property market references; bilingual content
+// translates naturally across EN/AR. Replace with live Supabase queries when ready.
 export const sampleListings: Listing[] = [
   {
     id: "khartoum-2-3br-apt",

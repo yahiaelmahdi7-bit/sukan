@@ -34,7 +34,38 @@ export const metadata: Metadata = {
   },
   description:
     "Sudan's first AI-powered property listing platform. Verified rentals and sales across all 18 states, built bilingual EN/AR for tenants, landlords, and the diaspora.",
-  metadataBase: new URL("https://sukan.app"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app",
+  ),
+  manifest: "/manifest.webmanifest",
+  themeColor: "#12100C",
+  appleWebApp: {
+    capable: true,
+    title: "Sukan",
+    statusBarStyle: "black-translucent",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Sukan — سُكَن",
+    title: {
+      default: "Sukan — Sudan's home for housing",
+      template: "%s · Sukan",
+    },
+    description:
+      "Verified property listings across all 18 states. Bilingual EN / AR. Built for tenants, landlords, and the diaspora.",
+    locale: "en_US",
+    alternateLocale: "ar_SD",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@sukanapp",
+    title: {
+      default: "Sukan — Sudan's home for housing",
+      template: "%s · Sukan",
+    },
+    description:
+      "Verified property listings across all 18 states. Bilingual EN / AR. Built for tenants, landlords, and the diaspora.",
+  },
 };
 
 export function generateStaticParams() {

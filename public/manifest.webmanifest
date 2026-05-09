@@ -1,0 +1,22 @@
+{
+  "name": "Sukan — سُكَن",
+  "short_name": "Sukan",
+  "description": "Sudan's home for housing. Verified property listings across all 18 states, bilingual EN/AR, built for tenants, landlords, and the diaspora.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#12100C",
+  "theme_color": "#12100C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

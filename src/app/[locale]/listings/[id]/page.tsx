@@ -8,6 +8,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ListingCard from "@/components/listing-card";
 import { sampleListings, getListingById, type Listing } from "@/lib/sample-listings";
+import ListingLocationMap from "./_components/listing-location-map";
 
 /* ─────────────────────────────────────────────────────────
    Metadata
@@ -393,20 +394,21 @@ export default async function ListingDetailPage({
               {t("listing.location")}
             </h2>
 
-            {/* Map placeholder — TODO: embed OSM iframe */}
-            {/* TODO: Replace this div with an <iframe> pointing to:
-                  https://www.openstreetmap.org/export/embed.html?bbox=...&marker={listing.latitude},{listing.longitude}
-                Set loading="lazy" and title attribute for accessibility.
-                Requires iframe-src CSP header update in next.config.ts. */}
-            <div
-              className="w-full aspect-video rounded-[var(--radius-card)] border border-dashed border-gold/30 flex items-center justify-center text-mute-soft text-sm mb-4"
-              aria-label={t("listing.mapPlaceholder")}
-            >
-              {t("listing.mapPlaceholder")}
-            </div>
+            {/* Live Leaflet map */}
+            <ListingLocationMap
+              listing={listing}
+              locale={locale as 'en' | 'ar'}
+              labels={{
+                directions: t("listing.directions"),
+                openInOsm: t("listing.openInOsm"),
+                copyCoords: t("listing.copyCoords"),
+                coordsCopied: t("listing.coordsCopied"),
+                mapTitle: t("listing.mapTitle"),
+              }}
+            />
 
-            {/* Location text */}
-            <p className="text-mute-soft text-sm">
+            {/* Location text — below the map so the map is the visual anchor */}
+            <p className="text-mute-soft text-sm mt-4">
               {listing.neighborhood ? `${listing.neighborhood}, ` : ""}
               {listing.city},{" "}
               <span className="text-parchment/80">{stateLabel}</span>,{" "}

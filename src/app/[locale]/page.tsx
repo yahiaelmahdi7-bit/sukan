@@ -1,32 +1,20 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { Search, Home, Plane, ShieldCheck, Languages, Globe, MessageCircle } from "lucide-react";
 import SukanMark from "@/components/sukan-mark";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ListingCard from "@/components/listing-card";
+import SudanStateMap from "@/components/sudan-state-map";
+import WaveDivider from "@/components/wave-divider";
+import Pill from "@/components/pill";
+import SectionHeader from "@/components/section-header";
+import HeroStats from "@/components/hero-stats";
+import NumberedStep from "@/components/numbered-step";
+import TestimonialCard from "@/components/testimonial-card";
+import DiasporaCallout from "@/components/diaspora-callout";
 import { sampleListings } from "@/lib/sample-listings";
 import HeroSearch from "@/components/hero-search";
-
-const STATE_KEYS = [
-  "khartoum",
-  "al_jazirah",
-  "blue_nile",
-  "sennar",
-  "white_nile",
-  "north_kordofan",
-  "south_kordofan",
-  "west_kordofan",
-  "north_darfur",
-  "south_darfur",
-  "east_darfur",
-  "central_darfur",
-  "west_darfur",
-  "kassala",
-  "red_sea",
-  "gedaref",
-  "river_nile",
-  "northern",
-] as const;
 
 export default async function HomePage({
   params,
@@ -41,6 +29,16 @@ export default async function HomePage({
   const featuredListings = sampleListings
     .filter((l) => l.tier === "featured")
     .slice(0, 3);
+
+  const heroStats = [
+    { value: t("hero.statListingsValue"), label: t("hero.statListings") },
+    { value: t("hero.statStatesValue"), label: t("hero.statStates") },
+    { value: t("hero.statVerifiedValue"), label: t("hero.statVerified") },
+  ];
+
+  const whatsappText = encodeURIComponent(
+    "Hi, I'd like to list my property on Sukan / مرحباً، أريد نشر عقاري على سُكَن"
+  );
 
   return (
     <>
@@ -61,7 +59,7 @@ export default async function HomePage({
             }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             {/* Eyebrow */}
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold">
               {t("brand.tagline")}
@@ -80,8 +78,18 @@ export default async function HomePage({
             {/* Two-column panel row */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
               {/* Left: tenant search (3/5) */}
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-3 flex flex-col gap-3">
                 <HeroSearch />
+
+                {/* AI match teaser */}
+                <p className="text-sm">
+                  <Link
+                    href="/match"
+                    className="text-gold hover:text-gold-bright transition-colors"
+                  >
+                    {t("hero.aiMatchTeaser")}
+                  </Link>
+                </p>
               </div>
 
               {/* Right: landlord CTA (2/5) */}
@@ -102,12 +110,30 @@ export default async function HomePage({
                     {t("hero.landlordSubtitle")}
                   </p>
 
-                  <Link
-                    href="/post"
-                    className="inline-block rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment font-semibold px-6 py-3 text-sm transition-colors"
+                  {/* WhatsApp CTA — primary green */}
+                  <a
+                    href={`https://wa.me/249912345678?text=${whatsappText}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] px-6 py-3 text-sm font-semibold text-white transition-colors w-full justify-center mb-3"
+                    style={{ backgroundColor: "#25d366" }}
                   >
-                    {t("hero.postProperty")}
-                  </Link>
+                    <MessageCircle size={16} aria-hidden />
+                    {t("hero.whatsappCta")}
+                  </a>
+
+                  {/* Secondary web link */}
+                  <div className="text-center">
+                    <Link
+                      href="/post"
+                      className="text-xs text-mute hover:text-earth transition-colors"
+                    >
+                      {t("hero.orPostWeb")}
+                    </Link>
+                  </div>
+
+                  {/* Stats */}
+                  <HeroStats stats={heroStats} />
                 </div>
               </div>
             </div>
@@ -117,20 +143,18 @@ export default async function HomePage({
         {/* ─────────────────────────────────────────────────────────
             2. WAVE DIVIDER
         ───────────────────────────────────────────────────────── */}
-        <div className="wave-divider opacity-50 my-0" />
+        <WaveDivider intensity="subtle" />
 
         {/* ─────────────────────────────────────────────────────────
             3. FEATURED LISTINGS
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth py-16">
+        <section className="bg-earth py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {/* Eyebrow */}
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold">
-              {t("listing.featured")}
-            </p>
-            <h2 className="font-display text-3xl md:text-4xl text-parchment mb-8">
-              {t("trust.stat1")}
-            </h2>
+            <SectionHeader
+              eyebrow={t("listing.featured")}
+              title={t("trust.stat1")}
+              viewAll={{ href: "/listings", label: t("listing.browseAll") + " →" }}
+            />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredListings.map((listing) => (
@@ -143,14 +167,15 @@ export default async function HomePage({
         {/* ─────────────────────────────────────────────────────────
             4. BROWSE ALL LISTINGS
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth-soft py-16">
+        <section className="bg-earth-soft py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="font-display text-4xl md:text-5xl text-parchment mb-4">
-              {t("nav.browse")}
-            </h2>
+            <SectionHeader
+              title={t("nav.browse")}
+              viewAll={{ href: "/listings", label: t("listing.browseAll") + " →" }}
+            />
 
             {/* Filter chips — decorative */}
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className="flex flex-wrap gap-2 mb-8 -mt-4">
               {[
                 t("hero.anyState"),
                 t("propertyType.apartment"),
@@ -179,82 +204,72 @@ export default async function HomePage({
         {/* ─────────────────────────────────────────────────────────
             5. HOW SUKAN WORKS
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-parchment-grain py-20">
+        <WaveDivider flip intensity="subtle" />
+        <section className="bg-parchment-grain py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="font-display text-4xl md:text-5xl text-earth text-center mb-14">
-              {t("howItWorks.title")}
-            </h2>
+            <SectionHeader
+              title={t("howItWorks.title")}
+              align="center"
+            />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {(
-                [
-                  {
-                    titleKey: "howItWorks.tenants",
-                    bodyKey: "howItWorks.tenantsBody",
-                  },
-                  {
-                    titleKey: "howItWorks.landlords",
-                    bodyKey: "howItWorks.landlordsBody",
-                  },
-                  {
-                    titleKey: "howItWorks.diaspora",
-                    bodyKey: "howItWorks.diasporaBody",
-                  },
-                ] as const
-              ).map(({ titleKey, bodyKey }) => (
-                <div key={titleKey} className="flex flex-col items-center text-center gap-4">
-                  <SukanMark monochrome="terracotta" size={40} />
-                  <h3 className="font-display text-xl text-earth font-semibold">
-                    {t(titleKey)}
-                  </h3>
-                  <p className="text-mute text-sm leading-relaxed">{t(bodyKey)}</p>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <NumberedStep
+                index={1}
+                icon={<Search size={40} strokeWidth={1.5} />}
+                title={t("howItWorks.tenants")}
+                body={t("howItWorks.tenantsBody")}
+              />
+              <NumberedStep
+                index={2}
+                icon={<Home size={40} strokeWidth={1.5} />}
+                title={t("howItWorks.landlords")}
+                body={t("howItWorks.landlordsBody")}
+              />
+              <NumberedStep
+                index={3}
+                icon={<Plane size={40} strokeWidth={1.5} />}
+                title={t("howItWorks.diaspora")}
+                body={t("howItWorks.diasporaBody")}
+              />
             </div>
           </div>
         </section>
+        <WaveDivider intensity="subtle" />
 
         {/* ─────────────────────────────────────────────────────────
             6. SUDAN STATES MAP BAND
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth py-16">
+        <section className="bg-earth py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="font-display text-3xl md:text-4xl text-parchment mb-2 text-center">
-              {t("statesSection.title")}
-            </h2>
-            <p className="text-mute-soft text-sm text-center mb-10">
-              {t("statesSection.subtitle")}
-            </p>
+            <SectionHeader
+              eyebrow={t("map.eyebrow")}
+              title={t("statesSection.title")}
+              subtitle={t("statesSection.subtitle")}
+              align="center"
+              viewAll={{ href: "/map", label: t("map.openFull") }}
+            />
 
-            <div className="flex flex-wrap justify-center gap-2">
-              {STATE_KEYS.map((key) => (
-                <Link
-                  key={key}
-                  href={`/listings?state=${key}`}
-                  className="rounded-[var(--radius-pill)] border border-gold/30 px-4 py-2 text-sm text-mute-soft hover:bg-gold/10 hover:text-parchment transition-colors"
-                >
-                  {t(`states.${key}`)}
-                </Link>
-              ))}
-            </div>
+            {/* Map */}
+            <SudanStateMap listings={sampleListings} height="520px" />
           </div>
         </section>
 
         {/* ─────────────────────────────────────────────────────────
             7. TRUST BAND
         ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth-soft py-16">
+        <WaveDivider flip intensity="subtle" />
+        <section className="bg-earth-soft py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center mb-10">
               {(
                 [
-                  "trust.verifiedListings",
-                  "trust.bilingualSupport",
-                  "trust.diasporaTrusted",
+                  { key: "trust.verifiedListings", Icon: ShieldCheck },
+                  { key: "trust.bilingualSupport", Icon: Languages },
+                  { key: "trust.diasporaTrusted", Icon: Globe },
                 ] as const
-              ).map((key) => (
+              ).map(({ key, Icon }) => (
                 <div key={key} className="flex flex-col items-center gap-3">
-                  <SukanMark monochrome="terracotta" size={36} />
+                  <Icon size={36} className="text-gold" strokeWidth={1.5} />
                   <p className="font-semibold text-parchment text-base">{t(key)}</p>
                 </div>
               ))}
@@ -272,6 +287,52 @@ export default async function HomePage({
             </div>
           </div>
         </section>
+
+        {/* ─────────────────────────────────────────────────────────
+            8. TESTIMONIALS
+        ───────────────────────────────────────────────────────── */}
+        <WaveDivider intensity="subtle" />
+        <section className="bg-earth py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <SectionHeader
+              eyebrow={t("testimonials.eyebrow")}
+              title={t("testimonials.title")}
+              align="center"
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              <TestimonialCard
+                quote={t("testimonials.t1Quote")}
+                author={t("testimonials.t1Author")}
+                location={t("testimonials.t1Location")}
+                accent="gold"
+              />
+              <TestimonialCard
+                quote={t("testimonials.t2Quote")}
+                author={t("testimonials.t2Author")}
+                location={t("testimonials.t2Location")}
+                accent="terracotta"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ─────────────────────────────────────────────────────────
+            9. DIASPORA CALLOUT
+        ───────────────────────────────────────────────────────── */}
+        <WaveDivider flip intensity="subtle" />
+        <section className="bg-earth-soft">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <DiasporaCallout
+              eyebrow={t("diaspora.eyebrow")}
+              title={t("diaspora.title")}
+              subtitle={t("diaspora.subtitle")}
+              browseCta={t("diaspora.browseCta")}
+              matchCta={t("diaspora.matchCta")}
+            />
+          </div>
+        </section>
+        <WaveDivider intensity="subtle" />
       </main>
 
       <Footer />
