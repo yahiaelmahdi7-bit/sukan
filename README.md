@@ -3,7 +3,7 @@
 Sudan's first AI-powered property listing platform. Mobile-first bilingual (Arabic/English) PWA connecting landlords, tenants, and diaspora investors.
 
 ## Status
-Pre-alpha. Local development.
+Pre-alpha. Live preview at [sukan.vercel.app](https://sukan.vercel.app). Auto-deploys from `main` via Vercel + GitHub integration.
 
 ## Stack
 - Next.js 16 (App Router, Cache Components)
