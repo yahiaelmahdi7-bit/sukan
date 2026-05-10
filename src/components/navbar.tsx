@@ -1,12 +1,23 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Heart } from "lucide-react";
 import SukanMark from "@/components/sukan-mark";
 import LocaleToggle from "@/components/locale-toggle";
 import SavedNavBadge from "@/components/saved-nav-badge";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "@/app/[locale]/(auth)/actions";
 
+/**
+ * Global site navigation — floating glass pill.
+ *
+ * IA principles:
+ * - LEFT (after brand): Discovery — Browse, For diaspora, About.
+ * - RIGHT cluster: Personal — Saved + Dashboard (signed in).
+ *   Then utility — Locale toggle. Then primary CTA — Post a property.
+ *   Sign in (signed out) takes the same slot as Saved+Dashboard.
+ *
+ * Sign out lives in the dashboard sidebar, not in the global nav.
+ * Post a property is a SINGLE CTA — no duplicate middle link.
+ * No icons next to text labels — keeps the row uniform.
+ */
 export default async function Navbar() {
   const t = await getTranslations("nav");
   const brand = await getTranslations("brand");
@@ -32,13 +43,15 @@ export default async function Navbar() {
     userInitials = null;
   }
 
+  const isSignedIn = userInitials !== null;
+
   return (
     <header className="sticky top-3 z-40 px-3 sm:px-5">
       <nav
         className="glass-strong glass-highlight mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-[var(--radius-pill)] border border-white/60 pe-2 ps-4 sm:ps-5"
         style={{ boxShadow: "var(--shadow-warm)" }}
       >
-        {/* Brand */}
+        {/* Brand — links home */}
         <Link
           href="/"
           className="smooth-fast flex items-center gap-3 py-2 text-ink hover:text-terracotta"
@@ -58,27 +71,13 @@ export default async function Navbar() {
           </span>
         </Link>
 
-        {/* Links */}
+        {/* Discovery links (center) */}
         <div className="hidden items-center gap-7 md:flex">
           <Link
             href="/listings"
             className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
           >
             {t("browse")}
-          </Link>
-          <Link
-            href="/saved"
-            className="smooth-fast relative flex items-center gap-1.5 text-sm text-ink/85 hover:text-terracotta"
-          >
-            <Heart size={14} strokeWidth={1.8} aria-hidden />
-            {t("saved")}
-            <SavedNavBadge />
-          </Link>
-          <Link
-            href="/post"
-            className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
-          >
-            {t("post")}
           </Link>
           <Link
             href="/diaspora"
@@ -94,12 +93,18 @@ export default async function Navbar() {
           </Link>
         </div>
 
-        {/* Right cluster */}
+        {/* Right cluster: personal · utility · CTA */}
         <div className="flex items-center gap-2">
-          <LocaleToggle />
-
-          {userInitials ? (
+          {/* Personal — Saved + Dashboard (only when signed in) */}
+          {isSignedIn && (
             <>
+              <Link
+                href="/saved"
+                className="smooth-fast relative hidden items-center gap-1.5 rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-flex"
+              >
+                {t("saved")}
+                <SavedNavBadge />
+              </Link>
               <Link
                 href="/dashboard"
                 className="smooth-fast hidden items-center gap-2 rounded-[var(--radius-pill)] border border-white/60 bg-white/50 px-2.5 py-1 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-flex"
@@ -115,16 +120,14 @@ export default async function Navbar() {
                 </span>
                 <span className="hidden lg:inline">Dashboard</span>
               </Link>
-              <form action={signOut}>
-                <button
-                  type="submit"
-                  className="smooth-fast hidden rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3 py-1.5 text-xs text-ink-mid hover:border-gold/50 hover:text-ink sm:inline-block"
-                >
-                  {t("signOut") ?? "Sign out"}
-                </button>
-              </form>
             </>
-          ) : (
+          )}
+
+          {/* Utility — locale toggle */}
+          <LocaleToggle />
+
+          {/* Sign in pill — only when signed out */}
+          {!isSignedIn && (
             <Link
               href="/sign-in"
               className="smooth-fast hidden rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-block"
@@ -133,6 +136,7 @@ export default async function Navbar() {
             </Link>
           )}
 
+          {/* Primary CTA — single instance, far right */}
           <Link
             href="/post"
             className="smooth-fast rounded-[var(--radius-pill)] bg-terracotta px-4 py-1.5 text-sm font-semibold text-cream hover:bg-terracotta-deep"
