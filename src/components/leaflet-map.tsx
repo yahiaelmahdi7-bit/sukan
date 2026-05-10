@@ -454,16 +454,23 @@ export default function LeafletMap({
 
       if (m.popupHtml) {
         marker.bindPopup(m.popupHtml, {
-          minWidth: 240,
-          maxWidth: 300,
-          className: 'sukan-popup',
+          minWidth: 260,
+          maxWidth: 290,
+          className: 'sukan-popup sukan-listing-popup',
+          // No padding — our card handles its own spacing
+          autoPan: true,
+          autoPanPadding: [20, 20],
         });
       }
 
-      // Click handling — priceLabel variant fires callback; state variant navigates
+      // Click handling — priceLabel variant fires callback AND opens popup
+      // State variant navigates to the listing page
       if (m.variant === 'priceLabel' && onMarkerClick) {
         marker.on('click', () => {
           onMarkerClick(m.id);
+          if (m.popupHtml) {
+            marker.openPopup();
+          }
         });
         marker.on('add', () => {
           const el = marker.getElement();
@@ -513,6 +520,7 @@ export default function LeafletMap({
           box-shadow: none;
           padding: 0;
         }
+        /* Dark popup (for state markers / generic) */
         .sukan-popup .leaflet-popup-content-wrapper {
           background: #1F1A14;
           color: #FDF8F0;
@@ -533,6 +541,47 @@ export default function LeafletMap({
           font-size: 18px;
           top: 8px;
           right: 8px;
+        }
+        /* Listing popup — cream glass card style */
+        .sukan-listing-popup .leaflet-popup-content-wrapper {
+          background: #FFFCF6;
+          color: #12100C;
+          border: 1px solid rgba(255,255,255,0.7);
+          border-radius: 14px;
+          box-shadow:
+            0 6px 12px rgba(122,85,48,0.08),
+            0 28px 56px rgba(122,85,48,0.18);
+          padding: 0;
+          overflow: hidden;
+        }
+        .sukan-listing-popup .leaflet-popup-content {
+          margin: 0;
+          width: 260px !important;
+        }
+        .sukan-listing-popup .leaflet-popup-tip-container {
+          margin-top: -1px;
+        }
+        .sukan-listing-popup .leaflet-popup-tip {
+          background: #FFFCF6;
+          box-shadow: none;
+        }
+        .sukan-listing-popup .leaflet-popup-close-button {
+          z-index: 2;
+          color: rgba(122,85,48,0.6);
+          font-size: 20px;
+          top: 6px;
+          right: 6px;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255,252,246,0.85);
+          border-radius: 50%;
+          line-height: 1;
+        }
+        .sukan-listing-popup .leaflet-popup-close-button:hover {
+          color: #C8401A;
         }
         /* Suppress Leaflet default icon broken images */
         .leaflet-marker-icon.leaflet-div-icon {

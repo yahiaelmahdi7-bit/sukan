@@ -375,7 +375,21 @@
     "street": "خريطة شارع",
     "toggleList": "القائمة",
     "hideList": "إخفاء القائمة",
-    "flyToListing": "إيجاد على الخريطة"
+    "flyToListing": "إيجاد على الخريطة",
+    "filterAnyPurpose": "الكل",
+    "filterRent": "إيجار",
+    "filterSale": "شراء",
+    "filterAnyType": "أي نوع",
+    "filterMaxPrice": "السعر الأقصى (دولار)",
+    "filterMaxPricePlaceholder": "أقصى $",
+    "filterApply": "تطبيق",
+    "filterClear": "مسح",
+    "resultCount": "عقار في السودان",
+    "resultCountPlural": "عقارات في السودان",
+    "listView": "عرض القائمة",
+    "toggleAllListings": "كل الإعلانات",
+    "toggleByState": "حسب الولاية",
+    "viewListing": "عرض الإعلان"
   },
   "dashboard": {
     "title": "لوحة التحكم",

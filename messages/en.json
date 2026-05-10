@@ -375,7 +375,21 @@
     "street": "Street",
     "toggleList": "List",
     "hideList": "Hide list",
-    "flyToListing": "Find on map"
+    "flyToListing": "Find on map",
+    "filterAnyPurpose": "All",
+    "filterRent": "Rent",
+    "filterSale": "Buy",
+    "filterAnyType": "Any type",
+    "filterMaxPrice": "Max price (USD)",
+    "filterMaxPricePlaceholder": "Max $",
+    "filterApply": "Apply",
+    "filterClear": "Clear",
+    "resultCount": "property in Sudan",
+    "resultCountPlural": "properties in Sudan",
+    "listView": "List view",
+    "toggleAllListings": "All listings",
+    "toggleByState": "By state",
+    "viewListing": "View listing"
   },
   "dashboard": {
     "title": "Dashboard",
