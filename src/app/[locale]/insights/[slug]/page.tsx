@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import GlassPanel from "@/components/glass-panel";
+import ProseCard from "@/components/prose-card";
 import WaveDivider from "@/components/wave-divider";
 import { insights, getInsightBySlug } from "@/lib/insights";
 import { Calendar, ArrowLeft, ArrowRight } from "lucide-react";
@@ -58,6 +59,7 @@ function formatDate(iso: string, locale: string): string {
 /**
  * Render the article body: handle markdown-style **bold** and line breaks.
  * No dependency on @tailwindcss/typography — manual prose styling.
+ * Color and spacing are inherited from the .sukan-prose parent.
  */
 function renderBody(text: string): React.ReactNode[] {
   return text.split("\n\n").map((para, i) => {
@@ -67,34 +69,22 @@ function renderBody(text: string): React.ReactNode[] {
     // Heading: starts with **text** on its own line
     if (trimmed.startsWith("**") && trimmed.endsWith("**") && !trimmed.slice(2, -2).includes("\n")) {
       const heading = trimmed.slice(2, -2);
-      return (
-        <h3
-          key={i}
-          className="mt-10 mb-4 font-display text-2xl leading-tight tracking-tight text-ink"
-        >
-          {heading}
-        </h3>
-      );
+      // h3 tag — .sukan-prose h3 styles apply automatically
+      return <h3 key={i}>{heading}</h3>;
     }
 
     // Paragraph with inline **bold** segments
     const parts = trimmed.split(/(\*\*[^*]+\*\*)/g);
     const content = parts.map((part, j) => {
       if (part.startsWith("**") && part.endsWith("**")) {
-        return (
-          <strong key={j} className="font-semibold text-ink">
-            {part.slice(2, -2)}
-          </strong>
-        );
+        // strong tag — .sukan-prose strong styles apply automatically
+        return <strong key={j}>{part.slice(2, -2)}</strong>;
       }
       return part;
     });
 
-    return (
-      <p key={i} className="text-base leading-[1.9] text-ink-mid">
-        {content}
-      </p>
-    );
+    // p tag — .sukan-prose p styles apply automatically
+    return <p key={i}>{content}</p>;
   }).filter(Boolean) as React.ReactNode[];
 }
 
@@ -186,8 +176,10 @@ export default async function InsightDetailPage({
 
         {/* ── Article body ── */}
         <article className="bg-cream py-16">
-          <div className="mx-auto max-w-3xl space-y-6 px-4 sm:px-8 lg:px-16">
-            {renderBody(body)}
+          <div className="mx-auto max-w-3xl px-4 sm:px-8 lg:px-16">
+            <ProseCard variant="cream">
+              {renderBody(body)}
+            </ProseCard>
           </div>
         </article>
 
@@ -224,7 +216,7 @@ export default async function InsightDetailPage({
                         <h3 className="font-display text-lg leading-snug text-ink group-hover:text-terracotta transition-colors">
                           {rTitle}
                         </h3>
-                        <p className="flex-1 text-sm leading-relaxed text-ink-mid line-clamp-2">
+                        <p className="flex-1 text-sm leading-relaxed text-ink-soft line-clamp-2">
                           {rExcerpt}
                         </p>
                         <p className="inline-flex items-center gap-1 text-xs font-medium text-terracotta group-hover:gap-2 transition-all">
@@ -245,7 +237,7 @@ export default async function InsightDetailPage({
         {/* ── CTA: guides ── */}
         <section className="bg-cream py-16">
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-8">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold-dk">
+            <p className="sukan-eyebrow mb-2">
               {isAr ? "الخطوة التالية" : "Next step"}
             </p>
             <h2 className="mb-4 font-display text-2xl tracking-tight text-ink md:text-3xl">

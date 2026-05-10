@@ -15,6 +15,7 @@ import {
   type Listing,
 } from "@/lib/sample-listings";
 import type { Locale } from "@/i18n/routing";
+import CompareButton from "@/components/compare-button";
 
 // ─── Extended fields (all optional, no Listing type mutation) ───────────────
 type ListingExtras = {
@@ -380,8 +381,21 @@ export default function ListingCard({ listing }: { listing: Listing }) {
             {views} views this week {/* TODO: i18n */}
           </span>
 
-          {/* ── Favorite button ───────────────────────────────────────────── */}
-          <div className="pointer-events-auto absolute top-3 z-20 ltr:right-3 rtl:left-3">
+          {/* ── Favorite + Compare buttons ────────────────────────────────── */}
+          <div className="pointer-events-auto absolute top-3 z-20 ltr:right-3 rtl:left-3 flex items-center gap-1.5">
+            <CompareButton
+              listing={{
+                id: listing.id,
+                title,
+                image: photos[0],
+                priceUsd: listing.priceUsd,
+                state: listing.state,
+                bedrooms: listing.bedrooms,
+                bathrooms: listing.bathrooms,
+                areaSqm: listing.areaSqm,
+              }}
+              size="sm"
+            />
             <FavoriteButton listingId={listing.id} size="sm" />
           </div>
         </div>

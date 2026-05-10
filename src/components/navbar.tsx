@@ -4,6 +4,7 @@ import SukanMark from "@/components/sukan-mark";
 import LocaleToggle from "@/components/locale-toggle";
 import SavedNavBadge from "@/components/saved-nav-badge";
 import RecentlyViewedDropdown from "@/components/recently-viewed-dropdown";
+import CompareTray from "@/components/compare-tray";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -195,6 +196,9 @@ export default async function Navbar() {
           </Link>
         </div>
       </nav>
+
+      {/* Floating compare tray — self-hides when empty */}
+      <CompareTray />
     </header>
   );
 }

@@ -27,6 +27,8 @@ import { ListingActivityCounters } from "@/components/listing-activity-counters"
 import { NeighborhoodBlurb } from "@/components/neighborhood-blurb";
 import { SimilarListingsRail } from "@/components/similar-listings-rail";
 import TrackRecentlyViewed from "@/components/track-recently-viewed";
+import PropertyReality from "@/components/property-reality";
+import { WhatsAppCta } from "@/components/whatsapp-cta";
 
 /* ─────────────────────────────────────────────────────────
    Inline DB row types (database.types.ts may be stale)
@@ -180,7 +182,8 @@ export default async function ListingDetailPage({
   const telUrl = `tel:${listing.whatsappContact}`;
 
   // Full share URL
-  const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/${locale}/listings/${listing.id}`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app";
+  const fullUrl = `${siteUrl}/${locale}/listings/${listing.id}`;
 
   // Similar listings: same state, different id; fallback to first 3 others
   let similarListings: Listing[] = sampleListings
@@ -525,20 +528,14 @@ export default async function ListingDetailPage({
                 shadow="lg"
                 className="p-6 flex flex-col gap-4 lg:sticky lg:top-6"
               >
-                {/* Primary: WhatsApp gradient CTA */}
-                <a
-                  href={waUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="smooth flex items-center justify-center gap-2 rounded-[var(--radius-pill)] text-cream font-semibold px-5 py-3.5 text-sm"
-                  style={{
-                    background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
-                    boxShadow: "0 8px 22px rgba(37, 211, 102, 0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
-                  }}
-                >
-                  <WhatsAppIcon />
-                  {t("listing.contactWhatsapp")}
-                </a>
+                {/* Primary: WhatsApp CTA — component handles deep-link + pre-filled message */}
+                <WhatsAppCta
+                  phone={listing.whatsappContact || undefined}
+                  listingTitle={localTitle}
+                  listingUrl={fullUrl}
+                  locale={locale as "en" | "ar"}
+                  className="py-3.5"
+                />
 
                 {/* Secondary: call */}
                 <a
@@ -712,7 +709,21 @@ export default async function ListingDetailPage({
           )}
 
           {/* ─────────────────────────────────────────────────────────
-              7b. NEIGHBORHOOD BLURB — editorial area context
+              7b. PROPERTY REALITY — Sudan-specific infrastructure facts
+              (power backup, water supply, cooling, parking, furnishing,
+               distance to airport). The key differentiator vs Dubizzle.
+          ───────────────────────────────────────────────────────── */}
+          <section className="mb-10" aria-label={locale === "ar" ? "حقائق العقار" : "Property reality"}>
+            <PropertyReality
+              amenities={listing.amenities}
+              id={listing.id}
+              state={listing.state}
+              locale={locale as "en" | "ar"}
+            />
+          </section>
+
+          {/* ─────────────────────────────────────────────────────────
+              7c. NEIGHBORHOOD BLURB — editorial area context
           ───────────────────────────────────────────────────────── */}
           <NeighborhoodBlurb city={listing.city} locale={locale as "en" | "ar"} />
 

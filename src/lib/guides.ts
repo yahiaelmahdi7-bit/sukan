@@ -29,7 +29,7 @@ export const guides: Guide[] = [
     nameAr: "الخرطوم ٢",
     state: "khartoum",
     heroImage:
-      "https://images.unsplash.com/photo-1597040663342-45b6af3d91a5?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214533_9e3366a7-1f0f-42ae-b416-11579eb34fe8.png",
     introEn:
       "Khartoum 2 sits on the southern bank of the Blue Nile, close enough to the confluence that you can smell the water on a cool morning. It has long been the first neighbourhood Sudanese diaspora families point to when they talk about coming home — wide, relatively tree-lined streets, a concentration of good villas, and an easy reach of the international school corridor. The area weathered the displacement pressures of recent years better than most; its walled compounds offer a privacy that residents value highly. Rents are the highest in Khartoum, but the market is liquid: landlords here understand USD transactions and short-hold leases in a way that is still rare elsewhere in the city.",
     introAr:
@@ -75,7 +75,7 @@ export const guides: Guide[] = [
     nameAr: "الخرطوم ٣",
     state: "khartoum",
     heroImage:
-      "https://images.unsplash.com/photo-1580088655677-e14c24f78b41?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214536_97349bea-6063-45b5-980b-305f13e15c4e.png",
     introEn:
       "Khartoum 3 is the city's densest mixed-use neighbourhood — a grid of mid-rise apartments over ground-floor shops, broken up by mosques, schools, and the occasional tree-shaded courtyard that hints at what it looked like before the concrete arrived. It is not scenic in the way Khartoum 2 is, but it is alive in a different register: the streets are busy from early morning prayer until well past midnight, small businesses proliferate, and the market access is genuinely excellent. For families who need central Khartoum services without the premium of Khartoum 2, Khartoum 3 delivers solid value. Water pressure here is notably consistent — one of the better-served areas in the capital.",
     introAr:
@@ -121,7 +121,7 @@ export const guides: Guide[] = [
     nameAr: "بحري الكورنيش",
     state: "khartoum",
     heroImage:
-      "https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214539_9d749881-c7dc-479b-a789-238e62bd9332.png",
     introEn:
       "Bahri — formally Khartoum North — sits on the north bank of the Blue Nile directly opposite central Khartoum, connected by three bridges that, on a clear day, let you watch the city's skyline from the river. Bahri Riverside specifically refers to the strip of neighbourhoods hugging the Nile bend: Al-Halfaya, Al-Haj Yousif waterfront, and the older villas between them. The Nile here is wide and slow, and in the cooler months, evening walks along the bank are genuinely restorative. Family compounds dominate — extended families who have held land here for generations — which makes the rental market tight but genuine when units do come to market.",
     introAr:
@@ -167,7 +167,7 @@ export const guides: Guide[] = [
     nameAr: "أم درمان الملازمين",
     state: "khartoum",
     heroImage:
-      "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214542_363f26b9-aa43-42ce-87f1-c3873da97d04.png",
     introEn:
       "Mulazimin is the oldest residential quarter of Omdurman, which is itself the oldest continuous urban settlement on the confluence. The neighbourhood grew around the barracks of the Mahdist army — 'mulazimin' meaning 'attached troops' — and the architecture still carries echoes of that layered history: broad-walled houses with interior courtyards, rooms added generation by generation, trees that have been growing for a hundred years. It is not a neighbourhood designed for outsiders, but for those who come to live rather than to visit, the texture of community life here is unlike anything in central Khartoum.",
     introAr:
@@ -213,7 +213,7 @@ export const guides: Guide[] = [
     nameAr: "الخرطوم العمارات",
     state: "khartoum",
     heroImage:
-      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214544_2807559f-64a3-4e17-aec3-d9db72e6b806.png",
     introEn:
       "Amarat is the commercial-residential seam of Khartoum — the neighbourhood where a ground-floor insurance office sits beneath three floors of apartments, where the line between office and home has always been blurry. Stretching along Africa Road and its tributaries, it houses a concentration of businesses, law firms, travel agencies, and mid-size restaurants that make it the most economically active residential zone in the city. Living here means accepting noise and traffic as ambient conditions, in exchange for being walking distance from almost every service you need.",
     introAr:
@@ -259,7 +259,7 @@ export const guides: Guide[] = [
     nameAr: "بورتسودان الكورنيش",
     state: "red_sea",
     heroImage:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214747_a3f5dd79-789a-424f-8cf2-3408ab0b579c.png",
     introEn:
       "Port Sudan's Corniche district runs along the Red Sea waterfront between the old port gates and the newer diplomatic quarter, a strip of seafront apartments and villas that has become, unexpectedly, a destination of growing diaspora interest. The Red Sea city was less disrupted by the 2023 conflict than Khartoum, which drove a wave of internal migration and, alongside it, an uptick in permanent relocation decisions from diaspora families who had been planning to return eventually but chose to accelerate. The Corniche offers sea breezes year-round, a more temperate climate than the interior, and a port city's particular cosmopolitan energy.",
     introAr:
@@ -305,7 +305,7 @@ export const guides: Guide[] = [
     nameAr: "وسط مدينة ودمدني",
     state: "al_jazirah",
     heroImage:
-      "https://images.unsplash.com/photo-1533651180995-3b8dcd33e834?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214749_9d7037cd-e157-4e3f-9fe2-c60f7a9d8c16.png",
     introEn:
       "Wad Madani is the capital of Al-Jazirah state, positioned at the heart of the Gezira agricultural scheme — the vast irrigated cotton- and sorghum-growing plain between the Blue and White Niles that has sustained central Sudan for a century. The city center is compact and functional: a main street, a large souq, the state government buildings, and a ring of residential quarters that feel a generation behind Khartoum in infrastructure but considerably ahead in affordability. For families priced out of the capital, or those who never wanted its pace, Wad Madani Center offers a genuine mid-size Sudanese city life with surprisingly good transport connections north.",
     introAr:
@@ -351,7 +351,7 @@ export const guides: Guide[] = [
     nameAr: "مدينة كسلا",
     state: "kassala",
     heroImage:
-      "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1600&auto=format&fit=crop",
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_214752_4a1ed493-105e-4076-9d27-bba448880edd.png",
     introEn:
       "Kassala is Sudan's eastern anchor — a city of 700,000 at the foot of the Taka Mountains, whose granite domes rise with an abruptness that has made this skyline one of the most photographed in the country. The old town grew around the ruins of the Egyptian fort and the Khatmiyya sufi order's shrine, giving it a spiritual and aesthetic depth that larger Sudanese cities lack. The Gash river runs through the city seasonally, shaping the landscape and dictating the pace of agricultural life around it. Kassala's position near the Eritrean and Ethiopian borders has made it permanently cosmopolitan: Eritrean refugees, Beja traders, Tigrinya speakers, and established Sudanese families all share the same markets.",
     introAr:

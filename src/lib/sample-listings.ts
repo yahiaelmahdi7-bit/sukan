@@ -104,6 +104,14 @@ export type Listing = {
   ownerVerified?: boolean;
   averageRating?: number;
   reviewCount?: number;
+  // ── New optional fields added in round 2 ──────────────────────────────────
+  createdAt?: string;
+  photos?: string[];
+  weeklyViews?: number;
+  previousPriceUsd?: number;
+  ownerAvatar?: string;
+  ownerOnline?: boolean;
+  ownerReplyTime?: number;
 };
 
 // Curated Unsplash images per property type. Hand-picked to avoid generic
@@ -201,6 +209,19 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "ياسر أحمد",
     ownerJoinedYear: 2024,
     photoSlots: 5,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-05-09T10:00:00Z",          // 2 days ago → NEW ribbon
+    photos: [
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1600&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1600&q=80",
+      "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1600&q=80",
+    ],
+    weeklyViews: 247,
+    previousPriceUsd: 950,                      // Price reduced
+    ownerAvatar: "https://i.pravatar.cc/120?img=12",
+    ownerOnline: true,
+    ownerReplyTime: 1,
   },
   {
     id: "omdurman-villa-thawra",
@@ -231,6 +252,19 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "آمنة إبراهيم",
     ownerJoinedYear: 2024,
     photoSlots: 6,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-28T08:30:00Z",          // 13 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
+      "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=80",
+    ],
+    weeklyViews: 198,
+    ownerAvatar: "https://i.pravatar.cc/120?img=5",
+    ownerOnline: true,
+    ownerReplyTime: 2,
   },
   {
     id: "port-sudan-shop",
@@ -260,6 +294,16 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "محمد عثمان",
     ownerJoinedYear: 2025,
     photoSlots: 4,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-05-07T14:00:00Z",          // 4 days ago → NEW ribbon
+    photos: [
+      "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
+    ],
+    weeklyViews: 54,
+    ownerOnline: false,
+    ownerReplyTime: 6,
   },
   {
     id: "river-nile-land-shendi",
@@ -286,6 +330,18 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "حسن خالد",
     ownerJoinedYear: 2024,
     photoSlots: 3,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-20T09:00:00Z",          // 21 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80",
+      "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
+    ],
+    weeklyViews: 38,
+    previousPriceUsd: 108000,                   // Price reduced
+    ownerAvatar: "https://i.pravatar.cc/120?img=33",
+    ownerOnline: false,
+    ownerReplyTime: 5,
   },
   {
     id: "kassala-studio-furnished",
@@ -315,6 +371,16 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "سلمى طاهر",
     ownerJoinedYear: 2025,
     photoSlots: 4,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-05-05T11:00:00Z",          // 6 days ago → NEW ribbon
+    photos: [
+      "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1600&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600&q=80",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1600&q=80",
+    ],
+    weeklyViews: 62,
+    ownerOnline: true,
+    ownerReplyTime: 3,
   },
   {
     id: "wad-madani-house",
@@ -343,6 +409,19 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "طارق بشير",
     ownerJoinedYear: 2024,
     photoSlots: 5,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-15T08:00:00Z",          // 26 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
+    ],
+    weeklyViews: 165,
+    previousPriceUsd: 80000,                    // Price reduced
+    ownerAvatar: "https://i.pravatar.cc/120?img=18",
+    ownerOnline: true,
+    ownerReplyTime: 2,
   },
   {
     id: "khartoum-bahri-2br",
@@ -374,6 +453,16 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "خالد محمود",
     ownerJoinedYear: 2025,
     photoSlots: 4,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-25T16:00:00Z",          // 16 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1600&q=80",
+    ],
+    weeklyViews: 88,
+    ownerOnline: false,
+    ownerReplyTime: 4,
   },
   {
     id: "damazin-family-home",
@@ -403,6 +492,16 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "عبدالرحمن إدريس",
     ownerJoinedYear: 2025,
     photoSlots: 3,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-18T07:30:00Z",          // 23 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1600&q=80",
+      "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1600&q=80",
+    ],
+    weeklyViews: 29,
+    ownerAvatar: "https://i.pravatar.cc/120?img=47",
+    ownerOnline: false,
+    ownerReplyTime: 7,
   },
   {
     id: "sennar-courtyard-house",
@@ -431,6 +530,18 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "عوض الكريم",
     ownerJoinedYear: 2024,
     photoSlots: 5,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-05-04T12:00:00Z",          // 7 days ago → NEW ribbon
+    photos: [
+      "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
+    ],
+    weeklyViews: 45,
+    ownerAvatar: "https://i.pravatar.cc/120?img=60",
+    ownerOnline: false,
+    ownerReplyTime: 5,
   },
   {
     id: "kosti-riverside-flat",
@@ -462,6 +573,16 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "نور الهدى",
     ownerJoinedYear: 2025,
     photoSlots: 3,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-30T10:00:00Z",          // 11 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600&q=80",
+      "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1600&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1600&q=80",
+    ],
+    weeklyViews: 73,
+    ownerOnline: true,
+    ownerReplyTime: 2,
   },
   {
     id: "el-obeid-family-house",
@@ -490,6 +611,17 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "مبارك صالح",
     ownerJoinedYear: 2024,
     photoSlots: 4,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-22T09:00:00Z",          // 19 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=80",
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&q=80",
+    ],
+    weeklyViews: 41,
+    previousPriceUsd: 58000,                    // Price reduced
+    ownerOnline: false,
+    ownerReplyTime: 8,
   },
   {
     id: "kadugli-modest-house",
@@ -519,6 +651,16 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "يوسف آدم",
     ownerJoinedYear: 2025,
     photoSlots: 3,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-12T13:00:00Z",          // 29 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=80",
+    ],
+    weeklyViews: 22,
+    ownerAvatar: "https://i.pravatar.cc/120?img=25",
+    ownerOnline: false,
+    ownerReplyTime: 6,
   },
   {
     id: "el-fula-residential-plot",
@@ -545,6 +687,15 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "آدم حسن",
     ownerJoinedYear: 2024,
     photoSlots: 2,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-17T10:00:00Z",          // 24 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
+      "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
+    ],
+    weeklyViews: 18,
+    ownerOnline: false,
+    ownerReplyTime: 8,
   },
   {
     id: "el-fasher-modest-home",
@@ -573,6 +724,17 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "إبراهيم سليمان",
     ownerJoinedYear: 2024,
     photoSlots: 3,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-19T08:00:00Z",          // 22 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
+    ],
+    weeklyViews: 31,
+    ownerAvatar: "https://i.pravatar.cc/120?img=52",
+    ownerOnline: true,
+    ownerReplyTime: 4,
   },
   {
     id: "nyala-villa-sale",
@@ -603,6 +765,19 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "فاطمة آدم",
     ownerJoinedYear: 2024,
     photoSlots: 5,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-24T14:00:00Z",          // 17 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=80",
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1600&q=80",
+      "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=80",
+    ],
+    weeklyViews: 152,
+    ownerAvatar: "https://i.pravatar.cc/120?img=9",
+    ownerOnline: true,
+    ownerReplyTime: 2,
   },
   {
     id: "el-daein-farm-land",
@@ -629,6 +804,15 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "بشير محمد",
     ownerJoinedYear: 2025,
     photoSlots: 2,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-23T11:00:00Z",          // 18 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80",
+      "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
+    ],
+    weeklyViews: 25,
+    ownerOnline: false,
+    ownerReplyTime: 7,
   },
   {
     id: "zalingei-small-home",
@@ -657,6 +841,17 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "حواء يعقوب",
     ownerJoinedYear: 2025,
     photoSlots: 3,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-14T09:00:00Z",          // 27 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1600&q=80",
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=80",
+    ],
+    weeklyViews: 19,
+    ownerAvatar: "https://i.pravatar.cc/120?img=38",
+    ownerOnline: false,
+    ownerReplyTime: 6,
   },
   {
     id: "el-geneina-compound",
@@ -685,6 +880,18 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "مريم أبكر",
     ownerJoinedYear: 2024,
     photoSlots: 4,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-05-08T15:30:00Z",          // 3 days ago → NEW ribbon
+    photos: [
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
+    ],
+    weeklyViews: 37,
+    previousPriceUsd: 43000,                    // Price reduced
+    ownerOnline: true,
+    ownerReplyTime: 3,
   },
   {
     id: "gedaref-farm",
@@ -711,6 +918,18 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "صلاح التجاني",
     ownerJoinedYear: 2024,
     photoSlots: 4,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-21T10:00:00Z",          // 20 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80",
+      "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
+    ],
+    weeklyViews: 127,
+    ownerAvatar: "https://i.pravatar.cc/120?img=65",
+    ownerOnline: true,
+    ownerReplyTime: 1,
   },
   {
     id: "dongola-date-farm",
@@ -737,6 +956,20 @@ export const sampleListings: Listing[] = [
     ownerNameAr: "عثمان حمد",
     ownerJoinedYear: 2024,
     photoSlots: 5,
+    // ── Round 2 fields ──────────────────────────────────────────────────────
+    createdAt: "2026-04-29T08:00:00Z",          // 12 days ago
+    photos: [
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
+      "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80",
+    ],
+    weeklyViews: 183,
+    previousPriceUsd: 88000,                    // Price reduced
+    ownerAvatar: "https://i.pravatar.cc/120?img=41",
+    ownerOnline: true,
+    ownerReplyTime: 2,
   },
 ];
 

@@ -148,7 +148,7 @@ export default async function InsightsIndexPage({
                         >
                           {title}
                         </h2>
-                        <p className="flex-1 text-sm leading-relaxed text-ink-mid line-clamp-3">
+                        <p className="flex-1 text-sm leading-relaxed text-ink-soft line-clamp-3">
                           {excerpt}
                         </p>
 
@@ -179,7 +179,7 @@ export default async function InsightsIndexPage({
         {/* ── Closing note ── */}
         <section className="bg-cream py-16">
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-            <p className="text-sm leading-relaxed text-ink-mid">
+            <p className="text-sm leading-relaxed text-ink-soft">
               {isAr
                 ? "تصدر تقارير سُكَن بناءً على بيانات السوق وخبرة ميدانية. هذه آراء تحريرية لا استشارات مالية أو قانونية."
                 : "Sukan insights are based on market data and on-the-ground experience. These are editorial opinions, not financial or legal advice."}

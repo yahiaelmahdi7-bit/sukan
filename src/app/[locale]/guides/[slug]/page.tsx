@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import GlassPanel from "@/components/glass-panel";
+import ProseCard from "@/components/prose-card";
 import WaveDivider from "@/components/wave-divider";
 import { guides, getGuideBySlug } from "@/lib/guides";
 import { MapPin, Zap, Droplets, Plane, ArrowLeft, Search } from "lucide-react";
@@ -228,13 +229,13 @@ export default async function GuideDetailPage({
         {/* ── Intro ── */}
         <section className="bg-cream py-16">
           <div className="mx-auto max-w-3xl px-4 sm:px-8">
-            <p className="text-lg leading-[1.9] text-ink-mid">{intro}</p>
+            <p className="sukan-prose text-lg">{intro}</p>
           </div>
         </section>
 
         <WaveDivider intensity="subtle" />
 
-        {/* ── Sections — alternating glass panels ── */}
+        {/* ── Sections — alternating prose cards ── */}
         <section className="bg-cream-deep py-16">
           <div className="mx-auto max-w-3xl space-y-8 px-4 sm:px-8">
             {guide.sections.map((section, i) => {
@@ -243,18 +244,9 @@ export default async function GuideDetailPage({
               const body = isAr ? section.bodyAr : section.bodyEn;
 
               return (
-                <GlassPanel
-                  key={i}
-                  variant={variant}
-                  radius="glass"
-                  shadow
-                  className="p-8 md:p-10"
-                >
-                  <h2 className="mb-5 font-display text-2xl leading-tight tracking-tight text-ink md:text-3xl">
-                    {title}
-                  </h2>
-                  <p className="text-base leading-[1.9] text-ink-mid">{body}</p>
-                </GlassPanel>
+                <ProseCard key={i} variant={variant} title={title}>
+                  <p>{body}</p>
+                </ProseCard>
               );
             })}
           </div>
@@ -270,7 +262,7 @@ export default async function GuideDetailPage({
                 ? `تصفّح العقارات في ${name}`
                 : `Browse listings in ${name}`}
             </h2>
-            <p className="mb-8 text-base leading-relaxed text-ink-mid">
+            <p className="mb-8 text-base leading-relaxed text-ink-soft">
               {isAr
                 ? "شاهد الشقق والمنازل والفيلات المتاحة الآن في هذا الحي"
                 : "See the apartments, houses, and villas available right now in this area"}

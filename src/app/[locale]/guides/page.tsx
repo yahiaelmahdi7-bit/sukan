@@ -114,7 +114,7 @@ export default async function GuidesIndexPage({
                             {guide.nameEn}
                           </p>
                         )}
-                        <p className="flex-1 text-sm leading-relaxed text-ink-mid line-clamp-3">
+                        <p className="flex-1 text-sm leading-relaxed text-ink-soft line-clamp-3">
                           {snippet}
                         </p>
 
@@ -158,7 +158,7 @@ export default async function GuidesIndexPage({
         {/* ── Footer note ── */}
         <section className="bg-cream py-16">
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-            <p className="text-sm leading-relaxed text-ink-mid">
+            <p className="text-sm leading-relaxed text-ink-soft">
               {isAr
                 ? "هذه الأدلة تعكس معرفة ميدانية بتاريخ الربع الأول من ٢٠٢٦. ظروف الكهرباء والمياه تتغير — نحدّث الأدلة فصلياً."
                 : "These guides reflect on-the-ground knowledge as of Q1 2026. Power and water conditions change — we update guides quarterly."}
