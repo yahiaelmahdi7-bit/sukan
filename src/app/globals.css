@@ -297,6 +297,19 @@ html[dir="rtl"] .font-display {
   }
 }
 
+/* ───────────────────────────────────────────────────────────────
+   Leaflet z-index containment
+   Leaflet's internal panes use z-index up to 1000 (controls layer).
+   Without containment they punch through the sticky navbar (z-40),
+   the floating dashboard top bar, and any other above-fold UI.
+   `isolation: isolate` creates a new stacking context so all those
+   internal z-indices stay scoped to the map container.
+   ─────────────────────────────────────────────────────────────── */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 0;
+}
+
 /* Smoother scrolling, smarter typography on the whole document */
 html {
   scroll-behavior: smooth;
