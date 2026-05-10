@@ -7,7 +7,8 @@ import SukanMark from "@/components/sukan-mark";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ListingCard from "@/components/listing-card";
-import { sampleListings, getListingById, type Listing } from "@/lib/sample-listings";
+import { sampleListings, type Listing } from "@/lib/sample-listings";
+import { getListingByIdAsync } from "@/lib/listings";
 import ListingLocationMap from "./_components/listing-location-map";
 import InquiryButton from "@/components/inquiry-button";
 import StaySafeCard from "@/components/stay-safe-card";
@@ -24,7 +25,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; id: string }>;
 }): Promise<Metadata> {
   const { locale, id } = await params;
-  const listing = getListingById(id);
+  const listing = await getListingByIdAsync(id);
 
   if (!listing) {
     return { title: "Listing not found · Sukan" };
@@ -105,7 +106,7 @@ export default async function ListingDetailPage({
   const { locale, id } = await params;
   setRequestLocale(locale);
 
-  const listing = getListingById(id);
+  const listing = await getListingByIdAsync(id);
   if (!listing) notFound();
 
   const t = await getTranslations();

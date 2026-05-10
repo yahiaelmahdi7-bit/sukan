@@ -12,7 +12,6 @@ import ViewToggle from "./_components/view-toggle";
 import MapView from "./_components/map-view";
 import StickyBar from "./_components/sticky-bar";
 import {
-  sampleListings,
   type Listing,
   type SudanState,
   type PropertyType,
@@ -20,6 +19,7 @@ import {
   type Amenity,
   SUDAN_STATES,
 } from "@/lib/sample-listings";
+import { getListingsWithSample } from "@/lib/listings";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -124,8 +124,8 @@ interface FilterResult {
   to: number;
 }
 
-function filterListings(params: ParsedParams): FilterResult {
-  let results = [...sampleListings];
+function filterListings(params: ParsedParams, source: Listing[]): FilterResult {
+  let results = [...source];
 
   if (params.state) {
     results = results.filter((l) => l.state === params.state);
@@ -220,7 +220,11 @@ export default async function ListingsPage({
 
   const rawSearchParams = await searchParamsPromise;
   const parsed = parseSearchParams(rawSearchParams);
-  const { items, allFiltered, total, totalPages, from, to } = filterListings(parsed);
+  const allListings = await getListingsWithSample();
+  const { items, allFiltered, total, totalPages, from, to } = filterListings(
+    parsed,
+    allListings,
+  );
 
   // Page numbers to render (show at most 5 pages around current)
   const pageNums: number[] = [];

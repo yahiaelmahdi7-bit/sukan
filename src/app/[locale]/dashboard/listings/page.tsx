@@ -1,8 +1,9 @@
 // Explicit "My Listings" page — same content as dashboard default, plus "+ New listing" CTA.
-// TODO: replace sampleListings.slice(0,4) with real Supabase query when data agent lands.
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { sampleListings } from "@/lib/sample-listings";
+import { getMyListings } from "@/lib/listings";
+import { createClient } from "@/lib/supabase/server";
 import DashboardTable from "../_components/dashboard-table";
 import { getMockInquiries } from "../_data/mock-inquiries";
 
@@ -17,8 +18,12 @@ export default async function ListingsPage({
 
   const inquiries = getMockInquiries();
 
-  // MOCK: first 4 sampleListings treated as "my" listings until Supabase query lands
-  const myListings = sampleListings.slice(0, 4);
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const real = user ? await getMyListings(user.id) : [];
+  const myListings = real.length > 0 ? real : sampleListings.slice(0, 4);
 
   const viewsByListingId: Record<string, number> = {
     "khartoum-2-3br-apt": 72,

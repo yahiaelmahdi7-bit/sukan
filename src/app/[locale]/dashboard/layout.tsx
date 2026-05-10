@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { ArrowLeft } from "lucide-react";
 import LocaleToggle from "@/components/locale-toggle";
 import SukanMark from "@/components/sukan-mark";
 import SidebarNav from "./_components/sidebar-nav";
@@ -45,8 +47,12 @@ export default async function DashboardLayout({
           {/* Mobile hamburger */}
           <MobileNavToggle userName={userName} signOutLabel={signOutLabel} />
 
-          {/* Brand mark — visible on mobile only */}
-          <div className="flex items-center gap-2 lg:hidden">
+          {/* Brand mark — links to home, visible on mobile only */}
+          <Link
+            href="/"
+            className="smooth-fast flex items-center gap-2 lg:hidden hover:opacity-80"
+            title="Back to Sukan"
+          >
             <SukanMark size={26} />
             <span
               className="font-display text-lg text-ink leading-none"
@@ -54,7 +60,16 @@ export default async function DashboardLayout({
             >
               سُكَن
             </span>
-          </div>
+          </Link>
+
+          {/* Back to Sukan — desktop only, visible escape hatch */}
+          <Link
+            href="/"
+            className="smooth-fast hidden lg:inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-xs font-semibold text-ink-mid hover:border-gold/50 hover:bg-gold/10 hover:text-ink"
+          >
+            <ArrowLeft size={13} className="rtl:rotate-180" aria-hidden />
+            {t("backToSite")}
+          </Link>
 
           <div className="flex-1" />
 

@@ -319,8 +319,23 @@
     "title": "Dashboard",
     "myListings": "My Listings",
     "inquiries": "Inquiries",
-    "analytics": "Analytics",
-    "profile": "Profile",
+    "analytics": {
+      "viewsLast30": "Views — last 30 days",
+      "topPerformers": "Top performing listings",
+      "viewsByState": "Views by state",
+      "conversionRate": "Inquiry conversion rate",
+      "noData": "No data yet"
+    },
+    "profile": {
+      "fullName": "Full name",
+      "phone": "Phone number",
+      "whatsapp": "WhatsApp number",
+      "city": "City",
+      "role": "Account type",
+      "roleTenant": "Tenant",
+      "roleLandlord": "Landlord",
+      "roleAgent": "Agent"
+    },
     "settings": "Settings",
     "signOut": "Sign out",
     "welcomeBack": "Hello, {name}",
@@ -365,23 +380,9 @@
       "respondedAt": "Sent",
       "unread": "Unread"
     },
-    "analytics": {
-      "viewsLast30": "Views — last 30 days",
-      "topPerformers": "Top performing listings",
-      "viewsByState": "Views by state",
-      "conversionRate": "Inquiry conversion rate",
-      "noData": "No data yet"
-    },
-    "profile": {
-      "fullName": "Full name",
-      "phone": "Phone number",
-      "whatsapp": "WhatsApp number",
-      "city": "City",
-      "role": "Account type",
-      "roleTenant": "Tenant",
-      "roleLandlord": "Landlord",
-      "roleAgent": "Agent"
-    }
+    "navAnalytics": "Analytics",
+    "navProfile": "Profile",
+    "backToSite": "Back to site"
   },
   "aiMatch": {
     "title": "AI Property Match",

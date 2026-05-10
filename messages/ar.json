@@ -319,8 +319,23 @@
     "title": "لوحة التحكم",
     "myListings": "إعلاناتي",
     "inquiries": "الاستفسارات",
-    "analytics": "الإحصائيات",
-    "profile": "الملف الشخصي",
+    "analytics": {
+      "viewsLast30": "المشاهدات — آخر 30 يوماً",
+      "topPerformers": "أفضل الإعلانات أداءً",
+      "viewsByState": "المشاهدات حسب الولاية",
+      "conversionRate": "معدل تحويل الاستفسارات",
+      "noData": "لا توجد بيانات بعد"
+    },
+    "profile": {
+      "fullName": "الاسم الكامل",
+      "phone": "رقم الهاتف",
+      "whatsapp": "رقم واتساب",
+      "city": "المدينة",
+      "role": "نوع الحساب",
+      "roleTenant": "مستأجر",
+      "roleLandlord": "مالك",
+      "roleAgent": "وكيل"
+    },
     "settings": "الإعدادات",
     "signOut": "تسجيل الخروج",
     "welcomeBack": "مرحباً، {name}",
@@ -365,23 +380,9 @@
       "respondedAt": "أُرسلت",
       "unread": "غير مقروء"
     },
-    "analytics": {
-      "viewsLast30": "المشاهدات — آخر 30 يوماً",
-      "topPerformers": "أفضل الإعلانات أداءً",
-      "viewsByState": "المشاهدات حسب الولاية",
-      "conversionRate": "معدل تحويل الاستفسارات",
-      "noData": "لا توجد بيانات بعد"
-    },
-    "profile": {
-      "fullName": "الاسم الكامل",
-      "phone": "رقم الهاتف",
-      "whatsapp": "رقم واتساب",
-      "city": "المدينة",
-      "role": "نوع الحساب",
-      "roleTenant": "مستأجر",
-      "roleLandlord": "مالك",
-      "roleAgent": "وكيل"
-    }
+    "navAnalytics": "التحليلات",
+    "navProfile": "الملف الشخصي",
+    "backToSite": "العودة إلى الموقع"
   },
   "aiMatch": {
     "title": "البحث الذكي بالذكاء الاصطناعي",

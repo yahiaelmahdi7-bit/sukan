@@ -5,12 +5,15 @@ import SukanMark from "@/components/sukan-mark";
 import GlassPanel from "@/components/glass-panel";
 import SignOutButton from "./sign-out-button";
 
+// `analytics` and `profile` are NESTED objects in messages/{en,ar}.json,
+// so they can't double as flat label strings. The nav uses dedicated
+// `navAnalytics` / `navProfile` keys to avoid the collision.
 const NAV_ITEMS = [
-  { key: "myListings" as const, href: "/dashboard" },
-  { key: "inquiries" as const, href: "/dashboard/inquiries" },
-  { key: "analytics" as const, href: "/dashboard/analytics" },
-  { key: "profile" as const, href: "/dashboard/profile" },
-  { key: "settings" as const, href: "/dashboard/settings" },
+  { key: "myListings" as const, labelKey: "myListings" as const, href: "/dashboard" },
+  { key: "inquiries" as const, labelKey: "inquiries" as const, href: "/dashboard/inquiries" },
+  { key: "analytics" as const, labelKey: "navAnalytics" as const, href: "/dashboard/analytics" },
+  { key: "profile" as const, labelKey: "navProfile" as const, href: "/dashboard/profile" },
+  { key: "settings" as const, labelKey: "settings" as const, href: "/dashboard/settings" },
 ];
 
 export type NavKey = "myListings" | "inquiries" | "analytics" | "profile" | "settings";
@@ -36,8 +39,12 @@ export default function DashboardSidebar({
       shadow="lg"
       className="flex flex-col w-60 shrink-0 h-full"
     >
-      {/* Brand header */}
-      <div className="flex items-center gap-3 px-6 py-6 border-b border-white/40">
+      {/* Brand header — links back to home */}
+      <Link
+        href="/"
+        className="smooth-fast flex items-center gap-3 px-6 py-6 border-b border-white/40 hover:opacity-80"
+        title="Back to Sukan"
+      >
         <SukanMark size={30} />
         <span
           className="font-display text-xl text-ink leading-none"
@@ -45,7 +52,7 @@ export default function DashboardSidebar({
         >
           سُكَن
         </span>
-      </div>
+      </Link>
 
       {/* Greeting */}
       <div className="px-6 py-4 border-b border-white/30">
@@ -79,7 +86,7 @@ export default function DashboardSidebar({
                 size={16}
                 className={isActive ? "opacity-90" : "opacity-40"}
               />
-              {t(item.key)}
+              {t(item.labelKey)}
             </Link>
           );
         })}

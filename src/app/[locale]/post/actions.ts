@@ -84,7 +84,11 @@ export async function createListing(
       price_period: input.pricePeriod,
       amenities: input.amenities,
       tier: input.tier,
-      status: "pending_payment",
+      // Standard tier is published immediately so owners see their listing
+      // appear on /listings the moment they submit. Featured tier still
+      // requires payment before activation.
+      status: input.tier === "featured" ? "pending_payment" : "active",
+      published_at: input.tier === "featured" ? null : new Date().toISOString(),
       whatsapp_contact: input.whatsappContact,
     })
     .select("id")
@@ -94,6 +98,8 @@ export async function createListing(
     return { ok: false, error: error.message };
   }
 
+  // Refresh both the home page (featured strip) and /listings (browse grid).
   revalidatePath("/", "layout");
+  revalidatePath("/listings");
   return { ok: true, listingId: data.id };
 }

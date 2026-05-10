@@ -1,7 +1,8 @@
 // Default dashboard page — renders "My Listings" view.
-// TODO: replace sampleListings.slice(0,4) with real Supabase query when data agent lands.
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { sampleListings } from "@/lib/sample-listings";
+import { getMyListings } from "@/lib/listings";
+import { createClient } from "@/lib/supabase/server";
 import StatCard from "./_components/stat-card";
 import DashboardTable from "./_components/dashboard-table";
 import { getMockStats } from "./_data/mock-stats";
@@ -19,8 +20,15 @@ export default async function DashboardPage({
   const stats = getMockStats();
   const inquiries = getMockInquiries();
 
-  // MOCK: first 4 sampleListings treated as "my" listings until Supabase query lands
-  const myListings = sampleListings.slice(0, 4);
+  // Layout has already auth-guarded; safe to read the user here.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const real = user ? await getMyListings(user.id) : [];
+  // Show real listings when present; fall back to demo data so pre-launch
+  // the dashboard still demonstrates the layout.
+  const myListings = real.length > 0 ? real : sampleListings.slice(0, 4);
 
   // Build per-listing view / inquiry counts from mock data
   const viewsByListingId: Record<string, number> = {
