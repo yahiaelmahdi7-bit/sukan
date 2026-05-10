@@ -33,7 +33,8 @@ export default function OAuthButtons() {
         type="button"
         onClick={handleGoogle}
         disabled={loading}
-        className="flex w-full items-center justify-center gap-3 rounded-md border border-gold/20 bg-earth px-4 py-3.5 text-base font-medium text-parchment transition hover:border-gold/40 hover:bg-earth-soft disabled:opacity-50"
+        className="smooth flex w-full items-center justify-center gap-3 rounded-[var(--radius-pill)] border border-white/55 bg-white/45 px-5 py-3 text-sm font-medium text-gold-dk backdrop-blur-md hover:border-gold/40 hover:bg-white/65 disabled:opacity-50"
+        style={{ boxShadow: "var(--shadow-warm-sm)" }}
       >
         {/* Google G mark */}
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -58,7 +59,10 @@ export default function OAuthButtons() {
       </button>
 
       {error && (
-        <p className="rounded-md border border-terracotta/30 bg-terracotta/10 px-4 py-3 text-sm text-terracotta">
+        <p
+          role="alert"
+          className="rounded-[var(--radius-glass)] border border-terracotta/20 bg-terracotta/8 px-4 py-2.5 text-sm text-terracotta-deep"
+        >
           {error}
         </p>
       )}

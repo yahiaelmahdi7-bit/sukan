@@ -7,7 +7,7 @@ const LeafletMap = dynamic(() => import("@/components/leaflet-map"), {
   ssr: false,
   loading: () => (
     <div
-      className="w-full rounded-[var(--radius-card)] bg-sand/40 animate-pulse flex items-center justify-center"
+      className="w-full rounded-[var(--radius-card)] bg-earth-soft/60 border border-gold/20 animate-pulse flex items-center justify-center"
       style={{ height: 360 }}
     >
       <span className="text-mute-soft text-sm">Loading map…</span>
@@ -33,7 +33,7 @@ export default function PostMap({
   ];
 
   return (
-    <div className="rounded-[var(--radius-card)] overflow-hidden border border-gold/30">
+    <div className="rounded-[var(--radius-card)] overflow-hidden border border-gold/30 smooth">
       <LeafletMap
         center={center}
         zoom={11}

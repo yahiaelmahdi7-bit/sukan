@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ListingCard from "@/components/listing-card";
+import GlassPanel from "@/components/glass-panel";
 import FilterSidebar from "./_components/filter-sidebar";
 import ActiveFilters from "./_components/active-filters";
 import SortSelect from "./_components/sort-select";
@@ -257,7 +258,7 @@ export default async function ListingsPage({
         <StickyBar total={total} />
 
         {/* ─── Header band ─────────────────────────────────────────────────── */}
-        <div className="bg-cream py-14 border-b border-sand-dk">
+        <div className="bg-cream py-14 border-b border-sand/60">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-dk">
               {t("browse.eyebrow")}
@@ -276,9 +277,9 @@ export default async function ListingsPage({
           <div className="lg:flex lg:gap-10">
             {/* ─── Desktop sidebar ─────────────────────────────────────────── */}
             <aside className="hidden lg:block lg:w-72 lg:shrink-0">
-              <div className="sticky top-20 h-fit overflow-y-auto rounded-xl border border-sand-dk bg-card shadow-sm p-6">
+              <GlassPanel variant="warm" radius="glass" highlight shadow className="sticky top-20 h-fit overflow-y-auto p-6">
                 <FilterSidebar />
-              </div>
+              </GlassPanel>
             </aside>
 
             {/* ─── Main content ─────────────────────────────────────────────── */}
@@ -326,12 +327,12 @@ export default async function ListingsPage({
                   {parsed.page > 1 ? (
                     <Link
                       href={buildPageHref(rawSearchParams, parsed.page - 1)}
-                      className="min-h-[40px] min-w-[40px] rounded-md border border-sand-dk bg-card px-4 py-2 text-sm text-ink transition hover:border-gold/60 hover:bg-gold/10"
+                      className="smooth-fast inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-[var(--radius-pill)] border border-white/55 bg-white/45 px-4 py-2 text-sm text-ink-mid backdrop-blur-sm hover:border-gold/50 hover:text-ink"
                     >
                       {t("browse.prevPage")}
                     </Link>
                   ) : (
-                    <span className="min-h-[40px] min-w-[40px] cursor-default rounded-md border border-sand-dk bg-sand px-4 py-2 text-sm text-ink-mid opacity-40">
+                    <span className="inline-flex min-h-[40px] min-w-[40px] cursor-default items-center justify-center rounded-[var(--radius-pill)] border border-sand/40 bg-sand/30 px-4 py-2 text-sm text-ink-mid opacity-40">
                       {t("browse.prevPage")}
                     </span>
                   )}
@@ -348,10 +349,10 @@ export default async function ListingsPage({
                         href={buildPageHref(rawSearchParams, n)}
                         aria-label={t("browse.page", { n })}
                         aria-current={n === parsed.page ? "page" : undefined}
-                        className={`flex min-h-[40px] min-w-[40px] items-center justify-center rounded-md border text-sm transition ${
+                        className={`smooth-fast flex min-h-[40px] min-w-[40px] items-center justify-center rounded-[var(--radius-pill)] border text-sm ${
                           n === parsed.page
-                            ? "border-terracotta bg-terracotta text-cream font-semibold"
-                            : "border-sand-dk bg-card text-ink-mid hover:border-gold/50 hover:text-ink"
+                            ? "border-terracotta/60 bg-terracotta text-cream font-semibold shadow-[0_2px_10px_rgba(200,64,26,0.28)]"
+                            : "border-white/55 bg-white/45 text-ink-mid backdrop-blur-sm hover:border-gold/50 hover:text-ink"
                         }`}
                       >
                         {n}
@@ -363,12 +364,12 @@ export default async function ListingsPage({
                   {parsed.page < totalPages ? (
                     <Link
                       href={buildPageHref(rawSearchParams, parsed.page + 1)}
-                      className="min-h-[40px] min-w-[40px] rounded-md border border-sand-dk bg-card px-4 py-2 text-sm text-ink transition hover:border-gold/60 hover:bg-gold/10"
+                      className="smooth-fast inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-[var(--radius-pill)] border border-white/55 bg-white/45 px-4 py-2 text-sm text-ink-mid backdrop-blur-sm hover:border-gold/50 hover:text-ink"
                     >
                       {t("browse.nextPage")}
                     </Link>
                   ) : (
-                    <span className="min-h-[40px] min-w-[40px] cursor-default rounded-md border border-sand-dk bg-sand px-4 py-2 text-sm text-ink-mid opacity-40">
+                    <span className="inline-flex min-h-[40px] min-w-[40px] cursor-default items-center justify-center rounded-[var(--radius-pill)] border border-sand/40 bg-sand/30 px-4 py-2 text-sm text-ink-mid opacity-40">
                       {t("browse.nextPage")}
                     </span>
                   )}

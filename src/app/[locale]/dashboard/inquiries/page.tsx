@@ -26,13 +26,19 @@ export default async function InquiriesPage({
   return (
     <div className="px-6 py-10 max-w-6xl mx-auto">
       <div className="mb-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold mb-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk mb-2">
           {t("title")}
         </p>
         <div className="flex items-center gap-4">
-          <h1 className="font-display text-4xl text-parchment">{t("inquiries")}</h1>
+          <h1 className="font-display text-4xl text-ink">{t("inquiries")}</h1>
           {unreadCount > 0 && (
-            <span className="rounded-[var(--radius-pill)] bg-terracotta px-3 py-1 text-xs font-semibold text-parchment">
+            <span
+              className="rounded-[var(--radius-pill)] px-3 py-1 text-xs font-semibold text-cream"
+              style={{
+                background: "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+                boxShadow: "var(--shadow-terracotta-glow)",
+              }}
+            >
               {unreadCount} {t("inquiry.unread")}
             </span>
           )}

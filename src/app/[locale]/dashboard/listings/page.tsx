@@ -37,14 +37,18 @@ export default async function ListingsPage({
       {/* Header row with CTA */}
       <div className="flex items-start justify-between gap-4 mb-10">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold mb-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk mb-2">
             {t("title")}
           </p>
-          <h1 className="font-display text-4xl text-parchment">{t("myListings")}</h1>
+          <h1 className="font-display text-4xl text-ink">{t("myListings")}</h1>
         </div>
         <Link
           href="/post"
-          className="mt-2 shrink-0 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment px-5 py-2.5 text-sm font-semibold transition-colors"
+          className="smooth mt-2 shrink-0 rounded-[var(--radius-pill)] text-cream px-5 py-2.5 text-sm font-semibold"
+          style={{
+            background: "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+            boxShadow: "0 8px 22px rgba(200, 64, 26, 0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
+          }}
         >
           {t("newListing")}
         </Link>

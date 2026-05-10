@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
-import { SUDAN_STATES, type SudanState, type PropertyType, type Amenity } from "@/lib/sample-listings";
+import { SUDAN_STATES, type PropertyType, type Amenity } from "@/lib/sample-listings";
 import SavedSearches from "./saved-searches";
 
 const PROPERTY_TYPES: PropertyType[] = [
@@ -18,16 +18,14 @@ const AMENITY_KEYS: Amenity[] = [
 ];
 
 const inputCls =
-  "w-full bg-earth border border-gold/20 rounded-md px-3 py-2 text-parchment text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20";
+  "smooth-fast w-full rounded-xl border border-white/55 bg-white/55 px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-mid/65 backdrop-blur-md focus:outline-none focus:border-gold/55 focus:bg-white/80 focus:ring-2 focus:ring-gold/20";
 
-const selectCls =
-  "w-full bg-earth border border-gold/20 rounded-md px-3 py-2 text-parchment text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 appearance-none";
+const selectCls = `${inputCls} appearance-none`;
 
-// Group header: tiny, uppercase, generous tracking, gold/70
-const groupHeader = "text-[11px] font-semibold uppercase tracking-[0.18em] text-gold/70";
+const groupHeader =
+  "text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-dk";
 
-// Thin gold/10 divider placed above each group (except first)
-const groupDivider = "border-t border-gold/10 pt-4 mt-4";
+const groupDivider = "border-t border-sand-dk pt-5 mt-5";
 
 interface FilterSidebarProps {
   className?: string;
@@ -40,7 +38,6 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Read current values
   const currentState = searchParams.get("state") ?? "";
   const currentType = searchParams.get("type") ?? "";
   const currentPurpose = searchParams.get("purpose") ?? "";
@@ -58,7 +55,6 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
       minBedrooms: currentMinBedrooms,
       amenity: currentAmenities,
     };
-    // Preserve non-filter params (sort, view) from URL
     const sort = searchParams.get("sort");
     if (sort) base.sort = sort;
     const view = searchParams.get("view");
@@ -135,7 +131,10 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
       {/* ─── Purpose ────────────────────────────────────────────────────────── */}
       <div className={groupDivider}>
         <p className={`mb-3 ${groupHeader}`}>{t("browse.purposeLabel")}</p>
-        <div className="flex gap-2">
+        <div
+          role="group"
+          className="inline-flex w-full rounded-[var(--radius-pill)] border border-white/55 bg-white/45 p-1 backdrop-blur-md"
+        >
           {(["", "rent", "sale"] as const).map((val) => {
             const label =
               val === "" ? t("browse.anyPurpose") :
@@ -147,10 +146,10 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
                 key={val}
                 type="button"
                 onClick={() => push({ purpose: val || undefined, page: undefined })}
-                className={`flex-1 rounded-md px-3 py-2 text-xs font-medium border transition ${
+                className={`smooth-fast flex-1 rounded-[var(--radius-pill)] px-3 py-1.5 text-xs font-semibold ${
                   active
-                    ? "bg-gold/20 border-gold text-parchment"
-                    : "bg-earth border-gold/20 text-mute-soft hover:border-gold/50"
+                    ? "bg-terracotta text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
+                    : "text-ink-mid hover:text-ink"
                 }`}
               >
                 {label}
@@ -203,9 +202,8 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
             return (
               <label
                 key={key}
-                className="flex cursor-pointer items-center gap-3 text-sm text-parchment"
+                className="flex cursor-pointer items-center gap-3 text-sm text-ink"
               >
-                {/* Custom checkbox with micro-animation */}
                 <span
                   onClick={() => toggleAmenity(key)}
                   role="checkbox"
@@ -214,15 +212,14 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
                   onKeyDown={(e) => {
                     if (e.key === " " || e.key === "Enter") toggleAmenity(key);
                   }}
-                  className={`relative flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden rounded-sm border transition-all duration-200 ${
+                  className={`smooth-fast relative flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden rounded-[5px] border ${
                     checked
                       ? "border-terracotta"
-                      : "border-gold/30 bg-earth"
+                      : "border-sand-dk bg-white/65"
                   }`}
                 >
-                  {/* Terracotta fill expanding from start side */}
                   <span
-                    className={`absolute inset-0 origin-left bg-terracotta/80 transition-transform duration-200 ${
+                    className={`absolute inset-0 origin-left bg-terracotta transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       checked ? "scale-x-100" : "scale-x-0"
                     }`}
                     aria-hidden
@@ -230,7 +227,7 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
                   {checked && (
                     <svg
                       viewBox="0 0 12 12"
-                      className="relative h-3 w-3 text-parchment"
+                      className="relative h-3 w-3 text-cream"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth={2}
@@ -240,10 +237,7 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
                     </svg>
                   )}
                 </span>
-                <span
-                  onClick={() => toggleAmenity(key)}
-                  className="select-none"
-                >
+                <span onClick={() => toggleAmenity(key)} className="select-none">
                   {t(`amenity.${key}`)}
                 </span>
               </label>
@@ -253,11 +247,11 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
       </div>
 
       {/* ─── Clear all ──────────────────────────────────────────────────────── */}
-      <div className="mt-5 pt-5 border-t border-gold/10">
+      <div className="mt-6 border-t border-sand-dk pt-5">
         <button
           type="button"
           onClick={() => router.push("/listings" as Parameters<typeof router.push>[0])}
-          className="w-full rounded-md border border-gold/20 px-4 py-2 text-sm text-mute-soft transition hover:border-gold/50 hover:text-parchment"
+          className="smooth-fast w-full rounded-[var(--radius-pill)] border border-white/55 bg-white/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink-mid backdrop-blur-md hover:border-gold/50 hover:text-ink"
         >
           {t("browse.clearFilters")}
         </button>

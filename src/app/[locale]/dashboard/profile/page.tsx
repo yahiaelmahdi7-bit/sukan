@@ -16,10 +16,10 @@ export default async function ProfilePage({
   return (
     <div className="px-6 py-10 max-w-2xl mx-auto">
       <div className="mb-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold mb-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk mb-2">
           {t("title")}
         </p>
-        <h1 className="font-display text-4xl text-parchment">{t("profile")}</h1>
+        <h1 className="font-display text-4xl text-ink">{t("profile")}</h1>
       </div>
 
       <ProfileForm

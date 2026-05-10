@@ -7,10 +7,10 @@ export default function ContentLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="min-h-screen bg-cream">
       <Navbar />
-      <main className="min-h-screen">{children}</main>
+      <main className="pt-20">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }

@@ -97,14 +97,14 @@ export default function ActiveFilters() {
       {chips.map((chip) => (
         <span
           key={chip.key}
-          className="inline-flex items-center gap-1.5 rounded-pill border border-terracotta/30 bg-terracotta/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-terracotta transition hover:border-terracotta/50"
+          className="smooth-fast inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-terracotta/35 bg-terracotta/12 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-terracotta backdrop-blur-sm hover:border-terracotta/55 hover:bg-terracotta/18"
         >
           {chip.label}
           <button
             type="button"
             onClick={chip.remove}
             aria-label={`${t("browse.removeFilter")}: ${chip.label}`}
-            className="flex h-3.5 w-3.5 items-center justify-center rounded-full text-terracotta/60 transition hover:text-terracotta"
+            className="smooth-fast flex h-3.5 w-3.5 items-center justify-center rounded-full text-terracotta/60 hover:text-terracotta"
           >
             <svg
               viewBox="0 0 12 12"

@@ -4,9 +4,9 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import PostWizard from "./_components/post-wizard";
 
-// ─── Step progress metadata ──────────────────────────────────────────────────
+// ─── Step pill (server-side SSR shell) ──────────────────────────────────────
 
-function StepDot({
+function StepPill({
   index,
   label,
   total,
@@ -15,41 +15,56 @@ function StepDot({
   label: string;
   total: number;
 }) {
-  // Static server-side "step 1 active" progress bar — client wizard takes over
-  // after hydration. We render step 1 as the initial active state.
   const isFirst = index === 0;
+
   return (
-    <div className="flex flex-col items-center gap-1.5 flex-1">
-      {/* Dot + connector row */}
+    <div className="flex flex-col items-center gap-2 flex-1">
+      {/* Connector + badge row */}
       <div className="flex items-center w-full">
-        {/* Leading connector (not for first dot) */}
+        {/* Leading connector */}
         {index > 0 && (
-          <div className="h-px flex-1 bg-gold/20" />
+          <div
+            className={[
+              "h-px flex-1 transition-colors",
+              isFirst ? "bg-gold/50" : "bg-gold/20",
+            ].join(" ")}
+          />
         )}
 
-        {/* Dot */}
+        {/* Badge */}
         <div
           className={[
-            "relative w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border-2",
+            "relative w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border-2 smooth",
             isFirst
-              ? "bg-terracotta border-terracotta text-parchment"
-              : "bg-transparent border-gold/30 text-mute",
+              ? "border-terracotta text-cream"
+              : "border-gold/30 text-mute bg-earth-soft/60",
           ].join(" ")}
+          style={
+            isFirst
+              ? {
+                  background: "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+                  boxShadow: "var(--shadow-terracotta-glow)",
+                }
+              : undefined
+          }
+          aria-current={isFirst ? "step" : undefined}
         >
           {index + 1}
         </div>
 
-        {/* Trailing connector (not for last dot) */}
+        {/* Trailing connector */}
         {index < total - 1 && (
           <div className="h-px flex-1 bg-gold/20" />
         )}
       </div>
 
-      {/* Label — hidden on mobile except step 1 */}
+      {/* Label */}
       <span
         className={[
           "text-xs text-center leading-tight",
-          isFirst ? "text-parchment font-semibold" : "text-mute hidden sm:block",
+          isFirst
+            ? "text-parchment font-semibold"
+            : "text-mute hidden sm:block",
         ].join(" ")}
       >
         {label}
@@ -79,13 +94,22 @@ function PostHero() {
         className="pointer-events-none absolute -top-24 end-0 w-[500px] h-[500px] rounded-full"
         style={{
           background:
-            "radial-gradient(ellipse at 70% 30%, rgba(200,135,58,0.14) 0%, transparent 70%)",
+            "radial-gradient(ellipse at 70% 30%, rgba(200,135,58,0.16) 0%, transparent 65%)",
+        }}
+      />
+      {/* Terracotta soft corner haze */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 start-0 w-[300px] h-[300px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(ellipse at 20% 80%, rgba(200,64,26,0.08) 0%, transparent 70%)",
         }}
       />
 
       <div className="relative mx-auto max-w-3xl px-4 sm:px-6 pt-14 pb-10">
         {/* Eyebrow */}
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">
           {t("title")}
         </p>
 
@@ -99,10 +123,14 @@ function PostHero() {
           {t("subtitle")}
         </p>
 
-        {/* 4-step progress — static SSR shell (client wizard re-renders this interactively) */}
-        <div className="flex items-start gap-0 w-full" aria-label={t("title")} role="navigation">
+        {/* 4-step progress — static SSR shell */}
+        <div
+          className="flex items-start gap-0 w-full"
+          aria-label={t("title")}
+          role="navigation"
+        >
           {steps.map((label, i) => (
-            <StepDot key={i} index={i} label={label} total={steps.length} />
+            <StepPill key={i} index={i} label={label} total={steps.length} />
           ))}
         </div>
       </div>
@@ -127,7 +155,7 @@ export default async function PostPage({
       <main className="min-h-screen bg-earth pb-24">
         <PostHero />
 
-        {/* Wave divider */}
+        {/* Thin gold wave divider */}
         <div className="wave-divider opacity-30 my-0" />
 
         {/* Wizard */}

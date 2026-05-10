@@ -26,7 +26,7 @@ export default function LocaleToggle() {
       onClick={flip}
       disabled={pending}
       aria-label={`Switch language to ${routing.locales.find((l) => l !== locale)}`}
-      className="rounded-pill border border-gold/30 px-4 py-1.5 text-sm text-parchment hover:border-gold hover:bg-gold/10 transition disabled:opacity-50"
+      className="smooth-fast rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-ink-mid hover:border-gold/50 hover:bg-gold/10 hover:text-ink disabled:opacity-50"
     >
       {t("languageToggle")}
     </button>

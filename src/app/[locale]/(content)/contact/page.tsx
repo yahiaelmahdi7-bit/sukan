@@ -1,6 +1,5 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import Pill from "@/components/pill";
-import WaveDivider from "@/components/wave-divider";
+import GlassPanel from "@/components/glass-panel";
 import { MessageCircle, Mail, Send, MapPin, Briefcase } from "lucide-react";
 
 export default async function ContactPage({
@@ -16,148 +15,168 @@ export default async function ContactPage({
   return (
     <>
       {/* ─── Hero ─── */}
-      <section className="relative bg-earth overflow-hidden">
+      <section className="relative overflow-hidden bg-cream py-24 lg:py-32">
+        {/* Warm gold halo */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-32 end-0 w-[500px] h-[500px] rounded-full"
+          className="pointer-events-none absolute -top-40 end-0 h-[560px] w-[560px] rounded-full"
           style={{
             background:
-              "radial-gradient(ellipse at 70% 30%, rgba(200,135,58,0.15) 0%, transparent 70%)",
+              "radial-gradient(ellipse at 70% 30%, rgba(200,135,58,0.13) 0%, transparent 70%)",
           }}
         />
-        <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="mb-5">
-            <Pill variant="gold" size="sm">
-              {t("eyebrow")}
-            </Pill>
-          </div>
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-tight text-parchment mb-6">
+        <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold-dk">
+            {t("eyebrow")}
+          </p>
+          <h1 className="font-display text-5xl leading-[1.05] tracking-tight text-ink md:text-6xl mb-6">
             {t("title")}
           </h1>
-          <p className="text-lg text-mute-soft max-w-2xl leading-[1.8]">
+          <p className="max-w-2xl text-lg leading-[1.8] text-ink-mid">
             {t("subtitle")}
           </p>
         </div>
       </section>
 
-      <WaveDivider intensity="subtle" />
-
       {/* ─── Contact methods ─── */}
-      <section className="bg-earth-soft py-20">
+      <section className="bg-cream-deep py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {/* WhatsApp */}
-            <div className="relative bg-earth border border-gold/15 rounded-[var(--radius-card)] p-8 flex flex-col gap-5 transition hover:-translate-y-0.5 hover:border-gold/30 overflow-hidden">
+            <GlassPanel
+              variant="warm"
+              radius="glass"
+              shadow
+              className="smooth lift relative flex flex-col gap-5 overflow-hidden p-8"
+            >
               <span
                 aria-hidden
-                className="absolute top-3 end-4 font-display text-7xl text-gold/8 leading-none font-bold select-none"
+                className="absolute top-3 end-4 font-display text-7xl text-gold/10 leading-none font-bold select-none"
               >
                 01
               </span>
-              <div className="text-gold w-11 h-11 flex items-center justify-center">
+              <div className="flex h-11 w-11 items-center justify-center text-gold-dk">
                 <MessageCircle size={40} strokeWidth={1.5} />
               </div>
-              <h3 className="font-display text-xl text-parchment font-semibold">
+              <h3 className="font-display text-xl font-semibold text-ink">
                 {t("whatsappTitle")}
               </h3>
-              <p className="text-mute-soft text-sm leading-relaxed flex-1">
+              <p className="flex-1 text-sm leading-relaxed text-ink-mid">
                 {t("whatsappBody")}
               </p>
               <a
                 href="https://wa.me/249912345678"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] px-5 py-2.5 text-sm font-semibold text-white transition-colors w-fit"
+                className="smooth inline-flex w-fit items-center gap-2 rounded-[var(--radius-pill)] px-5 py-2.5 text-sm font-semibold text-white hover:brightness-[1.08]"
                 style={{ backgroundColor: "#25d366" }}
               >
                 <MessageCircle size={14} aria-hidden />
                 {t("whatsappCta")}
               </a>
-            </div>
+            </GlassPanel>
 
             {/* Email */}
-            <div className="relative bg-earth border border-gold/15 rounded-[var(--radius-card)] p-8 flex flex-col gap-5 transition hover:-translate-y-0.5 hover:border-gold/30 overflow-hidden">
+            <GlassPanel
+              variant="warm"
+              radius="glass"
+              shadow
+              className="smooth lift relative flex flex-col gap-5 overflow-hidden p-8"
+            >
               <span
                 aria-hidden
-                className="absolute top-3 end-4 font-display text-7xl text-gold/8 leading-none font-bold select-none"
+                className="absolute top-3 end-4 font-display text-7xl text-gold/10 leading-none font-bold select-none"
               >
                 02
               </span>
-              <div className="text-gold w-11 h-11 flex items-center justify-center">
+              <div className="flex h-11 w-11 items-center justify-center text-gold-dk">
                 <Mail size={40} strokeWidth={1.5} />
               </div>
-              <h3 className="font-display text-xl text-parchment font-semibold">
+              <h3 className="font-display text-xl font-semibold text-ink">
                 {t("emailTitle")}
               </h3>
-              <p className="text-mute-soft text-sm leading-relaxed flex-1">
+              <p className="flex-1 text-sm leading-relaxed text-ink-mid">
                 {t("emailBody")}
               </p>
               <a
                 href="mailto:hello@sukan.app"
-                className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-gold/40 px-5 py-2.5 text-sm font-semibold text-gold hover:bg-gold/10 transition-colors w-fit"
+                className="smooth inline-flex w-fit items-center gap-2 rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 px-5 py-2.5 text-sm font-semibold text-gold-dk backdrop-blur-md hover:border-gold/70 hover:bg-gold/10"
               >
                 <Mail size={14} aria-hidden />
                 {t("emailCta")}
               </a>
-            </div>
+            </GlassPanel>
 
             {/* Telegram */}
-            <div className="relative bg-earth border border-gold/15 rounded-[var(--radius-card)] p-8 flex flex-col gap-5 transition hover:-translate-y-0.5 hover:border-gold/30 overflow-hidden">
+            <GlassPanel
+              variant="warm"
+              radius="glass"
+              shadow
+              className="smooth lift relative flex flex-col gap-5 overflow-hidden p-8"
+            >
               <span
                 aria-hidden
-                className="absolute top-3 end-4 font-display text-7xl text-gold/8 leading-none font-bold select-none"
+                className="absolute top-3 end-4 font-display text-7xl text-gold/10 leading-none font-bold select-none"
               >
                 03
               </span>
-              <div className="text-gold w-11 h-11 flex items-center justify-center">
+              <div className="flex h-11 w-11 items-center justify-center text-gold-dk">
                 <Send size={40} strokeWidth={1.5} />
               </div>
-              <h3 className="font-display text-xl text-parchment font-semibold">
+              <h3 className="font-display text-xl font-semibold text-ink">
                 {t("telegramTitle")}
               </h3>
-              <p className="text-mute-soft text-sm leading-relaxed flex-1">
+              <p className="flex-1 text-sm leading-relaxed text-ink-mid">
                 {t("telegramBody")}
               </p>
-              <span className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-gold/20 px-5 py-2.5 text-sm font-semibold text-mute-soft w-fit cursor-default">
+              <span className="inline-flex w-fit items-center gap-2 rounded-[var(--radius-pill)] border border-gold/20 bg-white/30 px-5 py-2.5 text-sm font-semibold text-ink-mid cursor-default">
                 <Send size={14} aria-hidden />
                 {t("telegramCta")}
               </span>
-            </div>
+            </GlassPanel>
           </div>
         </div>
       </section>
-
-      <WaveDivider flip intensity="subtle" />
 
       {/* ─── We're hiring ─── */}
-      <section className="bg-earth py-20">
+      <section className="bg-cream py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-start gap-5 mb-6">
-            <Briefcase size={32} className="text-gold mt-1 shrink-0" strokeWidth={1.5} />
-            <h2 className="font-display text-3xl md:text-4xl text-parchment leading-tight">
-              {t("hiringTitle")}
-            </h2>
-          </div>
-          <p className="text-mute-soft text-base leading-[1.9]">
-            {t("hiringBody")}
-          </p>
+          <GlassPanel variant="warm" radius="glass" shadow className="p-10 md:p-12">
+            <div className="mb-6 flex items-start gap-5">
+              <Briefcase
+                size={32}
+                className="mt-1 shrink-0 text-gold-dk"
+                strokeWidth={1.5}
+              />
+              <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">
+                {t("hiringTitle")}
+              </h2>
+            </div>
+            <p className="text-base leading-[1.9] text-ink-mid">
+              {t("hiringBody")}
+            </p>
+          </GlassPanel>
         </div>
       </section>
 
-      <WaveDivider intensity="subtle" />
-
       {/* ─── Office address ─── */}
-      <section className="bg-earth-soft py-20">
+      <section className="bg-cream-deep py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-start gap-5 mb-6">
-            <MapPin size={32} className="text-gold mt-1 shrink-0" strokeWidth={1.5} />
-            <h2 className="font-display text-3xl md:text-4xl text-parchment leading-tight">
-              {t("officeTitle")}
-            </h2>
-          </div>
-          <p className="text-mute-soft text-base leading-[1.9]">
-            {t("officeBody")}
-          </p>
+          <GlassPanel variant="warm" radius="glass" shadow className="p-10 md:p-12">
+            <div className="mb-6 flex items-start gap-5">
+              <MapPin
+                size={32}
+                className="mt-1 shrink-0 text-gold-dk"
+                strokeWidth={1.5}
+              />
+              <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">
+                {t("officeTitle")}
+              </h2>
+            </div>
+            <p className="text-base leading-[1.9] text-ink-mid">
+              {t("officeBody")}
+            </p>
+          </GlassPanel>
         </div>
       </section>
     </>

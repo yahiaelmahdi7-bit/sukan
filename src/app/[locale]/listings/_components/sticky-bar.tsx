@@ -15,10 +15,10 @@ export default function StickyBar({ total }: StickyBarProps) {
 
   return (
     <>
-      {/* Sticky bar — only on <lg */}
-      <div className="sticky top-16 z-30 border-b border-gold/10 bg-earth/90 px-4 py-2.5 backdrop-blur-md lg:hidden">
+      {/* Floating glass-strong sticky bar — <lg only */}
+      <div className="sticky top-16 z-30 glass-strong border-b border-white/30 px-4 py-2.5 backdrop-blur-md lg:hidden">
         <div className="flex items-center justify-between gap-3">
-          <span className="text-sm font-medium text-mute-soft">
+          <span className="text-sm font-medium text-ink-soft">
             {t("stickyResults", { count: total })}
           </span>
           <div className="flex items-center gap-2">
@@ -26,12 +26,12 @@ export default function StickyBar({ total }: StickyBarProps) {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-pill border border-gold/30 bg-earth-soft px-3 py-1.5 text-xs font-medium text-parchment transition hover:border-gold/60"
+              className="smooth-fast inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-white/55 bg-white/45 px-3 py-1.5 text-xs font-semibold text-ink-mid backdrop-blur-md hover:border-gold/50 hover:text-ink"
             >
               <svg
                 viewBox="0 0 16 16"
                 fill="currentColor"
-                className="h-3.5 w-3.5 text-gold"
+                className="h-3.5 w-3.5 text-gold-dk"
                 aria-hidden
               >
                 <path
@@ -46,30 +46,31 @@ export default function StickyBar({ total }: StickyBarProps) {
         </div>
       </div>
 
-      {/* Backdrop */}
+      {/* Dark-translucent backdrop */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-earth/50 backdrop-blur-sm lg:hidden"
           onClick={() => setOpen(false)}
           aria-hidden
         />
       )}
 
-      {/* Slide-up sheet */}
+      {/* Slide-up sheet — glass-strong surface */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto rounded-t-2xl border-t border-gold/20 bg-earth-deep p-6 shadow-2xl transition-transform duration-300 lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto rounded-t-[var(--radius-glass)] border-t border-white/30 glass-strong p-6 backdrop-blur-md transition-transform duration-300 lg:hidden ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
+        style={{ boxShadow: "var(--shadow-warm-lg)" }}
         aria-modal={open}
         role="dialog"
         aria-label={t("allFilters")}
       >
         <div className="mb-5 flex items-center justify-between">
-          <span className="font-display text-lg text-parchment">{t("allFilters")}</span>
+          <span className="font-display text-lg text-ink">{t("allFilters")}</span>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-gold/20 text-mute-soft hover:text-parchment transition"
+            className="smooth-fast flex h-7 w-7 items-center justify-center rounded-full border border-white/55 bg-white/45 text-ink-mid backdrop-blur-md hover:text-ink"
             aria-label="Close filters"
           >
             <svg

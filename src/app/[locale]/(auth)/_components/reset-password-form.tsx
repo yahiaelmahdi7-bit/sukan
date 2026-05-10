@@ -3,9 +3,23 @@
 import { useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
+import { GlassInput } from "@/components/ui/glass-input";
+import { GlassButton } from "@/components/ui/glass-button";
 import { resetPassword, type ActionResult } from "../actions";
 
 const initialState: ActionResult = { error: null };
+
+const labelClass =
+  "block mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-gold-dk";
+
+function Spinner() {
+  return (
+    <span
+      aria-hidden
+      className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-cream/30 border-t-cream"
+    />
+  );
+}
 
 export default function ResetPasswordForm() {
   const t = useTranslations("auth");
@@ -25,41 +39,37 @@ export default function ResetPasswordForm() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const inputClass =
-    "w-full rounded-md bg-earth border border-gold/20 px-4 py-3.5 text-base text-parchment placeholder:text-mute focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition";
-  const labelClass = "block mb-2 text-xs uppercase tracking-wider text-gold/80";
-
   return (
     <form action={formAction} className="flex flex-col gap-5">
       <div>
         <label htmlFor="reset-password" className={labelClass}>
           {t("password")}
         </label>
-        <input
+        <GlassInput
           id="reset-password"
           name="password"
           type="password"
           autoComplete="new-password"
           required
           minLength={8}
-          className={inputClass}
+          tone="light"
           placeholder="••••••••"
         />
-        <p className="mt-1.5 text-xs text-mute-soft">{t("passwordMin")}</p>
+        <p className="mt-1.5 text-xs text-ink-mid">{t("passwordMin")}</p>
       </div>
 
       <div>
         <label htmlFor="reset-confirm" className={labelClass}>
           {t("confirmPassword")}
         </label>
-        <input
+        <GlassInput
           id="reset-confirm"
           name="confirm_password"
           type="password"
           autoComplete="new-password"
           required
           minLength={8}
-          className={inputClass}
+          tone="light"
           placeholder="••••••••"
         />
       </div>
@@ -67,22 +77,22 @@ export default function ResetPasswordForm() {
       {state.error && (
         <p
           role="alert"
-          className="rounded-md border border-terracotta/30 bg-terracotta/10 px-4 py-3 text-sm text-terracotta"
+          className="rounded-[var(--radius-glass)] border border-terracotta/20 bg-terracotta/8 px-4 py-2.5 text-sm text-terracotta-deep"
         >
           {state.error}
         </p>
       )}
 
-      <button
+      <GlassButton
         type="submit"
+        variant="terracotta"
+        size="lg"
+        full
         disabled={pending}
-        className="flex w-full items-center justify-center gap-2 rounded-pill bg-terracotta py-3.5 text-base font-semibold text-parchment transition hover:bg-terracotta-deep disabled:opacity-60"
+        leading={pending ? <Spinner /> : undefined}
       >
-        {pending && (
-          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-parchment/30 border-t-parchment" />
-        )}
         {t("passwordReset")}
-      </button>
+      </GlassButton>
     </form>
   );
 }

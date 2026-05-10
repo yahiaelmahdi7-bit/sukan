@@ -50,38 +50,44 @@ export default function InquiryDetail({
   )}`;
 
   return (
-    <div className="bg-earth-soft rounded-[var(--radius-card)] border border-gold/15 p-7 flex flex-col gap-6 h-full">
+    <div
+      className="glass-warm glass-highlight rounded-[var(--radius-card)] border border-white/55 p-7 flex flex-col gap-6 h-full"
+      style={{ boxShadow: "var(--shadow-glass)" }}
+    >
       {/* Header */}
       <div>
-        <p className="text-xs uppercase tracking-wider text-mute-soft mb-1">
+        <p className="text-[10px] uppercase tracking-widest text-gold-dk font-semibold mb-1">
           {labels.from}
         </p>
-        <p className="text-xl font-display text-parchment">{name}</p>
-        <p className="text-sm text-mute-soft mt-1">
+        <p className="text-xl font-display text-ink">{name}</p>
+        <p className="text-sm text-ink-mid mt-1">
           {inquiry.inquirer_phone}
         </p>
       </div>
 
       {/* About listing */}
       <div>
-        <p className="text-xs uppercase tracking-wider text-mute-soft mb-1">
+        <p className="text-[10px] uppercase tracking-widest text-gold-dk font-semibold mb-1">
           {labels.about}
         </p>
-        <p className="text-sm text-parchment">{listingTitle}</p>
+        <p className="text-sm text-ink">{listingTitle}</p>
       </div>
 
       {/* Message */}
       <div className="flex-1">
-        <p className="text-xs uppercase tracking-wider text-mute-soft mb-3">
+        <p className="text-[10px] uppercase tracking-widest text-gold-dk font-semibold mb-3">
           {labels.message}
         </p>
-        <div className="bg-earth rounded-[10px] border border-gold/10 p-5">
-          <p className="text-sm text-parchment leading-relaxed">{message}</p>
+        <div
+          className="rounded-[10px] border border-white/60 bg-white/50 p-5 backdrop-blur-sm"
+          style={{ boxShadow: "var(--shadow-warm-sm)" }}
+        >
+          <p className="text-sm text-ink leading-relaxed">{message}</p>
         </div>
       </div>
 
       {/* Date */}
-      <p className="text-xs text-mute-soft">
+      <p className="text-xs text-ink-mid">
         {labels.respondedAt}:{" "}
         {formatDateTime(inquiry.created_at, locale)}
       </p>
@@ -92,13 +98,17 @@ export default function InquiryDetail({
           href={waLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment px-5 py-3 text-sm font-semibold transition-colors"
+          className="smooth flex-1 flex items-center justify-center gap-2 rounded-[var(--radius-pill)] text-cream px-5 py-3 text-sm font-semibold"
+          style={{
+            background: "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+            boxShadow: "0 8px 22px rgba(200, 64, 26, 0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
+          }}
         >
           {labels.replyWhatsapp}
         </a>
         <a
           href={`tel:${inquiry.inquirer_phone}`}
-          className="flex-1 flex items-center justify-center gap-2 rounded-[var(--radius-pill)] border border-gold/30 text-parchment px-5 py-3 text-sm hover:bg-gold/10 transition-colors"
+          className="smooth-fast flex-1 flex items-center justify-center gap-2 rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 text-ink-soft px-5 py-3 text-sm hover:border-gold/70 hover:bg-gold/10 hover:text-terracotta backdrop-blur-sm"
         >
           {labels.replyPhone}
         </a>

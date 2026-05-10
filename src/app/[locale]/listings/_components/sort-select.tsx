@@ -59,7 +59,7 @@ export default function SortSelect({ compact = false }: SortSelectProps) {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={t("browse.sortLabel")}
-        className={`flex items-center gap-2 rounded-lg border border-gold/20 bg-earth px-3 py-2 text-sm text-parchment transition hover:border-gold/50 focus:outline-none focus:ring-2 focus:ring-gold/25 ${
+        className={`smooth-fast flex items-center gap-2 rounded-[var(--radius-pill)] border border-white/55 bg-white/55 px-3.5 py-2 text-sm text-ink backdrop-blur-md hover:border-gold/50 hover:bg-white/75 focus:outline-none focus:ring-2 focus:ring-gold/20 ${
           compact ? "py-1.5 text-xs" : ""
         }`}
       >
@@ -69,7 +69,7 @@ export default function SortSelect({ compact = false }: SortSelectProps) {
           fill="none"
           stroke="currentColor"
           strokeWidth={1.5}
-          className="h-3.5 w-3.5 shrink-0 text-gold"
+          className="h-3.5 w-3.5 shrink-0 text-gold-dk"
           aria-hidden
         >
           <line x1="2" y1="4" x2="14" y2="4" />
@@ -88,7 +88,7 @@ export default function SortSelect({ compact = false }: SortSelectProps) {
           fill="none"
           stroke="currentColor"
           strokeWidth={1.5}
-          className={`h-2.5 w-2.5 shrink-0 text-mute-soft transition-transform ${open ? "rotate-180" : ""}`}
+          className={`smooth-fast h-2.5 w-2.5 shrink-0 text-ink-mid ${open ? "rotate-180" : ""}`}
           aria-hidden
         >
           <path d="M1 1l4 4 4-4" />
@@ -100,7 +100,8 @@ export default function SortSelect({ compact = false }: SortSelectProps) {
         <ul
           role="listbox"
           aria-label={t("browse.sortLabel")}
-          className="absolute end-0 z-50 mt-1.5 min-w-[180px] overflow-hidden rounded-xl border border-gold/20 bg-earth-soft py-1 shadow-2xl shadow-black/40"
+          className="glass-strong glass-highlight absolute end-0 z-50 mt-2 min-w-[200px] overflow-hidden rounded-[var(--radius-glass)] border border-white/60 py-1.5"
+          style={{ boxShadow: "var(--shadow-warm-lg)" }}
         >
           {SORT_OPTIONS.map((opt) => {
             const isActive = currentSort === opt.value;
@@ -109,17 +110,17 @@ export default function SortSelect({ compact = false }: SortSelectProps) {
                 <button
                   type="button"
                   onClick={() => handleChange(opt.value)}
-                  className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-start text-sm transition ${
+                  className={`smooth-fast flex w-full items-center gap-2.5 px-4 py-2.5 text-start text-sm ${
                     isActive
-                      ? "bg-gold/10 text-gold font-medium"
-                      : "text-parchment hover:bg-gold/5 hover:text-gold"
+                      ? "bg-gold/15 font-medium text-gold-dk"
+                      : "text-ink hover:bg-gold/8 hover:text-terracotta"
                   }`}
                 >
                   {isActive && (
                     <svg
                       viewBox="0 0 12 12"
                       fill="currentColor"
-                      className="h-2.5 w-2.5 shrink-0 text-gold"
+                      className="h-2.5 w-2.5 shrink-0 text-gold-dk"
                       aria-hidden
                     >
                       <path d="M1.5 6L4.5 9 10.5 3" stroke="currentColor" fill="none" strokeWidth={2} />

@@ -60,21 +60,12 @@ export default function MapWithPanel({
   );
 
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "grid",
-        gridTemplateColumns: "1fr",
-        height: "640px",
-      }}
-      // On lg+ use side-by-side layout
-      className="lg:grid-cols-[1fr_340px]"
-    >
-      {/* Map area */}
+    /* ── Full-height wrapper — fills the outer container ────────────────── */
+    <div className="relative flex h-full w-full overflow-hidden">
+      {/* ── Map area — fills all available space ──────────────────────────── */}
       <div
         ref={mapContainerRef}
-        style={{ height: "100%", minHeight: 0, position: "relative" }}
-        className="rounded-[var(--radius-card)] lg:rounded-e-none overflow-hidden"
+        className="relative min-h-0 flex-1 overflow-hidden"
       >
         <MapClient
           center={center}
@@ -87,39 +78,57 @@ export default function MapWithPanel({
         />
       </div>
 
-      {/* Panel — always rendered; hidden via CSS on small screens unless open */}
+      {/* ── Side panel — floating glass card (lg+) ────────────────────────── */}
+      {/*
+          On large screens: fixed-width column always visible beside the map.
+          On small screens: hidden by default; slides up from the bottom when
+          panelOpen is true (bottom-sheet pattern).
+      */}
       <div
-        style={{
-          height: "100%",
-          minHeight: 0,
-          overflow: "hidden",
-        }}
         className={[
-          // On large screens: always visible in the grid column
-          "hidden lg:block",
-          // On small screens: fixed slide-over
+          // Large screens: always-visible side column
+          "lg:relative lg:flex lg:w-[340px] lg:shrink-0",
+          // Small screens: bottom sheet — fixed, slides in from bottom
+          "max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0",
+          "max-lg:transition-transform max-lg:duration-300",
           panelOpen
-            ? "!block fixed inset-y-0 end-0 w-[340px] z-[1050] shadow-2xl"
-            : "",
-        ]
-          .join(" ")
-          .trim()}
+            ? "max-lg:translate-y-0 max-lg:z-[1050]"
+            : "max-lg:translate-y-full max-lg:z-[1050] max-lg:pointer-events-none",
+        ].join(" ")}
+        style={
+          panelOpen
+            ? {
+                // Bottom sheet: show from 40% viewport height up, rounded top corners only
+                maxHeight: "62vh",
+              }
+            : undefined
+        }
       >
-        <MapResultsPanel
-          listings={listings}
-          selectedId={selectedId}
-          onSelect={handleCardSelect}
-          locale={locale}
-          labels={labels}
-          isOpen={panelOpen}
-          onToggle={() => setPanelOpen((o) => !o)}
-        />
+        {/* Mobile: rounded top corners only */}
+        <div
+          className={[
+            "h-full w-full overflow-hidden",
+            // On small screens round only the top corners
+            "max-lg:rounded-t-[var(--radius-glass-lg)]",
+            // On large screens use the full outer wrapper's radius (none needed — flush)
+          ].join(" ")}
+        >
+          <MapResultsPanel
+            listings={listings}
+            selectedId={selectedId}
+            onSelect={handleCardSelect}
+            locale={locale}
+            labels={labels}
+            isOpen={panelOpen}
+            onToggle={() => setPanelOpen((o) => !o)}
+          />
+        </div>
       </div>
 
-      {/* Backdrop for mobile slide-over */}
+      {/* ── Mobile backdrop ───────────────────────────────────────────────── */}
       {panelOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-[1040] bg-black/50"
+          className="lg:hidden fixed inset-0 z-[1040] bg-earth/40 backdrop-blur-sm"
           onClick={() => setPanelOpen(false)}
           aria-hidden="true"
         />

@@ -35,6 +35,42 @@
 
   --radius-pill: 999px;
   --radius-card: 14px;
+  --radius-glass: 22px;
+  --radius-glass-lg: 28px;
+
+  /* Glass surfaces — warm parchment / cream tints, not iOS white */
+  --color-glass-cream: rgba(253, 248, 240, 0.55);
+  --color-glass-sand: rgba(240, 230, 208, 0.5);
+  --color-glass-strong: rgba(255, 252, 246, 0.78);
+  --color-glass-deep: rgba(18, 16, 12, 0.55);
+  --color-glass-stroke: rgba(255, 255, 255, 0.55);
+  --color-glass-stroke-warm: rgba(200, 135, 58, 0.18);
+
+  /* Apple-family easing curves */
+  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-glide: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Warm earth-tinted shadows (not generic black) */
+  --shadow-warm-sm:
+    0 1px 2px rgba(122, 85, 48, 0.05),
+    0 2px 6px rgba(122, 85, 48, 0.04);
+  --shadow-warm:
+    0 2px 6px rgba(122, 85, 48, 0.06),
+    0 12px 32px rgba(122, 85, 48, 0.10);
+  --shadow-warm-lg:
+    0 6px 12px rgba(122, 85, 48, 0.08),
+    0 28px 56px rgba(122, 85, 48, 0.14);
+  --shadow-glass:
+    0 1px 0 0 rgba(255, 255, 255, 0.6) inset,
+    0 0 0 0.5px rgba(255, 255, 255, 0.4),
+    0 12px 36px rgba(122, 85, 48, 0.12);
+  --shadow-gold-glow:
+    0 0 0 1px rgba(200, 135, 58, 0.18),
+    0 8px 32px rgba(200, 135, 58, 0.22);
+  --shadow-terracotta-glow:
+    0 0 0 1px rgba(200, 64, 26, 0.18),
+    0 8px 28px rgba(200, 64, 26, 0.20);
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -115,4 +151,157 @@ html[dir="rtl"] .font-display {
   );
   position: relative;
   overflow: hidden;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Glass surface system — parchment-tinted, not generic
+   ─────────────────────────────────────────────────────────────── */
+
+.glass {
+  background: var(--color-glass-cream);
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid var(--color-glass-stroke);
+}
+
+.glass-strong {
+  background: var(--color-glass-strong);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.glass-sand {
+  background: var(--color-glass-sand);
+  backdrop-filter: blur(20px) saturate(165%);
+  -webkit-backdrop-filter: blur(20px) saturate(165%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.glass-warm {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 252, 246, 0.78),
+    rgba(244, 234, 215, 0.58)
+  );
+  backdrop-filter: blur(24px) saturate(175%);
+  -webkit-backdrop-filter: blur(24px) saturate(175%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.glass-deep {
+  background: rgba(18, 16, 12, 0.55);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--color-glass-stroke-warm);
+}
+
+/* Inner top highlight — gives glass surfaces a bevelled "glassy" cap */
+.glass-highlight {
+  position: relative;
+}
+.glass-highlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 28%
+  );
+  mix-blend-mode: overlay;
+}
+
+/* Soft glow halos used for hover states */
+.glow-gold {
+  box-shadow: var(--shadow-gold-glow);
+}
+.glow-terracotta {
+  box-shadow: var(--shadow-terracotta-glow);
+}
+
+/* Smooth, Apple-feeling default for any element that opts in */
+.smooth {
+  transition-property: transform, box-shadow, background-color, border-color,
+    color, opacity, filter;
+  transition-duration: 320ms;
+  transition-timing-function: var(--ease-apple);
+}
+.smooth-fast {
+  transition-property: transform, box-shadow, background-color, border-color,
+    color, opacity, filter;
+  transition-duration: 180ms;
+  transition-timing-function: var(--ease-apple);
+}
+
+/* Lift on hover — used on cards */
+.lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Brand selection */
+::selection {
+  background: rgba(200, 135, 58, 0.28);
+  color: var(--color-earth);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Atmospheric drift — slow, organic, used by <Atmosphere />
+   ─────────────────────────────────────────────────────────────── */
+
+@keyframes drift-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(4%, -3%, 0) scale(1.06); }
+}
+@keyframes drift-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-3%, 2%, 0) scale(0.95); }
+}
+@keyframes drift-3 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(2%, 4%, 0) scale(1.08); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.animate-drift-1 { animation: drift-1 22s var(--ease-glide) infinite; }
+.animate-drift-2 { animation: drift-2 28s var(--ease-glide) infinite; }
+.animate-drift-3 { animation: drift-3 24s var(--ease-glide) infinite; }
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(214, 196, 160, 0.14) 0%,
+    rgba(214, 196, 160, 0.32) 50%,
+    rgba(214, 196, 160, 0.14) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift-1,
+  .animate-drift-2,
+  .animate-drift-3,
+  .skeleton {
+    animation: none;
+  }
+  .smooth,
+  .smooth-fast {
+    transition-duration: 0ms;
+  }
+}
+
+/* Smoother scrolling, smarter typography on the whole document */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-feature-settings: "kern", "liga", "calt";
 }

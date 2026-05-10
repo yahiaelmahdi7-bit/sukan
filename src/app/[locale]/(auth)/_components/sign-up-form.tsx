@@ -2,12 +2,28 @@
 
 import { useActionState, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { GlassInput } from "@/components/ui/glass-input";
+import { GlassSelect } from "@/components/ui/glass-select";
+import { GlassButton } from "@/components/ui/glass-button";
+import GlassPanel from "@/components/glass-panel";
 import { signUp, type ActionResult } from "../actions";
 
 const initialState: ActionResult = { error: null };
 
 const ROLES = ["tenant", "landlord", "agent"] as const;
 type RoleKey = "roleTenant" | "roleLandlord" | "roleAgent";
+
+const labelClass =
+  "block mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-gold-dk";
+
+function Spinner() {
+  return (
+    <span
+      aria-hidden
+      className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-cream/30 border-t-cream"
+    />
+  );
+}
 
 export default function SignUpForm() {
   const t = useTranslations("auth");
@@ -23,16 +39,12 @@ export default function SignUpForm() {
     initialState,
   );
 
-  const inputClass =
-    "w-full rounded-md bg-earth border border-gold/20 px-4 py-3.5 text-base text-parchment placeholder:text-mute focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition";
-  const labelClass = "block mb-2 text-xs uppercase tracking-wider text-gold/80";
-
   if (success) {
     return (
-      <div className="rounded-md border border-gold/20 bg-gold/5 px-6 py-8 text-center">
-        <p className="font-display text-xl text-parchment mb-2">{t("checkEmail")}</p>
-        <p className="text-sm text-mute-soft">{t("magicLinkSent")}</p>
-      </div>
+      <GlassPanel variant="warm" radius="glass" shadow={false} highlight={false} className="px-6 py-8 text-center">
+        <p className="font-display text-xl text-ink mb-2">{t("checkEmail")}</p>
+        <p className="text-sm text-ink-mid">{t("magicLinkSent")}</p>
+      </GlassPanel>
     );
   }
 
@@ -46,13 +58,13 @@ export default function SignUpForm() {
         <label htmlFor="signup-name" className={labelClass}>
           {t("fullName")}
         </label>
-        <input
+        <GlassInput
           id="signup-name"
           name="full_name"
           type="text"
           autoComplete="name"
           required
-          className={inputClass}
+          tone="light"
           placeholder="Ali Hassan"
         />
       </div>
@@ -62,13 +74,13 @@ export default function SignUpForm() {
         <label htmlFor="signup-email" className={labelClass}>
           {t("email")}
         </label>
-        <input
+        <GlassInput
           id="signup-email"
           name="email"
           type="email"
           autoComplete="email"
           required
-          className={inputClass}
+          tone="light"
           placeholder="you@example.com"
         />
       </div>
@@ -78,17 +90,17 @@ export default function SignUpForm() {
         <label htmlFor="signup-password" className={labelClass}>
           {t("password")}
         </label>
-        <input
+        <GlassInput
           id="signup-password"
           name="password"
           type="password"
           autoComplete="new-password"
           required
           minLength={8}
-          className={inputClass}
+          tone="light"
           placeholder="••••••••"
         />
-        <p className="mt-1.5 text-xs text-mute-soft">{t("passwordMin")}</p>
+        <p className="mt-1.5 text-xs text-ink-mid">{t("passwordMin")}</p>
       </div>
 
       {/* Role */}
@@ -96,12 +108,12 @@ export default function SignUpForm() {
         <label htmlFor="signup-role" className={labelClass}>
           {t("role")}
         </label>
-        <select
+        <GlassSelect
           id="signup-role"
           name="role"
           required
           defaultValue=""
-          className="w-full rounded-md bg-earth border border-gold/20 px-4 py-3.5 text-base text-parchment focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition"
+          tone="light"
         >
           <option value="" disabled>
             —
@@ -111,28 +123,28 @@ export default function SignUpForm() {
               {t(roleKey(r))}
             </option>
           ))}
-        </select>
+        </GlassSelect>
       </div>
 
       {state.error && (
         <p
           role="alert"
-          className="rounded-md border border-terracotta/30 bg-terracotta/10 px-4 py-3 text-sm text-terracotta"
+          className="rounded-[var(--radius-glass)] border border-terracotta/20 bg-terracotta/8 px-4 py-2.5 text-sm text-terracotta-deep"
         >
           {state.error}
         </p>
       )}
 
-      <button
+      <GlassButton
         type="submit"
+        variant="terracotta"
+        size="lg"
+        full
         disabled={pending}
-        className="flex w-full items-center justify-center gap-2 rounded-pill bg-terracotta py-3.5 text-base font-semibold text-parchment transition hover:bg-terracotta-deep disabled:opacity-60"
+        leading={pending ? <Spinner /> : undefined}
       >
-        {pending && (
-          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-parchment/30 border-t-parchment" />
-        )}
         {t("signUp")}
-      </button>
+      </GlassButton>
     </form>
   );
 }

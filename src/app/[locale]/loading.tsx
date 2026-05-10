@@ -9,15 +9,23 @@ export default async function Loading() {
     <>
       <Navbar />
 
-      <main className="flex flex-1 flex-col items-center justify-center py-32 gap-8">
-        {/* Pulsing mark */}
-        <div className="animate-pulse">
-          <SukanMark size={72} />
+      <main className="flex flex-1 flex-col items-center justify-center py-32 gap-5">
+        {/* Pulsing brand mark — neutral gold, works on both dark and cream */}
+        <div
+          className="animate-pulse"
+          style={{ animationTimingFunction: "var(--ease-glide)", animationDuration: "1.8s" }}
+        >
+          <SukanMark size={64} monochrome="gold" />
         </div>
 
-        <p className="text-sm text-mute-soft tracking-wide">
-          {t("message")}
-        </p>
+        {/* Caption shimmer — 3-dot skeleton bar that mirrors the mark width */}
+        <div className="flex flex-col items-center gap-3">
+          <p className="text-xs tracking-[0.22em] uppercase text-mute-soft font-sans">
+            {t("message")}
+          </p>
+          {/* Slim skeleton rule */}
+          <div className="skeleton h-0.5 w-16 rounded-full" />
+        </div>
       </main>
     </>
   );

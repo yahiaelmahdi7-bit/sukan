@@ -32,7 +32,7 @@ export default async function ForgotPasswordPage({
           {t("haveAccount")}{" "}
           <Link
             href="/sign-in"
-            className="font-medium text-gold hover:text-gold-bright transition"
+            className="font-medium text-terracotta transition hover:text-terracotta-deep"
           >
             {t("signIn")}
           </Link>

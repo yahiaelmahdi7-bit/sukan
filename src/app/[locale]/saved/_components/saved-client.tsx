@@ -8,6 +8,8 @@ import { getLocalFavorites, setLocalFavorites } from "@/lib/favorites";
 import { sampleListings, type Listing } from "@/lib/sample-listings";
 import ListingCard from "@/components/listing-card";
 import SukanMark from "@/components/sukan-mark";
+import GlassPanel from "@/components/glass-panel";
+import { GlassButton } from "@/components/ui/glass-button";
 
 type LoadState = "loading" | "empty" | "populated";
 
@@ -68,17 +70,22 @@ export default function SavedClient() {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div
+          <GlassPanel
             key={i}
-            className="animate-pulse rounded-[var(--radius-card)] bg-earth-soft border border-gold/10 overflow-hidden"
+            variant="deep"
+            radius="glass"
+            highlight={false}
+            shadow={false}
+            className="overflow-hidden"
           >
-            <div className="aspect-[4/3] w-full bg-sand/40" />
+            {/* Image placeholder */}
+            <div className="aspect-[4/3] w-full skeleton" />
             <div className="p-5 flex flex-col gap-3">
-              <div className="h-5 rounded bg-sand/40 w-4/5" />
-              <div className="h-4 rounded bg-sand/30 w-2/5" />
-              <div className="h-7 rounded bg-sand/40 w-3/5 mt-2" />
+              <div className="h-5 skeleton w-4/5" />
+              <div className="h-4 skeleton w-2/5" />
+              <div className="h-7 skeleton w-3/5 mt-2" />
             </div>
-          </div>
+          </GlassPanel>
         ))}
       </div>
     );
@@ -87,36 +94,45 @@ export default function SavedClient() {
   // ── Empty state ────────────────────────────────────────────
   if (loadState === "empty") {
     return (
-      <div className="flex flex-col items-center gap-6 py-20 text-center">
-        <SukanMark monochrome="gold" size={72} className="opacity-30" />
-
-        <div className="flex flex-col gap-2">
-          <h2 className="font-display text-3xl text-parchment">
-            {t("favorites.emptyTitle")}
-          </h2>
-          <p className="text-mute-soft text-base max-w-sm">
-            {t("favorites.emptyBody")}
-          </p>
-        </div>
-
-        <Link
-          href="/listings"
-          className="rounded-[var(--radius-pill)] bg-terracotta px-6 py-2.5 text-sm font-semibold text-parchment hover:bg-terracotta-deep transition-colors"
+      <div className="flex flex-col items-center gap-8 py-20">
+        <GlassPanel
+          variant="deep"
+          radius="glass-lg"
+          highlight={false}
+          shadow={false}
+          className="flex flex-col items-center gap-6 px-10 py-12 text-center max-w-sm w-full"
+          style={{ boxShadow: "var(--shadow-gold-glow)" }}
         >
-          {t("favorites.browseCta")}
-        </Link>
+          <SukanMark monochrome="gold" size={64} className="opacity-40" />
 
-        {isAnonymous && (
-          <div className="mt-2 rounded-[var(--radius-card)] border border-gold/20 bg-earth-soft px-5 py-4 text-sm text-mute-soft max-w-sm">
-            <p className="mb-3">{t("favorites.signInPrompt")}</p>
-            <Link
-              href="/sign-in"
-              className="rounded-[var(--radius-pill)] border border-gold/40 px-4 py-1.5 text-xs text-parchment hover:bg-gold/10 transition-colors"
-            >
-              {t("auth.signIn")}
-            </Link>
+          <div className="flex flex-col gap-2">
+            <h2 className="font-display text-3xl text-parchment">
+              {t("favorites.emptyTitle")}
+            </h2>
+            <p className="text-mute-soft text-sm leading-relaxed max-w-xs">
+              {t("favorites.emptyBody")}
+            </p>
           </div>
-        )}
+
+          <Link href="/listings">
+            <GlassButton variant="terracotta" size="md">
+              {t("favorites.browseCta")}
+            </GlassButton>
+          </Link>
+
+          {isAnonymous && (
+            <div className="mt-2 w-full border-t border-gold/15 pt-5 flex flex-col items-center gap-3">
+              <p className="text-xs text-mute-soft leading-relaxed">
+                {t("favorites.signInPrompt")}
+              </p>
+              <Link href="/sign-in">
+                <GlassButton variant="ghost-dark" size="sm">
+                  {t("auth.signIn")}
+                </GlassButton>
+              </Link>
+            </div>
+          )}
+        </GlassPanel>
       </div>
     );
   }
@@ -139,7 +155,7 @@ export default function SavedClient() {
         <button
           type="button"
           onClick={handleClearAll}
-          className="text-xs text-mute-soft hover:text-parchment transition-colors"
+          className="smooth-fast text-xs text-mute-soft hover:text-parchment"
         >
           {t("favorites.clearAll")}
         </button>

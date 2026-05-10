@@ -1,5 +1,7 @@
 "use client";
 
+import { GlassButton } from "@/components/ui/glass-button";
+
 interface DangerZoneProps {
   title: string;
   description: string;
@@ -12,16 +14,24 @@ export default function DangerZone({
   buttonLabel,
 }: DangerZoneProps) {
   return (
-    <div className="rounded-[var(--radius-card)] border border-terracotta/30 bg-terracotta/5 p-7">
-      <h3 className="font-display text-xl text-terracotta mb-3">{title}</h3>
-      <p className="text-sm text-mute-soft mb-6 leading-relaxed">{description}</p>
-      <button
+    <div
+      className="rounded-[var(--radius-card)] border border-terracotta/40 glass-warm p-7"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,252,246,0.72), rgba(200,64,26,0.05))",
+        boxShadow: "var(--shadow-warm-sm)",
+      }}
+    >
+      <h3 className="font-display text-xl text-terracotta-deep mb-3">{title}</h3>
+      <p className="text-sm text-ink-mid mb-6 leading-relaxed">{description}</p>
+      <GlassButton
+        variant="danger"
+        size="md"
         type="button"
         onClick={() => console.log("delete-account stub")}
-        className="rounded-[var(--radius-pill)] border border-terracotta text-terracotta px-6 py-2.5 text-sm font-semibold hover:bg-terracotta hover:text-parchment transition-colors"
       >
         {buttonLabel}
-      </button>
+      </GlassButton>
     </div>
   );
 }

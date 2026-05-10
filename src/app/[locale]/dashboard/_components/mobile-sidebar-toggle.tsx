@@ -18,16 +18,16 @@ export default function MobileSidebarToggle({
 
   return (
     <>
-      {/* Hamburger button — only visible on small screens */}
+      {/* Glass pill hamburger button — only visible on small screens */}
       <button
         type="button"
         aria-label="Open navigation"
         onClick={() => setOpen(true)}
-        className="lg:hidden p-2 rounded-lg text-mute-soft hover:text-parchment hover:bg-earth-soft transition-colors"
+        className="smooth-fast lg:hidden w-9 h-9 flex items-center justify-center rounded-full border border-white/60 bg-white/40 text-ink-mid hover:border-gold/50 hover:text-ink hover:bg-gold/10 backdrop-blur-sm"
       >
         <svg
-          width="22"
-          height="22"
+          width="18"
+          height="18"
           viewBox="0 0 22 22"
           fill="none"
           aria-hidden
@@ -44,12 +44,12 @@ export default function MobileSidebarToggle({
           className="fixed inset-0 z-50 flex"
           onClick={() => setOpen(false)}
         >
-          {/* Scrim */}
-          <div className="absolute inset-0 bg-earth/70 backdrop-blur-sm" />
+          {/* Frosted cream scrim */}
+          <div className="absolute inset-0 bg-cream/60 backdrop-blur-sm" />
 
           {/* Drawer panel */}
           <div
-            className="relative z-10 h-full ltr:ml-0 rtl:mr-0"
+            className="relative z-10 h-full ps-3 pt-4 pb-6"
             onClick={(e) => e.stopPropagation()}
           >
             <DashboardSidebar

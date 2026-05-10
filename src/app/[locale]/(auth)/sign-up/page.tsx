@@ -33,7 +33,7 @@ export default async function SignUpPage({
           {t("haveAccount")}{" "}
           <Link
             href="/sign-in"
-            className="font-medium text-gold hover:text-gold-bright transition"
+            className="font-medium text-terracotta transition hover:text-terracotta-deep"
           >
             {t("signIn")}
           </Link>
@@ -45,9 +45,11 @@ export default async function SignUpPage({
 
         {/* Divider */}
         <div className="flex items-center gap-3">
-          <span className="flex-1 border-t border-gold/10" />
-          <span className="text-xs text-mute-soft">{t("or")}</span>
-          <span className="flex-1 border-t border-gold/10" />
+          <span className="flex-1 border-t border-gold/20" />
+          <span className="rounded-full bg-cream px-3 py-0.5 text-xs text-ink-mid">
+            {t("or")}
+          </span>
+          <span className="flex-1 border-t border-gold/20" />
         </div>
 
         <SignUpForm />

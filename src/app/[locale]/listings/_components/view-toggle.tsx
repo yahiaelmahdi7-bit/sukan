@@ -27,8 +27,9 @@ export default function ViewToggle() {
   }
 
   return (
+    /* Segmented glass control — mirrors the purpose toggle in hero-search */
     <div
-      className="flex items-center gap-0.5 rounded-lg border border-gold/15 bg-earth p-0.5"
+      className="inline-flex rounded-[var(--radius-pill)] border border-white/55 bg-white/45 p-1 backdrop-blur-md"
       role="group"
       aria-label="View mode"
     >
@@ -38,10 +39,10 @@ export default function ViewToggle() {
         onClick={() => switchView("list")}
         aria-pressed={currentView === "list"}
         title={t("viewList")}
-        className={`flex h-7 w-8 items-center justify-center rounded-md transition ${
+        className={`smooth-fast flex h-7 w-8 items-center justify-center rounded-[var(--radius-pill)] transition ${
           currentView === "list"
-            ? "bg-gold/20 text-gold"
-            : "text-mute-soft hover:text-parchment"
+            ? "bg-terracotta text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
+            : "text-ink-mid hover:text-ink"
         }`}
       >
         {/* Grid/list icon */}
@@ -67,10 +68,10 @@ export default function ViewToggle() {
         onClick={() => switchView("map")}
         aria-pressed={currentView === "map"}
         title={t("viewMap")}
-        className={`flex h-7 w-8 items-center justify-center rounded-md transition ${
+        className={`smooth-fast flex h-7 w-8 items-center justify-center rounded-[var(--radius-pill)] transition ${
           currentView === "map"
-            ? "bg-gold/20 text-gold"
-            : "text-mute-soft hover:text-parchment"
+            ? "bg-terracotta text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
+            : "text-ink-mid hover:text-ink"
         }`}
       >
         {/* Map icon */}

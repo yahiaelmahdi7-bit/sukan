@@ -9,7 +9,7 @@ export default function SignOutButton({ label }: SignOutButtonProps) {
     <button
       type="button"
       onClick={() => console.log("sign-out stub")}
-      className="w-full flex items-center gap-3 px-4 py-3 rounded-[10px] text-sm text-mute-soft hover:text-parchment hover:bg-earth-soft transition-colors"
+      className="smooth-fast w-full flex items-center gap-3 px-4 py-2.5 rounded-[var(--radius-pill)] text-sm text-ink-mid hover:text-terracotta hover:bg-white/50 border border-transparent hover:border-terracotta/20"
     >
       <span className="text-base leading-none" aria-hidden>↩</span>
       {label}

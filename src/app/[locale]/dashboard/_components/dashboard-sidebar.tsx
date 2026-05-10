@@ -2,6 +2,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import SukanMark from "@/components/sukan-mark";
+import GlassPanel from "@/components/glass-panel";
 import SignOutButton from "./sign-out-button";
 
 const NAV_ITEMS = [
@@ -28,25 +29,34 @@ export default function DashboardSidebar({
   const t = useTranslations("dashboard");
 
   return (
-    <aside className="flex flex-col w-60 shrink-0 h-full border-e border-gold/10 bg-earth">
+    <GlassPanel
+      variant="strong"
+      radius="glass"
+      highlight
+      shadow="lg"
+      className="flex flex-col w-60 shrink-0 h-full"
+    >
       {/* Brand header */}
-      <div className="flex items-center gap-3 px-6 py-7 border-b border-gold/10">
-        <SukanMark size={32} monochrome="gold" />
-        <span className="font-display text-xl text-parchment leading-none">
+      <div className="flex items-center gap-3 px-6 py-6 border-b border-white/40">
+        <SukanMark size={30} />
+        <span
+          className="font-display text-xl text-ink leading-none"
+          style={{ fontFamily: "var(--font-arabic)" }}
+        >
           سُكَن
         </span>
       </div>
 
       {/* Greeting */}
-      <div className="px-6 py-5 border-b border-gold/10">
-        <p className="text-xs text-mute-soft uppercase tracking-wider mb-1">
+      <div className="px-6 py-4 border-b border-white/30">
+        <p className="text-[10px] text-gold-dk uppercase tracking-widest mb-1 font-semibold">
           {t("welcomeBack", { name: "" }).trim()}
         </p>
-        <p className="font-semibold text-parchment text-sm">{userName}</p>
+        <p className="font-semibold text-ink text-sm">{userName}</p>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
+      <nav className="flex-1 px-2.5 py-4 flex flex-col gap-0.5">
         {NAV_ITEMS.map((item) => {
           const isActive = item.key === active;
           return (
@@ -54,17 +64,20 @@ export default function DashboardSidebar({
               key={item.key}
               href={item.href}
               className={[
-                "flex items-center gap-3 px-4 py-3 rounded-[10px] text-sm font-medium transition-colors",
-                "ltr:border-s-2 rtl:border-e-2",
+                "smooth-fast flex items-center gap-3 px-4 py-2.5 rounded-[var(--radius-pill)] text-sm font-medium",
                 isActive
-                  ? "bg-gold/10 text-parchment border-terracotta"
-                  : "text-mute-soft hover:text-parchment hover:bg-earth-soft border-transparent",
+                  ? "bg-white/70 text-ink border border-white/80"
+                  : "text-ink-mid hover:text-ink hover:bg-white/40 border border-transparent",
               ].join(" ")}
+              style={
+                isActive
+                  ? { boxShadow: "var(--shadow-gold-glow)" }
+                  : undefined
+              }
             >
               <SukanMark
-                size={18}
-                monochrome={isActive ? "gold" : "parchment"}
-                className={isActive ? "opacity-100" : "opacity-30"}
+                size={16}
+                className={isActive ? "opacity-90" : "opacity-40"}
               />
               {t(item.key)}
             </Link>
@@ -73,9 +86,9 @@ export default function DashboardSidebar({
       </nav>
 
       {/* Sign out */}
-      <div className="px-3 py-5 border-t border-gold/10">
+      <div className="px-2.5 py-4 border-t border-white/30">
         <SignOutButton label={signOutLabel} />
       </div>
-    </aside>
+    </GlassPanel>
   );
 }

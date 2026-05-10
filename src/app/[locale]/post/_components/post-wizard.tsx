@@ -2,6 +2,10 @@
 
 import { useState, useEffect, useTransition, useId, useRef } from "react";
 import { useTranslations } from "next-intl";
+import GlassPanel from "@/components/glass-panel";
+import { GlassInput } from "@/components/ui/glass-input";
+import { GlassSelect } from "@/components/ui/glass-select";
+import { GlassButton } from "@/components/ui/glass-button";
 import PostMap from "./post-map";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -160,14 +164,10 @@ const MAX_PHOTOS = 10;
 
 // ─── Style helpers ────────────────────────────────────────────────────────────
 
-const inputCls =
-  "w-full bg-earth border border-gold/20 rounded-md px-4 py-3 text-parchment placeholder:text-mute focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-colors";
-
 const labelCls =
-  "block text-xs font-semibold uppercase tracking-wider text-mute-soft mb-1.5";
+  "block text-[11px] font-semibold uppercase tracking-[0.18em] text-mute-soft mb-1.5";
 
-const errorCls =
-  "mt-1 text-xs text-terracotta";
+const errorCls = "mt-1.5 text-xs text-terracotta";
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
@@ -191,19 +191,22 @@ function Stepper({
         type="button"
         aria-label="decrease"
         onClick={() => onChange(Math.max(min, value - 1))}
-        className="w-8 h-8 rounded-full border border-gold/40 text-gold flex items-center justify-center text-lg leading-none hover:border-gold hover:text-gold-bright transition-colors disabled:opacity-40"
+        className="smooth w-9 h-9 rounded-full border border-gold/30 bg-earth-soft/60 text-gold flex items-center justify-center text-lg leading-none hover:border-gold hover:bg-gold/10 hover:text-gold-bright disabled:opacity-40"
         disabled={value <= min}
       >
         −
       </button>
-      <span id={id} className="w-6 text-center text-parchment font-semibold tabular-nums">
+      <span
+        id={id}
+        className="w-7 text-center text-parchment font-bold tabular-nums text-base"
+      >
         {value}
       </span>
       <button
         type="button"
         aria-label="increase"
         onClick={() => onChange(Math.min(max, value + 1))}
-        className="w-8 h-8 rounded-full border border-gold/40 text-gold flex items-center justify-center text-lg leading-none hover:border-gold hover:text-gold-bright transition-colors disabled:opacity-40"
+        className="smooth w-9 h-9 rounded-full border border-gold/30 bg-earth-soft/60 text-gold flex items-center justify-center text-lg leading-none hover:border-gold hover:bg-gold/10 hover:text-gold-bright disabled:opacity-40"
         disabled={value >= max}
       >
         +
@@ -212,7 +215,8 @@ function Stepper({
   );
 }
 
-// Progress bar (client-interactive version, rendered inside wizard)
+// ─── Interactive progress bar (client version rendered inside wizard) ─────────
+
 function WizardProgress({
   step,
   steps,
@@ -231,32 +235,46 @@ function WizardProgress({
         const active = i === step;
 
         return (
-          <div key={i} className="flex flex-col items-center gap-1.5 flex-1">
+          <div key={i} className="flex flex-col items-center gap-2 flex-1">
             <div className="flex items-center w-full">
               {/* Leading connector */}
               {i > 0 && (
                 <div
                   className={[
-                    "h-px flex-1 transition-colors",
-                    done || active ? "bg-gold/60" : "bg-gold/20",
+                    "h-px flex-1 smooth",
+                    done || active ? "bg-gold/55" : "bg-gold/20",
                   ].join(" ")}
                 />
               )}
 
-              {/* Dot */}
+              {/* Badge */}
               <div
                 className={[
-                  "relative w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border-2 transition-colors",
+                  "relative w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border-2 smooth",
                   active
-                    ? "bg-terracotta border-terracotta text-parchment"
+                    ? "border-terracotta text-cream"
                     : done
-                    ? "bg-gold border-gold text-earth"
-                    : "bg-transparent border-gold/30 text-mute",
+                    ? "border-gold text-earth"
+                    : "border-gold/30 bg-earth-soft/60 text-mute",
                 ].join(" ")}
+                style={
+                  active
+                    ? {
+                        background:
+                          "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+                        boxShadow: "var(--shadow-terracotta-glow)",
+                      }
+                    : done
+                    ? {
+                        background:
+                          "linear-gradient(135deg, #c8873a 0%, #e0a857 100%)",
+                        boxShadow: "var(--shadow-gold-glow)",
+                      }
+                    : undefined
+                }
                 aria-current={active ? "step" : undefined}
               >
                 {done ? (
-                  // Checkmark SVG for completed steps
                   <svg
                     viewBox="0 0 12 12"
                     width="12"
@@ -281,8 +299,8 @@ function WizardProgress({
               {i < steps.length - 1 && (
                 <div
                   className={[
-                    "h-px flex-1 transition-colors",
-                    done ? "bg-gold/60" : "bg-gold/20",
+                    "h-px flex-1 smooth",
+                    done ? "bg-gold/55" : "bg-gold/20",
                   ].join(" ")}
                 />
               )}
@@ -340,30 +358,45 @@ function Step1({
                 type="button"
                 onClick={() => update({ propertyType: key })}
                 className={[
-                  "rounded-[var(--radius-pill)] border px-3 py-2.5 text-sm font-medium transition-colors flex flex-col items-center gap-1",
+                  "smooth rounded-[var(--radius-pill)] border px-3 py-3 text-sm font-medium flex flex-col items-center gap-1.5",
                   active
-                    ? "border-terracotta bg-terracotta/10 text-parchment"
-                    : "border-gold/30 text-mute-soft hover:border-gold/60 hover:text-parchment",
+                    ? "text-cream"
+                    : "glass-deep border-gold/30 text-mute-soft hover:border-gold/60 hover:text-parchment",
                 ].join(" ")}
+                style={
+                  active
+                    ? {
+                        background:
+                          "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+                        boxShadow: "var(--shadow-terracotta-glow)",
+                        border: "1px solid rgba(200,64,26,0.6)",
+                      }
+                    : undefined
+                }
                 aria-pressed={active}
               >
-                <span className="text-lg leading-none" aria-hidden>
+                <span className="text-xl leading-none" aria-hidden>
                   {PROPERTY_TYPE_GLYPHS[key]}
                 </span>
-                <span className="text-xs leading-tight">{pt(key)}</span>
+                <span className="text-[11px] leading-tight">{pt(key)}</span>
               </button>
             );
           })}
         </div>
         {errors.propertyType && (
-          <p className={errorCls} role="alert">{errors.propertyType}</p>
+          <p className={errorCls} role="alert">
+            {errors.propertyType}
+          </p>
         )}
       </fieldset>
 
       {/* Purpose */}
       <fieldset>
         <legend className={labelCls}>{t("purposeLabel")}</legend>
-        <div className="flex gap-3 mt-2">
+        <div
+          className="flex gap-0 mt-2 rounded-[var(--radius-pill)] border border-gold/25 bg-earth-soft/60 backdrop-blur-md p-1"
+          role="group"
+        >
           {(["rent", "sale"] as PurposeKey[]).map((key) => {
             const active = draft.purpose === key;
             return (
@@ -372,11 +405,20 @@ function Step1({
                 type="button"
                 onClick={() => update({ purpose: key })}
                 className={[
-                  "flex-1 rounded-[var(--radius-pill)] border py-2.5 text-sm font-semibold transition-colors",
+                  "smooth flex-1 rounded-[var(--radius-pill)] py-2 text-sm font-semibold",
                   active
-                    ? "bg-terracotta border-terracotta text-parchment"
-                    : "border-gold/30 text-mute-soft hover:border-gold/60 hover:text-parchment",
+                    ? "text-cream"
+                    : "text-mute-soft hover:text-parchment",
                 ].join(" ")}
+                style={
+                  active
+                    ? {
+                        background:
+                          "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+                        boxShadow: "0 2px 10px rgba(200,64,26,0.30)",
+                      }
+                    : undefined
+                }
                 aria-pressed={active}
               >
                 {ht(key)}
@@ -385,7 +427,9 @@ function Step1({
           })}
         </div>
         {errors.purpose && (
-          <p className={errorCls} role="alert">{errors.purpose}</p>
+          <p className={errorCls} role="alert">
+            {errors.purpose}
+          </p>
         )}
       </fieldset>
 
@@ -420,13 +464,13 @@ function Step1({
       {/* Area */}
       <div>
         <label className={labelCls}>{t("areaLabel")}</label>
-        <input
+        <GlassInput
+          tone="dark"
           type="number"
           min={0}
           placeholder="e.g. 120"
           value={draft.area}
           onChange={(e) => update({ area: e.target.value })}
-          className={inputCls}
         />
       </div>
 
@@ -434,37 +478,42 @@ function Step1({
       <div>
         <label className={labelCls}>{t("priceLabel")}</label>
         <div className="grid grid-cols-1 sm:grid-cols-[1fr_7rem_8rem] gap-2">
-          <input
+          <GlassInput
+            tone="dark"
             type="number"
             min={0}
             inputMode="numeric"
             placeholder="0"
             value={draft.price}
             onChange={(e) => update({ price: e.target.value })}
-            className={[inputCls, "min-w-0 w-full"].join(" ")}
+            className="min-w-0"
           />
-          <select
+          <GlassSelect
+            tone="dark"
             value={draft.currency}
-            onChange={(e) => update({ currency: e.target.value as CurrencyKey })}
+            onChange={(e) =>
+              update({ currency: e.target.value as CurrencyKey })
+            }
             aria-label={t("currencyLabel")}
-            className={[inputCls, "cursor-pointer w-full"].join(" ")}
           >
             <option value="SDG">SDG</option>
             <option value="USD">USD</option>
-          </select>
-          <select
+          </GlassSelect>
+          <GlassSelect
+            tone="dark"
             value={draft.period}
             onChange={(e) => update({ period: e.target.value as PeriodKey })}
             aria-label={t("periodLabel")}
-            className={[inputCls, "cursor-pointer w-full"].join(" ")}
           >
             <option value="month">{t("pricePeriodMonth")}</option>
             <option value="year">{t("pricePeriodYear")}</option>
             <option value="total">{t("pricePeriodTotal")}</option>
-          </select>
+          </GlassSelect>
         </div>
         {errors.price && (
-          <p className={errorCls} role="alert">{errors.price}</p>
+          <p className={errorCls} role="alert">
+            {errors.price}
+          </p>
         )}
       </div>
     </div>
@@ -495,7 +544,8 @@ function Step2({
       {/* State */}
       <div>
         <label className={labelCls}>{t("stateLabel")}</label>
-        <select
+        <GlassSelect
+          tone="dark"
           value={draft.state}
           onChange={(e) =>
             update({
@@ -504,7 +554,6 @@ function Step2({
               pinLng: null,
             })
           }
-          className={[inputCls, "cursor-pointer"].join(" ")}
         >
           <option value="">{t("selectState")}</option>
           {STATE_KEYS.map((key) => (
@@ -512,48 +561,52 @@ function Step2({
               {st(key)}
             </option>
           ))}
-        </select>
+        </GlassSelect>
         {errors.state && (
-          <p className={errorCls} role="alert">{errors.state}</p>
+          <p className={errorCls} role="alert">
+            {errors.state}
+          </p>
         )}
       </div>
 
       {/* City */}
       <div>
         <label className={labelCls}>{t("cityLabel")}</label>
-        <input
+        <GlassInput
+          tone="dark"
           type="text"
           placeholder={t("cityPlaceholder")}
           value={draft.city}
           onChange={(e) => update({ city: e.target.value })}
-          className={inputCls}
         />
         {errors.city && (
-          <p className={errorCls} role="alert">{errors.city}</p>
+          <p className={errorCls} role="alert">
+            {errors.city}
+          </p>
         )}
       </div>
 
       {/* Neighborhood (optional) */}
       <div>
         <label className={labelCls}>{t("neighborhoodLabel")}</label>
-        <input
+        <GlassInput
+          tone="dark"
           type="text"
           placeholder={t("neighborhoodPlaceholder")}
           value={draft.neighborhood}
           onChange={(e) => update({ neighborhood: e.target.value })}
-          className={inputCls}
         />
       </div>
 
       {/* Address line (optional) */}
       <div>
         <label className={labelCls}>{t("addressLabel")}</label>
-        <input
+        <GlassInput
+          tone="dark"
           type="text"
           placeholder={t("addressPlaceholder")}
           value={draft.address}
           onChange={(e) => update({ address: e.target.value })}
-          className={inputCls}
         />
       </div>
 
@@ -566,15 +619,12 @@ function Step2({
               draft.pinLat ?? coords[0],
               draft.pinLng ?? coords[1],
             ]}
-            pin={[
-              draft.pinLat ?? coords[0],
-              draft.pinLng ?? coords[1],
-            ]}
+            pin={[draft.pinLat ?? coords[0], draft.pinLng ?? coords[1]]}
             onPinDrag={([lat, lng]) => update({ pinLat: lat, pinLng: lng })}
           />
         ) : (
           <div
-            className="w-full rounded-[var(--radius-card)] border-2 border-dashed border-gold/30 bg-sand/40 flex items-center justify-center"
+            className="w-full rounded-[var(--radius-card)] border-2 border-dashed border-gold/30 glass-deep flex items-center justify-center"
             style={{ height: 360 }}
             role="img"
             aria-label={t("mapHint")}
@@ -648,49 +698,67 @@ function Step3({
 
   return (
     <div className="space-y-6">
-      {/* Drop zone */}
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label={t("dropzoneHeading")}
-        onClick={() => fileInputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") fileInputRef.current?.click();
-        }}
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        className="w-full rounded-[var(--radius-card)] border-2 border-dashed border-gold/30 bg-sand/20 hover:border-gold/60 hover:bg-sand/30 transition-colors cursor-pointer flex flex-col items-center justify-center gap-3 py-10 px-4"
+      {/* Drop zone — glass-deep panel with dashed gold border */}
+      <GlassPanel
+        variant="deep"
+        radius="card"
+        shadow={false}
+        highlight={false}
+        className="border border-dashed border-gold/30 hover:border-gold/55 smooth cursor-pointer"
       >
-        {/* Upload icon */}
-        <svg
-          viewBox="0 0 24 24"
-          width="44"
-          height="44"
-          fill="none"
-          className="text-gold/60"
-          aria-hidden
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label={t("dropzoneHeading")}
+          onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ")
+              fileInputRef.current?.click();
+          }}
+          onDrop={handleDrop}
+          onDragOver={(e) => e.preventDefault()}
+          className="flex flex-col items-center justify-center gap-3 py-12 px-4"
         >
-          <path
-            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-          <path
-            d="M12 3v12m0-12l-4 4m4-4l4 4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <p className="text-parchment font-semibold text-sm text-center">
-          {t("dropzoneHeading")}
-        </p>
-        <p className="text-mute-soft text-xs text-center">
-          {t("dropzoneSubtitle")}
-        </p>
-      </div>
+          {/* Upload icon */}
+          <div
+            className="w-14 h-14 rounded-full flex items-center justify-center"
+            style={{
+              background: "rgba(200,135,58,0.12)",
+              boxShadow: "var(--shadow-gold-glow)",
+            }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="28"
+              height="28"
+              fill="none"
+              className="text-gold"
+              aria-hidden
+            >
+              <path
+                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M12 3v12m0-12l-4 4m4-4l4 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          <p className="text-parchment font-semibold text-sm text-center">
+            {t("dropzoneHeading")}
+          </p>
+          <p className="text-mute-soft text-xs text-center">
+            {t("dropzoneSubtitle")}
+          </p>
+        </div>
+      </GlassPanel>
+
       <input
         ref={fileInputRef}
         type="file"
@@ -702,7 +770,9 @@ function Step3({
       />
 
       {errors.photos && (
-        <p className={errorCls} role="alert">{errors.photos}</p>
+        <p className={errorCls} role="alert">
+          {errors.photos}
+        </p>
       )}
 
       {/* Thumbnail grid — 6 slots */}
@@ -712,7 +782,7 @@ function Step3({
           return (
             <div
               key={i}
-              className="relative aspect-[4/3] rounded-[var(--radius-card)] overflow-hidden border border-gold/20 bg-sand/30"
+              className="relative aspect-[4/3] rounded-[var(--radius-card)] overflow-hidden border border-gold/20 glass-deep"
             >
               {url ? (
                 <>
@@ -726,13 +796,13 @@ function Step3({
                     type="button"
                     onClick={() => removePhoto(i)}
                     aria-label={t("removePhoto")}
-                    className="absolute top-1 end-1 w-6 h-6 rounded-full bg-earth/80 text-parchment flex items-center justify-center text-xs hover:bg-terracotta transition-colors"
+                    className="smooth absolute top-1.5 end-1.5 w-7 h-7 rounded-full bg-earth/80 backdrop-blur-md text-parchment flex items-center justify-center text-sm font-bold hover:bg-terracotta"
                   >
                     ×
                   </button>
                 </>
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-mute/60">
+                <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-mute/50">
                   <span className="text-xl leading-none">+</span>
                   <span className="text-xs">{t("photoSlot", { n: i + 1 })}</span>
                 </div>
@@ -770,70 +840,77 @@ function Step4({
 
   return (
     <div className="space-y-8">
-      {/* Summary + pricing in two columns on lg */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left: listing summary */}
         <div>
           <h2 className="font-display text-2xl text-parchment mb-4">
             {t("reviewTitle")}
           </h2>
-          <dl className="space-y-3">
-            {[
-              {
-                label: t("summaryType"),
-                value: draft.propertyType ? pt(draft.propertyType) : "—",
-              },
-              {
-                label: t("summaryPurpose"),
-                value: draft.purpose ? ht(draft.purpose) : "—",
-              },
-              {
-                label: t("summaryBedrooms"),
-                value: String(draft.bedrooms),
-              },
-              {
-                label: t("summaryBathrooms"),
-                value: String(draft.bathrooms),
-              },
-              {
-                label: t("summaryArea"),
-                value: draft.area ? `${draft.area} m²` : "—",
-              },
-              {
-                label: t("summaryPrice"),
-                value: draft.price
-                  ? `${draft.price} ${draft.currency} ${periodLabel}`
-                  : "—",
-              },
-              {
-                label: t("summaryState"),
-                value: draft.state ? st(draft.state as StateKey) : "—",
-              },
-              {
-                label: t("summaryCity"),
-                value: draft.city || "—",
-              },
-              ...(draft.neighborhood
-                ? [
-                    {
-                      label: t("summaryNeighborhood"),
-                      value: draft.neighborhood,
-                    },
-                  ]
-                : []),
-              {
-                label: t("summaryPhotos"),
-                value: t("summaryPhotosCount", { count: draft.photos.length }),
-              },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex justify-between gap-4 py-2 border-b border-gold/10">
-                <dt className="text-xs font-semibold uppercase tracking-wider text-mute-soft">
-                  {label}
-                </dt>
-                <dd className="text-sm text-parchment text-end">{value}</dd>
-              </div>
-            ))}
-          </dl>
+
+          <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/15">
+            <dl className="divide-y divide-gold/10">
+              {[
+                {
+                  label: t("summaryType"),
+                  value: draft.propertyType ? pt(draft.propertyType) : "—",
+                },
+                {
+                  label: t("summaryPurpose"),
+                  value: draft.purpose ? ht(draft.purpose) : "—",
+                },
+                {
+                  label: t("summaryBedrooms"),
+                  value: String(draft.bedrooms),
+                },
+                {
+                  label: t("summaryBathrooms"),
+                  value: String(draft.bathrooms),
+                },
+                {
+                  label: t("summaryArea"),
+                  value: draft.area ? `${draft.area} m²` : "—",
+                },
+                {
+                  label: t("summaryPrice"),
+                  value: draft.price
+                    ? `${draft.price} ${draft.currency} ${periodLabel}`
+                    : "—",
+                },
+                {
+                  label: t("summaryState"),
+                  value: draft.state ? st(draft.state as StateKey) : "—",
+                },
+                {
+                  label: t("summaryCity"),
+                  value: draft.city || "—",
+                },
+                ...(draft.neighborhood
+                  ? [
+                      {
+                        label: t("summaryNeighborhood"),
+                        value: draft.neighborhood,
+                      },
+                    ]
+                  : []),
+                {
+                  label: t("summaryPhotos"),
+                  value: t("summaryPhotosCount", {
+                    count: draft.photos.length,
+                  }),
+                },
+              ].map(({ label, value }) => (
+                <div
+                  key={label}
+                  className="flex justify-between items-baseline gap-4 px-4 py-2.5"
+                >
+                  <dt className="text-[11px] font-semibold uppercase tracking-wider text-mute-soft shrink-0">
+                    {label}
+                  </dt>
+                  <dd className="text-sm text-parchment text-end">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </GlassPanel>
         </div>
 
         {/* Right: pricing + payment */}
@@ -847,10 +924,10 @@ function Step4({
               {/* Standard tier */}
               <label
                 className={[
-                  "flex items-start gap-4 rounded-[var(--radius-card)] border p-4 cursor-pointer transition-colors",
+                  "smooth flex items-start gap-4 rounded-[var(--radius-card)] border p-4 cursor-pointer",
                   draft.tier === "standard"
-                    ? "border-gold/60 bg-gold/5"
-                    : "border-gold/20 hover:border-gold/40",
+                    ? "border-gold/55 bg-gold/8"
+                    : "border-gold/20 glass-deep hover:border-gold/40",
                 ].join(" ")}
               >
                 <input
@@ -874,10 +951,10 @@ function Step4({
               {/* Featured tier */}
               <label
                 className={[
-                  "flex items-start gap-4 rounded-[var(--radius-card)] border p-4 cursor-pointer transition-colors",
+                  "smooth flex items-start gap-4 rounded-[var(--radius-card)] border p-4 cursor-pointer",
                   draft.tier === "featured"
-                    ? "border-gold/60 bg-gold/5"
-                    : "border-gold/20 hover:border-gold/40",
+                    ? "border-gold/55 bg-gold/8"
+                    : "border-gold/20 glass-deep hover:border-gold/40",
                 ].join(" ")}
               >
                 <input
@@ -893,7 +970,13 @@ function Step4({
                     <p className="text-parchment font-semibold text-sm">
                       {t("tierFeatured")}
                     </p>
-                    <span className="rounded-[var(--radius-pill)] bg-gold/20 text-gold text-[10px] font-bold px-2 py-0.5 uppercase tracking-wide">
+                    <span
+                      className="rounded-[var(--radius-pill)] text-[10px] font-bold px-2 py-0.5 uppercase tracking-wide text-earth"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #c8873a 0%, #e0a857 100%)",
+                      }}
+                    >
                       {t("tierFeaturedBadge")}
                     </span>
                   </div>
@@ -907,9 +990,7 @@ function Step4({
 
           {/* Payment method */}
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-mute-soft mb-3">
-              {t("paymentTitle")}
-            </h3>
+            <h3 className={`${labelCls} mb-3`}>{t("paymentTitle")}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(
                 [
@@ -918,16 +999,20 @@ function Step4({
                   { value: "cashi", label: t("payCashi"), badge: "SDG" },
                   { value: "mbok", label: t("payMbok"), badge: "SDG" },
                   { value: "bank", label: t("payBank"), badge: "SDG" },
-                  { value: "whatsapp", label: t("payWhatsapp"), badge: "—" },
+                  {
+                    value: "whatsapp",
+                    label: t("payWhatsapp"),
+                    badge: "—",
+                  },
                 ] as { value: PaymentKey; label: string; badge: string }[]
               ).map(({ value, label, badge }) => (
                 <label
                   key={value}
                   className={[
-                    "flex items-center justify-between gap-3 cursor-pointer rounded-md border px-4 py-3 transition-colors",
+                    "smooth flex items-center justify-between gap-3 cursor-pointer rounded-xl border px-4 py-3",
                     draft.payment === value
-                      ? "border-terracotta bg-terracotta/10"
-                      : "border-gold/20 bg-earth hover:border-gold/40",
+                      ? "border-terracotta/60 bg-terracotta/10"
+                      : "border-gold/20 glass-deep hover:border-gold/40",
                   ].join(" ")}
                 >
                   <span className="flex items-center gap-3">
@@ -965,7 +1050,9 @@ function Step4({
             </span>
           </label>
           {errors.termsAccepted && (
-            <p className={errorCls} role="alert">{errors.termsAccepted}</p>
+            <p className={errorCls} role="alert">
+              {errors.termsAccepted}
+            </p>
           )}
         </div>
       </div>
@@ -974,16 +1061,15 @@ function Step4({
 }
 
 // ─── Payment instructions panel ──────────────────────────────────────────────
-//
-// MVP: real payment APIs aren't wired (no public Bankak/Cashi/mBOK SDK). We
-// surface manual transfer instructions; admin-side verification will flip the
-// listing from `pending_payment` → `active` once funds arrive.
 
 const SUKAN_PAYMENT_DETAILS = {
   bankak: { account: "1234 5678 9012", reference: "SUKAN-{id}" },
   cashi: { phone: "+249 91 200 0000", reference: "SUKAN-{id}" },
   mbok: { phone: "+249 91 200 0001", reference: "SUKAN-{id}" },
-  bank: { account: "Bank of Khartoum 0001-2345-6789", reference: "SUKAN-{id}" },
+  bank: {
+    account: "Bank of Khartoum 0001-2345-6789",
+    reference: "SUKAN-{id}",
+  },
   whatsapp: { phone: "+249 91 234 5678" },
 } as const;
 
@@ -992,14 +1078,13 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
 
   if (method === "stripe") return null;
 
-  const baseCls =
-    "rounded-md border border-gold/20 bg-earth/60 p-4 text-xs text-mute-soft leading-relaxed";
-
   if (method === "bankak") {
     const d = SUKAN_PAYMENT_DETAILS.bankak;
     return (
-      <div className={baseCls}>
-        <p className="text-parchment font-semibold mb-1">{t("payInstructionsBankak")}</p>
+      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
+        <p className="text-parchment font-semibold mb-1.5">
+          {t("payInstructionsBankak")}
+        </p>
         <p>
           {t("payInstructionsAccount")}:{" "}
           <span className="font-mono text-parchment">{d.account}</span>
@@ -1008,16 +1093,18 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
           {t("payInstructionsReference")}:{" "}
           <span className="font-mono text-parchment">{d.reference}</span>
         </p>
-      </div>
+      </GlassPanel>
     );
   }
 
   if (method === "cashi" || method === "mbok") {
     const d = SUKAN_PAYMENT_DETAILS[method];
     return (
-      <div className={baseCls}>
-        <p className="text-parchment font-semibold mb-1">
-          {method === "cashi" ? t("payInstructionsCashi") : t("payInstructionsMbok")}
+      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
+        <p className="text-parchment font-semibold mb-1.5">
+          {method === "cashi"
+            ? t("payInstructionsCashi")
+            : t("payInstructionsMbok")}
         </p>
         <p>
           {t("payInstructionsPhone")}:{" "}
@@ -1027,15 +1114,17 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
           {t("payInstructionsReference")}:{" "}
           <span className="font-mono text-parchment">{d.reference}</span>
         </p>
-      </div>
+      </GlassPanel>
     );
   }
 
   if (method === "bank") {
     const d = SUKAN_PAYMENT_DETAILS.bank;
     return (
-      <div className={baseCls}>
-        <p className="text-parchment font-semibold mb-1">{t("payInstructionsBank")}</p>
+      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
+        <p className="text-parchment font-semibold mb-1.5">
+          {t("payInstructionsBank")}
+        </p>
         <p>
           {t("payInstructionsAccount")}:{" "}
           <span className="font-mono text-parchment">{d.account}</span>
@@ -1044,7 +1133,7 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
           {t("payInstructionsReference")}:{" "}
           <span className="font-mono text-parchment">{d.reference}</span>
         </p>
-      </div>
+      </GlassPanel>
     );
   }
 
@@ -1052,19 +1141,21 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
     const d = SUKAN_PAYMENT_DETAILS.whatsapp;
     const waUrl = `https://wa.me/${d.phone.replace(/\D/g, "")}?text=${encodeURIComponent("I'd like to pay for a Sukan listing")}`;
     return (
-      <div className={baseCls}>
-        <p className="text-parchment font-semibold mb-1">{t("payInstructionsWhatsapp")}</p>
-        <p className="mb-2">{t("payInstructionsWhatsappBody")}</p>
+      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
+        <p className="text-parchment font-semibold mb-1.5">
+          {t("payInstructionsWhatsapp")}
+        </p>
+        <p className="mb-3">{t("payInstructionsWhatsappBody")}</p>
         <a
           href={waUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-pill px-4 py-2 text-xs font-semibold text-white"
+          className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] px-4 py-2 text-xs font-semibold text-white smooth"
           style={{ backgroundColor: "#25d366" }}
         >
           {t("payInstructionsWhatsappCta")}
         </a>
-      </div>
+      </GlassPanel>
     );
   }
 
@@ -1077,8 +1168,15 @@ function SuccessState() {
   const t = useTranslations("post");
   return (
     <div className="flex flex-col items-center justify-center py-16 gap-6 text-center">
-      {/* Large animated checkmark */}
-      <div className="w-20 h-20 rounded-full bg-gold/15 border-2 border-gold/50 flex items-center justify-center">
+      {/* Animated gold ring + check */}
+      <div
+        className="w-20 h-20 rounded-full flex items-center justify-center"
+        style={{
+          background: "rgba(200,135,58,0.12)",
+          boxShadow: "var(--shadow-gold-glow)",
+          border: "2px solid rgba(200,135,58,0.45)",
+        }}
+      >
         <svg
           viewBox="0 0 24 24"
           width="40"
@@ -1109,7 +1207,11 @@ function SuccessState() {
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
-function validate(step: number, draft: PostDraft, t: (key: string) => string): Record<string, string> {
+function validate(
+  step: number,
+  draft: PostDraft,
+  t: (key: string) => string,
+): Record<string, string> {
   const errs: Record<string, string> = {};
   if (step === 0) {
     if (!draft.propertyType) errs.propertyType = t("errorType");
@@ -1160,7 +1262,6 @@ export default function PostWizard() {
   }, []);
 
   // Persist draft (without photos) to sessionStorage on every change
-  // Uses startTransition to defer the write off the critical path
   function updateDraft(patch: Partial<PostDraft>) {
     setDraft((prev) => {
       const next = { ...prev, ...patch };
@@ -1184,14 +1285,15 @@ export default function PostWizard() {
   }
 
   function handleNext() {
-    const errs = validate(step, draft, (k) => t(k as Parameters<typeof t>[0]));
+    const errs = validate(step, draft, (k) =>
+      t(k as Parameters<typeof t>[0]),
+    );
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
     }
     setErrors({});
     setStep((s) => Math.min(STEPS.length - 1, s + 1));
-    // Scroll wizard card top into view on mobile
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -1202,7 +1304,9 @@ export default function PostWizard() {
   }
 
   function handleSubmit() {
-    const errs = validate(3, draft, (k) => t(k as Parameters<typeof t>[0]));
+    const errs = validate(3, draft, (k) =>
+      t(k as Parameters<typeof t>[0]),
+    );
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
@@ -1215,16 +1319,28 @@ export default function PostWizard() {
 
   if (submitted) {
     return (
-      <div className="bg-earth-soft rounded-[var(--radius-card)] border border-gold/20 p-6 sm:p-10 max-w-3xl mx-auto">
+      <GlassPanel
+        variant="deep"
+        radius="card"
+        shadow={false}
+        highlight={false}
+        className="border border-gold/20 p-6 sm:p-10 max-w-3xl mx-auto"
+      >
         <SuccessState />
-      </div>
+      </GlassPanel>
     );
   }
 
   const isLastStep = step === STEPS.length - 1;
 
   return (
-    <div className="bg-earth-soft rounded-[var(--radius-card)] border border-gold/20 p-6 sm:p-10 max-w-3xl mx-auto">
+    <GlassPanel
+      variant="deep"
+      radius="card"
+      shadow={false}
+      highlight={false}
+      className="border border-gold/20 p-6 sm:p-10 max-w-3xl mx-auto"
+    >
       {/* Progress bar */}
       <WizardProgress step={step} steps={[...STEPS]} />
 
@@ -1251,37 +1367,40 @@ export default function PostWizard() {
       <div className="mt-10 flex items-center justify-between gap-4 border-t border-gold/10 pt-6">
         {/* Back */}
         {step > 0 ? (
-          <button
+          <GlassButton
             type="button"
+            variant="ghost-dark"
+            size="md"
             onClick={handleBack}
-            className="rounded-[var(--radius-pill)] border border-gold/40 text-gold px-6 py-2.5 text-sm font-semibold hover:border-gold hover:text-gold-bright transition-colors"
           >
             {t("back")}
-          </button>
+          </GlassButton>
         ) : (
           <div aria-hidden />
         )}
 
         {/* Next / Submit */}
         {isLastStep ? (
-          <button
+          <GlassButton
             type="button"
+            variant="terracotta"
+            size="md"
             onClick={handleSubmit}
             disabled={!draft.termsAccepted}
-            className="rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep disabled:opacity-40 disabled:cursor-not-allowed text-parchment px-8 py-2.5 text-sm font-semibold transition-colors"
           >
             {t("submit")}
-          </button>
+          </GlassButton>
         ) : (
-          <button
+          <GlassButton
             type="button"
+            variant="terracotta"
+            size="md"
             onClick={handleNext}
-            className="rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment px-8 py-2.5 text-sm font-semibold transition-colors"
           >
             {t("next")}
-          </button>
+          </GlassButton>
         )}
       </div>
-    </div>
+    </GlassPanel>
   );
 }

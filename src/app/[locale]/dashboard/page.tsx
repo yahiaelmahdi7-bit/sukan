@@ -39,10 +39,10 @@ export default async function DashboardPage({
     <div className="px-6 py-10 max-w-6xl mx-auto">
       {/* ── Section title ───────────────────────────────────────────────────── */}
       <div className="mb-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold mb-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk mb-2">
           {t("title")}
         </p>
-        <h1 className="font-display text-4xl text-parchment">{t("myListings")}</h1>
+        <h1 className="font-display text-4xl text-ink">{t("myListings")}</h1>
       </div>
 
       {/* ── Stats row ──────────────────────────────────────────────────────── */}
@@ -70,7 +70,7 @@ export default async function DashboardPage({
 
       {/* ── Listings table ─────────────────────────────────────────────────── */}
       <div>
-        <h2 className="font-display text-2xl text-parchment mb-6">
+        <h2 className="font-display text-2xl text-ink mb-6">
           {t("myListings")}
         </h2>
         <DashboardTable

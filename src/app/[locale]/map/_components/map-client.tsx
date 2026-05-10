@@ -7,10 +7,10 @@ const LeafletMap = dynamic(() => import("@/components/leaflet-map"), {
   ssr: false,
   loading: () => (
     <div
-      className="w-full rounded-[var(--radius-card)] bg-earth-soft animate-pulse flex items-center justify-center"
+      className="skeleton flex w-full animate-pulse items-center justify-center bg-sand"
       style={{ height: "100%" }}
     >
-      <span className="text-mute-soft text-sm">Loading map…</span>
+      <span className="text-sm text-ink-mid">Loading map…</span>
     </div>
   ),
 });

@@ -1,6 +1,5 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
 import { sampleListings } from '@/lib/sample-listings';
 import type { MapMarker } from '@/components/leaflet-map';
 import { formatShortPrice } from '@/lib/format-price';
@@ -76,56 +75,65 @@ export default async function MapPage({
   };
 
   return (
+    /*
+      Full-viewport map page.
+      - Navbar floats on top (it uses position:fixed internally, which is fine).
+      - <main> fills the full viewport height below the navbar.
+      - No Footer — map pages conventionally omit it.
+    */
     <>
       <Navbar />
 
-      <main>
-        {/* ─────────────────────────────────────────────────────────
-            PAGE HEADER — generous breathing room
-        ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth pt-20 pb-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <main
+        className="flex flex-col"
+        style={{ height: "calc(100dvh - 64px)", marginTop: "64px" }}
+      >
+        {/* ── Compact page header — glass pill floating over the map top ──── */}
+        <div className="pointer-events-none absolute start-4 top-[80px] z-[900] hidden lg:block">
+          <div
+            className="inline-flex flex-col gap-0.5 rounded-[var(--radius-glass)] px-5 py-3"
+            style={{
+              background: "rgba(255,252,246,0.82)",
+              backdropFilter: "blur(22px) saturate(175%)",
+              WebkitBackdropFilter: "blur(22px) saturate(175%)",
+              border: "1px solid rgba(255,255,255,0.65)",
+              boxShadow: "var(--shadow-glass)",
+            }}
+          >
             {/* Eyebrow */}
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk">
               {t('map.eyebrow')}
             </p>
-
             {/* Headline */}
-            <h1 className="font-display text-5xl md:text-6xl leading-tight text-parchment max-w-3xl mb-4">
+            <h1 className="font-display text-xl leading-tight text-ink">
               {t('map.title')}
             </h1>
-
-            {/* Subtitle */}
-            <p className="text-lg text-mute-soft max-w-xl">
-              {t('map.subtitle')}
-            </p>
           </div>
-        </section>
+        </div>
 
-        {/* ─────────────────────────────────────────────────────────
-            MAP + SIDE PANEL
-        ───────────────────────────────────────────────────────── */}
-        <section className="bg-earth pb-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="rounded-[var(--radius-card)] overflow-hidden border border-gold/15">
-              <MapWithPanel
-                listings={listings}
-                markers={listingMarkers}
-                center={sudanCenter}
-                zoom={5}
-                locale={locale}
-                labels={panelLabels}
-              />
-            </div>
+        {/* ── Map + panel container — fills remaining height ─────────────── */}
+        <div className="relative flex-1 overflow-hidden">
+          <MapWithPanel
+            listings={listings}
+            markers={listingMarkers}
+            center={sudanCenter}
+            zoom={5}
+            locale={locale}
+            labels={panelLabels}
+          />
 
-            <p className="mt-4 text-xs text-mute-soft text-end">
-              {t('map.markersShown', { count: listings.length })}
-            </p>
-          </div>
-        </section>
+          {/* Result count — bottom-left watermark over the map */}
+          <p
+            className="pointer-events-none absolute bottom-3 start-4 z-[900] text-[11px] text-ink-mid"
+            style={{
+              textShadow:
+                "0 1px 3px rgba(255,255,255,0.9), 0 0 8px rgba(255,255,255,0.7)",
+            }}
+          >
+            {t('map.markersShown', { count: listings.length })}
+          </p>
+        </div>
       </main>
-
-      <Footer />
     </>
   );
 }

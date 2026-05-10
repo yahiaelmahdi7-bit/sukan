@@ -23,7 +23,7 @@ function BarChart({
 
   return (
     <div>
-      <p className="text-xs uppercase tracking-wider text-mute-soft mb-4">{label}</p>
+      <p className="text-[10px] uppercase tracking-widest text-gold-dk font-semibold mb-4">{label}</p>
       <div className="overflow-x-auto">
         <svg
           viewBox={`0 0 ${width} ${height + 20}`}
@@ -45,9 +45,9 @@ function BarChart({
                 y={y}
                 width={barWidth}
                 height={barH}
-                rx="2"
+                rx="3"
                 fill={barColor}
-                opacity={0.7 + 0.3 * (v / max)}
+                opacity={0.65 + 0.35 * (v / max)}
               >
                 <title>Day {i + 1}: {v} views</title>
               </rect>
@@ -56,7 +56,7 @@ function BarChart({
         </svg>
       </div>
       {/* X-axis labels: Day 1 / Day 15 / Day 30 */}
-      <div className="flex justify-between text-xs text-mute-soft mt-1 px-1">
+      <div className="flex justify-between text-xs text-ink-mid mt-1 px-1">
         <span>Day 1</span>
         <span>Day 15</span>
         <span>Day 30</span>
@@ -79,16 +79,16 @@ function HorizontalBar({
   const pct = max > 0 ? (value / max) * 100 : 0;
   return (
     <div className="flex items-center gap-4">
-      <span className="text-sm text-parchment w-28 shrink-0 truncate text-end ltr:text-end rtl:text-start">
+      <span className="text-sm text-ink w-28 shrink-0 truncate text-end ltr:text-end rtl:text-start">
         {label}
       </span>
-      <div className="flex-1 h-2 rounded-full bg-earth overflow-hidden">
+      <div className="flex-1 h-2 rounded-full bg-sand/50 overflow-hidden border border-white/40">
         <div
           className="h-full rounded-full bg-gold transition-all"
           style={{ width: `${pct.toFixed(1)}%` }}
         />
       </div>
-      <span className="text-xs text-mute-soft w-8 text-end">{value}</span>
+      <span className="text-xs text-ink-mid w-8 text-end">{value}</span>
     </div>
   );
 }
@@ -131,15 +131,18 @@ export default async function AnalyticsPage({
   return (
     <div className="px-6 py-10 max-w-5xl mx-auto">
       <div className="mb-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold mb-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk mb-2">
           {td("title")}
         </p>
-        <h1 className="font-display text-4xl text-parchment">{td("analytics")}</h1>
+        <h1 className="font-display text-4xl text-ink">{td("analytics")}</h1>
       </div>
 
       {/* ── Views last 30 days ──────────────────────────────────────────────── */}
-      <section className="mb-12 bg-earth-soft rounded-[var(--radius-card)] border border-gold/15 p-7">
-        <h2 className="font-display text-2xl text-parchment mb-6">
+      <section
+        className="mb-12 glass-warm glass-highlight rounded-[var(--radius-card)] border border-white/55 p-7"
+        style={{ boxShadow: "var(--shadow-glass)" }}
+      >
+        <h2 className="font-display text-2xl text-ink mb-6">
           {td("analytics.viewsLast30")}
         </h2>
         <BarChart
@@ -153,32 +156,38 @@ export default async function AnalyticsPage({
       {/* ── Conversion rate + top performers ───────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
         {/* Conversion rate */}
-        <section className="bg-earth-soft rounded-[var(--radius-card)] border border-gold/15 p-7">
-          <h2 className="font-display text-xl text-parchment mb-5">
+        <section
+          className="glass-warm glass-highlight rounded-[var(--radius-card)] border border-white/55 p-7"
+          style={{ boxShadow: "var(--shadow-glass)" }}
+        >
+          <h2 className="font-display text-xl text-ink mb-5">
             {td("analytics.conversionRate")}
           </h2>
-          <p className="font-display text-6xl text-gold-bright mb-2">{conversionRate}%</p>
-          <p className="text-sm text-mute-soft">
+          <p className="font-display text-6xl text-gold mb-2">{conversionRate}%</p>
+          <p className="text-sm text-ink-mid">
             {inquiries.length} inquiries / {totalViews} views
           </p>
         </section>
 
         {/* Top performers */}
-        <section className="bg-earth-soft rounded-[var(--radius-card)] border border-gold/15 p-7">
-          <h2 className="font-display text-xl text-parchment mb-5">
+        <section
+          className="glass-warm glass-highlight rounded-[var(--radius-card)] border border-white/55 p-7"
+          style={{ boxShadow: "var(--shadow-glass)" }}
+        >
+          <h2 className="font-display text-xl text-ink mb-5">
             {td("analytics.topPerformers")}
           </h2>
           <ol className="flex flex-col gap-4">
             {topThree.map((listing, i) => (
               <li key={listing.id} className="flex items-start gap-4">
-                <span className="font-display text-3xl text-gold/50 shrink-0 leading-none mt-0.5">
+                <span className="font-display text-3xl text-gold shrink-0 leading-none mt-0.5 opacity-60">
                   {i + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-parchment line-clamp-2">
+                  <p className="text-sm font-medium text-ink line-clamp-2">
                     {locale === "ar" ? listing.titleAr : listing.titleEn}
                   </p>
-                  <p className="text-xs text-mute-soft mt-0.5">
+                  <p className="text-xs text-ink-mid mt-0.5">
                     {viewsByListingId[listing.id] ?? 0} views
                   </p>
                 </div>
@@ -189,8 +198,11 @@ export default async function AnalyticsPage({
       </div>
 
       {/* ── Views by state ──────────────────────────────────────────────────── */}
-      <section className="bg-earth-soft rounded-[var(--radius-card)] border border-gold/15 p-7">
-        <h2 className="font-display text-2xl text-parchment mb-8">
+      <section
+        className="glass-warm glass-highlight rounded-[var(--radius-card)] border border-white/55 p-7"
+        style={{ boxShadow: "var(--shadow-glass)" }}
+      >
+        <h2 className="font-display text-2xl text-ink mb-8">
           {td("analytics.viewsByState")}
         </h2>
         <div className="flex flex-col gap-4">

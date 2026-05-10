@@ -56,7 +56,10 @@ export default function InquiryInbox({
             labels={labels}
           />
         ) : (
-          <div className="flex items-center justify-center h-48 rounded-[var(--radius-card)] border border-gold/10 bg-earth-soft text-mute-soft text-sm">
+          <div
+            className="flex items-center justify-center h-48 rounded-[var(--radius-card)] glass-warm border border-white/55 text-ink-mid text-sm"
+            style={{ boxShadow: "var(--shadow-warm-sm)" }}
+          >
             Select an inquiry to read
           </div>
         )}

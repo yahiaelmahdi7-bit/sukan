@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
+import { Search } from "lucide-react";
 
 type StateKey =
   | "khartoum"
@@ -85,15 +86,17 @@ export default function HeroSearch() {
     router.push(`/listings?${params.toString()}`);
   }
 
-  const selectBase =
-    "w-full rounded-lg border border-gold/20 bg-earth text-parchment placeholder-mute-soft px-3 py-2.5 text-sm focus:outline-none focus:border-gold/60 focus:ring-1 focus:ring-gold/30 transition-colors";
+  const fieldBase =
+    "smooth-fast w-full rounded-xl border border-white/55 bg-white/55 px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-mid/70 backdrop-blur-md focus:outline-none focus:border-gold/55 focus:bg-white/75 focus:ring-2 focus:ring-gold/20";
 
-  const labelBase = "block text-xs font-semibold uppercase tracking-wider text-mute-soft mb-1.5";
+  const labelBase =
+    "block text-[10px] font-semibold uppercase tracking-[0.22em] text-gold-dk mb-2";
 
   return (
     <form
       onSubmit={handleSearch}
-      className="bg-earth-soft rounded-[var(--radius-card)] border border-gold/20 p-6 shadow-2xl shadow-black/40"
+      className="glass-warm glass-highlight rounded-[var(--radius-glass)] border border-white/55 p-6 sm:p-7"
+      style={{ boxShadow: "var(--shadow-glass)" }}
     >
       <div className="grid grid-cols-2 gap-4">
         {/* State */}
@@ -102,7 +105,7 @@ export default function HeroSearch() {
           <select
             value={state}
             onChange={(e) => setState(e.target.value)}
-            className={selectBase}
+            className={fieldBase}
           >
             <option value="">{t("hero.anyState")}</option>
             {STATE_KEYS.map((key) => (
@@ -119,7 +122,7 @@ export default function HeroSearch() {
           <select
             value={propertyType}
             onChange={(e) => setPropertyType(e.target.value)}
-            className={selectBase}
+            className={fieldBase}
           >
             <option value="">{t("hero.anyType")}</option>
             {PROPERTY_TYPE_KEYS.map((key) => (
@@ -130,17 +133,20 @@ export default function HeroSearch() {
           </select>
         </div>
 
-        {/* Purpose toggle */}
+        {/* Purpose toggle — segmented */}
         <div>
           <label className={labelBase}>{t("hero.purposeLabel")}</label>
-          <div className="flex gap-2">
+          <div
+            role="group"
+            className="inline-flex w-full rounded-[var(--radius-pill)] border border-white/55 bg-white/45 p-1 backdrop-blur-md"
+          >
             <button
               type="button"
               onClick={() => setPurpose("rent")}
-              className={`flex-1 rounded-[var(--radius-pill)] py-2 text-sm font-semibold transition-colors ${
+              className={`smooth-fast flex-1 rounded-[var(--radius-pill)] py-1.5 text-xs font-semibold ${
                 purpose === "rent"
-                  ? "bg-terracotta text-parchment"
-                  : "border border-gold/40 text-mute-soft hover:border-gold/70 hover:text-parchment"
+                  ? "bg-terracotta text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
+                  : "text-ink-mid hover:text-ink"
               }`}
             >
               {t("hero.rent")}
@@ -148,10 +154,10 @@ export default function HeroSearch() {
             <button
               type="button"
               onClick={() => setPurpose("sale")}
-              className={`flex-1 rounded-[var(--radius-pill)] py-2 text-sm font-semibold transition-colors ${
+              className={`smooth-fast flex-1 rounded-[var(--radius-pill)] py-1.5 text-xs font-semibold ${
                 purpose === "sale"
-                  ? "bg-terracotta text-parchment"
-                  : "border border-gold/40 text-mute-soft hover:border-gold/70 hover:text-parchment"
+                  ? "bg-terracotta text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
+                  : "text-ink-mid hover:text-ink"
               }`}
             >
               {t("hero.sale")}
@@ -168,8 +174,8 @@ export default function HeroSearch() {
             step={50}
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
-            placeholder="e.g. 500"
-            className={selectBase}
+            placeholder="500"
+            className={fieldBase}
           />
         </div>
       </div>
@@ -177,8 +183,15 @@ export default function HeroSearch() {
       {/* Search CTA */}
       <button
         type="submit"
-        className="mt-5 w-full rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment font-semibold py-3 text-base transition-colors"
+        className="smooth mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-pill)] py-3 text-sm font-semibold text-cream hover:brightness-[1.05]"
+        style={{
+          background:
+            "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
+          boxShadow:
+            "0 8px 24px rgba(200, 64, 26, 0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
+        }}
       >
+        <Search size={16} strokeWidth={2} aria-hidden />
         {t("hero.search")}
       </button>
     </form>

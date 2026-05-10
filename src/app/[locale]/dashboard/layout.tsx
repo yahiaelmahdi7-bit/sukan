@@ -35,62 +35,74 @@ export default async function DashboardLayout({
   const signOutLabel = t("signOut");
 
   return (
-    <div className="min-h-screen bg-earth flex flex-col">
-      {/* ── Top bar ─────────────────────────────────────────────────────────── */}
-      <header className="h-16 shrink-0 border-b border-gold/10 bg-earth flex items-center px-4 sm:px-6 gap-3">
-        {/* Mobile hamburger */}
-        <MobileNavToggle userName={userName} signOutLabel={signOutLabel} />
+    <div className="min-h-screen bg-cream flex flex-col">
+      {/* ── Top bar — glass pill matching the main navbar ───────────────────── */}
+      <header className="sticky top-3 z-40 px-3 sm:px-5 shrink-0">
+        <div
+          className="glass-strong glass-highlight mx-auto flex max-w-screen-2xl items-center gap-3 rounded-[var(--radius-pill)] border border-white/60 pe-3 ps-4"
+          style={{ boxShadow: "var(--shadow-warm)" }}
+        >
+          {/* Mobile hamburger */}
+          <MobileNavToggle userName={userName} signOutLabel={signOutLabel} />
 
-        {/* Brand mark (mobile) */}
-        <div className="flex items-center gap-2 lg:hidden">
-          <SukanMark size={24} monochrome="gold" />
-          <span className="font-display text-lg text-parchment leading-none">
-            سُكَن
-          </span>
-        </div>
+          {/* Brand mark — visible on mobile only */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <SukanMark size={26} />
+            <span
+              className="font-display text-lg text-ink leading-none"
+              style={{ fontFamily: "var(--font-arabic)" }}
+            >
+              سُكَن
+            </span>
+          </div>
 
-        <div className="flex-1" />
+          <div className="flex-1" />
 
-        {/* Right cluster */}
-        <div className="flex items-center gap-3">
-          <LocaleToggle />
+          {/* Right cluster */}
+          <div className="flex items-center gap-2">
+            <LocaleToggle />
 
-          {/* Notification bell stub */}
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="w-9 h-9 flex items-center justify-center rounded-lg text-mute-soft hover:text-parchment hover:bg-earth-soft transition-colors"
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
-              <path
-                d="M10 2a6 6 0 0 0-6 6v2.586l-1.707 1.707A1 1 0 0 0 3 14h14a1 1 0 0 0 .707-1.707L16 10.586V8a6 6 0 0 0-6-6Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-              <path d="M8 14a2 2 0 1 0 4 0" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </button>
+            {/* Notification bell stub */}
+            <button
+              type="button"
+              aria-label="Notifications"
+              className="smooth-fast w-9 h-9 flex items-center justify-center rounded-full border border-white/60 bg-white/40 text-ink-mid hover:border-gold/50 hover:text-ink hover:bg-gold/10"
+            >
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden>
+                <path
+                  d="M10 2a6 6 0 0 0-6 6v2.586l-1.707 1.707A1 1 0 0 0 3 14h14a1 1 0 0 0 .707-1.707L16 10.586V8a6 6 0 0 0-6-6Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                />
+                <path d="M8 14a2 2 0 1 0 4 0" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </button>
 
-          {/* Avatar stub */}
-          <div
-            aria-label={userName}
-            className="w-9 h-9 rounded-full bg-earth-soft border border-gold/20 flex items-center justify-center"
-          >
-            <SukanMark size={20} monochrome="gold" className="opacity-60" />
+            {/* Avatar initials chip */}
+            <div
+              aria-label={userName}
+              className="w-9 h-9 rounded-full border border-white/60 flex items-center justify-center text-[11px] font-semibold text-earth shrink-0"
+              style={{
+                background: "linear-gradient(135deg, #e0a857 0%, #c8873a 100%)",
+                boxShadow: "var(--shadow-gold-glow)",
+              }}
+            >
+              <SukanMark size={18} className="opacity-80" />
+            </div>
           </div>
         </div>
       </header>
 
       {/* ── Body ────────────────────────────────────────────────────────────── */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Desktop sidebar */}
-        <div className="hidden lg:flex h-full">
+      <div className="flex flex-1 overflow-hidden pt-4">
+        {/* Desktop sidebar — floating glass card */}
+        <div className="hidden lg:flex h-full ps-4 pb-6">
           <SidebarNav userName={userName} signOutLabel={signOutLabel} />
         </div>
 
-        {/* Content area */}
-        <main className="flex-1 overflow-y-auto bg-earth">
+        {/* Content area — cream so atmosphere bleeds through */}
+        <main className="flex-1 overflow-y-auto">
           {children}
         </main>
       </div>

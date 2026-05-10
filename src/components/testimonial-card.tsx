@@ -12,28 +12,46 @@ export default function TestimonialCard({
   location,
   accent = "gold",
 }: TestimonialCardProps) {
-  const ruleColor =
-    accent === "terracotta" ? "bg-terracotta/40" : "bg-gold/40";
+  const ruleStyle =
+    accent === "terracotta"
+      ? "linear-gradient(90deg, rgba(200,64,26,0.55), transparent)"
+      : "linear-gradient(90deg, rgba(200,135,58,0.55), transparent)";
   const authorColor =
     accent === "terracotta" ? "text-terracotta" : "text-gold-dk";
+  const quoteMarkColor =
+    accent === "terracotta" ? "rgba(200,64,26,0.18)" : "rgba(200,135,58,0.22)";
 
   return (
-    <div className="bg-card border border-sand-dk rounded-[var(--radius-card)] p-7 flex flex-col gap-5 shadow-[0_4px_16px_rgba(18,16,12,0.06)]">
+    <div
+      className="glass-warm glass-highlight relative flex flex-col gap-5 overflow-hidden rounded-[var(--radius-glass)] border border-white/55 p-7"
+      style={{ boxShadow: "var(--shadow-glass)" }}
+    >
+      {/* Decorative oversized quote mark */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -top-6 ltr:right-4 rtl:left-4 select-none font-display text-[8rem] leading-none"
+        style={{ color: quoteMarkColor }}
+      >
+        “
+      </span>
+
       {/* Quote */}
-      <p className="italic text-ink text-lg leading-[1.7] flex-1">
+      <p className="relative flex-1 font-display text-lg italic leading-[1.65] text-ink">
         {quote}
       </p>
 
-      {/* Thin rule */}
-      <div className={`h-px w-10 ${ruleColor}`} />
+      {/* Gradient rule */}
+      <div className="h-px w-12" style={{ background: ruleStyle }} />
 
       {/* Author */}
       <div>
-        <p className={`text-xs uppercase tracking-wider font-semibold ${authorColor}`}>
+        <p
+          className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${authorColor}`}
+        >
           {author}
         </p>
         {location && (
-          <p className="text-xs text-ink-mid mt-0.5">{location}</p>
+          <p className="mt-0.5 text-xs text-ink-mid">{location}</p>
         )}
       </div>
     </div>

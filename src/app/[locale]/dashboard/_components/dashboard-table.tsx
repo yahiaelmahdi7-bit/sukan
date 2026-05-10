@@ -26,13 +26,19 @@ interface DashboardTableProps {
 function StatusPill({ tier }: { tier: Listing["tier"] }) {
   if (tier === "featured") {
     return (
-      <span className="inline-block rounded-[var(--radius-pill)] bg-gold/15 px-3 py-1 text-xs font-semibold text-gold-bright uppercase tracking-wider">
+      <span
+        className="inline-block rounded-[var(--radius-pill)] px-3 py-1 text-[10px] font-semibold text-earth uppercase tracking-wider"
+        style={{
+          background: "linear-gradient(135deg, #e0a857 0%, #c8873a 100%)",
+          boxShadow: "0 2px 8px rgba(200, 135, 58, 0.30)",
+        }}
+      >
         Featured
       </span>
     );
   }
   return (
-    <span className="inline-block rounded-[var(--radius-pill)] bg-earth-soft border border-gold/20 px-3 py-1 text-xs text-mute-soft uppercase tracking-wider">
+    <span className="inline-block rounded-[var(--radius-pill)] border border-white/60 bg-white/50 px-3 py-1 text-[10px] text-ink-mid uppercase tracking-wider backdrop-blur-sm">
       Active
     </span>
   );
@@ -46,32 +52,35 @@ export default function DashboardTable({
   inquiriesByListingId,
 }: DashboardTableProps) {
   return (
-    <div className="overflow-x-auto rounded-[var(--radius-card)] border border-gold/15">
+    <div
+      className="overflow-x-auto glass-warm glass-highlight rounded-[var(--radius-card)]"
+      style={{ boxShadow: "var(--shadow-glass)" }}
+    >
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-gold/10 bg-earth-soft/50">
-            <th className="px-5 py-4 text-start text-xs uppercase tracking-wider text-mute-soft font-semibold w-16">
+          <tr className="border-b border-white/40 bg-white/20">
+            <th className="px-5 py-4 text-start text-[10px] uppercase tracking-widest text-gold-dk font-semibold w-16">
               {labels.thumb}
             </th>
-            <th className="px-5 py-4 text-start text-xs uppercase tracking-wider text-mute-soft font-semibold">
+            <th className="px-5 py-4 text-start text-[10px] uppercase tracking-widest text-gold-dk font-semibold">
               {labels.title}
             </th>
-            <th className="px-5 py-4 text-start text-xs uppercase tracking-wider text-mute-soft font-semibold">
+            <th className="px-5 py-4 text-start text-[10px] uppercase tracking-widest text-gold-dk font-semibold">
               {labels.status}
             </th>
-            <th className="px-5 py-4 text-end text-xs uppercase tracking-wider text-mute-soft font-semibold">
+            <th className="px-5 py-4 text-end text-[10px] uppercase tracking-widest text-gold-dk font-semibold">
               {labels.views}
             </th>
-            <th className="px-5 py-4 text-end text-xs uppercase tracking-wider text-mute-soft font-semibold">
+            <th className="px-5 py-4 text-end text-[10px] uppercase tracking-widest text-gold-dk font-semibold">
               {labels.inquiries}
             </th>
-            <th className="px-5 py-4 text-end text-xs uppercase tracking-wider text-mute-soft font-semibold">
+            <th className="px-5 py-4 text-end text-[10px] uppercase tracking-widest text-gold-dk font-semibold">
               {labels.actions}
             </th>
           </tr>
         </thead>
         <tbody>
-          {listings.map((listing, i) => {
+          {listings.map((listing) => {
             const title = locale === "ar" ? listing.titleAr : listing.titleEn;
             const views = viewsByListingId[listing.id] ?? 0;
             const inquiries = inquiriesByListingId[listing.id] ?? 0;
@@ -79,24 +88,22 @@ export default function DashboardTable({
             return (
               <tr
                 key={listing.id}
-                className={[
-                  "border-b border-gold/10 last:border-0 transition-colors hover:bg-earth-soft/40",
-                  i % 2 === 0 ? "bg-transparent" : "bg-earth-soft/20",
-                ].join(" ")}
+                className="smooth-fast border-b border-white/30 last:border-0 hover:bg-white/35 group"
+                style={{ ["--hover-shadow" as string]: "var(--shadow-gold-glow)" }}
               >
                 {/* Thumbnail */}
                 <td className="px-5 py-4">
-                  <div className="card-watermark w-12 h-12 rounded-lg flex items-center justify-center shrink-0">
-                    <SukanMark size={28} monochrome="gold" className="opacity-20" />
+                  <div className="card-watermark w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                    <SukanMark size={26} className="opacity-25" />
                   </div>
                 </td>
 
                 {/* Title */}
                 <td className="px-5 py-4 max-w-[200px]">
-                  <p className="text-parchment font-medium line-clamp-2 leading-snug">
+                  <p className="text-ink font-medium line-clamp-2 leading-snug">
                     {title}
                   </p>
-                  <p className="text-xs text-mute-soft mt-0.5">
+                  <p className="text-xs text-ink-mid mt-0.5">
                     {locale === "ar" ? listing.cityAr : listing.city}
                   </p>
                 </td>
@@ -107,12 +114,12 @@ export default function DashboardTable({
                 </td>
 
                 {/* Views */}
-                <td className="px-5 py-4 text-end font-display text-lg text-parchment">
+                <td className="px-5 py-4 text-end font-display text-xl text-ink">
                   {views.toLocaleString()}
                 </td>
 
                 {/* Inquiries */}
-                <td className="px-5 py-4 text-end font-display text-lg text-parchment">
+                <td className="px-5 py-4 text-end font-display text-xl text-ink">
                   {inquiries}
                 </td>
 
@@ -121,28 +128,22 @@ export default function DashboardTable({
                   <div className="flex items-center justify-end gap-2">
                     <button
                       type="button"
-                      onClick={() =>
-                        console.log("edit stub", listing.id)
-                      }
-                      className="px-3 py-1.5 rounded-lg text-xs border border-gold/30 text-parchment hover:bg-gold/10 transition-colors"
+                      onClick={() => console.log("edit stub", listing.id)}
+                      className="smooth-fast px-3 py-1.5 rounded-[var(--radius-pill)] text-xs border border-gold/40 bg-white/45 text-ink-soft hover:border-gold/70 hover:bg-gold/10 hover:text-terracotta backdrop-blur-sm"
                     >
                       {labels.edit}
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
-                        console.log("renew stub", listing.id)
-                      }
-                      className="px-3 py-1.5 rounded-lg text-xs border border-gold/30 text-mute-soft hover:text-parchment hover:bg-earth-soft transition-colors"
+                      onClick={() => console.log("renew stub", listing.id)}
+                      className="smooth-fast px-3 py-1.5 rounded-[var(--radius-pill)] text-xs border border-white/60 bg-white/40 text-ink-mid hover:border-gold/40 hover:text-ink backdrop-blur-sm"
                     >
                       {labels.renew}
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
-                        console.log("archive stub", listing.id)
-                      }
-                      className="px-3 py-1.5 rounded-lg text-xs border border-terracotta/30 text-terracotta hover:bg-terracotta/10 transition-colors"
+                      onClick={() => console.log("archive stub", listing.id)}
+                      className="smooth-fast px-3 py-1.5 rounded-[var(--radius-pill)] text-xs border border-terracotta/30 text-terracotta hover:bg-terracotta/10 backdrop-blur-sm"
                     >
                       {labels.archive}
                     </button>

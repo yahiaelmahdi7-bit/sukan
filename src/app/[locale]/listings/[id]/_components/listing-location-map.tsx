@@ -25,7 +25,7 @@ const LeafletMap = dynamic(() => import('@/components/leaflet-map'), {
   ssr: false,
   loading: () => (
     <div
-      className="w-full h-full rounded-[var(--radius-card)] bg-earth-soft border border-gold/10 animate-pulse"
+      className="w-full h-full rounded-[var(--radius-glass)] bg-sand/60 animate-pulse"
       aria-hidden
     />
   ),
@@ -75,11 +75,11 @@ export default function ListingLocationMap({
   }
 
   const actionClass =
-    'text-mute-soft hover:text-gold transition text-sm inline-flex items-center gap-2 ps-3 pe-3 py-2 rounded-md hover:bg-gold/5';
+    'smooth text-ink-mid hover:text-gold-dk transition text-sm inline-flex items-center gap-2 ps-3 pe-3 py-2 rounded-[var(--radius-pill)] hover:bg-gold/8';
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Map */}
+      {/* Map — fills the glass frame from the parent GlassPanel */}
       <div className="w-full h-[420px] md:h-[480px]">
         <LeafletMap
           center={[lat, lng]}
@@ -97,8 +97,18 @@ export default function ListingLocationMap({
         />
       </div>
 
-      {/* Map action row */}
-      <div className="flex flex-wrap items-center gap-1" role="group" aria-label={labels.mapTitle}>
+      {/* Map action row — glass-warm pill strip */}
+      <div
+        className="flex flex-wrap items-center gap-1 px-2 py-1 rounded-[var(--radius-pill)]"
+        style={{
+          background: 'linear-gradient(135deg, rgba(255,252,246,0.65), rgba(244,234,215,0.50))',
+          backdropFilter: 'blur(12px) saturate(150%)',
+          WebkitBackdropFilter: 'blur(12px) saturate(150%)',
+          border: '1px solid rgba(255,255,255,0.55)',
+        }}
+        role="group"
+        aria-label={labels.mapTitle}
+      >
         {/* Get directions */}
         <a
           href={directionsUrl}
@@ -111,7 +121,7 @@ export default function ListingLocationMap({
           <span>{labels.directions}</span>
         </a>
 
-        <span className="text-gold/20 select-none" aria-hidden>·</span>
+        <span className="text-gold/30 select-none" aria-hidden>·</span>
 
         {/* Open in OSM */}
         <a
@@ -125,7 +135,7 @@ export default function ListingLocationMap({
           <span>{labels.openInOsm}</span>
         </a>
 
-        <span className="text-gold/20 select-none" aria-hidden>·</span>
+        <span className="text-gold/30 select-none" aria-hidden>·</span>
 
         {/* Copy coordinates */}
         <button
@@ -137,8 +147,8 @@ export default function ListingLocationMap({
         >
           {copied ? (
             <>
-              <Check size={14} className="text-gold" aria-hidden />
-              <span className="text-gold">{labels.coordsCopied}</span>
+              <Check size={14} className="text-gold-dk" aria-hidden />
+              <span className="text-gold-dk">{labels.coordsCopied}</span>
             </>
           ) : (
             <>

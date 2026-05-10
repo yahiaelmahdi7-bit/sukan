@@ -4,6 +4,8 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import SukanMark from "@/components/sukan-mark";
 import WaveDivider from "@/components/wave-divider";
+import GlassPanel from "@/components/glass-panel";
+import { GlassButton } from "@/components/ui/glass-button";
 
 export default async function NotFound() {
   const t = await getTranslations("errors");
@@ -12,44 +14,52 @@ export default async function NotFound() {
     <>
       <Navbar />
 
-      <main className="flex flex-1 flex-col items-center justify-center py-32 px-4 text-center">
-        {/* Muted large brand mark */}
-        <div className="pointer-events-none select-none opacity-[0.06]" aria-hidden>
-          <SukanMark size={240} monochrome="parchment" />
+      <main className="relative flex flex-1 flex-col items-center justify-center py-32 px-4 text-center">
+        {/* Large muted watermark — sits behind the glass card */}
+        <div
+          className="pointer-events-none select-none absolute opacity-[0.06]"
+          aria-hidden
+        >
+          <SukanMark size={280} monochrome="parchment" />
         </div>
 
-        <div className="-mt-16 flex flex-col items-center gap-6">
+        <GlassPanel
+          variant="deep"
+          radius="glass-lg"
+          highlight={false}
+          shadow={false}
+          className="relative z-10 flex flex-col items-center gap-6 px-10 py-14 max-w-lg w-full"
+          style={{ boxShadow: "var(--shadow-gold-glow)" }}
+        >
           {/* Headline */}
           <h1 className="font-display text-5xl text-parchment sm:text-6xl">
             {t("notFoundTitle")}
           </h1>
 
           {/* Body */}
-          <p className="max-w-md text-base text-mute-soft leading-relaxed">
+          <p className="max-w-sm text-base text-mute-soft leading-relaxed">
             {t("notFoundBody")}
           </p>
 
           {/* Wave divider */}
-          <div className="my-2 w-48 opacity-50">
+          <div className="w-36 opacity-40">
             <WaveDivider intensity="subtle" />
           </div>
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/listings"
-              className="rounded-pill bg-gold/10 border border-gold/30 px-6 py-2.5 text-sm font-medium text-parchment hover:bg-gold/20 transition"
-            >
-              {t("notFoundBrowse")}
+            <Link href="/listings">
+              <GlassButton variant="gold" size="md">
+                {t("notFoundBrowse")}
+              </GlassButton>
             </Link>
-            <Link
-              href="/"
-              className="rounded-pill border border-parchment/20 px-6 py-2.5 text-sm font-medium text-parchment/70 hover:text-parchment hover:border-parchment/40 transition"
-            >
-              {t("notFoundHome")}
+            <Link href="/">
+              <GlassButton variant="ghost-dark" size="md">
+                {t("notFoundHome")}
+              </GlassButton>
             </Link>
           </div>
-        </div>
+        </GlassPanel>
       </main>
 
       <Footer />

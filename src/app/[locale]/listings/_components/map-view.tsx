@@ -17,8 +17,8 @@ const LeafletMap = dynamic(() => import("@/components/leaflet-map"), {
   ssr: false,
   loading: () => (
     <div
-      className="flex items-center justify-center rounded-[var(--radius-card)] bg-earth-soft"
-      style={{ height: "70vh" }}
+      className="flex items-center justify-center rounded-[var(--radius-card)] glass-warm"
+      style={{ height: "70vh", boxShadow: "var(--shadow-warm)" }}
     >
       <SukanMark size={48} monochrome="gold" className="animate-pulse opacity-30" />
     </div>
@@ -41,9 +41,9 @@ export default function MapView({ listings }: MapViewProps) {
 
     const popupHtml = `
       <div style="padding:12px 14px;font-family:system-ui,sans-serif;">
-        <p style="font-size:13px;font-weight:600;color:#FDF8F0;margin:0 0 2px;">${title}</p>
+        <p style="font-size:13px;font-weight:600;color:#12100C;margin:0 0 2px;">${title}</p>
         <p style="font-size:11px;color:#8C7C69;margin:0 0 8px;">${city}</p>
-        <p style="font-size:15px;font-weight:700;color:#E0A857;margin:0 0 10px;">${priceStr}</p>
+        <p style="font-size:15px;font-weight:700;color:#C8873A;margin:0 0 10px;">${priceStr}</p>
         <a
           href="/${locale}/listings/${l.id}"
           style="display:inline-block;background:#C8401A;color:#FDF8F0;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:600;text-decoration:none;letter-spacing:0.04em;"
@@ -76,8 +76,11 @@ export default function MapView({ listings }: MapViewProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Map — 70vh sticky-ish */}
-      <div className="overflow-hidden rounded-[var(--radius-card)] border border-gold/10">
+      {/* Map — 70vh */}
+      <div
+        className="overflow-hidden rounded-[var(--radius-card)] border border-white/55"
+        style={{ boxShadow: "var(--shadow-warm)" }}
+      >
         <LeafletMap
           center={center}
           zoom={listings.length === 1 ? 13 : 6}
@@ -91,7 +94,7 @@ export default function MapView({ listings }: MapViewProps) {
       {listings.length > 0 && (
         <div
           ref={stripRef}
-          className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin"
+          className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin"
           style={{ scrollSnapType: "x mandatory" }}
         >
           {listings.map((listing) => {
@@ -105,8 +108,12 @@ export default function MapView({ listings }: MapViewProps) {
                 href={`/listings/${listing.id}`}
                 data-id={listing.id}
                 onClick={() => scrollToCard(listing.id)}
-                style={{ scrollSnapAlign: "start", minWidth: "200px" }}
-                className="group block w-[200px] shrink-0 overflow-hidden rounded-xl border border-gold/15 bg-earth-soft transition hover:border-gold/40 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/30"
+                style={{
+                  scrollSnapAlign: "start",
+                  minWidth: "200px",
+                  boxShadow: "var(--shadow-warm-sm)",
+                }}
+                className="smooth group block w-[200px] shrink-0 overflow-hidden rounded-[var(--radius-card)] border border-white/55 glass-warm lift hover:border-gold/40"
               >
                 {/* Mini image placeholder */}
                 <div className="card-watermark relative h-[100px] w-full">
@@ -118,15 +125,15 @@ export default function MapView({ listings }: MapViewProps) {
                     />
                   </div>
                   {listing.tier === "featured" && (
-                    <span className="absolute top-2 ltr:left-2 rtl:right-2 rounded-pill bg-gold px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-earth">
+                    <span className="absolute top-2 ltr:left-2 rtl:right-2 rounded-[var(--radius-pill)] bg-gold px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-earth">
                       ★
                     </span>
                   )}
                 </div>
                 <div className="p-3">
-                  <p className="truncate text-xs font-semibold text-parchment">{title}</p>
-                  <p className="truncate text-[11px] text-mute-soft">{city}</p>
-                  <p className="mt-1.5 font-display text-base text-gold-bright">{priceStr}</p>
+                  <p className="truncate text-xs font-semibold text-ink">{title}</p>
+                  <p className="truncate text-[11px] text-ink-soft">{city}</p>
+                  <p className="mt-1.5 font-display text-base text-gold-dk">{priceStr}</p>
                 </div>
               </Link>
             );

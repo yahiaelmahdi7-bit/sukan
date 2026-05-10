@@ -5,6 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { routing, localeDirection, type Locale } from "@/i18n/routing";
+import Atmosphere from "@/components/atmosphere";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -91,7 +92,8 @@ export default async function LocaleLayout({
       dir={dir}
       className={`${cormorant.variable} ${lato.variable} ${notoNaskh.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-earth text-parchment">
+      <body className="relative min-h-full flex flex-col bg-earth text-parchment">
+        <Atmosphere />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

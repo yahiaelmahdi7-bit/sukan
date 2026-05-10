@@ -2,9 +2,24 @@
 
 import { useActionState, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { GlassInput } from "@/components/ui/glass-input";
+import { GlassButton } from "@/components/ui/glass-button";
+import GlassPanel from "@/components/glass-panel";
 import { requestPasswordReset, type ActionResult } from "../actions";
 
 const initialState: ActionResult = { error: null };
+
+const labelClass =
+  "block mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-gold-dk";
+
+function Spinner() {
+  return (
+    <span
+      aria-hidden
+      className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-cream/30 border-t-cream"
+    />
+  );
+}
 
 export default function ForgotPasswordForm() {
   const t = useTranslations("auth");
@@ -21,16 +36,12 @@ export default function ForgotPasswordForm() {
     initialState,
   );
 
-  const inputClass =
-    "w-full rounded-md bg-earth border border-gold/20 px-4 py-3.5 text-base text-parchment placeholder:text-mute focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition";
-  const labelClass = "block mb-2 text-xs uppercase tracking-wider text-gold/80";
-
   if (sent) {
     return (
-      <div className="rounded-md border border-gold/20 bg-gold/5 px-6 py-8 text-center">
-        <p className="font-display text-xl text-parchment mb-2">{t("checkEmail")}</p>
-        <p className="text-sm text-mute-soft">{t("passwordResetSent")}</p>
-      </div>
+      <GlassPanel variant="warm" radius="glass" shadow={false} highlight={false} className="px-6 py-8 text-center">
+        <p className="font-display text-xl text-ink mb-2">{t("checkEmail")}</p>
+        <p className="text-sm text-ink-mid">{t("passwordResetSent")}</p>
+      </GlassPanel>
     );
   }
 
@@ -40,13 +51,13 @@ export default function ForgotPasswordForm() {
         <label htmlFor="forgot-email" className={labelClass}>
           {t("email")}
         </label>
-        <input
+        <GlassInput
           id="forgot-email"
           name="email"
           type="email"
           autoComplete="email"
           required
-          className={inputClass}
+          tone="light"
           placeholder="you@example.com"
         />
       </div>
@@ -54,22 +65,22 @@ export default function ForgotPasswordForm() {
       {state.error && (
         <p
           role="alert"
-          className="rounded-md border border-terracotta/30 bg-terracotta/10 px-4 py-3 text-sm text-terracotta"
+          className="rounded-[var(--radius-glass)] border border-terracotta/20 bg-terracotta/8 px-4 py-2.5 text-sm text-terracotta-deep"
         >
           {state.error}
         </p>
       )}
 
-      <button
+      <GlassButton
         type="submit"
+        variant="terracotta"
+        size="lg"
+        full
         disabled={pending}
-        className="flex w-full items-center justify-center gap-2 rounded-pill bg-terracotta py-3.5 text-base font-semibold text-parchment transition hover:bg-terracotta-deep disabled:opacity-60"
+        leading={pending ? <Spinner /> : undefined}
       >
-        {pending && (
-          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-parchment/30 border-t-parchment" />
-        )}
         {t("forgotPassword")}
-      </button>
+      </GlassButton>
     </form>
   );
 }

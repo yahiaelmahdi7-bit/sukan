@@ -34,13 +34,14 @@ export default function MobileNavToggle({
 
   return (
     <>
+      {/* Glass pill hamburger button */}
       <button
         type="button"
         aria-label="Open navigation"
         onClick={() => setOpen(true)}
-        className="lg:hidden p-2 rounded-lg text-mute-soft hover:text-parchment hover:bg-earth-soft transition-colors"
+        className="smooth-fast lg:hidden w-9 h-9 flex items-center justify-center rounded-full border border-white/60 bg-white/40 text-ink-mid hover:border-gold/50 hover:text-ink hover:bg-gold/10 backdrop-blur-sm"
       >
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+        <svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden>
           <rect x="2" y="5" width="18" height="2" rx="1" fill="currentColor" />
           <rect x="2" y="10" width="18" height="2" rx="1" fill="currentColor" />
           <rect x="2" y="15" width="18" height="2" rx="1" fill="currentColor" />
@@ -49,9 +50,10 @@ export default function MobileNavToggle({
 
       {open && (
         <div className="fixed inset-0 z-50 flex" onClick={() => setOpen(false)}>
-          <div className="absolute inset-0 bg-earth/70 backdrop-blur-sm" />
+          {/* Frosted cream scrim */}
+          <div className="absolute inset-0 bg-cream/60 backdrop-blur-sm" />
           <div
-            className="relative z-10 h-full"
+            className="relative z-10 h-full ps-3 pt-4 pb-6"
             onClick={(e) => e.stopPropagation()}
           >
             <DashboardSidebar
