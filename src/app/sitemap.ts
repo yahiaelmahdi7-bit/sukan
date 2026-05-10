@@ -44,9 +44,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/post", "monthly", 0.7),
     entry("/about", "monthly", 0.6),
     entry("/diaspora", "monthly", 0.7),
+    entry("/agents", "weekly", 0.7),
     entry("/privacy", "yearly", 0.3),
     entry("/terms", "yearly", 0.3),
     entry("/contact", "monthly", 0.5),
+    // /compare is intentionally excluded — noindex, pure client state, no SEO value
   ];
 
   const listingRoutes: MetadataRoute.Sitemap = sampleListings.map((listing) =>

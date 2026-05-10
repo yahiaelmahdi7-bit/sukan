@@ -9,6 +9,8 @@ import WaveDivider from "@/components/wave-divider";
 import { insights, getInsightBySlug } from "@/lib/insights";
 import { Calendar, ArrowLeft, ArrowRight } from "lucide-react"; // ArrowRight used for RTL back-nav and forward CTAs
 import type { Metadata } from "next";
+import JsonLd from "@/components/json-ld";
+import { buildArticleLD, buildBreadcrumbLD } from "@/lib/json-ld";
 
 export function generateStaticParams() {
   return insights.map((i) => ({ slug: i.slug }));
@@ -145,8 +147,32 @@ export default async function InsightDetailPage({
   // Related: other insights (up to 2)
   const related = insights.filter((i) => i.slug !== slug).slice(0, 2);
 
+  // JSON-LD
+  const canonicalUrl = `${SITE_URL}/${locale}/insights/${slug}`;
+  const newsArticleLD = buildArticleLD({
+    title: isAr ? insight.titleAr : insight.titleEn,
+    description: isAr
+      ? insight.excerptAr.slice(0, 160)
+      : insight.excerptEn.slice(0, 160),
+    image: insight.heroImage,
+    published: insight.publishedAt,
+    author: isAr ? insight.authorAr : insight.authorEn,
+    url: canonicalUrl,
+    siteUrl: SITE_URL,
+    type: "NewsArticle",
+  });
+  const breadcrumbLD = buildBreadcrumbLD({
+    items: [
+      { name: isAr ? "الرئيسية" : "Home", url: `${SITE_URL}/${locale}` },
+      { name: isAr ? "التحليلات" : "Insights", url: `${SITE_URL}/${locale}/insights` },
+      { name: title, url: canonicalUrl },
+    ],
+  });
+
   return (
     <>
+      <JsonLd data={newsArticleLD} />
+      <JsonLd data={breadcrumbLD} />
       <Navbar />
 
       <main className="min-h-screen bg-cream">

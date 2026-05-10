@@ -64,17 +64,19 @@ export default async function DashboardLayout({
         <MobileNavToggle userName={userName} signOutLabel={signOutLabel} />
       </div>
 
-      {/* Body — desktop sidebar + main content */}
-      <div className="flex flex-1 overflow-hidden pt-4">
-        <div className="hidden lg:flex h-full ps-4 pb-6">
+      {/* Body — desktop sidebar (sticky) + main content (natural flow).
+          The page scrolls normally; the sidebar pins under the floating
+          navbar via position: sticky. */}
+      <div className="flex flex-1 pt-6 gap-6 px-4 sm:px-6">
+        <aside className="hidden lg:block shrink-0 self-start sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pb-6">
           <SidebarNav
             userName={userName}
             signOutLabel={signOutLabel}
             isAdmin={isAdmin}
           />
-        </div>
+        </aside>
 
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1 min-w-0 pb-12">{children}</main>
       </div>
     </div>
   );

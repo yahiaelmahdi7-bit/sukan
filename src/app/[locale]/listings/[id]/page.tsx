@@ -4,6 +4,12 @@ import { notFound } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { setRequestLocale, getTranslations, getFormatter } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import JsonLd from "@/components/json-ld";
+import {
+  buildResidenceLD,
+  buildRealEstateListingLD,
+  buildBreadcrumbLD,
+} from "@/lib/json-ld";
 import SukanMark from "@/components/sukan-mark";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -59,6 +65,9 @@ type DbReview = {
    Metadata
 ───────────────────────────────────────────────────────── */
 
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
 export async function generateMetadata({
   params,
 }: {
@@ -71,16 +80,56 @@ export async function generateMetadata({
     return { title: "Listing not found · Sukan" };
   }
 
-  const title = locale === "ar" ? listing.titleAr : listing.titleEn;
-  const stateKey = listing.state;
+  const isAr = locale === "ar";
+  const title = isAr ? listing.titleAr : listing.titleEn;
+  const cityLabel = isAr ? (listing.cityAr ?? listing.city) : listing.city;
+  const stateLabel = listing.state.replace(/_/g, " ");
 
-  // Truncate description to ~160 chars
-  const rawDesc = locale === "ar" ? listing.descriptionAr : listing.descriptionEn;
+  // Locale-aware title: "<title> · <city>, <state> · Sukan"
+  const metaTitle = isAr
+    ? `${title} · ${cityLabel}، ${stateLabel} · سُكَن`
+    : `${title} · ${cityLabel}, ${stateLabel} · Sukan`;
+
+  // Truncate description to ≤160 chars
+  const rawDesc = isAr ? listing.descriptionAr : listing.descriptionEn;
   const description = rawDesc.length > 160 ? rawDesc.slice(0, 157) + "…" : rawDesc;
 
+  const canonicalUrl = `${SITE_URL}/${locale}/listings/${id}`;
+
+  // First photo for OG/Twitter
+  const ogImage = listing.imageUrl ?? listing.photos?.[0] ?? "";
+  const absoluteOgImage = ogImage.startsWith("http")
+    ? ogImage
+    : `${SITE_URL}${ogImage || "/opengraph-image.png"}`;
+
   return {
-    title: `${title} · ${stateKey}`,
+    title: metaTitle,
     description,
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/listings/${id}`,
+        ar: `${SITE_URL}/ar/listings/${id}`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title: metaTitle,
+      description,
+      url: canonicalUrl,
+      siteName: "Sukan — سُكَن",
+      locale: isAr ? "ar_SD" : "en_US",
+      images: absoluteOgImage
+        ? [{ url: absoluteOgImage, alt: title, width: 1200, height: 630 }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metaTitle,
+      description,
+      images: absoluteOgImage ? [absoluteOgImage] : undefined,
+    },
   };
 }
 
@@ -271,8 +320,26 @@ export default async function ListingDetailPage({
   //  until ownerId is surfaced on the Listing type — the DB trigger links them)
   const landlordIdForReview = listing.id;
 
+  // JSON-LD structured data
+  const ldLocale = locale as "en" | "ar";
+  const breadcrumbItems = [
+    { name: locale === "ar" ? "الرئيسية" : "Home", url: `${siteUrl}/${locale}` },
+    { name: locale === "ar" ? "العقارات" : "Listings", url: `${siteUrl}/${locale}/listings` },
+    {
+      name: locale === "ar" ? (listing.cityAr ?? listing.city) : listing.city,
+      url: `${siteUrl}/${locale}/listings?state=${listing.state}`,
+    },
+    {
+      name: locale === "ar" ? listing.titleAr : listing.titleEn,
+      url: `${siteUrl}/${locale}/listings/${listing.id}`,
+    },
+  ];
+
   return (
     <>
+      <JsonLd data={buildResidenceLD({ listing, locale: ldLocale, siteUrl })} />
+      <JsonLd data={buildRealEstateListingLD({ listing, locale: ldLocale, siteUrl })} />
+      <JsonLd data={buildBreadcrumbLD({ items: breadcrumbItems })} />
       <Navbar />
 
       <main className="bg-cream min-h-screen">

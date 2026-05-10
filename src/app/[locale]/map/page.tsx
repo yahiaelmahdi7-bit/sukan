@@ -1,7 +1,47 @@
+import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import Navbar from '@/components/navbar';
 import { sampleListings } from '@/lib/sample-listings';
 import MapWithPanel from './_components/map-with-panel';
+
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+  const title = isAr ? "خريطة العقارات في السودان · سُكَن" : "Sudan Property Map · Sukan";
+  const description = isAr
+    ? "استعرض عقارات السودان على الخريطة — شقق وفيلات ومنازل في جميع الولايات"
+    : "Explore Sudan properties on an interactive map — apartments, villas, and houses across all states";
+  const canonicalUrl = `${SITE_URL}/${locale}/map`;
+
+  return {
+    title,
+    description,
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/map`,
+        ar: `${SITE_URL}/ar/map`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Sukan — سُكَن",
+      locale: isAr ? "ar_SD" : "en_US",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function MapPage({
   params,

@@ -39,6 +39,33 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app",
   ),
+  applicationName: "Sukan",
+  authors: [{ name: "Sukan" }],
+  creator: "Sukan",
+  publisher: "Sukan",
+  // Localised keyword set — covers EN and AR search intent for Sudan real estate
+  keywords: [
+    "Sudan property",
+    "Sudan real estate",
+    "rent apartment Khartoum",
+    "buy villa Bahri",
+    "Sudan housing",
+    "Khartoum apartments",
+    "Sudan diaspora property",
+    "عقارات السودان",
+    "شقق للإيجار الخرطوم",
+    "فيلات للبيع السودان",
+    "عقارات المغتربين السودانيين",
+    "سكن السودان",
+    "إيجار شقة الخرطوم",
+    "بيع عقار السودان",
+  ],
+  // Prevent iOS Safari auto-linking phone numbers / addresses in meta description
+  formatDetection: {
+    email: false,
+    telephone: false,
+    address: false,
+  },
   manifest: "/manifest.webmanifest",
   themeColor: "#12100C",
   appleWebApp: {
@@ -61,6 +88,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     site: "@sukanapp",
+    creator: "@sukanapp",
     title: {
       default: "Sukan — Sudan's home for housing",
       template: "%s · Sukan",

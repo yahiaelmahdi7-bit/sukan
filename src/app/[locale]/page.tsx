@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import JsonLd from "@/components/json-ld";
+import { buildOrganizationLD, buildWebSiteLD } from "@/lib/json-ld";
 import { Search, Home, Plane, ShieldCheck, Languages, Globe, MessageCircle } from "lucide-react";
 import SukanMark from "@/components/sukan-mark";
 import Navbar from "@/components/navbar";
@@ -21,6 +24,33 @@ import ActivityTicker from "@/components/activity-ticker";
 import StaggeredListings from "@/components/staggered-listings";
 import LiveBrowsingPill from "@/components/live-browsing-pill";
 import SectionFreshnessPill from "@/components/section-freshness-pill";
+
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+  const canonicalUrl = `${SITE_URL}/${locale}`;
+
+  return {
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en`,
+        ar: `${SITE_URL}/ar`,
+      },
+    },
+    openGraph: {
+      locale: isAr ? "ar_SD" : "en_US",
+      url: canonicalUrl,
+    },
+  };
+}
 
 export default async function HomePage({
   params,
@@ -65,6 +95,8 @@ export default async function HomePage({
 
   return (
     <>
+      <JsonLd data={buildOrganizationLD({ siteUrl: SITE_URL })} />
+      <JsonLd data={buildWebSiteLD({ siteUrl: SITE_URL })} />
       <Navbar />
 
       <main>

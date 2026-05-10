@@ -91,42 +91,42 @@ function seedActivityFeed(userId: string): ActivityRow[] {
     {
       id: "act-1",
       icon: "eye",
-      textKey: "dashboardOverview.activityViewed",
+      textKey: "activityViewed",
       textVars: { name: "Mohammed", listing: "Khartoum 2" },
       href: "/dashboard/listings",
     },
     {
       id: "act-2",
       icon: "heart",
-      textKey: "dashboardOverview.activitySaved",
+      textKey: "activitySaved",
       textVars: { listing: "Bahri apartment" },
       href: "/dashboard/listings",
     },
     {
       id: "act-3",
       icon: "message",
-      textKey: "dashboardOverview.activityInquired",
+      textKey: "activityInquired",
       textVars: { name: "Sara", location: "Toronto" },
       href: "/dashboard/inquiries",
     },
     {
       id: "act-4",
       icon: "trending-up",
-      textKey: "dashboardOverview.activityViews",
+      textKey: "activityViews",
       textVars: { listing: "Dongola farm", count: 12 },
       href: "/dashboard/listings",
     },
     {
       id: "act-5",
       icon: "eye",
-      textKey: "dashboardOverview.activityViewed",
+      textKey: "activityViewed",
       textVars: { name: "Layla", listing: "Port Sudan shop" },
       href: "/dashboard/listings",
     },
     {
       id: "act-6",
       icon: "message",
-      textKey: "dashboardOverview.activityInquired",
+      textKey: "activityInquired",
       textVars: { name: "Kamal", location: "Riyadh" },
       href: "/dashboard/inquiries",
     },
@@ -195,9 +195,9 @@ function buildActionItems(params: {
       items.push({
         id: `no-photos-${listing.id}`,
         icon: "camera",
-        titleKey: "dashboardOverview.actionNoPhotos",
+        titleKey: "actionNoPhotos",
         titleVars: { title: listing.titleEn },
-        ctaKey: "dashboardOverview.actionAddPhotos",
+        ctaKey: "actionAddPhotos",
         ctaHref: `/post?edit=${listing.id}`,
       });
       if (items.length >= 5) break;
@@ -211,18 +211,18 @@ function buildActionItems(params: {
       items.push({
         id: "unread-single",
         icon: "message",
-        titleKey: "dashboardOverview.actionUnreadSingle",
+        titleKey: "actionUnreadSingle",
         titleVars: { name: first.inquirer_name_en },
-        ctaKey: "dashboardOverview.actionReply",
+        ctaKey: "actionReply",
         ctaHref: `/dashboard/inquiries/${first.id}`,
       });
     } else {
       items.push({
         id: "unread-multi",
         icon: "inbox",
-        titleKey: "dashboardOverview.actionUnreadMulti",
+        titleKey: "actionUnreadMulti",
         titleVars: { count: unreadInquiries.length },
-        ctaKey: "dashboardOverview.actionOpenInbox",
+        ctaKey: "actionOpenInbox",
         ctaHref: `/dashboard/inquiries`,
       });
     }
@@ -238,9 +238,9 @@ function buildActionItems(params: {
       items.push({
         id: "stale-inquiries",
         icon: "clock",
-        titleKey: "dashboardOverview.actionStaleInquiries",
+        titleKey: "actionStaleInquiries",
         titleVars: { count: stale.length },
-        ctaKey: "dashboardOverview.actionOpenInbox",
+        ctaKey: "actionOpenInbox",
         ctaHref: `/dashboard/inquiries`,
       });
     }
@@ -251,9 +251,9 @@ function buildActionItems(params: {
     items.push({
       id: "profile-incomplete",
       icon: "user",
-      titleKey: "dashboardOverview.actionProfileIncomplete",
+      titleKey: "actionProfileIncomplete",
       titleVars: { pct: profileCompletePct },
-      ctaKey: "dashboardOverview.actionFinishProfile",
+      ctaKey: "actionFinishProfile",
       ctaHref: `/dashboard/profile`,
     });
   }
@@ -263,8 +263,8 @@ function buildActionItems(params: {
     items.push({
       id: "verification-pending",
       icon: "shield",
-      titleKey: "dashboardOverview.actionVerificationPending",
-      ctaKey: "dashboardOverview.actionCheckStatus",
+      titleKey: "actionVerificationPending",
+      ctaKey: "actionCheckStatus",
       ctaHref: `/dashboard/profile`,
     });
   }

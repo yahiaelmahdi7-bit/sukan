@@ -1,7 +1,47 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import GlassPanel from "@/components/glass-panel";
 import DiasporaCallout from "@/components/diaspora-callout";
 import { ShieldCheck, Globe, Languages } from "lucide-react";
+
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+  const title = isAr ? "عن سُكَن — منصة العقارات السودانية" : "About Sukan — Sudan's Property Platform";
+  const description = isAr
+    ? "تعرّف على سُكَن، المنصة العقارية السودانية الأولى باللغتين العربية والإنجليزية"
+    : "Learn about Sukan, Sudan's first bilingual EN/AR property marketplace for tenants, landlords, and diaspora";
+  const canonicalUrl = `${SITE_URL}/${locale}/about`;
+
+  return {
+    title,
+    description,
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/about`,
+        ar: `${SITE_URL}/ar/about`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Sukan — سُكَن",
+      locale: isAr ? "ar_SD" : "en_US",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function AboutPage({
   params,

@@ -8,6 +8,9 @@ import { VerifiedBadge } from "@/components/verified-badge";
 import { createClient } from "@/lib/supabase/server";
 import EmptyState from "@/components/empty-state";
 
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
 export async function generateMetadata({
   params,
 }: {
@@ -15,9 +18,31 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "agents" });
+  const isAr = locale === "ar";
+  const title = `${t("title")} · Sukan`;
+  const description = t("subtitle");
+  const canonicalUrl = `${SITE_URL}/${locale}/agents`;
+
   return {
-    title: `${t("title")} · Sukan`,
-    description: t("subtitle"),
+    title,
+    description,
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/agents`,
+        ar: `${SITE_URL}/ar/agents`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Sukan — سُكَن",
+      locale: isAr ? "ar_SD" : "en_US",
+    },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

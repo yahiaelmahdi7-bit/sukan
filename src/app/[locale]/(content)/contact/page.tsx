@@ -1,6 +1,46 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import GlassPanel from "@/components/glass-panel";
 import { MessageCircle, Mail, Send, MapPin, Briefcase } from "lucide-react";
+
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+  const title = isAr ? "تواصل معنا · سُكَن" : "Contact Us · Sukan";
+  const description = isAr
+    ? "تواصل مع فريق سُكَن عبر واتساب أو البريد الإلكتروني أو تيليغرام"
+    : "Get in touch with the Sukan team via WhatsApp, email, or Telegram";
+  const canonicalUrl = `${SITE_URL}/${locale}/contact`;
+
+  return {
+    title,
+    description,
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/contact`,
+        ar: `${SITE_URL}/ar/contact`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Sukan — سُكَن",
+      locale: isAr ? "ar_SD" : "en_US",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function ContactPage({
   params,

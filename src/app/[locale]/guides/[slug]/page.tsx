@@ -9,6 +9,8 @@ import WaveDivider from "@/components/wave-divider";
 import { guides, getGuideBySlug } from "@/lib/guides";
 import { MapPin, Zap, Droplets, Plane, ArrowLeft, ArrowRight, Search } from "lucide-react";
 import type { Metadata } from "next";
+import JsonLd from "@/components/json-ld";
+import { buildArticleLD, buildBreadcrumbLD } from "@/lib/json-ld";
 
 export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));
@@ -120,8 +122,30 @@ export default async function GuideDetailPage({
   const power = RELIABILITY_BADGE[guide.vitals.powerReliability];
   const water = RELIABILITY_BADGE[guide.vitals.waterReliability];
 
+  // JSON-LD
+  const canonicalUrl = `${SITE_URL}/${locale}/guides/${slug}`;
+  const articleLD = buildArticleLD({
+    title: isAr ? `دليل ${name}` : `${name} guide`,
+    description: isAr ? guide.introAr.slice(0, 160) : guide.introEn.slice(0, 160),
+    image: guide.heroImage,
+    published: "2026-04-01",
+    author: "Sukan Editorial",
+    url: canonicalUrl,
+    siteUrl: SITE_URL,
+    type: "Article",
+  });
+  const breadcrumbLD = buildBreadcrumbLD({
+    items: [
+      { name: isAr ? "الرئيسية" : "Home", url: `${SITE_URL}/${locale}` },
+      { name: isAr ? "الأدلة" : "Guides", url: `${SITE_URL}/${locale}/guides` },
+      { name, url: canonicalUrl },
+    ],
+  });
+
   return (
     <>
+      <JsonLd data={articleLD} />
+      <JsonLd data={breadcrumbLD} />
       <Navbar />
 
       <main className="min-h-screen bg-cream">

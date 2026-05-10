@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ListingCard from "@/components/listing-card";
+import JsonLd from "@/components/json-ld";
+import { buildBreadcrumbLD, buildCollectionPageLD } from "@/lib/json-ld";
 import GlassPanel from "@/components/glass-panel";
 import FilterSidebar from "./_components/filter-sidebar";
 import ActiveFilters from "./_components/active-filters";
@@ -280,6 +283,56 @@ function buildResultSummary(params: ParsedParams, total: number, locale: string)
   return parts.join(" ");
 }
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+// ─── Metadata ─────────────────────────────────────────────────────────────────
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+
+  const title = isAr
+    ? "تصفح العقارات في السودان · سُكَن"
+    : "Browse Properties in Sudan · Sukan";
+  const description = isAr
+    ? "شقق وفيلات ومنازل للإيجار والبيع في جميع ولايات السودان — قائمة محدّثة يومياً"
+    : "Apartments, villas, and houses for rent and sale across all 18 Sudanese states — updated daily";
+  const canonicalUrl = `${SITE_URL}/${locale}/listings`;
+
+  return {
+    title,
+    description,
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/listings`,
+        ar: `${SITE_URL}/ar/listings`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Sukan — سُكَن",
+      locale: isAr ? "ar_SD" : "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ListingsPage({
@@ -333,8 +386,31 @@ export default async function ListingsPage({
 
   const resultSummary = buildResultSummary(parsed, total, locale);
 
+  // JSON-LD
+  const ldLocale = locale as "en" | "ar";
+  const isAr = locale === "ar";
+  const browseUrl = `${SITE_URL}/${locale}/listings`;
+  const breadcrumbLD = buildBreadcrumbLD({
+    items: [
+      { name: isAr ? "الرئيسية" : "Home", url: `${SITE_URL}/${locale}` },
+      { name: isAr ? "العقارات" : "Listings", url: browseUrl },
+    ],
+  });
+  const collectionLD = buildCollectionPageLD({
+    url: browseUrl,
+    name: isAr ? "عقارات السودان" : "Sudan Property Listings",
+    description: isAr
+      ? "شقق وفيلات ومنازل للإيجار والبيع في جميع ولايات السودان"
+      : "Apartments, villas, and houses for rent and sale across all 18 Sudanese states",
+    siteUrl: SITE_URL,
+    listings: items,
+    locale: ldLocale,
+  });
+
   return (
     <>
+      <JsonLd data={breadcrumbLD} />
+      <JsonLd data={collectionLD} />
       <Navbar />
 
       <main className="flex-1">

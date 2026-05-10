@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import GlassPanel from "@/components/glass-panel";
@@ -24,6 +25,52 @@ const DIASPORA_STATES = new Set(
 const diasporaListings = sampleListings
   .filter((l) => DIASPORA_STATES.has(l.state as string))
   .slice(0, 3);
+
+// ── Constants ────────────────────────────────────────────────────────────────
+
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+// ── Metadata ─────────────────────────────────────────────────────────────────
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+
+  const title = isAr
+    ? "عقارات السودان للمغتربين · سُكَن"
+    : "Sudan Property for the Diaspora · Sukan";
+  const description = isAr
+    ? "اشتر أو استأجر عقاراً في السودان من الخارج — خدمة موثوقة للمغتربين السودانيين في جميع أنحاء العالم"
+    : "Buy or rent property in Sudan from abroad — trusted service for the Sudanese diaspora worldwide";
+  const canonicalUrl = `${SITE_URL}/${locale}/diaspora`;
+
+  return {
+    title,
+    description,
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/diaspora`,
+        ar: `${SITE_URL}/ar/diaspora`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Sukan — سُكَن",
+      locale: isAr ? "ar_SD" : "en_US",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
