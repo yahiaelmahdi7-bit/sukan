@@ -199,19 +199,57 @@ function priceLabelIconHtml(priceLabel: string, tone: 'rent' | 'sale' | 'feature
 }
 
 // ─── Tile layer URLs ───────────────────────────────────────────────────────────
+//
+// Primary provider: Mapbox (light-v11 for clean street view, satellite-
+// streets-v12 for satellite + labels). Mapbox raster tiles need tileSize=512
+// and zoomOffset=-1 for proper retina rendering with Leaflet.
+//
+// Fallback to OSM/Esri when NEXT_PUBLIC_MAPBOX_TOKEN is missing so the site
+// keeps working without a Mapbox account.
 
-const TILE_LAYERS = {
-  satellite: {
-    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-    maxZoom: 19,
-  },
-  street: {
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19,
-  },
-} as const;
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+
+type TileLayerConfig = {
+  url: string;
+  attribution: string;
+  maxZoom: number;
+  tileSize?: number;
+  zoomOffset?: number;
+};
+
+const TILE_LAYERS: Record<'satellite' | 'street', TileLayerConfig> = MAPBOX_TOKEN
+  ? {
+      satellite: {
+        url: `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`,
+        attribution:
+          '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+        tileSize: 512,
+        zoomOffset: -1,
+      },
+      street: {
+        url: `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`,
+        attribution:
+          '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+        tileSize: 512,
+        zoomOffset: -1,
+      },
+    }
+  : {
+      satellite: {
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attribution:
+          'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxZoom: 19,
+      },
+      street: {
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
+      },
+    };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -267,6 +305,8 @@ export default function LeafletMap({
       tileLayerRef.current = L.tileLayer(cfg.url, {
         attribution: cfg.attribution,
         maxZoom: cfg.maxZoom,
+        tileSize: cfg.tileSize ?? 256,
+        zoomOffset: cfg.zoomOffset ?? 0,
       }).addTo(map);
 
       addMarkers(L, map, markers, draggable, onMarkerDrag, onMarkerClick);
@@ -296,6 +336,8 @@ export default function LeafletMap({
       tileLayerRef.current = L.tileLayer(cfg.url, {
         attribution: cfg.attribution,
         maxZoom: cfg.maxZoom,
+        tileSize: cfg.tileSize ?? 256,
+        zoomOffset: cfg.zoomOffset ?? 0,
       }).addTo(mapRef.current!);
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
