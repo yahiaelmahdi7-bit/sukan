@@ -547,9 +547,9 @@ function Step1({
                 type="button"
                 onClick={() => update({ propertyType: key })}
                 className={[
-                  "smooth rounded-[var(--radius-glass)] border p-4 flex flex-col items-center gap-2 aspect-[4/3]",
+                  "smooth flex aspect-[4/3] flex-col items-center justify-center gap-3 rounded-[var(--radius-glass)] border p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-cream",
                   active
-                    ? "text-cream border-terracotta/60"
+                    ? "border-terracotta/60 text-cream"
                     : "glass-warm border-white/55 text-ink hover:border-gold/55 hover:shadow-[var(--shadow-warm)]",
                 ].join(" ")}
                 style={
@@ -563,10 +563,12 @@ function Step1({
                 }
                 aria-pressed={active}
               >
-                <span className="text-2xl leading-none" aria-hidden>
+                <span className="text-4xl leading-none" aria-hidden>
                   {PROPERTY_TYPE_GLYPHS[key]}
                 </span>
-                <span className="font-display text-[11px] leading-tight">{pt(key)}</span>
+                <span className="text-sm font-medium leading-tight">
+                  {pt(key)}
+                </span>
               </button>
             );
           })}
@@ -763,7 +765,7 @@ function Step1({
           </p>
         )}
         <div>
-          <label className={`${labelCls} text-[10px]`}>
+          <label className={`${labelCls}`}>
             {t("descriptionEnLabel")}
           </label>
           <GlassTextarea
@@ -775,7 +777,7 @@ function Step1({
           />
         </div>
         <div>
-          <label className={`${labelCls} text-[10px]`} dir="rtl">
+          <label className={`${labelCls}`} dir="rtl">
             {t("descriptionArLabel")}
           </label>
           <GlassTextarea
