@@ -151,13 +151,16 @@ export default async function ListingDetailPage({
   const altDesc = isRtl ? listing.descriptionEn : listing.descriptionAr;
   const stateLabel = t(`states.${listing.state}`);
 
-  // Period suffix
+  // Period suffix — sale listings never show "/month" or "/year",
+  // even if the DB row stored a rent period by mistake.
   const periodSuffix =
-    listing.period === "month"
-      ? t("listing.perMonth")
-      : listing.period === "year"
-        ? t("listing.perYear")
-        : t("listing.perTotal");
+    listing.purpose === "sale"
+      ? ""
+      : listing.period === "month"
+        ? t("listing.perMonth")
+        : listing.period === "year"
+          ? t("listing.perYear")
+          : "";
 
   // Formatted prices
   const priceUsdFormatted = format.number(listing.priceUsd, {
@@ -349,10 +352,12 @@ export default async function ListingDetailPage({
               )}
             </div>
 
-            {/* Desktop: 1 large (2 col) + 2x2 thumbs grid */}
-            <div className="hidden lg:grid lg:grid-cols-3 gap-2">
-              {/* Large slot — spans 2 cols */}
-              <div className="lg:col-span-2 relative aspect-[16/10] rounded-[var(--radius-glass-lg)] overflow-hidden"
+            {/* Desktop: when no photos, render ONE clean wide placeholder
+                (avoids a 5-tile empty grid). When photos exist, fall back
+                to the 1-large + 2×2-thumbs gallery. */}
+            <div className={`hidden lg:grid gap-2 ${photos.length === 0 ? "lg:grid-cols-1" : "lg:grid-cols-3"}`}>
+              {/* Large slot — spans 2 cols when thumbs render, full width when no photos */}
+              <div className={`relative aspect-[16/10] rounded-[var(--radius-glass-lg)] overflow-hidden ${photos.length === 0 ? "" : "lg:col-span-2"}`}
                 style={{ boxShadow: "var(--shadow-warm-lg)" }}>
                 {heroPhoto ? (
                   <Image
@@ -384,38 +389,32 @@ export default async function ListingDetailPage({
                 )}
               </div>
 
-              {/* 2×2 thumb grid on the right */}
-              <div className="grid grid-cols-2 grid-rows-2 gap-2">
-                {thumbPhotos.length > 0
-                  ? thumbPhotos.slice(0, 4).map((photo, i) => (
-                      <div key={photo.id} className="relative aspect-square rounded-[var(--radius-glass)] overflow-hidden"
-                        style={{ boxShadow: "var(--shadow-warm-sm)" }}>
-                        <Image
-                          src={photo.url}
-                          alt={`${localTitle} ${i + 2}`}
-                          fill
-                          sizes="(min-width: 1024px) 17vw"
-                          className="object-cover"
-                        />
-                      </div>
-                    ))
-                  : Array.from({ length: Math.min((listing.photoSlots ?? 5) - 1, 4) }, (_, i) => (
-                      <PhotoPlaceholder
-                        key={i}
-                        aspectClass="aspect-square"
-                        label={`${localTitle} ${i + 2}`}
+              {/* 2×2 thumb grid — only when at least one extra photo exists */}
+              {thumbPhotos.length > 0 && (
+                <div className="grid grid-cols-2 grid-rows-2 gap-2">
+                  {thumbPhotos.slice(0, 4).map((photo, i) => (
+                    <div key={photo.id} className="relative aspect-square rounded-[var(--radius-glass)] overflow-hidden"
+                      style={{ boxShadow: "var(--shadow-warm-sm)" }}>
+                      <Image
+                        src={photo.url}
+                        alt={`${localTitle} ${i + 2}`}
+                        fill
+                        sizes="(min-width: 1024px) 17vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+
+                  {/* Fill empty thumb slots when photos exist but fewer than 4 */}
+                  {thumbPhotos.length < 4 &&
+                    Array.from({ length: 4 - thumbPhotos.length }, (_, i) => (
+                      <div
+                        key={`empty-${i}`}
+                        className="card-watermark rounded-[var(--radius-glass)] aspect-square opacity-30"
                       />
                     ))}
-
-                {/* Fill empty thumb slots when photos exist but fewer than 4 */}
-                {thumbPhotos.length > 0 && thumbPhotos.length < 4 &&
-                  Array.from({ length: 4 - thumbPhotos.length }, (_, i) => (
-                    <div
-                      key={`empty-${i}`}
-                      className="card-watermark rounded-[var(--radius-glass)] aspect-square opacity-30"
-                    />
-                  ))}
-              </div>
+                </div>
+              )}
             </div>
           </section>
 
