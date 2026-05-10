@@ -5,6 +5,7 @@ import LocaleToggle from "@/components/locale-toggle";
 import SavedNavBadge from "@/components/saved-nav-badge";
 import RecentlyViewedDropdown from "@/components/recently-viewed-dropdown";
 import CompareTray from "@/components/compare-tray";
+import MobileMenu from "@/components/mobile-menu";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -86,8 +87,10 @@ export default async function Navbar() {
           </span>
         </Link>
 
-        {/* Discovery links (center) */}
-        <div className="hidden items-center gap-7 md:flex">
+        {/* Discovery links (center)
+            md (768px): Browse + For diaspora + Agents visible; Guides + Insights + About hidden (too many links at 768px)
+            lg (1024px): all six links visible */}
+        <div className="hidden items-center gap-5 md:flex lg:gap-7">
           <Link
             href="/listings"
             className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
@@ -106,47 +109,54 @@ export default async function Navbar() {
           >
             {t("agents")}
           </Link>
+          {/* Guides, Insights, About hidden at md — too crowded at 768px; shown at lg+ */}
           <Link
             href="/guides"
-            className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
+            className="smooth-fast hidden text-sm text-ink/85 hover:text-terracotta lg:inline"
           >
             {/* TODO: i18n */}
             Guides
           </Link>
           <Link
             href="/insights"
-            className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
+            className="smooth-fast hidden text-sm text-ink/85 hover:text-terracotta lg:inline"
           >
             {/* TODO: i18n */}
             Insights
           </Link>
           <Link
             href="/about"
-            className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
+            className="smooth-fast hidden text-sm text-ink/85 hover:text-terracotta lg:inline"
           >
             {t("about")}
           </Link>
         </div>
 
-        {/* Right cluster: personal · utility · CTA */}
+        {/* Right cluster: personal · utility · CTA
+            Below md (< 768px): ONLY the MobileMenu hamburger is shown.
+            md+ (≥ 768px): full desktop cluster — Saved, Recently viewed, Dashboard, locale, Sign in, Post CTA. */}
         <div className="flex items-center gap-2">
-          {/* Personal — Saved + Recently viewed + Dashboard (only when signed in) */}
+          {/* ── DESKTOP-ONLY items (hidden on mobile) ─────────────────────── */}
+
+          {/* Personal — Saved + Recently viewed + Dashboard (signed in, desktop) */}
           {isSignedIn && (
             <>
               <Link
                 href="/saved"
-                className="smooth-fast relative hidden items-center gap-1.5 rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-flex"
+                className="smooth-fast relative hidden items-center gap-1.5 rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 md:inline-flex"
               >
                 {t("saved")}
                 <SavedNavBadge />
               </Link>
 
-              {/* Recently viewed dropdown — between Saved and Dashboard */}
-              <RecentlyViewedDropdown />
+              {/* Recently viewed dropdown — desktop only */}
+              <span className="hidden md:contents">
+                <RecentlyViewedDropdown />
+              </span>
 
               <Link
                 href="/dashboard"
-                className="smooth-fast hidden items-center gap-2 rounded-[var(--radius-pill)] border border-white/60 bg-white/50 px-2.5 py-1 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-flex"
+                className="smooth-fast hidden items-center gap-2 rounded-[var(--radius-pill)] border border-white/60 bg-white/50 px-2.5 py-1 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 md:inline-flex"
               >
                 <span
                   className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-semibold text-earth"
@@ -173,27 +183,36 @@ export default async function Navbar() {
             </>
           )}
 
-          {/* Utility — locale toggle */}
-          <LocaleToggle />
+          {/* Locale toggle — desktop only (also lives in the mobile drawer) */}
+          <span className="hidden md:contents">
+            <LocaleToggle />
+          </span>
 
-          {/* Sign in pill — only when signed out */}
+          {/* Sign in pill — signed out, desktop only */}
           {!isSignedIn && (
             <Link
               href="/sign-in"
-              className="smooth-fast hidden rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-block"
+              className="smooth-fast hidden rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3.5 py-1.5 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 md:inline-block"
             >
               {t("signIn")}
             </Link>
           )}
 
-          {/* Primary CTA — single instance, far right */}
+          {/* Primary CTA — desktop only; lives in drawer on mobile */}
           <Link
             href="/post"
-            className="smooth-fast rounded-[var(--radius-pill)] bg-terracotta px-4 py-1.5 text-sm font-semibold text-cream hover:bg-terracotta-deep"
+            className="smooth-fast hidden rounded-[var(--radius-pill)] bg-terracotta px-4 py-1.5 text-sm font-semibold text-cream hover:bg-terracotta-deep md:inline-block"
             style={{ boxShadow: "0 4px 14px rgba(200, 64, 26, 0.28)" }}
           >
             {t("post")}
           </Link>
+
+          {/* ── MOBILE hamburger — triggers the drawer (hidden md+) ────────── */}
+          <MobileMenu
+            isSignedIn={isSignedIn}
+            firstName={firstName}
+            userInitials={userInitials}
+          />
         </div>
       </nav>
 

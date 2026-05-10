@@ -299,6 +299,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-05-07T14:00:00Z",          // 4 days ago → NEW ribbon
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_220838_d0fd3cf5-3401-467c-8866-b0ad8d82cd12.png",
       "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=80",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
       "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
@@ -335,6 +336,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-20T09:00:00Z",          // 21 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_220841_c9d312df-eda1-4c10-b519-37a4db1b2521.png",
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
       "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80",
       "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
@@ -376,6 +378,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-05-05T11:00:00Z",          // 6 days ago → NEW ribbon
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_220844_16fad8bb-aaa9-4b50-a3be-180498cc7ff9.png",
       "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1600&q=80",
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1600&q=80",
@@ -459,6 +462,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-25T16:00:00Z",          // 16 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_220847_0817d59e-2ee7-4ac1-9f6c-155c1cb16e80.png",
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
       "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1600&q=80",
@@ -498,6 +502,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-18T07:30:00Z",          // 23 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_220937_dbc37028-0102-4f31-8012-6601a01825e4.png",
       "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1600&q=80",
       "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1600&q=80",
     ],
@@ -536,6 +541,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-05-04T12:00:00Z",          // 7 days ago → NEW ribbon
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_220940_b2915f47-095b-4276-9c01-329786715043.png",
       "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1600&q=80",
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
       "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&q=80",
@@ -579,6 +585,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-30T10:00:00Z",          // 11 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_220944_105a36e6-52d3-48f9-8cb7-ee97ffaf37ce.png",
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600&q=80",
       "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1600&q=80",
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1600&q=80",

@@ -29,6 +29,7 @@ import { SimilarListingsRail } from "@/components/similar-listings-rail";
 import TrackRecentlyViewed from "@/components/track-recently-viewed";
 import PropertyReality from "@/components/property-reality";
 import { WhatsAppCta } from "@/components/whatsapp-cta";
+import { ListingToc } from "@/components/listing-toc";
 
 /* ─────────────────────────────────────────────────────────
    Inline DB row types (database.types.ts may be stale)
@@ -275,6 +276,9 @@ export default async function ListingDetailPage({
       <Navbar />
 
       <main className="bg-cream min-h-screen">
+        {/* Sticky TOC — desktop only, fixed right-rail overlay */}
+        <ListingToc locale={locale} />
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
 
           {/* ─────────────────────────────────────────────────────────
@@ -317,7 +321,7 @@ export default async function ListingDetailPage({
           {/* ─────────────────────────────────────────────────────────
               2. PHOTO GALLERY HERO (F2)
           ───────────────────────────────────────────────────────── */}
-          <section className="mb-8" aria-label={t("photos.gallery")}>
+          <section id="photos" className="mb-8" aria-label={t("photos.gallery")}>
             {/* Mobile: large slot + horizontal thumb scroll */}
             <div className="lg:hidden">
               <div className="relative aspect-[16/10] w-full rounded-[var(--radius-glass-lg)] overflow-hidden"
@@ -445,7 +449,7 @@ export default async function ListingDetailPage({
           {/* ─────────────────────────────────────────────────────────
               3 + 4. TITLE / PRICE ROW + CONTACT CTA
           ───────────────────────────────────────────────────────── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <div id="overview" className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
 
             {/* Left: title, pills, price */}
             <div className="lg:col-span-2 flex flex-col gap-5">
@@ -665,7 +669,7 @@ export default async function ListingDetailPage({
               7. AMENITIES — glass-warm chips with gold check
           ───────────────────────────────────────────────────────── */}
           {listing.amenities.length > 0 && (
-            <section className="mb-10" aria-labelledby="amenities-heading">
+            <section id="amenities" className="mb-10" aria-labelledby="amenities-heading">
               <h2
                 id="amenities-heading"
                 className="font-display text-3xl md:text-4xl text-ink mb-5 tracking-tight"
@@ -713,7 +717,7 @@ export default async function ListingDetailPage({
               (power backup, water supply, cooling, parking, furnishing,
                distance to airport). The key differentiator vs Dubizzle.
           ───────────────────────────────────────────────────────── */}
-          <section className="mb-10" aria-label={locale === "ar" ? "حقائق العقار" : "Property reality"}>
+          <section id="reality" className="mb-10" aria-label={locale === "ar" ? "حقائق العقار" : "Property reality"}>
             <PropertyReality
               amenities={listing.amenities}
               id={listing.id}
@@ -725,12 +729,60 @@ export default async function ListingDetailPage({
           {/* ─────────────────────────────────────────────────────────
               7c. NEIGHBORHOOD BLURB — editorial area context
           ───────────────────────────────────────────────────────── */}
-          <NeighborhoodBlurb city={listing.city} locale={locale as "en" | "ar"} />
+          <section id="neighborhood" className="mb-10" aria-label={locale === "ar" ? "عن هذا الحي" : "About this area"}>
+            <NeighborhoodBlurb city={listing.city} locale={locale as "en" | "ar"} />
+          </section>
 
           {/* ─────────────────────────────────────────────────────────
-              8. ABOUT THE OWNER — glass-warm card (F4: verified badge)
+              8. LOCATION — glass-warm frame around leaflet map
+              (moved before owner for scannability: place → who → social proof)
           ───────────────────────────────────────────────────────── */}
-          <section className="mb-10" aria-labelledby="owner-heading">
+          <section id="map" className="mb-10" aria-labelledby="location-heading">
+            <h2
+              id="location-heading"
+              className="font-display text-3xl md:text-4xl text-ink mb-5 tracking-tight"
+            >
+              {t("listing.location")}
+            </h2>
+
+            {/* Glass frame around the Leaflet map */}
+            <GlassPanel
+              variant="warm"
+              radius="glass"
+              shadow="lg"
+              className="p-3 overflow-visible"
+            >
+              <div className="rounded-[var(--radius-glass)] overflow-hidden">
+                <ListingLocationMap
+                  listing={listing}
+                  locale={locale as "en" | "ar"}
+                  labels={{
+                    directions: t("listing.directions"),
+                    openInOsm: t("listing.openInOsm"),
+                    copyCoords: t("listing.copyCoords"),
+                    coordsCopied: t("listing.coordsCopied"),
+                    mapTitle: t("listing.mapTitle"),
+                  }}
+                />
+              </div>
+            </GlassPanel>
+
+            {/* Location text — below the map */}
+            <p className="font-sans text-ink-mid text-sm mt-4">
+              {listing.neighborhood ? `${listing.neighborhood}, ` : ""}
+              {listing.city},{" "}
+              <span className="text-ink/80">{stateLabel}</span>,{" "}
+              Sudan
+              <span className="ms-3 text-xs opacity-50">
+                {listing.latitude.toFixed(4)}° N, {listing.longitude.toFixed(4)}° E
+              </span>
+            </p>
+          </section>
+
+          {/* ─────────────────────────────────────────────────────────
+              9. ABOUT THE OWNER — glass-warm card (F4: verified badge)
+          ───────────────────────────────────────────────────────── */}
+          <section id="owner" className="mb-10" aria-labelledby="owner-heading">
             <h2
               id="owner-heading"
               className="font-display text-3xl md:text-4xl text-ink mb-5 tracking-tight"
@@ -781,7 +833,7 @@ export default async function ListingDetailPage({
           {/* ─────────────────────────────────────────────────────────
               F5: REVIEWS SECTION
           ───────────────────────────────────────────────────────── */}
-          <section className="mb-10" aria-labelledby="reviews-heading">
+          <section id="reviews" className="mb-10" aria-labelledby="reviews-heading">
             <div className="flex flex-wrap items-center gap-4 mb-5">
               <h2
                 id="reviews-heading"
@@ -853,51 +905,6 @@ export default async function ListingDetailPage({
           </section>
 
           {/* ─────────────────────────────────────────────────────────
-              9. LOCATION — glass-warm frame around leaflet map
-          ───────────────────────────────────────────────────────── */}
-          <section className="mb-10" aria-labelledby="location-heading">
-            <h2
-              id="location-heading"
-              className="font-display text-3xl md:text-4xl text-ink mb-5 tracking-tight"
-            >
-              {t("listing.location")}
-            </h2>
-
-            {/* Glass frame around the Leaflet map */}
-            <GlassPanel
-              variant="warm"
-              radius="glass"
-              shadow="lg"
-              className="p-3 overflow-visible"
-            >
-              <div className="rounded-[var(--radius-glass)] overflow-hidden">
-                <ListingLocationMap
-                  listing={listing}
-                  locale={locale as "en" | "ar"}
-                  labels={{
-                    directions: t("listing.directions"),
-                    openInOsm: t("listing.openInOsm"),
-                    copyCoords: t("listing.copyCoords"),
-                    coordsCopied: t("listing.coordsCopied"),
-                    mapTitle: t("listing.mapTitle"),
-                  }}
-                />
-              </div>
-            </GlassPanel>
-
-            {/* Location text — below the map */}
-            <p className="font-sans text-ink-mid text-sm mt-4">
-              {listing.neighborhood ? `${listing.neighborhood}, ` : ""}
-              {listing.city},{" "}
-              <span className="text-ink/80">{stateLabel}</span>,{" "}
-              Sudan
-              <span className="ms-3 text-xs opacity-50">
-                {listing.latitude.toFixed(4)}° N, {listing.longitude.toFixed(4)}° E
-              </span>
-            </p>
-          </section>
-
-          {/* ─────────────────────────────────────────────────────────
               9b. SIMILAR LISTINGS RAIL — horizontal scroll mini-cards
           ───────────────────────────────────────────────────────── */}
           <SimilarListingsRail
@@ -911,7 +918,7 @@ export default async function ListingDetailPage({
               10. SIMILAR LISTINGS — uses existing ListingCard
           ───────────────────────────────────────────────────────── */}
           {similarListings.length > 0 && (
-            <section className="mb-10" aria-labelledby="similar-heading">
+            <section id="similar" className="mb-10" aria-labelledby="similar-heading">
               <h2
                 id="similar-heading"
                 className="font-display text-3xl md:text-4xl text-ink mb-6 tracking-tight"

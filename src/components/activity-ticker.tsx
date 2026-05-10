@@ -158,11 +158,17 @@ export default function ActivityTicker() {
         }
       `}</style>
 
+      {/*
+       * Hidden below sm (< 640px): a 360px-wide ticker at w-[min(360px,calc(100vw-3rem))]
+       * would fill 86% of a 360px phone viewport and obstruct content. The dismiss
+       * button still works on sm+ screens where the ticker appears. sm was chosen over
+       * md so tablet-sized phones (640–767px) still benefit from the social-proof widget.
+       */}
       <div
         role="status"
         aria-live="polite"
         aria-label={isAr ? "نشاط السوق المباشر" : "Live marketplace activity"}
-        className="ticker-card fixed bottom-6 left-6 rtl:right-6 rtl:left-auto z-50 w-[min(360px,calc(100vw-3rem))] rounded-[var(--radius-glass,22px)] p-3.5"
+        className="ticker-card fixed bottom-6 left-6 rtl:right-6 rtl:left-auto z-50 hidden w-[min(360px,calc(100vw-3rem))] rounded-[var(--radius-glass,22px)] p-3.5 sm:block"
         dir={isAr ? "rtl" : "ltr"}
       >
         {/* Dismiss button — always sits at the logical end (right in LTR, left in RTL) */}
