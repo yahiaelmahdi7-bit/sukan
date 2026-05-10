@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
+import { MessageCircle } from "lucide-react";
+import EmptyState from "@/components/empty-state";
 import type { Inquiry } from "../../_data/inquiry-types";
 
 interface InquiryInboxListProps {
@@ -41,12 +43,13 @@ export default function InquiryInboxList({
 
   if (inquiries.length === 0) {
     return (
-      <div
-        className="flex items-center justify-center h-48 rounded-[var(--radius-card)] glass-warm border border-white/55 text-ink-mid text-sm"
-        style={{ boxShadow: "var(--shadow-warm-sm)" }}
-      >
-        {locale === "ar" ? "لا توجد استفسارات بعد" : "No inquiries yet"}
-      </div>
+      <EmptyState
+        icon={<MessageCircle size={24} />}
+        title="No inquiries yet"
+        body="When someone messages you about a listing, they'll appear here. In the meantime, share your listings to get the word out."
+        primaryCta={{ label: "Share my listings", href: `/${currentLocale}/dashboard/listings` }}
+        secondaryCta={{ label: "Browse properties", href: `/${currentLocale}/listings` }}
+      />
     );
   }
 

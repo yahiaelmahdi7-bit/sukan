@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Building2, MapPin } from "lucide-react";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import { Building2, MapPin, Users } from "lucide-react";
 import GlassPanel from "@/components/glass-panel";
 import { GlassButton } from "@/components/ui/glass-button";
 import { VerifiedBadge } from "@/components/verified-badge";
 import { createClient } from "@/lib/supabase/server";
+import EmptyState from "@/components/empty-state";
 
 export async function generateMetadata({
   params,
@@ -79,11 +78,8 @@ export default async function AgentsPage({
   const agents = await fetchAgents();
 
   return (
-    <>
-      <Navbar />
-
-      <main className="min-h-screen">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div className="min-h-screen">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
           {/* Hero */}
           <header className="mb-12 max-w-2xl">
             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-gold-dk">
@@ -99,27 +95,14 @@ export default async function AgentsPage({
 
           {/* Empty state */}
           {agents.length === 0 ? (
-            <div className="flex flex-col items-center gap-6 py-16">
-              <GlassPanel
-                variant="warm"
-                radius="glass-lg"
-                highlight
-                shadow="lg"
-                className="flex flex-col items-center gap-5 border border-white/55 px-10 py-12 text-center max-w-md"
-              >
-                <Building2 size={40} className="text-gold-dk opacity-60" aria-hidden />
-                <h2 className="font-display text-2xl text-ink">
-                  {t("emptyTitle")}
-                </h2>
-                <p className="text-sm leading-relaxed text-ink-mid max-w-xs">
-                  {t("emptyBody")}
-                </p>
-                <Link href="/listings">
-                  <GlassButton variant="terracotta" size="md">
-                    {t("browseCta")}
-                  </GlassButton>
-                </Link>
-              </GlassPanel>
+            <div className="py-8">
+              <EmptyState
+                icon={<Users size={24} />}
+                title="Our agent directory is just getting started"
+                body="We're verifying our first Sudanese realtors. Want to be one of the first listed? Apply below."
+                primaryCta={{ label: "Apply to be an agent", href: `/${locale}/contact?topic=agent` }}
+                secondaryCta={{ label: "Browse listings", href: `/${locale}/listings` }}
+              />
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -177,11 +160,8 @@ export default async function AgentsPage({
                 </GlassPanel>
               ))}
             </div>
-          )}
-        </div>
-      </main>
-
-      <Footer />
-    </>
+        )}
+      </div>
+    </div>
   );
 }

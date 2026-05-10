@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import GlassPanel from "@/components/glass-panel";
 import { GlassButton } from "@/components/ui/glass-button";
+import EmptyState from "@/components/empty-state";
+import { BellRing } from "lucide-react";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -117,10 +119,12 @@ export default async function SavedSearchesPage({
       </div>
 
       {alerts.length === 0 ? (
-        <GlassPanel variant="warm" radius="card" highlight className="p-10 text-center">
-          <p className="font-display text-2xl text-ink mb-3">{ta("savedSearches")}</p>
-          <p className="text-sm text-ink-mid">{ta("modalDesc")}</p>
-        </GlassPanel>
+        <EmptyState
+          icon={<BellRing size={24} />}
+          title="Save a search and we'll watch for you"
+          body="We'll email you the moment a new listing matches what you're looking for — no need to keep checking."
+          primaryCta={{ label: "Create a saved search", href: `/${locale}/listings` }}
+        />
       ) : (
         <ul className="flex flex-col gap-4">
           {alerts.map((alert) => {

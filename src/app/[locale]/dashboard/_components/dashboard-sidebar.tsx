@@ -89,6 +89,7 @@ export default function DashboardSidebar({
             <Link
               key={item.key}
               href={item.href}
+              data-tour={item.key}
               className={[
                 "smooth-fast flex items-center gap-3 px-4 py-2.5 rounded-[var(--radius-pill)] text-sm font-medium",
                 isActive

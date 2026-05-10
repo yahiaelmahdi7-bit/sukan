@@ -22,6 +22,11 @@ import { ViewingRequestModal } from "@/components/viewing-request-modal";
 import { StarRating } from "@/components/star-rating";
 import { ReviewForm } from "./_components/review-form";
 import { createClient } from "@/lib/supabase/server";
+import { ViewingNow } from "@/components/viewing-now";
+import { ListingActivityCounters } from "@/components/listing-activity-counters";
+import { NeighborhoodBlurb } from "@/components/neighborhood-blurb";
+import { SimilarListingsRail } from "@/components/similar-listings-rail";
+import TrackRecentlyViewed from "@/components/track-recently-viewed";
 
 /* ─────────────────────────────────────────────────────────
    Inline DB row types (database.types.ts may be stale)
@@ -291,6 +296,22 @@ export default async function ListingDetailPage({
           </nav>
 
           {/* ─────────────────────────────────────────────────────────
+              1b. LIVE VIEWING COUNTER — above the fold
+          ───────────────────────────────────────────────────────── */}
+          <div className="mb-5">
+            <ViewingNow listingId={listing.id} />
+          </div>
+
+          <TrackRecentlyViewed
+            listing={{
+              id: listing.id,
+              title: localTitle,
+              image: heroPhoto?.url ?? "",
+              priceUsd: listing.priceUsd,
+            }}
+          />
+
+          {/* ─────────────────────────────────────────────────────────
               2. PHOTO GALLERY HERO (F2)
           ───────────────────────────────────────────────────────── */}
           <section className="mb-8" aria-label={t("photos.gallery")}>
@@ -491,6 +512,9 @@ export default async function ListingDetailPage({
                   </p>
                 )}
               </div>
+
+              {/* Activity counters — trust signals near the price */}
+              <ListingActivityCounters listingId={listing.id} />
             </div>
 
             {/* Right: Contact CTA card — glass-warm, sticky desktop */}
@@ -688,6 +712,11 @@ export default async function ListingDetailPage({
           )}
 
           {/* ─────────────────────────────────────────────────────────
+              7b. NEIGHBORHOOD BLURB — editorial area context
+          ───────────────────────────────────────────────────────── */}
+          <NeighborhoodBlurb city={listing.city} locale={locale as "en" | "ar"} />
+
+          {/* ─────────────────────────────────────────────────────────
               8. ABOUT THE OWNER — glass-warm card (F4: verified badge)
           ───────────────────────────────────────────────────────── */}
           <section className="mb-10" aria-labelledby="owner-heading">
@@ -856,6 +885,16 @@ export default async function ListingDetailPage({
               </span>
             </p>
           </section>
+
+          {/* ─────────────────────────────────────────────────────────
+              9b. SIMILAR LISTINGS RAIL — horizontal scroll mini-cards
+          ───────────────────────────────────────────────────────── */}
+          <SimilarListingsRail
+            currentListingId={listing.id}
+            currentState={listing.state}
+            currentPropertyType={listing.propertyType}
+            locale={locale as "en" | "ar"}
+          />
 
           {/* ─────────────────────────────────────────────────────────
               10. SIMILAR LISTINGS — uses existing ListingCard

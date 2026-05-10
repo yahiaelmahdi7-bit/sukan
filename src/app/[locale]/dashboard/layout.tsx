@@ -3,6 +3,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import Navbar from "@/components/navbar";
 import SidebarNav from "./_components/sidebar-nav";
 import MobileNavToggle from "./_components/mobile-nav-toggle";
+import OnboardingTour from "@/components/onboarding-tour";
 import { getMockUser } from "./_data/mock-user";
 import { createClient } from "@/lib/supabase/server";
 
@@ -55,6 +56,7 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen bg-cream flex flex-col">
       <Navbar />
+      <OnboardingTour />
 
       {/* Mobile-only hamburger row sits below the global nav so the dashboard
           sub-nav is reachable on small screens without doubling up shells. */}

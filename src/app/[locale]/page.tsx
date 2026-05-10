@@ -17,6 +17,8 @@ import AIMatchButton from "@/components/ai-match-button";
 import { sampleListings } from "@/lib/sample-listings";
 import HeroSearch from "@/components/hero-search";
 import GlassPanel from "@/components/glass-panel";
+import ActivityTicker from "@/components/activity-ticker";
+import StaggeredListings from "@/components/staggered-listings";
 
 export default async function HomePage({
   params,
@@ -164,9 +166,11 @@ export default async function HomePage({
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredListings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
-              ))}
+              <StaggeredListings>
+                {featuredListings.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </StaggeredListings>
             </div>
           </div>
         </section>
@@ -201,9 +205,11 @@ export default async function HomePage({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sampleListings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
-              ))}
+              <StaggeredListings>
+                {sampleListings.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </StaggeredListings>
             </div>
           </div>
         </section>
@@ -340,6 +346,8 @@ export default async function HomePage({
           </div>
         </section>
         <WaveDivider intensity="subtle" />
+
+        <ActivityTicker />
       </main>
 
       <Footer />

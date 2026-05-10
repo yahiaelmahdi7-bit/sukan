@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import SukanMark from "@/components/sukan-mark";
 import LocaleToggle from "@/components/locale-toggle";
 import SavedNavBadge from "@/components/saved-nav-badge";
+import RecentlyViewedDropdown from "@/components/recently-viewed-dropdown";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -23,6 +24,7 @@ export default async function Navbar() {
   const brand = await getTranslations("brand");
 
   let userInitials: string | null = null;
+  let firstName: string | null = null;
   try {
     const supabase = await createClient();
     const {
@@ -30,7 +32,10 @@ export default async function Navbar() {
     } = await supabase.auth.getUser();
     if (user) {
       const meta = user.user_metadata as { full_name?: string } | undefined;
-      const name = meta?.full_name?.trim() || user.email || "";
+      const fullName = meta?.full_name?.trim() || "";
+      const name = fullName || user.email || "";
+
+      // Derive initials (unchanged logic)
       userInitials =
         name
           .split(/[\s@.]+/)
@@ -38,9 +43,18 @@ export default async function Navbar() {
           .slice(0, 2)
           .map((s) => s[0]?.toUpperCase() ?? "")
           .join("") || "U";
+
+      // Derive first name for greeting
+      // Priority: full_name first word → email local-part → "there"
+      // TODO: i18n — greeting is English-only for now
+      firstName =
+        fullName.split(" ")[0] ||
+        user.email?.split("@")[0] ||
+        "there";
     }
   } catch {
     userInitials = null;
+    firstName = null;
   }
 
   const isSignedIn = userInitials !== null;
@@ -92,6 +106,20 @@ export default async function Navbar() {
             {t("agents")}
           </Link>
           <Link
+            href="/guides"
+            className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
+          >
+            {/* TODO: i18n */}
+            Guides
+          </Link>
+          <Link
+            href="/insights"
+            className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
+          >
+            {/* TODO: i18n */}
+            Insights
+          </Link>
+          <Link
             href="/about"
             className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
           >
@@ -101,7 +129,7 @@ export default async function Navbar() {
 
         {/* Right cluster: personal · utility · CTA */}
         <div className="flex items-center gap-2">
-          {/* Personal — Saved + Dashboard (only when signed in) */}
+          {/* Personal — Saved + Recently viewed + Dashboard (only when signed in) */}
           {isSignedIn && (
             <>
               <Link
@@ -111,6 +139,10 @@ export default async function Navbar() {
                 {t("saved")}
                 <SavedNavBadge />
               </Link>
+
+              {/* Recently viewed dropdown — between Saved and Dashboard */}
+              <RecentlyViewedDropdown />
+
               <Link
                 href="/dashboard"
                 className="smooth-fast hidden items-center gap-2 rounded-[var(--radius-pill)] border border-white/60 bg-white/50 px-2.5 py-1 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-flex"
@@ -124,7 +156,18 @@ export default async function Navbar() {
                 >
                   {userInitials}
                 </span>
-                <span className="hidden lg:inline">Dashboard</span>
+                {/* First-name greeting — hidden below lg, falls back gracefully */}
+                {/* TODO: i18n */}
+                <span className="hidden lg:inline">
+                  {firstName ? (
+                    <>
+                      <span className="text-ink/50">Hi,</span>{" "}
+                      <span className="font-medium">{firstName}</span>
+                    </>
+                  ) : (
+                    "Dashboard"
+                  )}
+                </span>
               </Link>
             </>
           )}

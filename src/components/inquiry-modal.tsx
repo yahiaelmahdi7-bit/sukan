@@ -2,7 +2,8 @@
 
 import { useTransition, useState, useId } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
+import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
 import SukanMark from "@/components/sukan-mark";
 import { getOrCreateInquiry } from "@/app/[locale]/dashboard/inquiries/actions";
 import type { Listing } from "@/lib/sample-listings";
@@ -17,14 +18,15 @@ type SubmitState = "idle" | "submitting" | "error";
 export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
   const t = useTranslations("inquiry");
   const locale = useLocale();
-  const router = useRouter();
   const uid = useId();
 
   const listingTitle = locale === "ar" ? listing.titleAr : listing.titleEn;
+  const city = (listing as { city?: string }).city ?? "";
 
   const [message, setMessage] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const [isPending, startTransition] = useTransition();
 
@@ -51,9 +53,8 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
       const result = await getOrCreateInquiry(listing.id, message.trim());
 
       if (result.ok) {
-        // Navigate to the thread page — user lands directly in chat
-        router.push(`/dashboard/inquiries/${result.inquiryId}`);
-        onClose();
+        // Show the in-modal success state instead of navigating away
+        setSubmitted(true);
       } else {
         // Fall back to the old API route for unauthenticated users
         try {
@@ -71,8 +72,8 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
           const data = (await res.json()) as { ok: boolean; error?: string };
 
           if (data.ok) {
-            // Unauthenticated path: just close — no thread to navigate to
-            onClose();
+            // Unauthenticated path: show success state too
+            setSubmitted(true);
           } else {
             setErrorMessage(data.error ?? t("errorGeneric"));
             setSubmitState("error");
@@ -103,6 +104,79 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
       {/* Panel */}
       <div className="relative w-full max-w-md bg-earth border border-gold/20 rounded-[var(--radius-card)] shadow-[0_8px_48px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden">
 
+        {/* ── Success state ── */}
+        {submitted ? (
+          <div className="flex flex-col items-center gap-6 px-8 py-10 text-center">
+            {/* Gold-tinted check icon */}
+            <div
+              className="flex items-center justify-center"
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: "50%",
+                background:
+                  "linear-gradient(135deg, rgba(200,135,58,0.22) 0%, rgba(200,135,58,0.08) 100%)",
+                border: "1px solid rgba(200,135,58,0.3)",
+                color: "#C8873A",
+              }}
+              aria-hidden
+            >
+              <CheckCircle2 size={32} />
+            </div>
+
+            {/* Title + body */}
+            <div className="flex flex-col gap-2">
+              <h2
+                className="font-display text-3xl text-parchment"
+                style={{ fontFamily: "var(--font-display, 'Cormorant Garamond', serif)" }}
+                id={`${uid}-title`}
+              >
+                We&apos;ve messaged the landlord
+              </h2>
+              <p className="text-sm leading-relaxed text-mute-soft max-w-xs mx-auto">
+                They typically reply within a few hours. We&apos;ll let you know the moment they do.
+              </p>
+            </div>
+
+            {/* What's next hint pills */}
+            {/* TODO: i18n */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+              <Link
+                href={`/${locale}/dashboard/saved-searches`}
+                onClick={onClose}
+                className="smooth-fast inline-flex items-center rounded-[var(--radius-pill)] border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-xs font-medium text-gold hover:bg-gold/20 hover:border-gold/50"
+              >
+                Save similar searches
+              </Link>
+              {city && (
+                <Link
+                  href={`/${locale}/listings?city=${encodeURIComponent(city)}`}
+                  onClick={onClose}
+                  className="smooth-fast inline-flex items-center rounded-[var(--radius-pill)] border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-xs font-medium text-gold hover:bg-gold/20 hover:border-gold/50"
+                >
+                  Browse more in {city}
+                </Link>
+              )}
+              <Link
+                href={`/${locale}/listings`}
+                onClick={onClose}
+                className="smooth-fast inline-flex items-center rounded-[var(--radius-pill)] border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-xs font-medium text-gold hover:bg-gold/20 hover:border-gold/50"
+              >
+                Get AI matched
+              </Link>
+            </div>
+
+            {/* Done button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full mt-1 flex items-center justify-center rounded-[var(--radius-pill)] border border-gold/30 bg-earth-soft/60 py-3 text-sm font-semibold text-parchment hover:border-gold/55 hover:bg-gold/10 transition-colors"
+            >
+              Done
+            </button>
+          </div>
+        ) : (
+          <>
         {/* Header */}
         <div className="flex items-center gap-3 border-b border-gold/15 px-6 py-4">
           <SukanMark size={28} monochrome="gold" />
@@ -127,7 +201,7 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
           </button>
         </div>
 
-        {/* Body — only form state; success navigates away */}
+        {/* Body — only form state; success swaps to the success view above */}
         <form onSubmit={handleSubmit} noValidate className="flex flex-col p-6 gap-5">
 
           {/* Message */}
@@ -196,6 +270,8 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
             </a>
           </div>
         </form>
+          </>
+        )}
       </div>
     </div>
   );
