@@ -212,6 +212,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-05-09T10:00:00Z",          // 2 days ago → NEW ribbon
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_215635_b81bf5d9-d747-4d1a-81a3-f7578b8703d8.png",
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1600&q=80",
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600&q=80",
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1600&q=80",
@@ -255,6 +256,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-28T08:30:00Z",          // 13 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_215639_2a593a50-f658-4fc2-a763-b47f4821458c.png",
       "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1600&q=80",
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
@@ -412,6 +414,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-15T08:00:00Z",          // 26 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_215642_41a8ff65-1799-4ed4-84b1-69c25d727745.png",
       "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&q=80",
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80",
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
@@ -768,6 +771,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-24T14:00:00Z",          // 17 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_215646_eed081c1-2594-4fd6-826d-d84cfa8ce10a.png",
       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=80",
       "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1600&q=80",
       "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1600&q=80",
@@ -921,6 +925,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-21T10:00:00Z",          // 20 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_215733_645c6272-abab-4872-9928-a8c9199c2e97.png",
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
       "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80",
       "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
@@ -959,6 +964,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-29T08:00:00Z",          // 12 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_215736_3e1af96e-2388-48e8-8cfc-3a72e1177e8f.png",
       "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=1600&q=80",
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
       "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1600&q=80",
