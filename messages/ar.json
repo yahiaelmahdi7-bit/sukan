@@ -709,6 +709,27 @@
     "averageRating": "متوسط التقييم",
     "basedOn": "بناءً على {count} تقييم"
   },
+  "chat": {
+    "title": "المحادثة",
+    "threadHeader": "محادثة مع",
+    "sendMessage": "أرسل رسالة",
+    "typeMessage": "اكتب رسالة…",
+    "attachPhoto": "إرفاق صورة",
+    "send": "إرسال",
+    "sending": "جارٍ الإرسال…",
+    "error": "فشل الإرسال. حاول مجدداً.",
+    "noMessagesYet": "لا توجد رسائل بعد. ابدأ المحادثة.",
+    "you": "أنت",
+    "justNow": "الآن",
+    "minutesAgo": "منذ {n} د",
+    "hoursAgo": "منذ {n} س",
+    "daysAgo": "منذ {n} ي",
+    "viewListing": "عرض الإعلان",
+    "backToInbox": "العودة إلى الاستفسارات",
+    "attaching": "جارٍ الرفع…",
+    "removeAttachment": "إزالة المرفق",
+    "unread": "غير مقروء"
+  },
   "ai": {
     "generateDescription": "إنشاء بالذكاء الاصطناعي",
     "estimatePrice": "تقدير السعر العادل",

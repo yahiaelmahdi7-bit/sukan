@@ -2,7 +2,9 @@
 
 import { useTransition, useState, useId } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import SukanMark from "@/components/sukan-mark";
+import { getOrCreateInquiry } from "@/app/[locale]/dashboard/inquiries/actions";
 import type { Listing } from "@/lib/sample-listings";
 
 interface InquiryModalProps {
@@ -10,17 +12,16 @@ interface InquiryModalProps {
   onClose: () => void;
 }
 
-type SubmitState = "idle" | "success" | "error";
+type SubmitState = "idle" | "submitting" | "error";
 
 export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
   const t = useTranslations("inquiry");
   const locale = useLocale();
+  const router = useRouter();
   const uid = useId();
 
   const listingTitle = locale === "ar" ? listing.titleAr : listing.titleEn;
 
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -38,37 +39,48 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!name.trim() || !phone.trim() || !message.trim()) {
+    if (!message.trim()) {
       setErrorMessage(t("errorValidation"));
       setSubmitState("error");
       return;
     }
 
+    setSubmitState("submitting");
+
     startTransition(async () => {
-      try {
-        const res = await fetch("/api/inquiries", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            listingId: listing.id,
-            name: name.trim(),
-            phone: phone.trim(),
-            message: message.trim(),
-            locale,
-          }),
-        });
+      const result = await getOrCreateInquiry(listing.id, message.trim());
 
-        const data = (await res.json()) as { ok: boolean; error?: string };
+      if (result.ok) {
+        // Navigate to the thread page — user lands directly in chat
+        router.push(`/dashboard/inquiries/${result.inquiryId}`);
+        onClose();
+      } else {
+        // Fall back to the old API route for unauthenticated users
+        try {
+          const res = await fetch("/api/inquiries", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              listingId: listing.id,
+              name: "Guest",
+              phone: "",
+              message: message.trim(),
+              locale,
+            }),
+          });
+          const data = (await res.json()) as { ok: boolean; error?: string };
 
-        if (data.ok) {
-          setSubmitState("success");
-        } else {
-          setErrorMessage(data.error ?? t("errorGeneric"));
+          if (data.ok) {
+            // Unauthenticated path: just close — no thread to navigate to
+            onClose();
+          } else {
+            setErrorMessage(data.error ?? t("errorGeneric"));
+            setSubmitState("error");
+          }
+        } catch {
+          setErrorMessage(result.error ?? t("errorGeneric"));
           setSubmitState("error");
         }
-      } catch {
-        setErrorMessage(t("errorGeneric"));
-        setSubmitState("error");
       }
     });
   }
@@ -76,8 +88,6 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
   const waUrl = `https://wa.me/${listing.whatsappContact.replace(/\D/g, "")}`;
   const telUrl = `tel:${listing.whatsappContact}`;
 
-  const nameId = `${uid}-name`;
-  const phoneId = `${uid}-phone`;
   const messageId = `${uid}-message`;
 
   return (
@@ -117,144 +127,75 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
           </button>
         </div>
 
-        {/* Body */}
-        {submitState === "success" ? (
-          /* ── Success state ── */
-          <div className="flex flex-col items-center justify-center gap-5 px-6 py-12 text-center">
-            <SukanMark size={48} monochrome="gold" />
-            <div className="flex flex-col gap-2">
-              <p className="font-display text-2xl text-parchment">
-                {t("successTitle")}
-              </p>
-              <p className="text-mute-soft text-sm leading-relaxed max-w-xs">
-                {t("successBody")}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-2 rounded-[var(--radius-pill)] border border-gold/30 text-gold px-8 py-3 text-sm hover:bg-gold/10 transition-colors"
+        {/* Body — only form state; success navigates away */}
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col p-6 gap-5">
+
+          {/* Message */}
+          <div className="flex flex-col">
+            <label
+              htmlFor={messageId}
+              className="text-xs uppercase tracking-wider text-gold/80 mb-2"
             >
-              {t("close")}
-            </button>
+              {t("message")}
+            </label>
+            <textarea
+              id={messageId}
+              rows={4}
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                if (submitState === "error") setSubmitState("idle");
+              }}
+              className="py-3.5 px-4 text-base bg-earth-soft border border-gold/20 rounded-md text-parchment placeholder:text-mute-soft focus:outline-none focus:border-gold/50 transition-colors resize-none"
+              placeholder={t("messagePlaceholder")}
+            />
           </div>
-        ) : (
-          /* ── Form state ── */
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col p-6 gap-5">
 
-            {/* Name */}
-            <div className="flex flex-col">
-              <label
-                htmlFor={nameId}
-                className="text-xs uppercase tracking-wider text-gold/80 mb-2"
-              >
-                {t("name")}
-              </label>
-              <input
-                id={nameId}
-                type="text"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  if (submitState === "error") setSubmitState("idle");
-                }}
-                autoComplete="name"
-                className="py-3.5 px-4 text-base bg-earth-soft border border-gold/20 rounded-md text-parchment placeholder:text-mute-soft focus:outline-none focus:border-gold/50 transition-colors"
-                placeholder={t("name")}
-              />
-            </div>
-
-            {/* Phone */}
-            <div className="flex flex-col">
-              <label
-                htmlFor={phoneId}
-                className="text-xs uppercase tracking-wider text-gold/80 mb-2"
-              >
-                {t("phone")}
-              </label>
-              <input
-                id={phoneId}
-                type="tel"
-                value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                  if (submitState === "error") setSubmitState("idle");
-                }}
-                autoComplete="tel"
-                inputMode="tel"
-                className="py-3.5 px-4 text-base bg-earth-soft border border-gold/20 rounded-md text-parchment placeholder:text-mute-soft focus:outline-none focus:border-gold/50 transition-colors"
-                placeholder={t("phone")}
-              />
-              <p className="mt-1.5 text-xs text-mute-soft">{t("phoneHelp")}</p>
-            </div>
-
-            {/* Message */}
-            <div className="flex flex-col">
-              <label
-                htmlFor={messageId}
-                className="text-xs uppercase tracking-wider text-gold/80 mb-2"
-              >
-                {t("message")}
-              </label>
-              <textarea
-                id={messageId}
-                rows={4}
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                  if (submitState === "error") setSubmitState("idle");
-                }}
-                className="py-3.5 px-4 text-base bg-earth-soft border border-gold/20 rounded-md text-parchment placeholder:text-mute-soft focus:outline-none focus:border-gold/50 transition-colors resize-none"
-                placeholder={t("messagePlaceholder")}
-              />
-            </div>
-
-            {/* Inline error */}
-            {submitState === "error" && errorMessage && (
-              <p
-                role="alert"
-                className="rounded-md bg-terracotta/10 border border-terracotta/30 px-4 py-3 text-sm text-terracotta"
-              >
-                {errorMessage}
-              </p>
-            )}
-
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={isPending}
-              className="w-full flex items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep disabled:opacity-60 disabled:cursor-not-allowed text-parchment font-semibold py-3.5 text-base transition-colors"
+          {/* Inline error */}
+          {submitState === "error" && errorMessage && (
+            <p
+              role="alert"
+              className="rounded-md bg-terracotta/10 border border-terracotta/30 px-4 py-3 text-sm text-terracotta"
             >
-              {isPending ? (
-                <>
-                  <SpinnerIcon />
-                  {t("sending")}
-                </>
-              ) : (
-                t("send")
-              )}
-            </button>
+              {errorMessage}
+            </p>
+          )}
 
-            {/* Direct contact links */}
-            <div className="flex items-center justify-center gap-4 pt-1">
-              <a
-                href={waUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-mute-soft hover:text-gold transition-colors underline-offset-2 hover:underline"
-              >
-                {t("orWhatsapp")}
-              </a>
-              <span className="text-gold/20" aria-hidden>|</span>
-              <a
-                href={telUrl}
-                className="text-xs text-mute-soft hover:text-gold transition-colors underline-offset-2 hover:underline"
-              >
-                {t("orPhone")}
-              </a>
-            </div>
-          </form>
-        )}
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full flex items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep disabled:opacity-60 disabled:cursor-not-allowed text-parchment font-semibold py-3.5 text-base transition-colors"
+          >
+            {isPending ? (
+              <>
+                <SpinnerIcon />
+                {t("sending")}
+              </>
+            ) : (
+              t("send")
+            )}
+          </button>
+
+          {/* Direct contact links */}
+          <div className="flex items-center justify-center gap-4 pt-1">
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-mute-soft hover:text-gold transition-colors underline-offset-2 hover:underline"
+            >
+              {t("orWhatsapp")}
+            </a>
+            <span className="text-gold/20" aria-hidden>|</span>
+            <a
+              href={telUrl}
+              className="text-xs text-mute-soft hover:text-gold transition-colors underline-offset-2 hover:underline"
+            >
+              {t("orPhone")}
+            </a>
+          </div>
+        </form>
       </div>
     </div>
   );

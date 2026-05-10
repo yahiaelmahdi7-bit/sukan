@@ -709,6 +709,27 @@
     "averageRating": "Average rating",
     "basedOn": "Based on {count} review(s)"
   },
+  "chat": {
+    "title": "Chat",
+    "threadHeader": "Conversation with",
+    "sendMessage": "Send a message",
+    "typeMessage": "Type a message…",
+    "attachPhoto": "Attach photo",
+    "send": "Send",
+    "sending": "Sending…",
+    "error": "Failed to send. Try again.",
+    "noMessagesYet": "No messages yet. Start the conversation.",
+    "you": "You",
+    "justNow": "just now",
+    "minutesAgo": "{n}m ago",
+    "hoursAgo": "{n}h ago",
+    "daysAgo": "{n}d ago",
+    "viewListing": "View listing",
+    "backToInbox": "Back to inquiries",
+    "attaching": "Uploading…",
+    "removeAttachment": "Remove attachment",
+    "unread": "unread"
+  },
   "ai": {
     "generateDescription": "Generate with AI",
     "estimatePrice": "Estimate fair price",
