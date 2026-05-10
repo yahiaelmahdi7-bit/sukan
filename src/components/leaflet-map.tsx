@@ -200,12 +200,14 @@ function priceLabelIconHtml(priceLabel: string, tone: 'rent' | 'sale' | 'feature
 
 // ─── Tile layer URLs ───────────────────────────────────────────────────────────
 //
-// Primary provider: Mapbox (light-v11 for clean street view, satellite-
-// streets-v12 for satellite + labels). Mapbox raster tiles need tileSize=512
-// and zoomOffset=-1 for proper retina rendering with Leaflet.
+// Default: CartoDB Positron tiles for the street view — clean light grey
+// streets on a near-white background, the same minimalist aesthetic as
+// Google Maps' light style. Free, no API key, no billing required.
+// Esri World Imagery for satellite (also free, no key).
 //
-// Fallback to OSM/Esri when NEXT_PUBLIC_MAPBOX_TOKEN is missing so the site
-// keeps working without a Mapbox account.
+// Optional upgrade path: if NEXT_PUBLIC_MAPBOX_TOKEN is set, the maps
+// switch to Mapbox light-v11 + satellite-streets-v12 instead. Site
+// functions identically without a token.
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -215,6 +217,7 @@ type TileLayerConfig = {
   maxZoom: number;
   tileSize?: number;
   zoomOffset?: number;
+  subdomains?: string;
 };
 
 const TILE_LAYERS: Record<'satellite' | 'street', TileLayerConfig> = MAPBOX_TOKEN
@@ -244,10 +247,11 @@ const TILE_LAYERS: Record<'satellite' | 'street', TileLayerConfig> = MAPBOX_TOKE
         maxZoom: 19,
       },
       street: {
-        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
         attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxZoom: 20,
+        subdomains: 'abcd',
       },
     };
 
@@ -307,6 +311,7 @@ export default function LeafletMap({
         maxZoom: cfg.maxZoom,
         tileSize: cfg.tileSize ?? 256,
         zoomOffset: cfg.zoomOffset ?? 0,
+        ...(cfg.subdomains ? { subdomains: cfg.subdomains } : {}),
       }).addTo(map);
 
       addMarkers(L, map, markers, draggable, onMarkerDrag, onMarkerClick);
@@ -338,6 +343,7 @@ export default function LeafletMap({
         maxZoom: cfg.maxZoom,
         tileSize: cfg.tileSize ?? 256,
         zoomOffset: cfg.zoomOffset ?? 0,
+        ...(cfg.subdomains ? { subdomains: cfg.subdomains } : {}),
       }).addTo(mapRef.current!);
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
