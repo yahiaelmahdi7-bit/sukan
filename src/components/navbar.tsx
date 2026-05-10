@@ -86,6 +86,12 @@ export default async function Navbar() {
             {t("diaspora")}
           </Link>
           <Link
+            href="/agents"
+            className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
+          >
+            {t("agents")}
+          </Link>
+          <Link
             href="/about"
             className="smooth-fast text-sm text-ink/85 hover:text-terracotta"
           >

@@ -31,14 +31,14 @@ export default async function SavedPage({
     <>
       <Navbar />
 
-      <main className="bg-earth min-h-screen">
+      <main className="min-h-screen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
           {/* Page header */}
           <header className="mb-10">
-            <p className="text-xs uppercase tracking-widest text-gold mb-2 font-sans">
+            <p className="text-xs uppercase tracking-widest text-gold-dk mb-2 font-sans">
               {t("title")}
             </p>
-            <h1 className="font-display text-4xl md:text-5xl text-parchment leading-tight">
+            <h1 className="font-display text-4xl md:text-5xl text-ink leading-tight">
               {t("subtitle")}
             </h1>
             {/* Subtle gold rule under the title */}

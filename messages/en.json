@@ -13,7 +13,8 @@
     "about": "About",
     "signIn": "Sign in",
     "signOut": "Sign out",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "agents": "Agents"
   },
   "hero": {
     "tenantTitle": "Find a home in Sudan",
@@ -739,5 +740,16 @@
     "useSuggested": "Use suggested",
     "aiUnavailable": "AI is not configured",
     "error": "Couldn’t generate. Try again."
+  },
+  "agents": {
+    "title": "Trusted property agents",
+    "subtitle": "The verified professionals listing on Sukan. Browse by who you trust most.",
+    "eyebrow": "Agents",
+    "anonymous": "Property agent",
+    "listingCount": "{count, plural, =0 {No active listings} one {# active listing} other {# active listings}}",
+    "viewListings": "View listings",
+    "emptyTitle": "No agents yet",
+    "emptyBody": "Sukan is in private beta. Agents will appear here once they verify their accounts.",
+    "browseCta": "Browse listings"
   }
 }
