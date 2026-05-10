@@ -24,7 +24,7 @@ export default async function PostPage({
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-earth pb-24">
+      <main className="min-h-screen pb-24">
         {/* Hero band — no step indicator here; wizard owns the live one. */}
         <div className="relative overflow-hidden">
           {/* Ambient gold radial haze */}
@@ -47,13 +47,13 @@ export default async function PostPage({
           />
 
           <div className="relative mx-auto max-w-3xl px-4 pb-12 pt-14 sm:px-6">
-            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-dk">
               {t("title")}
             </p>
-            <h1 className="mb-3 font-display text-4xl leading-tight text-parchment sm:text-5xl">
+            <h1 className="mb-3 font-display text-4xl leading-tight text-ink sm:text-5xl">
               {t("title")}
             </h1>
-            <p className="mb-2 max-w-xl text-base text-mute-soft">
+            <p className="mb-2 max-w-xl text-base text-ink-mid">
               {t("subtitle")}
             </p>
           </div>

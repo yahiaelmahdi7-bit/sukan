@@ -179,7 +179,7 @@ const STATE_COORDS: Record<StateKey, [number, number]> = {
 // ─── Style helpers ────────────────────────────────────────────────────────────
 
 const labelCls =
-  "block text-[11px] font-semibold uppercase tracking-[0.18em] text-mute-soft mb-1.5";
+  "block text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-dk mb-1.5";
 
 const errorCls = "mt-1.5 text-xs text-terracotta";
 
@@ -205,14 +205,14 @@ function Stepper({
         type="button"
         aria-label="decrease"
         onClick={() => onChange(Math.max(min, value - 1))}
-        className="smooth w-9 h-9 rounded-full border border-gold/30 bg-earth-soft/60 text-gold flex items-center justify-center text-lg leading-none hover:border-gold hover:bg-gold/10 hover:text-gold-bright disabled:opacity-40"
+        className="smooth w-9 h-9 rounded-full border border-sand-dk bg-white/55 text-gold-dk flex items-center justify-center text-lg leading-none hover:border-gold hover:bg-gold/10 hover:text-gold-dk disabled:opacity-40"
         disabled={value <= min}
       >
         −
       </button>
       <span
         id={id}
-        className="w-7 text-center text-parchment font-bold tabular-nums text-base"
+        className="w-7 text-center text-ink font-bold tabular-nums text-base"
       >
         {value}
       </span>
@@ -220,7 +220,7 @@ function Stepper({
         type="button"
         aria-label="increase"
         onClick={() => onChange(Math.min(max, value + 1))}
-        className="smooth w-9 h-9 rounded-full border border-gold/30 bg-earth-soft/60 text-gold flex items-center justify-center text-lg leading-none hover:border-gold hover:bg-gold/10 hover:text-gold-bright disabled:opacity-40"
+        className="smooth w-9 h-9 rounded-full border border-sand-dk bg-white/55 text-gold-dk flex items-center justify-center text-lg leading-none hover:border-gold hover:bg-gold/10 hover:text-gold-dk disabled:opacity-40"
         disabled={value >= max}
       >
         +
@@ -269,7 +269,7 @@ function WizardProgress({
                     ? "border-terracotta text-cream"
                     : done
                     ? "border-gold text-earth"
-                    : "border-gold/30 bg-earth-soft/60 text-mute",
+                    : "border-sand-dk bg-white/55 text-ink-mid",
                 ].join(" ")}
                 style={
                   active
@@ -325,10 +325,10 @@ function WizardProgress({
               className={[
                 "text-xs text-center leading-tight",
                 active
-                  ? "text-parchment font-semibold"
+                  ? "text-ink font-semibold"
                   : done
-                  ? "text-gold"
-                  : "text-mute hidden sm:block",
+                  ? "text-gold-dk"
+                  : "text-ink-mid hidden sm:block",
               ].join(" ")}
             >
               {label}
@@ -374,7 +374,7 @@ function PriceEstimateCallout({
       className="mt-3 rounded-[var(--radius-glass)] border border-gold/30 p-4 space-y-2"
       style={{ background: "rgba(200,135,58,0.08)" }}
     >
-      <p className="text-sm text-parchment font-semibold">
+      <p className="text-sm text-ink font-semibold">
         {t("suggestion", {
           min: `${estimate.currency} ${estimate.min.toLocaleString()}`,
           max: `${estimate.currency} ${estimate.max.toLocaleString()}`,
@@ -382,7 +382,7 @@ function PriceEstimateCallout({
         })}
       </p>
       {reasoning && (
-        <p className="text-xs text-mute-soft leading-relaxed">{reasoning}</p>
+        <p className="text-xs text-ink-mid leading-relaxed">{reasoning}</p>
       )}
       <GlassButton
         type="button"
@@ -538,7 +538,7 @@ function Step1({
       {/* Property type tiles */}
       <fieldset>
         <legend className={labelCls}>{t("typeLabel")}</legend>
-        <div className="grid grid-cols-4 gap-2 mt-2">
+        <div className="grid grid-cols-4 gap-3 mt-2">
           {PROPERTY_TYPE_KEYS.map((key) => {
             const active = draft.propertyType === key;
             return (
@@ -547,10 +547,10 @@ function Step1({
                 type="button"
                 onClick={() => update({ propertyType: key })}
                 className={[
-                  "smooth rounded-[var(--radius-pill)] border px-3 py-3 text-sm font-medium flex flex-col items-center gap-1.5",
+                  "smooth rounded-[var(--radius-glass)] border p-4 flex flex-col items-center gap-2 aspect-[4/3]",
                   active
-                    ? "text-cream"
-                    : "glass-deep border-gold/30 text-mute-soft hover:border-gold/60 hover:text-parchment",
+                    ? "text-cream border-terracotta/60"
+                    : "glass-warm border-white/55 text-ink hover:border-gold/55 hover:shadow-[var(--shadow-warm)]",
                 ].join(" ")}
                 style={
                   active
@@ -558,16 +558,15 @@ function Step1({
                         background:
                           "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
                         boxShadow: "var(--shadow-terracotta-glow)",
-                        border: "1px solid rgba(200,64,26,0.6)",
                       }
                     : undefined
                 }
                 aria-pressed={active}
               >
-                <span className="text-xl leading-none" aria-hidden>
+                <span className="text-2xl leading-none" aria-hidden>
                   {PROPERTY_TYPE_GLYPHS[key]}
                 </span>
-                <span className="text-[11px] leading-tight">{pt(key)}</span>
+                <span className="font-display text-[11px] leading-tight">{pt(key)}</span>
               </button>
             );
           })}
@@ -583,7 +582,7 @@ function Step1({
       <fieldset>
         <legend className={labelCls}>{t("purposeLabel")}</legend>
         <div
-          className="flex gap-0 mt-2 rounded-[var(--radius-pill)] border border-gold/25 bg-earth-soft/60 backdrop-blur-md p-1"
+          className="inline-flex w-full mt-2 rounded-[var(--radius-pill)] border border-white/55 bg-white/45 p-1 backdrop-blur-md"
           role="group"
         >
           {(["rent", "sale"] as PurposeKey[]).map((key) => {
@@ -596,15 +595,14 @@ function Step1({
                 className={[
                   "smooth flex-1 rounded-[var(--radius-pill)] py-2 text-sm font-semibold",
                   active
-                    ? "text-cream"
-                    : "text-mute-soft hover:text-parchment",
+                    ? "text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
+                    : "text-ink-mid hover:text-ink",
                 ].join(" ")}
                 style={
                   active
                     ? {
                         background:
                           "linear-gradient(135deg, #c8401a 0%, #9d2f0f 100%)",
-                        boxShadow: "0 2px 10px rgba(200,64,26,0.30)",
                       }
                     : undefined
                 }
@@ -654,7 +652,7 @@ function Step1({
       <div>
         <label className={labelCls}>{t("areaLabel")}</label>
         <GlassInput
-          tone="dark"
+          tone="light"
           type="number"
           min={0}
           placeholder="e.g. 120"
@@ -668,7 +666,7 @@ function Step1({
         <label className={labelCls}>{t("priceLabel")}</label>
         <div className="grid grid-cols-1 sm:grid-cols-[1fr_7rem_8rem] gap-2">
           <GlassInput
-            tone="dark"
+            tone="light"
             type="number"
             min={0}
             inputMode="numeric"
@@ -678,7 +676,7 @@ function Step1({
             className="min-w-0"
           />
           <GlassSelect
-            tone="dark"
+            tone="light"
             value={draft.currency}
             onChange={(e) =>
               update({ currency: e.target.value as CurrencyKey })
@@ -689,7 +687,7 @@ function Step1({
             <option value="USD">USD</option>
           </GlassSelect>
           <GlassSelect
-            tone="dark"
+            tone="light"
             value={draft.period}
             onChange={(e) => update({ period: e.target.value as PeriodKey })}
             aria-label={t("periodLabel")}
@@ -709,7 +707,7 @@ function Step1({
         <div className="mt-2 flex items-center gap-2">
           <GlassButton
             type="button"
-            variant="ghost-dark"
+            variant="ghost-light"
             size="sm"
             onClick={handleEstimatePrice}
             disabled={estimating}
@@ -746,7 +744,7 @@ function Step1({
           <label className={`${labelCls} mb-0`}>{t("descriptionLabel")}</label>
           <GlassButton
             type="button"
-            variant="ghost-dark"
+            variant="ghost-light"
             size="sm"
             onClick={handleGenerateDescription}
             disabled={generatingDesc || !userId}
@@ -769,7 +767,7 @@ function Step1({
             {t("descriptionEnLabel")}
           </label>
           <GlassTextarea
-            tone="dark"
+            tone="light"
             rows={4}
             placeholder={t("descriptionEnPlaceholder")}
             value={draft.descriptionEn}
@@ -781,7 +779,7 @@ function Step1({
             {t("descriptionArLabel")}
           </label>
           <GlassTextarea
-            tone="dark"
+            tone="light"
             rows={4}
             dir="rtl"
             placeholder={t("descriptionArPlaceholder")}
@@ -819,7 +817,7 @@ function Step2({
       <div>
         <label className={labelCls}>{t("stateLabel")}</label>
         <GlassSelect
-          tone="dark"
+          tone="light"
           value={draft.state}
           onChange={(e) =>
             update({
@@ -847,7 +845,7 @@ function Step2({
       <div>
         <label className={labelCls}>{t("cityLabel")}</label>
         <GlassInput
-          tone="dark"
+          tone="light"
           type="text"
           placeholder={t("cityPlaceholder")}
           value={draft.city}
@@ -864,7 +862,7 @@ function Step2({
       <div>
         <label className={labelCls}>{t("neighborhoodLabel")}</label>
         <GlassInput
-          tone="dark"
+          tone="light"
           type="text"
           placeholder={t("neighborhoodPlaceholder")}
           value={draft.neighborhood}
@@ -876,7 +874,7 @@ function Step2({
       <div>
         <label className={labelCls}>{t("addressLabel")}</label>
         <GlassInput
-          tone="dark"
+          tone="light"
           type="text"
           placeholder={t("addressPlaceholder")}
           value={draft.address}
@@ -886,7 +884,7 @@ function Step2({
 
       {/* Live draggable map */}
       <div>
-        <p className="text-xs text-mute-soft mb-2">{t("mapHint")}</p>
+        <p className="text-xs text-ink-mid mb-2">{t("mapHint")}</p>
         {coords ? (
           <PostMap
             center={[
@@ -898,12 +896,12 @@ function Step2({
           />
         ) : (
           <div
-            className="w-full rounded-[var(--radius-card)] border-2 border-dashed border-gold/30 glass-deep flex items-center justify-center"
+            className="w-full rounded-[var(--radius-card)] border-2 border-dashed border-sand-dk glass-warm flex items-center justify-center"
             style={{ height: 360 }}
             role="img"
             aria-label={t("mapHint")}
           >
-            <p className="text-mute-soft text-sm px-6 text-center">
+            <p className="text-ink-mid text-sm px-6 text-center">
               {t("selectState")}
             </p>
           </div>
@@ -939,7 +937,7 @@ function Step3({
 
   if (!userId) {
     return (
-      <div className="py-12 text-center text-mute-soft text-sm">
+      <div className="py-12 text-center text-ink-mid text-sm">
         {t("signInRequired")}
       </div>
     );
@@ -991,12 +989,12 @@ function Step4({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left: listing summary */}
         <div>
-          <h2 className="font-display text-2xl text-parchment mb-4">
+          <h2 className="font-display text-2xl text-ink mb-4">
             {t("reviewTitle")}
           </h2>
 
-          <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/15">
-            <dl className="divide-y divide-gold/10">
+          <GlassPanel variant="warm" radius="card" shadow={false} highlight={false} className="border border-white/55">
+            <dl className="divide-y divide-sand-dk/40">
               {[
                 {
                   label: t("summaryType"),
@@ -1051,10 +1049,10 @@ function Step4({
                   key={label}
                   className="flex justify-between items-baseline gap-4 px-4 py-2.5"
                 >
-                  <dt className="text-[11px] font-semibold uppercase tracking-wider text-mute-soft shrink-0">
+                  <dt className="text-[11px] font-semibold uppercase tracking-wider text-ink-mid shrink-0">
                     {label}
                   </dt>
-                  <dd className="text-sm text-parchment text-end">{value}</dd>
+                  <dd className="text-sm text-ink text-end">{value}</dd>
                 </div>
               ))}
             </dl>
@@ -1065,7 +1063,7 @@ function Step4({
         <div className="space-y-6">
           {/* Pricing tier */}
           <div>
-            <h2 className="font-display text-2xl text-parchment mb-4">
+            <h2 className="font-display text-2xl text-ink mb-4">
               {t("pricingTitle")}
             </h2>
             <div className="space-y-3">
@@ -1075,7 +1073,7 @@ function Step4({
                   "smooth flex items-start gap-4 rounded-[var(--radius-card)] border p-4 cursor-pointer",
                   draft.tier === "standard"
                     ? "border-gold/55 bg-gold/8"
-                    : "border-gold/20 glass-deep hover:border-gold/40",
+                    : "border-white/55 glass-warm hover:border-gold/40",
                 ].join(" ")}
               >
                 <input
@@ -1087,10 +1085,10 @@ function Step4({
                   className="mt-0.5 accent-gold"
                 />
                 <div className="flex-1">
-                  <p className="text-parchment font-semibold text-sm">
+                  <p className="text-ink font-semibold text-sm">
                     {t("tierStandard")}
                   </p>
-                  <p className="text-mute-soft text-xs mt-0.5">
+                  <p className="text-ink-mid text-xs mt-0.5">
                     {t("tierStandardDesc")}
                   </p>
                 </div>
@@ -1102,7 +1100,7 @@ function Step4({
                   "smooth flex items-start gap-4 rounded-[var(--radius-card)] border p-4 cursor-pointer",
                   draft.tier === "featured"
                     ? "border-gold/55 bg-gold/8"
-                    : "border-gold/20 glass-deep hover:border-gold/40",
+                    : "border-white/55 glass-warm hover:border-gold/40",
                 ].join(" ")}
               >
                 <input
@@ -1115,7 +1113,7 @@ function Step4({
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <p className="text-parchment font-semibold text-sm">
+                    <p className="text-ink font-semibold text-sm">
                       {t("tierFeatured")}
                     </p>
                     <span
@@ -1128,7 +1126,7 @@ function Step4({
                       {t("tierFeaturedBadge")}
                     </span>
                   </div>
-                  <p className="text-mute-soft text-xs">
+                  <p className="text-ink-mid text-xs">
                     {t("tierFeaturedPerk")}
                   </p>
                 </div>
@@ -1160,7 +1158,7 @@ function Step4({
                     "smooth flex items-center justify-between gap-3 cursor-pointer rounded-xl border px-4 py-3",
                     draft.payment === value
                       ? "border-terracotta/60 bg-terracotta/10"
-                      : "border-gold/20 glass-deep hover:border-gold/40",
+                      : "border-white/55 glass-warm hover:border-gold/40",
                   ].join(" ")}
                 >
                   <span className="flex items-center gap-3">
@@ -1172,9 +1170,9 @@ function Step4({
                       onChange={() => update({ payment: value })}
                       className="accent-terracotta"
                     />
-                    <span className="text-sm text-parchment">{label}</span>
+                    <span className="text-sm text-ink">{label}</span>
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-mute-soft">
+                  <span className="text-[10px] uppercase tracking-wider text-ink-mid">
                     {badge}
                   </span>
                 </label>
@@ -1193,7 +1191,7 @@ function Step4({
               onChange={(e) => update({ termsAccepted: e.target.checked })}
               className="mt-0.5 accent-gold w-4 h-4 shrink-0"
             />
-            <span className="text-sm text-mute-soft leading-snug">
+            <span className="text-sm text-ink-mid leading-snug">
               {t("confirmAccuracy")}
             </span>
           </label>
@@ -1229,17 +1227,17 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
   if (method === "bankak") {
     const d = SUKAN_PAYMENT_DETAILS.bankak;
     return (
-      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
-        <p className="text-parchment font-semibold mb-1.5">
+      <GlassPanel variant="warm" radius="card" shadow={false} highlight={false} className="border border-white/55 text-xs text-ink-mid leading-relaxed p-4">
+        <p className="text-ink font-semibold mb-1.5">
           {t("payInstructionsBankak")}
         </p>
         <p>
           {t("payInstructionsAccount")}:{" "}
-          <span className="font-mono text-parchment">{d.account}</span>
+          <span className="font-mono text-ink">{d.account}</span>
         </p>
         <p>
           {t("payInstructionsReference")}:{" "}
-          <span className="font-mono text-parchment">{d.reference}</span>
+          <span className="font-mono text-ink">{d.reference}</span>
         </p>
       </GlassPanel>
     );
@@ -1248,19 +1246,19 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
   if (method === "cashi" || method === "mbok") {
     const d = SUKAN_PAYMENT_DETAILS[method];
     return (
-      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
-        <p className="text-parchment font-semibold mb-1.5">
+      <GlassPanel variant="warm" radius="card" shadow={false} highlight={false} className="border border-white/55 text-xs text-ink-mid leading-relaxed p-4">
+        <p className="text-ink font-semibold mb-1.5">
           {method === "cashi"
             ? t("payInstructionsCashi")
             : t("payInstructionsMbok")}
         </p>
         <p>
           {t("payInstructionsPhone")}:{" "}
-          <span className="font-mono text-parchment">{d.phone}</span>
+          <span className="font-mono text-ink">{d.phone}</span>
         </p>
         <p>
           {t("payInstructionsReference")}:{" "}
-          <span className="font-mono text-parchment">{d.reference}</span>
+          <span className="font-mono text-ink">{d.reference}</span>
         </p>
       </GlassPanel>
     );
@@ -1269,17 +1267,17 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
   if (method === "bank") {
     const d = SUKAN_PAYMENT_DETAILS.bank;
     return (
-      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
-        <p className="text-parchment font-semibold mb-1.5">
+      <GlassPanel variant="warm" radius="card" shadow={false} highlight={false} className="border border-white/55 text-xs text-ink-mid leading-relaxed p-4">
+        <p className="text-ink font-semibold mb-1.5">
           {t("payInstructionsBank")}
         </p>
         <p>
           {t("payInstructionsAccount")}:{" "}
-          <span className="font-mono text-parchment">{d.account}</span>
+          <span className="font-mono text-ink">{d.account}</span>
         </p>
         <p>
           {t("payInstructionsReference")}:{" "}
-          <span className="font-mono text-parchment">{d.reference}</span>
+          <span className="font-mono text-ink">{d.reference}</span>
         </p>
       </GlassPanel>
     );
@@ -1289,8 +1287,8 @@ function PaymentInstructions({ method }: { method: PaymentKey }) {
     const d = SUKAN_PAYMENT_DETAILS.whatsapp;
     const waUrl = `https://wa.me/${d.phone.replace(/\D/g, "")}?text=${encodeURIComponent("I'd like to pay for a Sukan listing")}`;
     return (
-      <GlassPanel variant="deep" radius="card" shadow={false} highlight={false} className="border border-gold/20 text-xs text-mute-soft leading-relaxed p-4">
-        <p className="text-parchment font-semibold mb-1.5">
+      <GlassPanel variant="warm" radius="card" shadow={false} highlight={false} className="border border-white/55 text-xs text-ink-mid leading-relaxed p-4">
+        <p className="text-ink font-semibold mb-1.5">
           {t("payInstructionsWhatsapp")}
         </p>
         <p className="mb-3">{t("payInstructionsWhatsappBody")}</p>
@@ -1342,10 +1340,10 @@ function SuccessState() {
         </svg>
       </div>
       <div>
-        <h2 className="font-display text-3xl text-parchment mb-2">
+        <h2 className="font-display text-3xl text-ink mb-2">
           {t("successHeading")}
         </h2>
-        <p className="text-mute-soft text-sm max-w-sm mx-auto">
+        <p className="text-ink-mid text-sm max-w-sm mx-auto">
           {t("successBody")}
         </p>
       </div>
@@ -1522,11 +1520,11 @@ export default function PostWizard({ userId }: { userId: string | null }) {
   if (submitted) {
     return (
       <GlassPanel
-        variant="deep"
-        radius="card"
-        shadow={false}
-        highlight={false}
-        className="border border-gold/20 p-6 sm:p-10 max-w-3xl mx-auto"
+        variant="warm"
+        radius="glass"
+        highlight
+        shadow="lg"
+        className="border border-white/55 p-6 sm:p-10 max-w-3xl mx-auto"
       >
         <SuccessState />
       </GlassPanel>
@@ -1537,17 +1535,17 @@ export default function PostWizard({ userId }: { userId: string | null }) {
 
   return (
     <GlassPanel
-      variant="deep"
-      radius="card"
-      shadow={false}
-      highlight={false}
-      className="border border-gold/20 p-6 sm:p-10 max-w-3xl mx-auto"
+      variant="warm"
+      radius="glass"
+      highlight
+      shadow="lg"
+      className="border border-white/55 p-6 sm:p-10 max-w-3xl mx-auto"
     >
       {/* Progress bar */}
       <WizardProgress step={step} steps={[...STEPS]} />
 
       {/* Step heading */}
-      <h2 className="font-display text-3xl text-parchment mb-6">
+      <h2 className="font-display text-3xl text-ink mb-6">
         {STEPS[step]}
       </h2>
 
@@ -1583,12 +1581,12 @@ export default function PostWizard({ userId }: { userId: string | null }) {
       )}
 
       {/* Navigation footer */}
-      <div className="mt-10 flex items-center justify-between gap-4 border-t border-gold/10 pt-6">
+      <div className="mt-10 flex items-center justify-between gap-4 border-t border-sand-dk/40 pt-6">
         {/* Back */}
         {step > 0 ? (
           <GlassButton
             type="button"
-            variant="ghost-dark"
+            variant="ghost-light"
             size="md"
             onClick={handleBack}
           >
