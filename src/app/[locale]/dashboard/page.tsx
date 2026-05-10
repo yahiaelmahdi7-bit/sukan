@@ -1,14 +1,24 @@
-// Default dashboard page — renders "My Listings" view.
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { sampleListings } from "@/lib/sample-listings";
-import { getMyListings } from "@/lib/listings";
 import { createClient } from "@/lib/supabase/server";
-import StatCard from "./_components/stat-card";
-import DashboardTable from "./_components/dashboard-table";
-import { getMockStats } from "./_data/mock-stats";
-import { getMockInquiries } from "./_data/mock-inquiries";
-import { getDashboardStats } from "./_data/stats";
-import { getInquiriesForUser } from "./_data/inquiries";
+import ListingCard from "@/components/listing-card";
+import WelcomeBanner from "./_components/welcome-banner";
+import KpiStatCard from "./_components/kpi-stat-card";
+import ActionItemsCard from "./_components/action-items-card";
+import RecentActivityFeed from "./_components/recent-activity-feed";
+import DashboardQuickActions from "./_components/dashboard-quick-actions";
+import { getOverviewData } from "./_data/overview";
+
+// ─── Interpolation helper ─────────────────────────────────────────────────────
+
+function interpolate(
+  template: string,
+  vars: Record<string, string | number> = {},
+): string {
+  return Object.entries(vars).reduce(
+    (str, [k, v]) => str.replace(new RegExp(`\\{${k}\\}`, "g"), String(v)),
+    template,
+  );
+}
 
 export default async function DashboardPage({
   params,
@@ -17,93 +27,139 @@ export default async function DashboardPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("dashboard");
+  const t = await getTranslations();
+  const td = await getTranslations("dashboardOverview");
 
-  // Layout has already auth-guarded; safe to read the user here.
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const real = user ? await getMyListings(user.id) : [];
-  // Show real listings when present; fall back to demo data so pre-launch
-  // the dashboard still demonstrates the layout.
-  const myListings = real.length > 0 ? real : sampleListings.slice(0, 4);
 
-  // Real stats — fall back to mock when DB is empty / tables not yet migrated
-  const mockStats = getMockStats();
-  const realStats = user ? await getDashboardStats(user.id) : null;
+  const data = await getOverviewData(user?.id ?? "anonymous");
 
-  // Real inquiries — fall back to mock when empty (pre-launch demo)
-  const realInquiries = user ? await getInquiriesForUser(user.id) : [];
-  const mockInquiries = getMockInquiries();
-  const inquiries = realInquiries.length > 0 ? realInquiries : mockInquiries;
-
-  // Build per-listing view / inquiry counts
-  const viewsByListingId: Record<string, number> = {
-    "khartoum-2-3br-apt": 72,
-    "omdurman-villa-thawra": 41,
-    "port-sudan-shop": 18,
-    "river-nile-land-shendi": 11,
-  };
-  const inquiriesByListingId: Record<string, number> = {};
-  for (const inq of inquiries) {
-    inquiriesByListingId[inq.listing_id] =
-      (inquiriesByListingId[inq.listing_id] ?? 0) + 1;
+  // ── Resolve action item display strings ───────────────────────────────────
+  const titleStrings = data.actionItems.map((item) =>
+    interpolate(td(item.titleKey as Parameters<typeof td>[0]), item.titleVars ?? {}),
+  );
+  const bodyStrings = data.actionItems.map((item) =>
+    item.bodyKey
+      ? interpolate(td(item.bodyKey as Parameters<typeof td>[0]), item.bodyVars ?? {})
+      : undefined,
+  );
+  const ctaLabels: Record<string, string> = {};
+  const ctaKeySet = new Set(data.actionItems.map((i) => i.ctaKey));
+  for (const key of ctaKeySet) {
+    try {
+      ctaLabels[key] = td(key as Parameters<typeof td>[0]);
+    } catch {
+      ctaLabels[key] = "→";
+    }
   }
 
+  // ── Activity feed display strings ─────────────────────────────────────────
+  const activityTextStrings = data.activityFeed.map((row) =>
+    interpolate(td(row.textKey as Parameters<typeof td>[0]), row.textVars),
+  );
+
+  const isAr = locale === "ar";
+
   return (
-    <div className="px-6 py-10 max-w-6xl mx-auto">
-      {/* ── Section title ───────────────────────────────────────────────────── */}
-      <div className="mb-10">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk mb-2">
-          {t("title")}
+    <div className="px-5 sm:px-8 py-10 max-w-6xl mx-auto flex flex-col gap-8">
+
+      {/* ── 1. Welcome banner ─────────────────────────────────────────────── */}
+      <WelcomeBanner
+        data={data}
+        locale={locale}
+        labels={{
+          greeting: isAr ? "أهلاً بعودتك يا {firstName}" : td("greeting"),
+          sinceLastVisit: td("sinceLastVisit"),
+          weekAtGlance: td("weekAtGlance"),
+          newInquiries: td("newInquiriesPill"),
+          verified: td("verified"),
+          pendingVerification: td("pendingVerification"),
+          verifyNow: td("verifyNow"),
+        }}
+      />
+
+      {/* ── 2. Stat row ───────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <KpiStatCard
+          label={td("statViews")}
+          value={data.stats.viewsThisWeek}
+          delta={data.stats.viewsDelta}
+          deltaUpLabel={t("dashboard.stats.deltaUp")}
+          deltaDownLabel={t("dashboard.stats.deltaDown")}
+        />
+        <KpiStatCard
+          label={td("statInquiries")}
+          value={data.stats.inquiriesThisWeek}
+          delta={data.stats.inquiriesDelta}
+          deltaUpLabel={t("dashboard.stats.deltaUp")}
+          deltaDownLabel={t("dashboard.stats.deltaDown")}
+        />
+        <KpiStatCard
+          label={td("statViewings")}
+          value={data.stats.viewingRequestsThisWeek}
+          delta={data.stats.viewingsDelta}
+          deltaUpLabel={t("dashboard.stats.deltaUp")}
+          deltaDownLabel={t("dashboard.stats.deltaDown")}
+        />
+        <KpiStatCard
+          label={td("statSaves")}
+          value={data.stats.savesThisWeek}
+          delta={data.stats.savesDelta}
+          deltaUpLabel={t("dashboard.stats.deltaUp")}
+          deltaDownLabel={t("dashboard.stats.deltaDown")}
+        />
+      </div>
+
+      {/* ── 3. Action items ───────────────────────────────────────────────── */}
+      <ActionItemsCard
+        items={data.actionItems}
+        titleLabel={td("actionItemsTitle")}
+        allClearLabel={td("allClearTitle")}
+        allClearBodyLabel={td("allClearBody")}
+        ctaLabels={ctaLabels}
+        titleStrings={titleStrings}
+        bodyStrings={bodyStrings}
+      />
+
+      {/* ── 4. Top-performing listings ────────────────────────────────────── */}
+      <section>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-dk mb-4">
+          {td("topListingsTitle")}
         </p>
-        <h1 className="font-display text-4xl text-ink">{t("myListings")}</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {data.topListings.map((listing) => (
+            <ListingCard key={listing.id} listing={listing} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── 5. Recent activity + quick actions row ────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        {/* Activity feed takes 3 of 5 cols on wide screens */}
+        <div className="lg:col-span-3">
+          <RecentActivityFeed
+            rows={data.activityFeed}
+            titleLabel={td("activityTitle")}
+            textStrings={activityTextStrings}
+          />
+        </div>
+
+        {/* Quick-links panel: 2 of 5 cols */}
+        <div className="lg:col-span-2">
+          <DashboardQuickActions
+            labels={{
+              postProperty: td("quickPostProperty"),
+              viewInquiries: td("quickViewInquiries"),
+              browseListings: td("quickBrowseListings"),
+              viewAnalytics: td("quickViewAnalytics"),
+            }}
+          />
+        </div>
       </div>
 
-      {/* ── Stats row ──────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-12">
-        <StatCard
-          label={t("stats.totalListings")}
-          value={realStats ? realStats.totalListings : mockStats.totalListings}
-        />
-        <StatCard
-          label={t("stats.activeListings")}
-          value={mockStats.activeListings}
-        />
-        <StatCard
-          label={t("stats.viewsThisWeek")}
-          value={realStats ? realStats.totalViews : mockStats.viewsThisWeek}
-        />
-        <StatCard
-          label={t("stats.inquiriesCount")}
-          value={realStats ? realStats.totalInquiries : mockStats.inquiriesCount}
-        />
-      </div>
-
-      {/* ── Listings table ─────────────────────────────────────────────────── */}
-      <div>
-        <h2 className="font-display text-2xl text-ink mb-6">
-          {t("myListings")}
-        </h2>
-        <DashboardTable
-          listings={myListings}
-          locale={locale}
-          labels={{
-            thumb: t("table.thumb"),
-            title: t("table.title"),
-            status: t("table.status"),
-            views: t("table.views"),
-            inquiries: t("table.inquiries"),
-            actions: t("table.actions"),
-            edit: t("actions.edit"),
-            renew: t("actions.renew"),
-            archive: t("actions.archive"),
-          }}
-          viewsByListingId={viewsByListingId}
-          inquiriesByListingId={inquiriesByListingId}
-        />
-      </div>
     </div>
   );
 }
