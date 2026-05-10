@@ -20,13 +20,17 @@ import {
   SUDAN_STATES,
 } from "@/lib/sample-listings";
 import { getListingsWithSample } from "@/lib/listings";
+import { findNeighborhoodSlug, getNeighborhood } from "@/lib/sudan-neighborhoods";
+import { regions, getRegionByKey, type RegionKey } from "@/lib/regions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type SortKey = "recent" | "price_asc" | "price_desc" | "bedrooms_desc" | "area_desc";
 
 interface ParsedParams {
+  region?: RegionKey;
   state?: SudanState;
+  neighborhood?: string;
   type?: PropertyType;
   purpose?: Purpose;
   maxPrice?: number;
@@ -52,14 +56,26 @@ const VALID_AMENITIES: Amenity[] = [
   "elevator", "balcony", "rooftop",
 ];
 
+const VALID_REGIONS = regions.map((r) => r.key);
+
 // ─── Parsing helpers ──────────────────────────────────────────────────────────
 
 function parseSearchParams(raw: Record<string, string | string[] | undefined>): ParsedParams {
+  // region
+  const rawRegion = typeof raw.region === "string" ? raw.region : undefined;
+  const region = rawRegion && (VALID_REGIONS as string[]).includes(rawRegion)
+    ? (rawRegion as RegionKey)
+    : undefined;
+
   // state
   const rawState = typeof raw.state === "string" ? raw.state : undefined;
   const state = rawState && (SUDAN_STATES as readonly string[]).includes(rawState)
     ? (rawState as SudanState)
     : undefined;
+
+  // neighborhood — trim + lowercase for matching
+  const rawNeighborhood = typeof raw.neighborhood === "string" ? raw.neighborhood.trim() : undefined;
+  const neighborhood = rawNeighborhood || undefined;
 
   // type
   const rawType = typeof raw.type === "string" ? raw.type : undefined;
@@ -110,7 +126,7 @@ function parseSearchParams(raw: Record<string, string | string[] | undefined>): 
   const rawView = typeof raw.view === "string" ? raw.view : undefined;
   const view: "list" | "map" = rawView === "map" ? "map" : "list";
 
-  return { state, type, purpose, maxPrice, minBedrooms, amenities, sort, page, view };
+  return { region, state, neighborhood, type, purpose, maxPrice, minBedrooms, amenities, sort, page, view };
 }
 
 // ─── Filtering + sorting + pagination ────────────────────────────────────────
@@ -127,9 +143,35 @@ interface FilterResult {
 function filterListings(params: ParsedParams, source: Listing[]): FilterResult {
   let results = [...source];
 
+  // Region filter: restrict to states in the region (state filter takes precedence if also set)
+  if (params.region && !params.state) {
+    const regionData = getRegionByKey(params.region);
+    if (regionData) {
+      results = results.filter((l) => regionData.states.includes(l.state));
+    }
+  }
+
   if (params.state) {
     results = results.filter((l) => l.state === params.state);
   }
+
+  // Neighborhood filter — match by canonical slug from the Sudan-wide
+  // neighborhood dictionary. The URL param is a slug (e.g. "al-thawra"); we
+  // look up each listing's raw neighborhood text via findNeighborhoodSlug.
+  if (params.neighborhood) {
+    const wanted = params.neighborhood.trim().toLowerCase();
+    results = results.filter((l) => {
+      if (!l.neighborhood) return false;
+      const slug = findNeighborhoodSlug(l.state, l.neighborhood);
+      // Fall back to a tolerant text match so historical free-text
+      // neighborhood strings still resolve if they don't map to a slug.
+      return (
+        slug === wanted ||
+        l.neighborhood.toLowerCase().trim().replace(/\s+/g, "-") === wanted
+      );
+    });
+  }
+
   if (params.type) {
     results = results.filter((l) => l.propertyType === params.type);
   }
@@ -151,11 +193,6 @@ function filterListings(params: ParsedParams, source: Listing[]): FilterResult {
   }
 
   // ─── Sort ──────────────────────────────────────────────────────────────────
-  // "recent"        — preserve natural array order (newest first in real DB)
-  // "price_asc"     — ascending priceUsd
-  // "price_desc"    — descending priceUsd
-  // "bedrooms_desc" — descending bedrooms (nulls treated as 0)
-  // "area_desc"     — descending areaSqm (nulls treated as 0)
   switch (params.sort) {
     case "price_asc":
       results.sort((a, b) => a.priceUsd - b.priceUsd);
@@ -170,7 +207,6 @@ function filterListings(params: ParsedParams, source: Listing[]): FilterResult {
       results.sort((a, b) => (b.areaSqm ?? 0) - (a.areaSqm ?? 0));
       break;
     default:
-      // "recent" — natural array order (newest first in real app)
       break;
   }
 
@@ -202,6 +238,46 @@ function buildPageHref(
   }
   p.set("page", String(targetPage));
   return `/listings?${p.toString()}`;
+}
+
+// ─── Result context summary ───────────────────────────────────────────────────
+
+function buildResultSummary(params: ParsedParams, total: number, locale: string): string {
+  const isAr = locale === "ar";
+  const countLabel = isAr
+    ? `${total} نتيجة`
+    : `${total} result${total !== 1 ? "s" : ""}`;
+  const parts: string[] = [countLabel];
+
+  if (params.region && !params.state) {
+    const regionData = getRegionByKey(params.region);
+    if (regionData) {
+      const name = isAr ? regionData.nameAr : regionData.nameEn;
+      parts.push(isAr ? `في ${name}` : `in ${name}`);
+    }
+  }
+
+  if (params.state) {
+    // state label is handled by the t() below, but we need a server-side label here.
+    // We'll rely on the inline approach — the region name is the main context.
+    const regionData = regions.find((r) => r.states.includes(params.state!));
+    if (regionData && !params.region) {
+      const name = isAr ? regionData.nameAr : regionData.nameEn;
+      parts.push(isAr ? `في ${name}` : `in ${name}`);
+    }
+  }
+
+  if (params.neighborhood) {
+    // Look up display name from the dictionary if the slug matches; otherwise
+    // surface the raw param so legacy free-text values still show.
+    const hood = params.state
+      ? getNeighborhood(params.state, params.neighborhood)
+      : null;
+    const label = (isAr ? hood?.ar : hood?.en) ?? params.neighborhood;
+    parts.push(isAr ? `· حي ${label}` : `· ${label} neighborhood`);
+  }
+
+  return parts.join(" ");
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -246,12 +322,16 @@ export default async function ListingsPage({
   });
 
   const hasFilters =
+    !!parsed.region ||
     !!parsed.state ||
+    !!parsed.neighborhood ||
     !!parsed.type ||
     !!parsed.purpose ||
     parsed.maxPrice !== undefined ||
     parsed.minBedrooms !== undefined ||
     parsed.amenities.length > 0;
+
+  const resultSummary = buildResultSummary(parsed, total, locale);
 
   return (
     <>
@@ -293,6 +373,13 @@ export default async function ListingsPage({
                 <div className="mb-5">
                   <ActiveFilters />
                 </div>
+              )}
+
+              {/* Result context summary — shows region/neighborhood context */}
+              {hasFilters && (
+                <p className="mb-4 text-sm font-medium text-terracotta/80">
+                  {resultSummary}
+                </p>
               )}
 
               {/* Results header row: count + view toggle + sort */}

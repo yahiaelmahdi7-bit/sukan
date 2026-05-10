@@ -1,5 +1,5 @@
-// Server component — no "use client" needed; numbers are seeded, no interactivity.
-// TODO: i18n — replace hardcoded strings with translation keys
+// Server component — no interactivity needed; numbers are seeded, no "use client".
+import { getTranslations } from "next-intl/server";
 
 /** Deterministic seed → integer in [min, max] */
 function seededInt(seed: string, min: number, max: number, salt: number): number {
@@ -14,7 +14,9 @@ interface ListingActivityCountersProps {
   listingId: string;
 }
 
-export function ListingActivityCounters({ listingId }: ListingActivityCountersProps) {
+export async function ListingActivityCounters({ listingId }: ListingActivityCountersProps) {
+  const t = await getTranslations("listing");
+
   const inquiries = seededInt(listingId, 3, 18, 7);
   const views = seededInt(listingId, 80, 500, 13);
   const saves = seededInt(listingId, 4, 25, 19);
@@ -22,20 +24,17 @@ export function ListingActivityCounters({ listingId }: ListingActivityCountersPr
   return (
     <p
       className="text-xs text-[#12100C]/50 font-medium flex flex-wrap items-center gap-1 select-none"
-      aria-label={`${inquiries} inquiries, ${views} views, saved ${saves} times`}
+      aria-label={[
+        t("activityInquiries", { count: inquiries }),
+        t("activityViews", { count: views }),
+        t("activitySaves", { count: saves }),
+      ].join(", ")}
     >
-      {/* TODO: i18n */}
-      <span>
-        <span className="text-[#C8873A] font-semibold">{inquiries}</span> inquiries
-      </span>
+      <span>{t("activityInquiries", { count: inquiries })}</span>
       <span aria-hidden className="opacity-40 mx-1">·</span>
-      <span>
-        <span className="text-[#C8873A] font-semibold">{views}</span> views
-      </span>
+      <span>{t("activityViews", { count: views })}</span>
       <span aria-hidden className="opacity-40 mx-1">·</span>
-      <span>
-        saved <span className="text-[#C8873A] font-semibold">{saves}</span> times
-      </span>
+      <span>{t("activitySaves", { count: saves })}</span>
     </p>
   );
 }

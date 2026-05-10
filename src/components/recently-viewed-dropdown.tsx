@@ -4,13 +4,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { History, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   getRecentlyViewed,
   clearRecentlyViewed,
   type RecentlyViewedItem,
 } from "@/lib/recently-viewed";
-
-// TODO: i18n — all strings below are English placeholders
 
 const SDG_PER_USD = 600;
 
@@ -22,6 +21,7 @@ function formatSdg(usd: number): string {
 }
 
 export default function RecentlyViewedDropdown() {
+  const t = useTranslations("recentlyViewed");
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<RecentlyViewedItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -82,19 +82,19 @@ export default function RecentlyViewedDropdown() {
         onClick={toggle}
         aria-expanded={open}
         aria-haspopup="true"
-        aria-label="Recently viewed listings" // TODO: i18n
+        aria-label={t("label")}
         className="smooth-fast hidden items-center gap-1.5 rounded-[var(--radius-pill)] border border-white/60 bg-white/40 px-3 py-1.5 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 sm:inline-flex"
       >
         <History size={14} className="shrink-0 text-ink/70" />
         {/* Label hidden on smaller screens — icon-only up to lg */}
-        <span className="hidden lg:inline">Recently viewed</span>
+        <span className="hidden lg:inline">{t("header")}</span>
       </button>
 
       {/* Dropdown panel */}
       {open && (
         <div
           role="dialog"
-          aria-label="Recently viewed listings" // TODO: i18n
+          aria-label={t("label")}
           className="absolute end-0 top-full z-50 mt-2 w-80 origin-top-right sm:w-96"
           style={{
             boxShadow: "var(--shadow-warm)",
@@ -108,7 +108,7 @@ export default function RecentlyViewedDropdown() {
             {/* Header row */}
             <div className="flex items-center justify-between border-b border-white/40 px-4 py-3">
               <span className="text-sm font-semibold text-ink">
-                Recently viewed {/* TODO: i18n */}
+                {t("header")}
               </span>
               <div className="flex items-center gap-3">
                 {items.length > 0 && (
@@ -117,7 +117,7 @@ export default function RecentlyViewedDropdown() {
                     onClick={handleClear}
                     className="smooth-fast text-xs text-ink/50 hover:text-terracotta"
                   >
-                    Clear all {/* TODO: i18n */}
+                    {t("clearAll")}
                   </button>
                 )}
                 <button
@@ -137,7 +137,7 @@ export default function RecentlyViewedDropdown() {
               <div className="flex flex-col items-center gap-3 px-6 py-8 text-center">
                 <History size={28} className="text-ink/20" />
                 <p className="text-sm text-ink/50">
-                  Properties you view will show up here {/* TODO: i18n */}
+                  {t("empty")}
                 </p>
                 <a
                   href="/listings"
@@ -145,7 +145,7 @@ export default function RecentlyViewedDropdown() {
                   className="smooth-fast mt-1 rounded-[var(--radius-pill)] bg-terracotta px-4 py-1.5 text-xs font-semibold text-cream hover:bg-terracotta-deep"
                   style={{ boxShadow: "0 4px 14px rgba(200, 64, 26, 0.22)" }}
                 >
-                  Start browsing → {/* TODO: i18n */}
+                  {t("startBrowsing")}
                 </a>
               </div>
             ) : (

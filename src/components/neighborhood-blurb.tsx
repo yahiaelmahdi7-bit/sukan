@@ -1,6 +1,6 @@
 // Server component — no "use client" needed.
-// TODO: i18n — replace hardcoded heading strings with translation keys
 
+import { getTranslations } from "next-intl/server";
 import { getNeighborhoodBlurb } from "@/lib/neighborhoods";
 
 interface NeighborhoodBlurbProps {
@@ -8,12 +8,12 @@ interface NeighborhoodBlurbProps {
   locale: "en" | "ar";
 }
 
-export function NeighborhoodBlurb({ city, locale }: NeighborhoodBlurbProps) {
+export async function NeighborhoodBlurb({ city, locale }: NeighborhoodBlurbProps) {
+  const t = await getTranslations("listing");
   const blurb = getNeighborhoodBlurb(city);
   if (!blurb) return null;
 
   const isAr = locale === "ar";
-  const heading = isAr ? "عن هذا الحي" : "About this area";
   const name = isAr ? blurb.nameAr : blurb.nameEn;
   const body = isAr ? blurb.bodyAr : blurb.bodyEn;
 
@@ -23,12 +23,11 @@ export function NeighborhoodBlurb({ city, locale }: NeighborhoodBlurbProps) {
       className="mb-10"
       dir={isAr ? "rtl" : "ltr"}
     >
-      {/* TODO: i18n heading */}
       <h2
         id="neighborhood-heading"
         className="font-display text-3xl md:text-4xl text-[#12100C] mb-5 tracking-tight"
       >
-        {heading}
+        {t("neighborhoodHeader")}
       </h2>
 
       <div

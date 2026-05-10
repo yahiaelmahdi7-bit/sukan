@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Scale, X, BedDouble, Bath, Maximize2 } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import EmptyState from "@/components/empty-state";
 import {
   getCompareItems,
@@ -18,6 +19,7 @@ const SDG_PER_USD = 600;
 // ── Column ─────────────────────────────────────────────────────────────────
 
 function CompareColumn({ item }: { item: CompareItem }) {
+  const t = useTranslations("compare");
   const sdgMonthly = item.priceUsd * SDG_PER_USD;
 
   return (
@@ -54,20 +56,20 @@ function CompareColumn({ item }: { item: CompareItem }) {
         {/* Price */}
         <div className="px-4 py-3">
           <p className="text-[11px] uppercase tracking-[0.12em] text-ink-mid/70">
-            Price {/* TODO: i18n */}
+            {t("price")}
           </p>
           <p className="mt-1 font-display text-2xl text-terracotta">
             ${item.priceUsd.toLocaleString()}
           </p>
           <p className="mt-0.5 text-[11px] text-ink-mid">
-            ≈ {sdgMonthly.toLocaleString()} SDG/mo {/* TODO: i18n */}
+            ≈ {sdgMonthly.toLocaleString()} SDG/mo
           </p>
         </div>
 
         {/* State */}
         <div className="px-4 py-3">
           <p className="text-[11px] uppercase tracking-[0.12em] text-ink-mid/70">
-            State {/* TODO: i18n */}
+            {t("state")}
           </p>
           <p className="mt-1 text-sm font-medium text-ink">{item.state}</p>
         </div>
@@ -75,7 +77,7 @@ function CompareColumn({ item }: { item: CompareItem }) {
         {/* Beds */}
         <div className="px-4 py-3">
           <p className="text-[11px] uppercase tracking-[0.12em] text-ink-mid/70">
-            Bedrooms {/* TODO: i18n */}
+            {t("bedrooms")}
           </p>
           {item.bedrooms !== undefined ? (
             <p className="mt-1 flex items-center gap-1.5 text-sm text-ink">
@@ -90,7 +92,7 @@ function CompareColumn({ item }: { item: CompareItem }) {
         {/* Baths */}
         <div className="px-4 py-3">
           <p className="text-[11px] uppercase tracking-[0.12em] text-ink-mid/70">
-            Bathrooms {/* TODO: i18n */}
+            {t("bathrooms")}
           </p>
           {item.bathrooms !== undefined ? (
             <p className="mt-1 flex items-center gap-1.5 text-sm text-ink">
@@ -105,7 +107,7 @@ function CompareColumn({ item }: { item: CompareItem }) {
         {/* Area */}
         <div className="px-4 py-3">
           <p className="text-[11px] uppercase tracking-[0.12em] text-ink-mid/70">
-            Area {/* TODO: i18n */}
+            {t("area")}
           </p>
           {item.areaSqm !== undefined ? (
             <p className="mt-1 flex items-center gap-1.5 text-sm text-ink">
@@ -128,7 +130,7 @@ function CompareColumn({ item }: { item: CompareItem }) {
                 "0 4px 14px rgba(200,64,26,0.25), inset 0 1px 0 rgba(255,255,255,0.15)",
             }}
           >
-            View listing → {/* TODO: i18n */}
+            {t("viewListing")}
           </a>
           <button
             type="button"
@@ -136,7 +138,7 @@ function CompareColumn({ item }: { item: CompareItem }) {
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-[var(--radius-pill)] border border-sand-dk py-2 text-sm text-ink-mid transition-colors hover:border-terracotta/40 hover:text-terracotta"
           >
             <X size={13} />
-            Remove {/* TODO: i18n */}
+            {t("remove")}
           </button>
         </div>
       </div>
@@ -163,6 +165,7 @@ function CompareSkeleton() {
 // ── Page ───────────────────────────────────────────────────────────────────
 
 export default function ComparePage() {
+  const t = useTranslations("compare");
   const [items, setItems] = useState<CompareItem[]>([]);
   const [mounted, setMounted] = useState(false);
 
@@ -185,14 +188,14 @@ export default function ComparePage() {
       {/* Header */}
       <div className="mb-10 flex flex-col gap-2">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-dk">
-          Side by side {/* TODO: i18n */}
+          {t("sideBySide")}
         </p>
         <h1 className="font-display text-4xl text-ink">
-          Compare properties {/* TODO: i18n */}
+          {t("compareProperties")}
         </h1>
         {mounted && items.length > 0 && (
           <p className="text-sm text-ink-mid">
-            {items.length} of 3 selected {/* TODO: i18n */}
+            {t("selected", { count: items.length })}
           </p>
         )}
       </div>
@@ -204,9 +207,9 @@ export default function ComparePage() {
       {mounted && items.length === 0 && (
         <EmptyState
           icon={<Scale size={26} />}
-          title="Nothing to compare yet" // TODO: i18n
-          body="Browse listings and tap the scale icon on any card to add it here. You can compare up to 3 properties side by side." // TODO: i18n
-          primaryCta={{ label: "Browse listings", href: "/listings" }} // TODO: i18n
+          title={t("empty")}
+          body={t("emptyBody")}
+          primaryCta={{ label: t("browseCta"), href: "/listings" }}
         />
       )}
 
@@ -223,13 +226,13 @@ export default function ComparePage() {
           {items.length < 3 && (
             <div className="mt-10 flex flex-col items-center gap-3 text-center">
               <p className="text-sm text-ink-mid">
-                Add {3 - items.length} more propert{items.length === 2 ? "y" : "ies"} to fill the comparison {/* TODO: i18n */}
+                {t("addMore", { count: 3 - items.length })}
               </p>
               <a
                 href="/listings"
                 className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 px-6 py-2.5 text-sm font-semibold text-gold-dk backdrop-blur-md transition-colors hover:border-gold/70 hover:bg-gold/10 hover:text-terracotta"
               >
-                Browse more listings {/* TODO: i18n */}
+                {t("browseMore")}
               </a>
             </div>
           )}

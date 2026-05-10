@@ -24,6 +24,7 @@ export default function MobileMenu({
   userInitials: string | null;
 }) {
   const t = useTranslations("nav");
+  const tm = useTranslations("mobileMenu");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -49,7 +50,7 @@ export default function MobileMenu({
       {/* ── Hamburger trigger — only visible below md ────────────────────── */}
       <button
         type="button"
-        aria-label="Open menu"
+        aria-label={tm("open")}
         aria-expanded={open}
         aria-controls="mobile-drawer"
         onClick={() => setOpen(true)}
@@ -76,7 +77,7 @@ export default function MobileMenu({
             id="mobile-drawer"
             role="dialog"
             aria-modal="true"
-            aria-label="Navigation menu"
+            aria-label={tm("label")}
             className="fixed inset-y-0 end-0 z-50 flex w-[min(320px,88vw)] flex-col overflow-y-auto rounded-s-[var(--radius-glass)] border-s border-white/60"
             style={{
               background: "rgba(253,248,240,0.97)",
@@ -89,12 +90,11 @@ export default function MobileMenu({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-sand/60 px-5 py-4">
               <span className="font-display text-base tracking-wide text-ink">
-                {/* TODO: i18n */}
-                Menu
+                {tm("header")}
               </span>
               <button
                 type="button"
-                aria-label="Close menu"
+                aria-label={tm("close")}
                 onClick={close}
                 className="smooth-fast flex h-8 w-8 items-center justify-center rounded-full text-ink/50 hover:bg-ink/8 hover:text-ink"
               >
@@ -114,12 +114,10 @@ export default function MobileMenu({
                 {t("agents")}
               </DrawerLink>
               <DrawerLink href="/guides" icon={<BookOpen size={17} strokeWidth={1.8} />} onClick={close}>
-                {/* TODO: i18n */}
-                Guides
+                {t("guides")}
               </DrawerLink>
               <DrawerLink href="/insights" icon={<TrendingUp size={17} strokeWidth={1.8} />} onClick={close}>
-                {/* TODO: i18n */}
-                Insights
+                {t("insights")}
               </DrawerLink>
               <DrawerLink href="/about" icon={<Info size={17} strokeWidth={1.8} />} onClick={close}>
                 {t("about")}
@@ -137,8 +135,7 @@ export default function MobileMenu({
                     {t("saved")}
                   </DrawerLink>
                   <DrawerLink href="/saved?tab=recent" icon={<Clock size={17} strokeWidth={1.8} />} onClick={close}>
-                    {/* TODO: i18n */}
-                    Recently viewed
+                    {tm("recentlyViewed")}
                   </DrawerLink>
                   {/* Dashboard row with avatar */}
                   <Link
@@ -155,8 +152,7 @@ export default function MobileMenu({
                       {userInitials}
                     </span>
                     <span className="font-medium">
-                      {firstName ? `Hi, ${firstName}` : "Dashboard"}
-                      {/* TODO: i18n */}
+                      {firstName ? tm("signedInAs", { name: firstName }) : t("dashboard")}
                     </span>
                   </Link>
                 </>
@@ -169,8 +165,7 @@ export default function MobileMenu({
               {/* Locale toggle row */}
               <div className="flex items-center gap-3 px-3 py-2.5">
                 <span className="text-sm text-ink/50">
-                  {/* TODO: i18n */}
-                  Language
+                  {tm("language")}
                 </span>
                 <LocaleToggle />
               </div>

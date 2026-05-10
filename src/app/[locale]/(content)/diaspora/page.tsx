@@ -1,6 +1,4 @@
-// TODO: i18n — hero, section titles, and CTA strings are hardcoded EN/AR inline.
-// The `t()` calls from next-intl are removed; re-add when translation keys are ready.
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import GlassPanel from "@/components/glass-panel";
 import SectionHeader from "@/components/section-header";
@@ -37,7 +35,7 @@ export default async function DiasporaPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const isAr = locale === "ar";
+  const t = await getTranslations("diasporaPage2");
 
   return (
     <>
@@ -65,24 +63,17 @@ export default async function DiasporaPage({
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           {/* Eyebrow */}
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold-dk">
-            {/* TODO: i18n */}
-            {isAr ? "للمغتربين السودانيين" : "For the Sudanese diaspora"}
+            {t("eyebrowHero")}
           </p>
 
           {/* Headline */}
           <h1 className="font-display mb-6 text-5xl leading-[1.05] tracking-tight text-ink md:text-6xl lg:text-7xl">
-            {/* TODO: i18n */}
-            {isAr
-              ? "اشترِ، استأجر، أو راقب عقارك في السودان من أي مكان."
-              : "Buy, rent, or watch over property in Sudan from anywhere."}
+            {t("heroTitle")}
           </h1>
 
           {/* Audience sub-line */}
           <p className="mb-8 max-w-2xl text-lg leading-[1.8] text-ink-mid">
-            {/* TODO: i18n */}
-            {isAr
-              ? "بُني سُكَن للمغتربين السودانيين في القاهرة والرياض ودبي ولندن وتورونتو وما وراءها."
-              : "Built for the Sudanese diaspora in Cairo, Riyadh, Dubai, London, Toronto, and beyond."}
+            {t("heroSubtitle")}
           </p>
 
           {/* Currency accent inline */}
@@ -96,17 +87,9 @@ export default async function DiasporaPage({
       <section className="bg-cream-deep py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            eyebrow={isAr ? "ما يتوفر الآن" : "What's real, right now"}
-            title={
-              isAr
-                ? "ما الذي يقدمه سُكَن فعلاً"
-                : "What Sukan actually delivers"
-            }
-            subtitle={
-              isAr
-                ? "لا وعود فارغة — فيما يلي ما تجده اليوم على المنصة."
-                : "No empty promises — here is what you find on the platform today."
-            }
+            eyebrow={t("trustEyebrow")}
+            title={t("trustTitle")}
+            subtitle={t("trustSubtitle")}
             align="center"
           />
           <DiasporaTrustStrip locale={locale} />
@@ -119,12 +102,8 @@ export default async function DiasporaPage({
       <section className="bg-cream py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            eyebrow={isAr ? "الوعي بالعملة" : "Currency awareness"}
-            title={
-              isAr
-                ? "لماذا نعرض الدولار والجنيه جنباً إلى جنب"
-                : "Why we show USD and SDG side by side"
-            }
+            eyebrow={t("currencyEyebrow")}
+            title={t("currencyTitle")}
           />
 
           {/* Large currency card */}
@@ -138,28 +117,7 @@ export default async function DiasporaPage({
             className="mt-6 p-7 md:p-9"
           >
             <p className="text-base leading-[1.9] text-ink-mid">
-              {/* TODO: i18n */}
-              {isAr ? (
-                <>
-                  المغتربون يضعون ميزانياتهم بالدولار الأمريكي. السودانيون
-                  المحليون يُسعِّرون بالجنيه السوداني. وسعر الصرف يتحرك. لهذا
-                  نعرض كلا المبلغين على كل إعلان وفي كل أداة بحث — حتى لا تضطر
-                  إلى إجراء أي حساب قبل التواصل. السعر الحالي المعتمد:{" "}
-                  <strong className="text-ink">1 دولار = 600 جنيه</strong>، ويُحدَّث
-                  يدوياً. نخطط لربط سعر البنك المركزي مباشرةً في الربع الثالث
-                  من ٢٠٢٦.
-                </>
-              ) : (
-                <>
-                  Diaspora buyers budget in USD. Sudanese locals price in SDG.
-                  The rate moves. So we show both amounts on every listing and in
-                  every search tool — no mental arithmetic before you reach out.
-                  The current working rate is{" "}
-                  <strong className="text-ink">1 USD = 600 SDG</strong>, updated
-                  manually. We plan to connect a live Central Bank feed in Q3
-                  2026.
-                </>
-              )}
+              {t("currencyExplanation")}
             </p>
           </GlassPanel>
         </div>
@@ -171,21 +129,13 @@ export default async function DiasporaPage({
       <section className="bg-cream-deep py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            eyebrow={isAr ? "المختارة لهذا الشهر" : "Curated this month"}
-            title={
-              isAr
-                ? "المفضلة لدى المغتربين"
-                : "Diaspora favorites this month"
-            }
-            subtitle={
-              isAr
-                ? "عقارات في أحياء يُفضلها المغتربون وفق أدلة الأحياء لدينا — الخرطوم ٢، بحري، بورتسودان، والعمارات."
-                : "Properties in neighborhoods our guides rate as diaspora-favored — Khartoum 2, Bahri, Port Sudan, and Amarat."
-            }
+            eyebrow={t("listingsEyebrow")}
+            title={t("listingsTitle")}
+            subtitle={t("listingsSubtitle")}
             align="start"
             viewAll={{
               href: "/listings",
-              label: isAr ? "تصفح كل الإعلانات" : "Browse all listings",
+              label: t("browseCta"),
             }}
           />
 
@@ -197,7 +147,7 @@ export default async function DiasporaPage({
             </div>
           ) : (
             <p className="text-sm text-ink-mid">
-              {isAr ? "لا توجد إعلانات في الوقت الحالي." : "No listings at this time."}
+              {t("noListings")}
             </p>
           )}
         </div>
@@ -209,17 +159,9 @@ export default async function DiasporaPage({
       <section className="bg-cream py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            eyebrow={isAr ? "الطريق إلى الأمام" : "What's coming next"}
-            title={
-              isAr
-                ? "ما نبنيه الآن — القادم في الربع الثالث ٢٠٢٦"
-                : "What we're building — Coming Q3 2026"
-            }
-            subtitle={
-              isAr
-                ? "هذه التزامات حقيقية، لا وعود تسويقية. لم تُشحَن بعد — وسنكون صادقين بشأن ذلك."
-                : "These are real commitments, not marketing promises. Not shipped yet — and we're honest about that."
-            }
+            eyebrow={t("roadmapEyebrow")}
+            title={t("roadmapTitle")}
+            subtitle={t("roadmapSubtitle")}
           />
 
           <GlassPanel
@@ -240,18 +182,14 @@ export default async function DiasporaPage({
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-3">
                     <h3 className="font-display text-lg font-semibold text-ink">
-                      {/* TODO: i18n */}
-                      {isAr ? "فيديو جولة موثَّقة" : "Verified video walkthroughs"}
+                      {t("roadmapVideoTitle")}
                     </h3>
                     <Pill variant="muted" size="sm">
-                      {isAr ? "قريباً — الربع الثالث" : "Coming Q3"}
+                      {t("comingQ3")}
                     </Pill>
                   </div>
                   <p className="text-sm leading-relaxed text-ink-mid">
-                    {/* TODO: i18n */}
-                    {isAr
-                      ? "وكيل يسجّل جولة مُختومة بالوقت والموقع الجغرافي. تشاهدها قبل أن تقرر."
-                      : "An agent records a timestamped, geo-tagged walk-through. You watch it before deciding."}
+                    {t("roadmapVideoBody")}
                   </p>
                 </div>
               </li>
@@ -267,18 +205,14 @@ export default async function DiasporaPage({
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-3">
                     <h3 className="font-display text-lg font-semibold text-ink">
-                      {/* TODO: i18n */}
-                      {isAr ? "ضمان محتجز قابل للاسترداد عبر Stripe" : "Stripe escrow holds"}
+                      {t("roadmapEscrowTitle")}
                     </h3>
                     <Pill variant="muted" size="sm">
-                      {isAr ? "قريباً — الربع الثالث" : "Coming Q3"}
+                      {t("comingQ3")}
                     </Pill>
                   </div>
                   <p className="text-sm leading-relaxed text-ink-mid">
-                    {/* TODO: i18n */}
-                    {isAr
-                      ? "وديعة قابلة للاسترداد تُحتجز حتى يتحقق شخص موثوق — أو أنت شخصياً — من العقار في الموقع."
-                      : "Refundable deposit held until you (or a trusted local) verifies the property in person."}
+                    {t("roadmapEscrowBody")}
                   </p>
                 </div>
               </li>
@@ -294,18 +228,14 @@ export default async function DiasporaPage({
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-3">
                     <h3 className="font-display text-lg font-semibold text-ink">
-                      {/* TODO: i18n */}
-                      {isAr ? "التحقق من صك الملكية" : "Title-deed verification"}
+                      {t("roadmapDeedTitle")}
                     </h3>
                     <Pill variant="muted" size="sm">
-                      {isAr ? "قريباً — الربع الثالث" : "Coming Q3"}
+                      {t("comingQ3")}
                     </Pill>
                   </div>
                   <p className="text-sm leading-relaxed text-ink-mid">
-                    {/* TODO: i18n */}
-                    {isAr
-                      ? "بالشراكة مع مكتب محاماة في الخرطوم. يتحققون من الملكية في سجل الأراضي؛ نحن نضع علامة «صك موثَّق» على الإعلان."
-                      : "We partner with a Khartoum law firm. They verify ownership at the Land Registry; we mark the listing \"Title verified.\""}
+                    {t("roadmapDeedBody")}
                   </p>
                 </div>
               </li>
@@ -321,18 +251,14 @@ export default async function DiasporaPage({
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-3">
                     <h3 className="font-display text-lg font-semibold text-ink">
-                      {/* TODO: i18n */}
-                      {isAr ? "جلسات «سِر معي» المباشرة" : "Live walk-with-me calls"}
+                      {t("roadmapLiveCallTitle")}
                     </h3>
                     <Pill variant="muted" size="sm">
-                      {isAr ? "قريباً — الربع الثالث" : "Coming Q3"}
+                      {t("comingQ3")}
                     </Pill>
                   </div>
                   <p className="text-sm leading-relaxed text-ink-mid">
-                    {/* TODO: i18n */}
-                    {isAr
-                      ? "جولة فيديو واتساب مباشرة مع وكيل سُكَن عند الطلب."
-                      : "WhatsApp video tour with a Sukan agent on demand."}
+                    {t("roadmapLiveCallBody")}
                   </p>
                 </div>
               </li>
@@ -361,15 +287,11 @@ export default async function DiasporaPage({
             />
 
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-dk">
-              {/* TODO: i18n */}
-              {isAr ? "ابدأ الآن" : "Get started"}
+              {t("ctaEyebrow")}
             </p>
 
             <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">
-              {/* TODO: i18n */}
-              {isAr
-                ? "جاهز للعثور على مكانك في السودان؟"
-                : "Ready to find your place in Sudan?"}
+              {t("ctaTitle")}
             </h2>
 
             <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:gap-4">
@@ -383,8 +305,7 @@ export default async function DiasporaPage({
                     "0 8px 24px rgba(200,135,58,0.32), inset 0 1px 0 rgba(255,255,255,0.35)",
                 }}
               >
-                {/* TODO: i18n */}
-                {isAr ? "تصفح الإعلانات" : "Browse listings"}
+                {t("browseCta")}
               </Link>
 
               {/* Secondary — glass outline */}
@@ -392,8 +313,7 @@ export default async function DiasporaPage({
                 href="/agents"
                 className="smooth inline-flex items-center justify-center rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 px-8 py-3.5 text-sm font-semibold text-gold-dk backdrop-blur-md hover:border-gold/70 hover:bg-gold/10"
               >
-                {/* TODO: i18n */}
-                {isAr ? "تحدث إلى وكيل" : "Talk to an agent"}
+                {t("talkToAgent")}
               </Link>
             </div>
           </div>

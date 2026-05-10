@@ -1,4 +1,3 @@
-// TODO: i18n
 import type { ReactNode } from "react";
 import Link from "next/link";
 

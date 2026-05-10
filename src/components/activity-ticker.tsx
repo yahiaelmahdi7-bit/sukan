@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   Home,
   Heart,
@@ -88,6 +88,7 @@ const SESSION_KEY = "sukan-ticker-dismissed";
 
 export default function ActivityTicker() {
   const locale = useLocale();
+  const t = useTranslations("activityTicker");
   const isAr = locale === "ar";
 
   const [dismissed, setDismissed] = useState(true); // start hidden; hydrate below
@@ -167,14 +168,14 @@ export default function ActivityTicker() {
       <div
         role="status"
         aria-live="polite"
-        aria-label={isAr ? "نشاط السوق المباشر" : "Live marketplace activity"}
+        aria-label={t("liveLabel")}
         className="ticker-card fixed bottom-6 left-6 rtl:right-6 rtl:left-auto z-50 hidden w-[min(360px,calc(100vw-3rem))] rounded-[var(--radius-glass,22px)] p-3.5 sm:block"
         dir={isAr ? "rtl" : "ltr"}
       >
         {/* Dismiss button — always sits at the logical end (right in LTR, left in RTL) */}
         <button
           onClick={handleDismiss}
-          aria-label={isAr ? "إغلاق تغذية النشاط" : "Dismiss activity feed"}
+          aria-label={t("dismiss")}
           className="absolute end-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full text-[#12100C]/40 transition-colors hover:bg-[#12100C]/8 hover:text-[#12100C]/70"
         >
           <X size={11} strokeWidth={2.5} />

@@ -1,8 +1,7 @@
 "use client";
 
-// TODO: i18n — strings are hardcoded EN/AR, switched via useLocale()
 import { useEffect, useRef, useState } from "react";
-import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 
 /** Seed a starting viewer count in [30, 80] deterministically on the client. */
 function seedCount(): number {
@@ -15,8 +14,7 @@ function seedCount(): number {
  * Renders nothing on the server (count is purely client-side fiction for liveness signal).
  */
 export default function LiveBrowsingPill() {
-  const locale = useLocale();
-  const isAr = locale === "ar";
+  const t = useTranslations("homepage");
 
   const [count, setCount] = useState<number | null>(null);
   const countRef = useRef<number>(0);
@@ -50,7 +48,7 @@ export default function LiveBrowsingPill() {
 
   if (count === null) return null;
 
-  const label = isAr ? `${count} يتصفحون الآن` : `${count} browsing right now`;
+  const label = t("browsingNow", { count });
 
   return (
     <>

@@ -1,8 +1,7 @@
 "use client";
 
-// TODO: i18n — replace hardcoded strings with translation keys
-
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 /** Deterministic seed → integer in [min, max] using a simple hash */
 function seededInt(seed: string, min: number, max: number, salt = 0): number {
@@ -19,6 +18,7 @@ interface ViewingNowProps {
 }
 
 export function ViewingNow({ listingId }: ViewingNowProps) {
+  const t = useTranslations("listing");
   const initial = seededInt(listingId, 8, 22);
   const [count, setCount] = useState(initial);
 
@@ -57,7 +57,7 @@ export function ViewingNow({ listingId }: ViewingNowProps) {
       <span
         role="status"
         aria-live="polite"
-        aria-label={`${count} people viewing this property right now`}
+        aria-label={t("viewingNow", { count })}
         className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-[#C8401A]/30 px-3.5 py-1.5 text-xs font-medium text-[#12100C]/75 select-none"
         style={{
           background:
@@ -78,11 +78,8 @@ export function ViewingNow({ listingId }: ViewingNowProps) {
             boxShadow: "0 0 6px rgba(200,135,58,0.55)",
           }}
         />
-        {/* TODO: i18n */}
         <span>
-          <span className="font-semibold text-[#C8401A]">{count}</span>
-          {" "}
-          {count === 1 ? "person" : "people"} viewing this property right now
+          {t("viewingNow", { count })}
         </span>
       </span>
     </>

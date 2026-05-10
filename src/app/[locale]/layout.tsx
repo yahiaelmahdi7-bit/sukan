@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import { routing, localeDirection, type Locale } from "@/i18n/routing";
 import Atmosphere from "@/components/atmosphere";
+import BackToDashboardPill from "@/components/back-to-dashboard-pill";
+import { createClient } from "@/lib/supabase/server";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -86,6 +88,17 @@ export default async function LocaleLayout({
 
   const dir = localeDirection[locale as Locale];
 
+  let isSignedIn = false;
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    isSignedIn = !!user;
+  } catch {
+    isSignedIn = false;
+  }
+
   return (
     <html
       lang={locale}
@@ -94,7 +107,10 @@ export default async function LocaleLayout({
     >
       <body className="relative min-h-full flex flex-col bg-earth text-parchment">
         <Atmosphere />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {children}
+          <BackToDashboardPill signedIn={isSignedIn} />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

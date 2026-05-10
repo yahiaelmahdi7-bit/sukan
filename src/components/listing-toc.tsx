@@ -1,33 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-
-// TODO: i18n — locale-aware labels
-const LABELS_EN = {
-  onThisPage: "On this page",
-  photos: "Photos",
-  overview: "Overview",
-  amenities: "Amenities",
-  reality: "Property reality",
-  neighborhood: "About this area",
-  map: "Location",
-  owner: "About the owner",
-  reviews: "Reviews",
-  similar: "Similar properties",
-} as const;
-
-const LABELS_AR: Record<keyof typeof LABELS_EN, string> = {
-  onThisPage: "في هذه الصفحة",
-  photos: "الصور",
-  overview: "نظرة عامة",
-  amenities: "المرافق",
-  reality: "حقائق العقار",
-  neighborhood: "عن هذا الحي",
-  map: "الموقع",
-  owner: "عن المالك",
-  reviews: "التقييمات",
-  similar: "عقارات مشابهة",
-};
+import { useTranslations } from "next-intl";
 
 type SectionId =
   | "photos"
@@ -57,8 +31,20 @@ interface ListingTocProps {
 }
 
 export function ListingToc({ locale }: ListingTocProps) {
+  const t = useTranslations("listing");
   const isRtl = locale === "ar";
-  const labels = isRtl ? LABELS_AR : LABELS_EN;
+
+  const labels: Record<SectionId, string> = {
+    photos: t("tocPhotos"),
+    overview: t("tocOverview"),
+    amenities: t("tocAmenities"),
+    reality: t("tocReality"),
+    neighborhood: t("tocNeighborhood"),
+    map: t("tocMap"),
+    owner: t("tocOwner"),
+    reviews: t("tocReviews"),
+    similar: t("tocSimilar"),
+  };
 
   const [activeId, setActiveId] = useState<SectionId | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -132,7 +118,7 @@ export function ListingToc({ locale }: ListingTocProps) {
   return (
     // hidden on < lg; fixed on lg+, positioned on the far inline-end edge
     <nav
-      aria-label={labels.onThisPage}
+      aria-label={t("tocHeader")}
       dir={isRtl ? "rtl" : "ltr"}
       className="hidden lg:block"
       style={{
@@ -158,7 +144,7 @@ export function ListingToc({ locale }: ListingTocProps) {
         className="text-[10px] font-semibold uppercase tracking-[0.16em] text-gold-dk mb-3 px-1"
         aria-hidden
       >
-        {labels.onThisPage}
+        {t("tocHeader")}
       </p>
 
       {/* Divider */}

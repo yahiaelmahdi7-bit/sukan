@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { X, Scale } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   getCompareItems,
   removeFromCompare,
@@ -13,7 +14,7 @@ import {
 
 // ── Placeholder slot ───────────────────────────────────────────────────────
 
-function EmptySlot() {
+function EmptySlot({ pickMore }: { pickMore: string }) {
   return (
     <div
       className="flex flex-col items-center justify-center gap-1 rounded-[10px] text-center"
@@ -26,7 +27,7 @@ function EmptySlot() {
     >
       <Scale size={14} className="text-gold/60" />
       <span className="text-[10px] leading-tight text-ink-mid/70">
-        Pick one more {/* TODO: i18n */}
+        {pickMore}
       </span>
     </div>
   );
@@ -37,9 +38,11 @@ function EmptySlot() {
 function FilledSlot({
   item,
   onRemove,
+  removeLabel,
 }: {
   item: CompareItem;
   onRemove: (id: string) => void;
+  removeLabel: string;
 }) {
   return (
     <div
@@ -78,7 +81,7 @@ function FilledSlot({
       {/* Remove */}
       <button
         type="button"
-        aria-label={`Remove ${item.title} from compare`} // TODO: i18n
+        aria-label={removeLabel}
         onClick={() => onRemove(item.id)}
         className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink/50 text-cream transition-colors hover:bg-ink/80"
       >
@@ -91,6 +94,7 @@ function FilledSlot({
 // ── Main tray ──────────────────────────────────────────────────────────────
 
 export default function CompareTray() {
+  const t = useTranslations("compare");
   const [items, setItems] = useState<CompareItem[]>([]);
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -136,7 +140,7 @@ export default function CompareTray() {
 
       <div
         role="region"
-        aria-label="Compare tray" // TODO: i18n
+        aria-label={t("trayLabel")}
         className="fixed bottom-6 ltr:right-6 rtl:left-6 rtl:right-auto z-40 flex items-end gap-3"
         style={{
           animation:
@@ -164,9 +168,10 @@ export default function CompareTray() {
                   key={item.id}
                   item={item}
                   onRemove={removeFromCompare}
+                  removeLabel={t("removeItem", { title: item.title })}
                 />
               ) : (
-                <EmptySlot key={`empty-${i}`} />
+                <EmptySlot key={`empty-${i}`} pickMore={t("pickMore")} />
               );
             })}
           </div>
@@ -185,14 +190,14 @@ export default function CompareTray() {
               }}
             >
               <Scale size={14} />
-              Compare {items.length} {/* TODO: i18n */}
+              {t("cta", { count: items.length })}
             </a>
             <button
               type="button"
               onClick={clearCompare}
               className="text-center text-[11px] text-ink-mid/70 underline underline-offset-2 transition-colors hover:text-terracotta"
             >
-              Clear all {/* TODO: i18n */}
+              {t("clearAll")}
             </button>
           </div>
         </div>

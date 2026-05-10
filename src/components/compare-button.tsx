@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Scale } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   addToCompare,
   removeFromCompare,
@@ -29,6 +30,7 @@ export default function CompareButton({
   size = "sm",
   className = "",
 }: CompareButtonProps) {
+  const t = useTranslations("compare");
   const [inCompare, setInCompare] = useState(false);
 
   // Sync with store on mount + on external changes
@@ -57,7 +59,7 @@ export default function CompareButton({
         });
         if (!result.ok && result.reason === "max") {
           // TODO: replace with toast when one is wired up
-          alert("You can compare up to 3 listings at a time."); // TODO: i18n
+          alert(t("tooMany"));
         }
       }
     },
@@ -72,8 +74,8 @@ export default function CompareButton({
       type="button"
       onClick={handleClick}
       aria-pressed={inCompare}
-      aria-label={inCompare ? "Remove from compare" : "Add to compare"} // TODO: i18n
-      title={inCompare ? "Remove from compare" : "Add to compare"} // TODO: i18n
+      aria-label={inCompare ? t("added") : t("add")}
+      title={inCompare ? t("added") : t("add")}
       style={{ width: dim, height: dim }}
       className={[
         "flex items-center justify-center rounded-full",

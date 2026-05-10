@@ -46,16 +46,15 @@ function daysAgo(dateStr: string): number {
   return Math.floor((now - then) / 86_400_000);
 }
 
-// Amenity icon map
-const AMENITY_ICONS: { key: string; icon: React.ReactNode; label: string }[] =
-  [
-    { key: "parking", icon: <Car size={13} />, label: "Parking" }, // TODO: i18n
-    { key: "furnished", icon: <Sofa size={13} />, label: "Furnished" }, // TODO: i18n
-    { key: "generator", icon: <Zap size={13} />, label: "Generator" }, // TODO: i18n
-    { key: "water_tank", icon: <Droplet size={13} />, label: "Water tank" }, // TODO: i18n
-    { key: "water", icon: <Droplet size={13} />, label: "Water" }, // TODO: i18n
-    { key: "ac", icon: <Snowflake size={13} />, label: "AC" }, // TODO: i18n
-  ];
+// Amenity icon map — labels resolved at render time via t()
+const AMENITY_KEYS: { key: string; icon: React.ReactNode; tKey: string }[] = [
+  { key: "parking", icon: <Car size={13} />, tKey: "listing.amenityParking" },
+  { key: "furnished", icon: <Sofa size={13} />, tKey: "listing.amenityFurnished" },
+  { key: "generator", icon: <Zap size={13} />, tKey: "listing.amenityGenerator" },
+  { key: "water_tank", icon: <Droplet size={13} />, tKey: "listing.amenityWaterTank" },
+  { key: "water", icon: <Droplet size={13} />, tKey: "listing.amenityWater" },
+  { key: "ac", icon: <Snowflake size={13} />, tKey: "listing.amenityAc" },
+];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -127,12 +126,12 @@ function AgentAvatar({
   avatar,
   name,
   online,
-  replyTime,
+  replyTimeLabel,
 }: {
   avatar?: string;
   name: string;
   online?: boolean;
-  replyTime?: number;
+  replyTimeLabel?: string;
 }) {
   const initial = name.trim()[0]?.toUpperCase() ?? "S";
 
@@ -166,12 +165,12 @@ function AgentAvatar({
           />
         )}
       </div>
-      {replyTime !== undefined && (
+      {replyTimeLabel !== undefined && (
         <span
           className="whitespace-nowrap text-ink-mid"
           style={{ fontSize: 10, lineHeight: "14px" }}
         >
-          ~{replyTime}h reply {/* TODO: i18n */}
+          {replyTimeLabel}
         </span>
       )}
     </div>
@@ -231,11 +230,9 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   const isPriceReduced =
     x.previousPriceUsd !== undefined && x.previousPriceUsd > listing.priceUsd;
 
-  let listedLabel: string | null = null; // TODO: i18n
+  let listedLabel: string | null = null;
   if (createdDays !== undefined) {
-    if (createdDays === 0) listedLabel = "Listed today";
-    else if (createdDays === 1) listedLabel = "Listed yesterday";
-    else listedLabel = `Listed ${createdDays}d ago`;
+    listedLabel = t("listing.listedDaysAgo", { count: createdDays });
   }
 
   // ── View count ─────────────────────────────────────────────────────────────
@@ -249,17 +246,18 @@ export default function ListingCard({ listing }: { listing: Listing }) {
     ? listing.amenities
     : [];
 
-  const visibleAmenities = AMENITY_ICONS.filter((a) =>
-    amenityList.some((m) => m === a.key),
-  ).slice(0, 5);
+  const visibleAmenities = AMENITY_KEYS
+    .filter((a) => amenityList.some((m) => m === a.key))
+    .slice(0, 5)
+    .map((a) => ({ ...a, label: t(a.tKey as Parameters<typeof t>[0]) }));
 
   // ── SDG price ─────────────────────────────────────────────────────────────
   const sdgPrice = listing.priceUsd * SDG_PER_USD;
   const periodSuffix =
     listing.period === "month"
-      ? "/mo" // TODO: i18n
+      ? t("listing.periodSuffixMonth")
       : listing.period === "year"
-      ? "/yr" // TODO: i18n
+      ? t("listing.periodSuffixYear")
       : "";
 
   // ── Owner info ─────────────────────────────────────────────────────────────
@@ -342,7 +340,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                   boxShadow: "0 3px 10px rgba(200,64,26,0.4)",
                 }}
               >
-                NEW {/* TODO: i18n */}
+                {t("listing.ribbonNew")}
               </span>
             )}
 
@@ -355,7 +353,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                   boxShadow: "0 3px 10px rgba(200,135,58,0.35)",
                 }}
               >
-                PRICE REDUCED {/* TODO: i18n */}
+                {t("listing.ribbonPriceReduced")}
                 <span className="font-normal normal-case tracking-normal line-through opacity-75">
                   $
                   {format.number(x.previousPriceUsd!, {
@@ -378,7 +376,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
               className="inline-block h-1.5 w-1.5 rounded-full"
               style={{ background: "#22c55e" }}
             />
-            {views} views this week {/* TODO: i18n */}
+            {t("listing.viewsThisWeek", { count: views })}
           </span>
 
           {/* ── Favorite + Compare buttons ────────────────────────────────── */}
@@ -492,7 +490,11 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                 avatar={x.ownerAvatar}
                 name={ownerDisplayName}
                 online={x.ownerOnline}
-                replyTime={x.ownerReplyTime}
+                replyTimeLabel={
+                  x.ownerReplyTime !== undefined
+                    ? t("listing.replyTime", { hours: x.ownerReplyTime })
+                    : undefined
+                }
               />
             </div>
           </div>

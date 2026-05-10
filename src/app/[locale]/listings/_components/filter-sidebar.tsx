@@ -1,9 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
-import { SUDAN_STATES, type PropertyType, type Amenity } from "@/lib/sample-listings";
+import { SUDAN_STATES, type PropertyType, type Amenity, type SudanState } from "@/lib/sample-listings";
+import { regions, getRegionByState, getRegionByKey, type RegionKey } from "@/lib/regions";
+import { getNeighborhoodsForState, type NeighborhoodName } from "@/lib/sudan-neighborhoods";
 import SavedSearches from "./saved-searches";
 
 const PROPERTY_TYPES: PropertyType[] = [
@@ -27,6 +29,14 @@ const groupHeader =
 
 const groupDivider = "border-t border-sand-dk pt-5 mt-5";
 
+// Pill button style for region & neighborhood filters
+const pillBase =
+  "smooth-fast rounded-[var(--radius-pill)] border px-3 py-1.5 text-xs font-semibold transition-colors";
+const pillInactive =
+  "border-white/55 bg-white/45 text-ink-mid backdrop-blur-sm hover:border-gold/50 hover:text-ink";
+const pillActive =
+  "border-terracotta/60 bg-terracotta text-cream shadow-[0_2px_8px_rgba(200,64,26,0.25)]";
+
 interface FilterSidebarProps {
   className?: string;
   onClose?: () => void;
@@ -38,17 +48,41 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const currentRegion = searchParams.get("region") ?? "";
   const currentState = searchParams.get("state") ?? "";
+  const currentNeighborhood = searchParams.get("neighborhood") ?? "";
   const currentType = searchParams.get("type") ?? "";
   const currentPurpose = searchParams.get("purpose") ?? "";
   const currentMaxPrice = searchParams.get("maxPrice") ?? "";
   const currentMinBedrooms = searchParams.get("minBedrooms") ?? "";
   const currentAmenities = searchParams.getAll("amenity");
 
+  // Derive the active region from state if region param not set
+  const derivedRegion = currentRegion
+    ? currentRegion
+    : currentState
+    ? (getRegionByState(currentState)?.key ?? "")
+    : "";
+
+  // States to show in the state dropdown (narrowed when a region is selected)
+  const allowedStates: readonly string[] = derivedRegion
+    ? (regions.find((r) => r.key === derivedRegion)?.states ?? SUDAN_STATES)
+    : SUDAN_STATES;
+
+  // Neighborhoods for the selected state — pulled from the curated Sudan-wide
+  // dictionary so every state has real options even before listings exist there.
+  const locale = useLocale();
+  const isAr = locale === "ar";
+  const neighborhoodsForState: NeighborhoodName[] = currentState
+    ? getNeighborhoodsForState(currentState)
+    : [];
+
   function buildParams(overrides: Record<string, string | string[] | undefined>) {
     const p = new URLSearchParams();
     const base: Record<string, string | string[]> = {
+      region: currentRegion,
       state: currentState,
+      neighborhood: currentNeighborhood,
       type: currentType,
       purpose: currentPurpose,
       maxPrice: currentMaxPrice,
@@ -78,6 +112,27 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
     onClose?.();
   }
 
+  function selectRegion(regionKey: string) {
+    if (regionKey === currentRegion) {
+      // Toggle off
+      push({ region: undefined, state: undefined, neighborhood: undefined, page: undefined });
+    } else {
+      // Selecting a region clears state and neighborhood (they'll be re-narrowed)
+      push({ region: regionKey, state: undefined, neighborhood: undefined, page: undefined });
+    }
+  }
+
+  function selectState(stateVal: string) {
+    // When state changes, clear neighborhood; keep region if compatible
+    const newRegion = stateVal ? (getRegionByState(stateVal)?.key ?? "") : currentRegion;
+    push({
+      state: stateVal || undefined,
+      neighborhood: undefined,
+      region: newRegion || undefined,
+      page: undefined,
+    });
+  }
+
   function toggleAmenity(key: Amenity) {
     const next = currentAmenities.includes(key)
       ? currentAmenities.filter((a) => a !== key)
@@ -92,23 +147,92 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
         <SavedSearches />
       </div>
 
-      {/* ─── State ──────────────────────────────────────────────────────────── */}
+      {/* ─── Region ─────────────────────────────────────────────────────────── */}
       <div>
+        {/* TODO: i18n */}
+        <p className={`mb-3 ${groupHeader}`}>Region</p>
+        <div className="flex flex-wrap gap-1.5">
+          {/* All regions pill */}
+          <button
+            type="button"
+            onClick={() =>
+              push({ region: undefined, state: undefined, neighborhood: undefined, page: undefined })
+            }
+            className={`${pillBase} ${!derivedRegion ? pillActive : pillInactive}`}
+          >
+            {/* TODO: i18n */}
+            All
+          </button>
+          {regions.map((r) => (
+            <button
+              key={r.key}
+              type="button"
+              onClick={() => selectRegion(r.key)}
+              className={`${pillBase} ${derivedRegion === r.key ? pillActive : pillInactive}`}
+            >
+              {r.nameEn}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ─── State ──────────────────────────────────────────────────────────── */}
+      <div className={groupDivider}>
         <p className={`mb-3 ${groupHeader}`}>{t("browse.stateLabel")}</p>
         <select
           className={selectCls}
           value={currentState}
-          onChange={(e) => push({ state: e.target.value || undefined, page: undefined })}
+          onChange={(e) => selectState(e.target.value)}
           aria-label={t("browse.stateLabel")}
         >
           <option value="">{t("browse.anyState")}</option>
-          {SUDAN_STATES.map((s) => (
+          {(allowedStates as string[]).map((s) => (
             <option key={s} value={s}>
-              {t(`states.${s}`)}
+              {t(`states.${s as SudanState}`)}
             </option>
           ))}
         </select>
       </div>
+
+      {/* ─── Neighborhood (only when a state is selected) ───────────────────── */}
+      {currentState && (
+        <div className={groupDivider}>
+          {/* TODO: i18n */}
+          <p className={`mb-3 ${groupHeader}`}>Neighborhood</p>
+          {neighborhoodsForState.length === 0 ? (
+            <p className="text-xs text-ink-mid/70 italic">
+              {/* TODO: i18n */}
+              No neighborhoods configured for this state
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => push({ neighborhood: undefined, page: undefined })}
+                className={`${pillBase} ${!currentNeighborhood ? pillActive : pillInactive}`}
+              >
+                {/* TODO: i18n */}
+                Any
+              </button>
+              {neighborhoodsForState.map((n) => (
+                <button
+                  key={n.slug}
+                  type="button"
+                  onClick={() =>
+                    push({
+                      neighborhood: currentNeighborhood === n.slug ? undefined : n.slug,
+                      page: undefined,
+                    })
+                  }
+                  className={`${pillBase} ${currentNeighborhood === n.slug ? pillActive : pillInactive}`}
+                >
+                  {isAr ? n.ar : n.en}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ─── Property type ──────────────────────────────────────────────────── */}
       <div className={groupDivider}>

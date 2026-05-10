@@ -8,6 +8,7 @@
 //       via listing.whatsappContact in the page — pass that through here).
 
 import { MessageCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface WhatsAppCtaProps {
   /**
@@ -35,14 +36,9 @@ export function WhatsAppCta({
   locale,
   className = "",
 }: WhatsAppCtaProps) {
-  // TODO: i18n — replace hardcoded strings with next-intl keys when added.
-  const label =
-    locale === "ar" ? "تواصل عبر واتساب" : "Message on WhatsApp";
-
-  const message =
-    locale === "ar"
-      ? `مرحباً، أنا مهتم بـ ${listingTitle} عبر سُكَن: ${listingUrl}`
-      : `Hi! I'm interested in ${listingTitle} on Sukan: ${listingUrl}`;
+  const t = useTranslations("whatsapp");
+  const label = t("cta");
+  const message = t("message", { title: listingTitle, url: listingUrl });
 
   const href = `https://wa.me/${digitsOnly(phone)}?text=${encodeURIComponent(message)}`;
 

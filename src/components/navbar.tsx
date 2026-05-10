@@ -47,12 +47,11 @@ export default async function Navbar() {
           .join("") || "U";
 
       // Derive first name for greeting
-      // Priority: full_name first word → email local-part → "there"
-      // TODO: i18n — greeting is English-only for now
+      // Priority: full_name first word → email local-part → null (greeting falls back to "Dashboard")
       firstName =
         fullName.split(" ")[0] ||
         user.email?.split("@")[0] ||
-        "there";
+        null;
     }
   } catch {
     userInitials = null;
@@ -114,15 +113,13 @@ export default async function Navbar() {
             href="/guides"
             className="smooth-fast hidden text-sm text-ink/85 hover:text-terracotta lg:inline"
           >
-            {/* TODO: i18n */}
-            Guides
+            {t("guides")}
           </Link>
           <Link
             href="/insights"
             className="smooth-fast hidden text-sm text-ink/85 hover:text-terracotta lg:inline"
           >
-            {/* TODO: i18n */}
-            Insights
+            {t("insights")}
           </Link>
           <Link
             href="/about"
@@ -168,15 +165,11 @@ export default async function Navbar() {
                   {userInitials}
                 </span>
                 {/* First-name greeting — hidden below lg, falls back gracefully */}
-                {/* TODO: i18n */}
                 <span className="hidden lg:inline">
                   {firstName ? (
-                    <>
-                      <span className="text-ink/50">Hi,</span>{" "}
-                      <span className="font-medium">{firstName}</span>
-                    </>
+                    t("greeting", { name: firstName })
                   ) : (
-                    "Dashboard"
+                    t("dashboard")
                   )}
                 </span>
               </Link>

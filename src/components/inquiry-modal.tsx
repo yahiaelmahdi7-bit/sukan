@@ -17,6 +17,7 @@ type SubmitState = "idle" | "submitting" | "error";
 
 export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
   const t = useTranslations("inquiry");
+  const tm = useTranslations("inquiryModal");
   const locale = useLocale();
   const uid = useId();
 
@@ -131,22 +132,21 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
                 style={{ fontFamily: "var(--font-display, 'Cormorant Garamond', serif)" }}
                 id={`${uid}-title`}
               >
-                We&apos;ve messaged the landlord
+                {tm("successTitle")}
               </h2>
               <p className="text-sm leading-relaxed text-mute-soft max-w-xs mx-auto">
-                They typically reply within a few hours. We&apos;ll let you know the moment they do.
+                {tm("successBody")}
               </p>
             </div>
 
             {/* What's next hint pills */}
-            {/* TODO: i18n */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
               <Link
                 href={`/${locale}/dashboard/saved-searches`}
                 onClick={onClose}
                 className="smooth-fast inline-flex items-center rounded-[var(--radius-pill)] border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-xs font-medium text-gold hover:bg-gold/20 hover:border-gold/50"
               >
-                Save similar searches
+                {tm("saveSearch")}
               </Link>
               {city && (
                 <Link
@@ -154,7 +154,7 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
                   onClick={onClose}
                   className="smooth-fast inline-flex items-center rounded-[var(--radius-pill)] border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-xs font-medium text-gold hover:bg-gold/20 hover:border-gold/50"
                 >
-                  Browse more in {city}
+                  {tm("browseCity", { city })}
                 </Link>
               )}
               <Link
@@ -162,7 +162,7 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
                 onClick={onClose}
                 className="smooth-fast inline-flex items-center rounded-[var(--radius-pill)] border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-xs font-medium text-gold hover:bg-gold/20 hover:border-gold/50"
               >
-                Get AI matched
+                {tm("aiMatch")}
               </Link>
             </div>
 
@@ -172,7 +172,7 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
               onClick={onClose}
               className="w-full mt-1 flex items-center justify-center rounded-[var(--radius-pill)] border border-gold/30 bg-earth-soft/60 py-3 text-sm font-semibold text-parchment hover:border-gold/55 hover:bg-gold/10 transition-colors"
             >
-              Done
+              {tm("done")}
             </button>
           </div>
         ) : (

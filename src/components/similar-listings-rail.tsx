@@ -1,8 +1,8 @@
 // Server component — CSS-only horizontal scroll, no "use client" needed.
-// TODO: i18n — replace hardcoded strings with translation keys
 
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 import {
   sampleListings,
   getListingImage,
@@ -27,12 +27,13 @@ interface SimilarListingsRailProps {
   locale?: Locale;
 }
 
-export function SimilarListingsRail({
+export async function SimilarListingsRail({
   currentListingId,
   currentState,
   currentPropertyType,
   locale = "en",
 }: SimilarListingsRailProps) {
+  const t = await getTranslations("listing");
   // Primary: same state + same type, excluding self
   let picks = sampleListings.filter(
     (l) =>
@@ -58,10 +59,7 @@ export function SimilarListingsRail({
 
   // City label for the heading — first match's locale city (or just state)
   const cityLabel = listings[0] ? getLocaleCity(listings[0], locale) : currentState;
-  // TODO: i18n heading
-  const heading = locale === "ar"
-    ? `عقارات مشابهة في ${cityLabel}`
-    : `Similar properties in ${cityLabel}`;
+  const heading = t("similarTitle", { city: cityLabel });
 
   return (
     <section aria-labelledby="similar-rail-heading" className="mb-10">
@@ -138,13 +136,13 @@ export function SimilarListingsRail({
                 {(listing.bedrooms != null || listing.bathrooms != null) && (
                   <p className="text-[11px] text-[#12100C]/55 leading-none mt-0.5">
                     {listing.bedrooms != null && (
-                      <span>{listing.bedrooms} bd</span>
+                      <span>{t("bedroomsShort", { count: listing.bedrooms })}</span>
                     )}
                     {listing.bedrooms != null && listing.bathrooms != null && (
                       <span className="mx-1 opacity-40">·</span>
                     )}
                     {listing.bathrooms != null && (
-                      <span>{listing.bathrooms} ba</span>
+                      <span>{t("bathroomsShort", { count: listing.bathrooms })}</span>
                     )}
                   </p>
                 )}

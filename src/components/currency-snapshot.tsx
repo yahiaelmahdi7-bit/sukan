@@ -1,5 +1,6 @@
 // Server Component — no interactivity needed
 import { TrendingUp } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 export interface CurrencySnapshotProps {
   size?: "sm" | "lg";
@@ -7,11 +8,14 @@ export interface CurrencySnapshotProps {
 
 // Hardcoded rate — updated manually until Central Bank feed lands in Q3 2026
 const USD_TO_SDG = 600;
-const UPDATED_LABEL = "11 May 2026 · updated manually";
+const UPDATED_DATE = "11 May 2026";
 
-export default function CurrencySnapshot({
+export default async function CurrencySnapshot({
   size = "sm",
 }: CurrencySnapshotProps) {
+  const t = await getTranslations("currency");
+  const updatedLabel = `${UPDATED_DATE} · ${t("updatedManually")}`;
+
   if (size === "lg") {
     return (
       <div
@@ -50,12 +54,12 @@ export default function CurrencySnapshot({
 
             {/* Timestamp */}
             <p className="mt-1 text-xs text-ink-mid/70">
-              as of {UPDATED_LABEL}
+              {updatedLabel}
             </p>
 
             {/* Road-map note */}
             <p className="mt-3 text-xs text-ink-mid/60 italic">
-              Q3 2026: live rate from Central Bank feed
+              {t("q3Note")}
             </p>
           </div>
         </div>
@@ -74,7 +78,7 @@ export default function CurrencySnapshot({
         1 USD ≈{" "}
         <span className="text-gold-dk">{USD_TO_SDG.toLocaleString()} SDG</span>
       </span>
-      <span className="text-xs text-ink-mid/60">· {UPDATED_LABEL}</span>
+      <span className="text-xs text-ink-mid/60">· {updatedLabel}</span>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 // Server Component — no "use client" directive needed
-// TODO: i18n — strings are hardcoded EN/AR, switched via locale prop
 import { Sparkles } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import type { Listing } from "@/lib/sample-listings";
 
 interface SectionFreshnessPillProps {
   listings: Listing[];
-  locale: string;
+  locale?: string;
 }
 
 /** Reference date: today (hardcoded per spec). */
@@ -16,11 +16,10 @@ const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
  * Counts listings whose `createdAt` falls within the last 7 days from TODAY.
  * Renders nothing if the count is 0.
  */
-export default function SectionFreshnessPill({
+export default async function SectionFreshnessPill({
   listings,
-  locale,
 }: SectionFreshnessPillProps) {
-  const isAr = locale === "ar";
+  const t = await getTranslations("homepage");
 
   const newCount = listings.filter((l) => {
     if (!l.createdAt) return false;
@@ -30,9 +29,7 @@ export default function SectionFreshnessPill({
 
   if (newCount === 0) return null;
 
-  const label = isAr
-    ? `${newCount} جديد هذا الأسبوع`
-    : `${newCount} new this week`;
+  const label = t("newThisWeek", { count: newCount });
 
   return (
     <span

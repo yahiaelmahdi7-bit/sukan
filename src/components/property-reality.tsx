@@ -4,6 +4,7 @@
 // differentiating feature vs Dubizzle-style portals for Sudanese buyers.
 
 import { Zap, Droplet, Snowflake, Car, Sofa, Plane } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import GlassPanel from "@/components/glass-panel";
 import type { SudanState } from "@/lib/sample-listings";
 
@@ -99,36 +100,37 @@ function StatCell({
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function PropertyReality({
+export default async function PropertyReality({
   amenities = [],
   state,
   locale,
 }: PropertyRealityProps) {
+  const t = await getTranslations("listing");
   const a = new Set(amenities);
 
   // ── Power ────────────────────────────────────────────────────────────────
   const powerValue = a.has("generator")
-    ? "Generator + grid"
+    ? t("powerGeneratorGrid")
     : a.has("solar")
-      ? "Solar + grid"
-      : "Grid only";
+      ? t("powerSolarGrid")
+      : t("powerGridOnly");
   const powerHighlight = a.has("generator") || a.has("solar");
   const powerMuted = !powerHighlight;
 
   // ── Water ────────────────────────────────────────────────────────────────
-  const waterValue = a.has("water_tank") ? "Tank + city water" : "City water";
+  const waterValue = a.has("water_tank") ? t("waterTankCity") : t("waterCityOnly");
   const waterHighlight = a.has("water_tank");
 
   // ── Cooling ──────────────────────────────────────────────────────────────
-  const coolingValue = a.has("ac") ? "AC fitted" : "Fans / passive";
+  const coolingValue = a.has("ac") ? t("coolingAcFitted") : t("coolingFansPassive");
   const coolingHighlight = a.has("ac");
 
   // ── Parking ──────────────────────────────────────────────────────────────
-  const parkingValue = a.has("parking") ? "On-property" : "Street";
+  const parkingValue = a.has("parking") ? t("parkingOnProperty") : t("parkingStreet");
   const parkingHighlight = a.has("parking");
 
   // ── Furnishing ───────────────────────────────────────────────────────────
-  const furnishingValue = a.has("furnished") ? "Furnished" : "Unfurnished";
+  const furnishingValue = a.has("furnished") ? t("furnishingFurnished") : t("furnishingUnfurnished");
   const furnishingHighlight = a.has("furnished");
 
   // ── Distance to airport ──────────────────────────────────────────────────
@@ -137,9 +139,8 @@ export default function PropertyReality({
   const airportValue = airportLabel ? `${airportLabel} (${airportDist})` : airportDist;
   const airportMuted = airportDist === "—";
 
-  // ── Heading — bilingual ──────────────────────────────────────────────────
-  // TODO: i18n — replace hardcoded strings with next-intl keys when translations are added.
-  const heading = locale === "ar" ? "حقائق العقار" : "Property reality";
+  // ── Heading ──────────────────────────────────────────────────────────────
+  const heading = t("propertyRealityTitle");
 
   return (
     <GlassPanel
@@ -155,7 +156,7 @@ export default function PropertyReality({
         className="font-display text-xl text-ink tracking-tight mb-5"
       >
         {heading}
-        {/* Bilingual subtitle on the same line, always shown */}
+        {/* Bilingual subtitle on the same line — opposite locale hint */}
         <span className="ms-2 text-sm font-sans text-ink/40 tracking-normal">
           {locale === "ar" ? "Property reality" : "حقائق العقار"}
         </span>
@@ -165,42 +166,42 @@ export default function PropertyReality({
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-6">
         <StatCell
           icon={<Zap size={14} strokeWidth={2} />}
-          label={locale === "ar" ? "الكهرباء" : "Power"}
+          label={t("propertyRealityPower")}
           value={powerValue}
           highlight={powerHighlight}
           muted={powerMuted}
         />
         <StatCell
           icon={<Droplet size={14} strokeWidth={2} />}
-          label={locale === "ar" ? "المياه" : "Water"}
+          label={t("propertyRealityWater")}
           value={waterValue}
           highlight={waterHighlight}
           muted={!waterHighlight}
         />
         <StatCell
           icon={<Snowflake size={14} strokeWidth={2} />}
-          label={locale === "ar" ? "التبريد" : "Cooling"}
+          label={t("propertyRealityCooling")}
           value={coolingValue}
           highlight={coolingHighlight}
           muted={!coolingHighlight}
         />
         <StatCell
           icon={<Car size={14} strokeWidth={2} />}
-          label={locale === "ar" ? "الموقف" : "Parking"}
+          label={t("propertyRealityParking")}
           value={parkingValue}
           highlight={parkingHighlight}
           muted={!parkingHighlight}
         />
         <StatCell
           icon={<Sofa size={14} strokeWidth={2} />}
-          label={locale === "ar" ? "الفرش" : "Furnishing"}
+          label={t("propertyRealityFurnishing")}
           value={furnishingValue}
           highlight={furnishingHighlight}
           muted={!furnishingHighlight}
         />
         <StatCell
           icon={<Plane size={14} strokeWidth={2} />}
-          label={locale === "ar" ? "المطار" : "Airport"}
+          label={t("propertyRealityAirport")}
           value={airportValue}
           muted={airportMuted}
         />

@@ -1,37 +1,37 @@
 "use client";
 
-// TODO: i18n
 // NOTE: Mount <OnboardingTour /> inside the dashboard layout (src/app/[locale]/dashboard/layout.tsx)
 // to activate it. It auto-hides after completion and never renders again for
 // returning visitors (localStorage flag "sukan-onboarding-done").
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 
 const STORAGE_KEY = "sukan-onboarding-done";
 
 interface TourStep {
   /** data-tour attribute on the target nav element */
   target: string;
-  title: string;
-  body: string;
+  titleKey: string;
+  bodyKey: string;
 }
 
 const STEPS: TourStep[] = [
   {
     target: "myListings",
-    title: "My listings",
-    body: "This is where your properties live. Post your first one to get started.",
+    titleKey: "step1Title",
+    bodyKey: "step1Body",
   },
   {
     target: "inquiries",
-    title: "Inquiries",
-    body: "When tenants reach out, you'll find their messages here.",
+    titleKey: "step2Title",
+    bodyKey: "step2Body",
   },
   {
     target: "savedSearches",
-    title: "Saved searches",
-    body: "Tenants looking for something specific can save searches — keep an eye on demand here.",
+    titleKey: "step3Title",
+    bodyKey: "step3Body",
   },
 ];
 
@@ -43,6 +43,7 @@ interface TooltipRect {
 }
 
 export default function OnboardingTour() {
+  const t = useTranslations("onboarding");
   const [step, setStep] = useState(0);
   const [visible, setVisible] = useState(false);
   const [targetRect, setTargetRect] = useState<TooltipRect | null>(null);
@@ -188,9 +189,11 @@ export default function OnboardingTour() {
             className="font-display text-xl text-ink leading-tight"
             style={{ fontFamily: "var(--font-display, 'Cormorant Garamond', serif)" }}
           >
-            {current.title}
+            {t(current.titleKey as Parameters<typeof t>[0])}
           </p>
-          <p className="text-sm leading-relaxed text-ink-mid">{current.body}</p>
+          <p className="text-sm leading-relaxed text-ink-mid">
+            {t(current.bodyKey as Parameters<typeof t>[0])}
+          </p>
         </div>
 
         {/* Actions */}
@@ -200,7 +203,7 @@ export default function OnboardingTour() {
             onClick={dismiss}
             className="text-xs text-ink-mid hover:text-ink transition-colors"
           >
-            Skip tour
+            {t("skip")}
           </button>
           <button
             type="button"
@@ -212,7 +215,7 @@ export default function OnboardingTour() {
                 "0 4px 14px rgba(200,64,26,0.30), inset 0 1px 0 rgba(255,255,255,0.18)",
             }}
           >
-            {step < STEPS.length - 1 ? "Next →" : "Done"}
+            {step < STEPS.length - 1 ? t("next") : t("done")}
           </button>
         </div>
       </div>

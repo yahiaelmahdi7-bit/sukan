@@ -1,9 +1,10 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import type { SudanState, PropertyType, Amenity } from "@/lib/sample-listings";
+import { getRegionByKey } from "@/lib/regions";
 
 type ChipDescriptor = {
   key: string;
@@ -13,6 +14,7 @@ type ChipDescriptor = {
 
 export default function ActiveFilters() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,14 +33,56 @@ export default function ActiveFilters() {
     router.push((qs ? `${pathname}?${qs}` : pathname) as Parameters<typeof router.push>[0]);
   }
 
+  // When removing region, also remove state and neighborhood (they were narrowed by it)
+  function removeRegion() {
+    const p = new URLSearchParams(searchParams.toString());
+    p.delete("region");
+    p.delete("neighborhood");
+    p.delete("page");
+    const qs = p.toString();
+    router.push((qs ? `${pathname}?${qs}` : pathname) as Parameters<typeof router.push>[0]);
+  }
+
+  // When removing state, also remove neighborhood
+  function removeState() {
+    const p = new URLSearchParams(searchParams.toString());
+    p.delete("state");
+    p.delete("neighborhood");
+    p.delete("page");
+    const qs = p.toString();
+    router.push((qs ? `${pathname}?${qs}` : pathname) as Parameters<typeof router.push>[0]);
+  }
+
   const chips: ChipDescriptor[] = [];
+
+  // Region chip — only show if explicitly set (not just derived)
+  const region = searchParams.get("region");
+  if (region) {
+    const regionData = getRegionByKey(region);
+    const regionLabel = (locale === "ar" ? regionData?.nameAr : regionData?.nameEn) ?? region;
+    chips.push({
+      key: "region",
+      label: regionLabel,
+      remove: removeRegion,
+    });
+  }
 
   const state = searchParams.get("state");
   if (state) {
     chips.push({
       key: "state",
       label: t(`states.${state as SudanState}`),
-      remove: () => pushWithout("state"),
+      remove: removeState,
+    });
+  }
+
+  // Neighborhood chip
+  const neighborhood = searchParams.get("neighborhood");
+  if (neighborhood) {
+    chips.push({
+      key: "neighborhood",
+      label: neighborhood,
+      remove: () => pushWithout("neighborhood"),
     });
   }
 
