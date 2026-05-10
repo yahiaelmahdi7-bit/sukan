@@ -12,6 +12,7 @@ import {
   getListingImage,
   getLocaleCity,
   getLocaleTitle,
+  getLocaleNeighborhood,
   type Listing,
 } from "@/lib/sample-listings";
 import type { Locale } from "@/i18n/routing";
@@ -185,6 +186,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   const format = useFormatter();
   const title = getLocaleTitle(listing, locale);
   const city = getLocaleCity(listing, locale);
+  const neighborhood = getLocaleNeighborhood(listing, locale);
 
   // Cast to extended type — all extras are optional
   const x = listing as Listing & ListingExtras;
@@ -421,7 +423,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           {/* City + listed-date pill row */}
           <div className="mt-1 flex items-center gap-2">
             <p className="min-w-0 flex-1 truncate text-sm text-ink-mid">
-              {city}
+              {neighborhood && neighborhood !== city ? `${neighborhood} · ${city}` : city}
             </p>
             {listedLabel && (
               <span

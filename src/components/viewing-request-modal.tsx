@@ -94,7 +94,7 @@ export function ViewingRequestModal({
           {status === "sent" ? (
             <>
               <p className="text-sm text-green-700">{t("sent")}</p>
-              <div className="flex justify-end">
+              <div className="flex justify-end rtl:justify-start">
                 <button
                   type="button"
                   onClick={closeDialog}
@@ -170,7 +170,7 @@ export function ViewingRequestModal({
                 <p className="text-xs text-red-600">Something went wrong. Please try again.</p>
               )}
 
-              <div className="flex justify-end gap-2">
+              <div className="flex justify-end gap-2 rtl:justify-start">
                 <button
                   type="button"
                   onClick={closeDialog}

@@ -7,7 +7,7 @@ import GlassPanel from "@/components/glass-panel";
 import ProseCard from "@/components/prose-card";
 import WaveDivider from "@/components/wave-divider";
 import { insights, getInsightBySlug } from "@/lib/insights";
-import { Calendar, ArrowLeft, ArrowRight } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight } from "lucide-react"; // ArrowRight used for RTL back-nav and forward CTAs
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -167,13 +167,13 @@ export default async function InsightDetailPage({
             }}
           />
 
-          {/* Back link */}
+          {/* Back link — arrow points backward in reading direction */}
           <div className="absolute start-4 top-6 sm:start-8">
             <Link
               href="/insights"
               className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-ink/50 px-4 py-2 text-xs font-medium text-cream backdrop-blur-sm hover:bg-ink/70 transition-colors"
             >
-              <ArrowLeft size={12} aria-hidden />
+              {isAr ? <ArrowRight size={12} aria-hidden /> : <ArrowLeft size={12} aria-hidden />}
               {isAr ? "كل التحليلات" : "All insights"}
             </Link>
           </div>
@@ -255,7 +255,7 @@ export default async function InsightDetailPage({
                         </p>
                         <p className="inline-flex items-center gap-1 text-xs font-medium text-terracotta group-hover:gap-2 transition-all">
                           {isAr ? "اقرأ" : "Read"}
-                          <ArrowRight size={12} aria-hidden />
+                          {isAr ? <ArrowLeft size={12} aria-hidden /> : <ArrowRight size={12} aria-hidden />}
                         </p>
                       </GlassPanel>
                     </Link>

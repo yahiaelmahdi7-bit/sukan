@@ -6,7 +6,7 @@ import SectionHeader from "@/components/section-header";
 import GlassPanel from "@/components/glass-panel";
 import WaveDivider from "@/components/wave-divider";
 import { guides } from "@/lib/guides";
-import { MapPin, ArrowRight } from "lucide-react";
+import { MapPin, ArrowRight, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 
 const SITE_URL =
@@ -180,10 +180,10 @@ export default async function GuidesIndexPage({
                           )}
                         </div>
 
-                        {/* CTA */}
+                        {/* CTA — arrow points forward in reading direction */}
                         <p className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-terracotta group-hover:gap-2 transition-all">
                           {isAr ? "اقرأ الدليل" : "Read guide"}
-                          <ArrowRight size={14} aria-hidden />
+                          {isAr ? <ArrowLeft size={14} aria-hidden /> : <ArrowRight size={14} aria-hidden />}
                         </p>
                       </div>
                     </GlassPanel>

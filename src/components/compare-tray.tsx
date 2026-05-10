@@ -83,7 +83,7 @@ function FilledSlot({
         type="button"
         aria-label={removeLabel}
         onClick={() => onRemove(item.id)}
-        className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink/50 text-cream transition-colors hover:bg-ink/80"
+        className="absolute end-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink/50 text-cream transition-colors hover:bg-ink/80"
       >
         <X size={10} strokeWidth={2.5} />
       </button>
@@ -141,7 +141,7 @@ export default function CompareTray() {
       <div
         role="region"
         aria-label={t("trayLabel")}
-        className="fixed bottom-6 ltr:right-6 rtl:left-6 rtl:right-auto z-40 flex items-end gap-3"
+        className="fixed bottom-6 end-6 z-40 flex items-end gap-3"
         style={{
           animation:
             items.length > 0

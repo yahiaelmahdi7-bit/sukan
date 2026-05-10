@@ -58,12 +58,12 @@ function CompareColumn({ item }: { item: CompareItem }) {
           <p className="text-[11px] uppercase tracking-[0.12em] text-ink-mid/70">
             {t("price")}
           </p>
-          <p className="mt-1 font-display text-2xl text-terracotta">
+          <bdi className="mt-1 block font-display text-2xl text-terracotta">
             ${item.priceUsd.toLocaleString()}
-          </p>
-          <p className="mt-0.5 text-[11px] text-ink-mid">
+          </bdi>
+          <bdi className="mt-0.5 block text-[11px] text-ink-mid">
             ≈ {sdgMonthly.toLocaleString()} SDG/mo
-          </p>
+          </bdi>
         </div>
 
         {/* State */}

@@ -169,7 +169,7 @@ export default function ActivityTicker() {
         role="status"
         aria-live="polite"
         aria-label={t("liveLabel")}
-        className="ticker-card fixed bottom-6 left-6 rtl:right-6 rtl:left-auto z-50 hidden w-[min(360px,calc(100vw-3rem))] rounded-[var(--radius-glass,22px)] p-3.5 sm:block"
+        className="ticker-card fixed bottom-6 start-6 z-50 hidden w-[min(360px,calc(100vw-3rem))] rounded-[var(--radius-glass,22px)] p-3.5 sm:block"
         dir={isAr ? "rtl" : "ltr"}
       >
         {/* Dismiss button — always sits at the logical end (right in LTR, left in RTL) */}

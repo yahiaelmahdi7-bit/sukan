@@ -122,14 +122,14 @@ export async function SimilarListingsRail({
                   {city}
                 </p>
 
-                {/* Price */}
+                {/* Price — bdi ensures correct number ordering in RTL */}
                 <div className="flex flex-wrap items-baseline gap-1 mt-0.5">
-                  <span className="font-display text-base text-[#C8401A] font-semibold leading-none">
+                  <bdi className="font-display text-base text-[#C8401A] font-semibold leading-none">
                     {formatUsd(listing.priceUsd)}
-                  </span>
-                  <span className="text-[10px] text-[#12100C]/45 leading-none">
+                  </bdi>
+                  <bdi className="text-[10px] text-[#12100C]/45 leading-none">
                     ≈ {(sdg / 1000).toFixed(0)}K SDG
-                  </span>
+                  </bdi>
                 </div>
 
                 {/* Beds / baths */}

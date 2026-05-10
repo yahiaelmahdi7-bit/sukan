@@ -941,5 +941,10 @@
   "activityTicker": {
     "dismiss": "Dismiss activity feed",
     "liveLabel": "Live marketplace activity"
+  },
+  "trending": {
+    "eyebrow": "Hot right now",
+    "title": "Trending in {city}",
+    "subtitle": "The properties everyone's looking at this week."
   }
 }

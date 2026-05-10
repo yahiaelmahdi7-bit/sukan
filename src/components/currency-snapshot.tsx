@@ -38,18 +38,18 @@ export default async function CurrencySnapshot({
           </div>
 
           <div className="flex flex-col gap-1">
-            {/* Primary rate */}
+            {/* Primary rate — bdi ensures correct number direction in both LTR/RTL contexts */}
             <p className="font-display text-3xl leading-none text-ink md:text-4xl">
-              1 USD ≈{" "}
-              <span className="text-gold-dk">{USD_TO_SDG.toLocaleString()} SDG</span>
+              <bdi>1 USD ≈{" "}
+              <span className="text-gold-dk">{USD_TO_SDG.toLocaleString()} SDG</span></bdi>
             </p>
 
             {/* Secondary context line */}
             <p className="text-sm text-ink-mid">
-              1,000 USD ≈{" "}
+              <bdi>1,000 USD ≈{" "}
               <span className="font-semibold text-ink">
                 {(1000 * USD_TO_SDG).toLocaleString()} SDG
-              </span>
+              </span></bdi>
             </p>
 
             {/* Timestamp */}
@@ -74,10 +74,10 @@ export default async function CurrencySnapshot({
       style={{ boxShadow: "0 2px 10px rgba(200,135,58,0.10)" }}
     >
       <TrendingUp size={14} className="shrink-0 text-gold-dk" strokeWidth={1.5} />
-      <span className="text-sm font-semibold text-ink">
+      <bdi className="text-sm font-semibold text-ink">
         1 USD ≈{" "}
         <span className="text-gold-dk">{USD_TO_SDG.toLocaleString()} SDG</span>
-      </span>
+      </bdi>
       <span className="text-xs text-ink-mid/60">· {updatedLabel}</span>
     </div>
   );

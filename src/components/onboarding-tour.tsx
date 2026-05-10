@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const STORAGE_KEY = "sukan-onboarding-done";
 
@@ -44,6 +44,8 @@ interface TooltipRect {
 
 export default function OnboardingTour() {
   const t = useTranslations("onboarding");
+  const locale = useLocale();
+  const isRtl = locale === "ar";
   const [step, setStep] = useState(0);
   const [visible, setVisible] = useState(false);
   const [targetRect, setTargetRect] = useState<TooltipRect | null>(null);
@@ -95,7 +97,7 @@ export default function OnboardingTour() {
 
   const current = STEPS[step];
 
-  // Tooltip position: try to the right of the target, clamp to viewport
+  // Tooltip position: place on the trailing edge of the target, clamp to viewport
   let tooltipTop = 0;
   let tooltipLeft = 0;
   const TOOLTIP_WIDTH = 280;
@@ -105,8 +107,12 @@ export default function OnboardingTour() {
   if (targetRect) {
     // Anchor vertically to the centre of the target element
     tooltipTop = targetRect.top + targetRect.height / 2 - TOOLTIP_HEIGHT / 2;
-    // Place to the right of the target
-    tooltipLeft = targetRect.left + targetRect.width + GAP;
+    // In LTR: place to the right of the target; in RTL: place to the left
+    if (isRtl) {
+      tooltipLeft = targetRect.left - TOOLTIP_WIDTH - GAP;
+    } else {
+      tooltipLeft = targetRect.left + targetRect.width + GAP;
+    }
 
     // Clamp inside viewport
     tooltipTop = Math.max(
@@ -118,9 +124,9 @@ export default function OnboardingTour() {
       Math.min(tooltipLeft, window.innerWidth - TOOLTIP_WIDTH - GAP),
     );
   } else {
-    // Fallback: bottom-right corner
+    // Fallback: bottom-end corner
     tooltipTop = window.innerHeight - TOOLTIP_HEIGHT - 24;
-    tooltipLeft = window.innerWidth - TOOLTIP_WIDTH - 24;
+    tooltipLeft = isRtl ? 24 : window.innerWidth - TOOLTIP_WIDTH - 24;
   }
 
   return createPortal(

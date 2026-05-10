@@ -124,8 +124,8 @@ export function ListingToc({ locale }: ListingTocProps) {
       style={{
         position: "fixed",
         top: "6rem",
-        // RTL: left side. LTR: right side.
-        [isRtl ? "left" : "right"]: "1.25rem",
+        // Logical property: end side in reading direction (right in LTR, left in RTL)
+        insetInlineEnd: "1.25rem",
         width: "11rem",
         zIndex: 30,
         // cream glass card

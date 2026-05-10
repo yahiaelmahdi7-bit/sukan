@@ -276,7 +276,7 @@ export default function AIMatchModal({ open, onClose }: AIMatchModalProps) {
               aria-label={t("send")}
               className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-terracotta text-parchment transition hover:bg-terracotta-deep disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <Send size={16} />
+              <Send size={16} className={locale === "ar" ? "scale-x-[-1]" : ""} />
             </button>
           </div>
 

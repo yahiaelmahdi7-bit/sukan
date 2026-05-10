@@ -6,7 +6,7 @@ import SectionHeader from "@/components/section-header";
 import GlassPanel from "@/components/glass-panel";
 import WaveDivider from "@/components/wave-divider";
 import { insights } from "@/lib/insights";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 
 const SITE_URL =
@@ -204,7 +204,7 @@ export default async function InsightsIndexPage({
 
                         <p className="inline-flex items-center gap-1 text-sm font-medium text-terracotta group-hover:gap-2 transition-all">
                           {isAr ? "اقرأ التحليل" : "Read analysis"}
-                          <ArrowRight size={14} aria-hidden />
+                          {isAr ? <ArrowLeft size={14} aria-hidden /> : <ArrowRight size={14} aria-hidden />}
                         </p>
                       </div>
                     </GlassPanel>

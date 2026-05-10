@@ -36,6 +36,23 @@ export default async function HomePage({
     .filter((l) => l.tier === "featured")
     .slice(0, 3);
 
+  // ── Trending band ────────────────────────────────────────────────────────────
+  // Group by state, find the most-listed state, sort by weeklyViews, take top 3.
+  const listingsByState = sampleListings.reduce<Record<string, typeof sampleListings>>((acc, l) => {
+    if (!acc[l.state]) acc[l.state] = [];
+    acc[l.state].push(l);
+    return acc;
+  }, {});
+  const topState = Object.entries(listingsByState).sort((a, b) => b[1].length - a[1].length)[0];
+  const trendingPool = topState ? topState[1] : sampleListings;
+  const trendingListings = [...trendingPool]
+    .sort((a, b) => (b.weeklyViews ?? 0) - (a.weeklyViews ?? 0))
+    .slice(0, 3);
+  // City display name — use the first listing's locale-appropriate city field
+  const trendingCity = locale === "ar"
+    ? (trendingListings[0]?.cityAr ?? trendingListings[0]?.city ?? "")
+    : (trendingListings[0]?.city ?? "");
+
   const heroStats = [
     { value: t("hero.statListingsValue"), label: t("hero.statListings") },
     { value: t("hero.statStatesValue"), label: t("hero.statStates") },
@@ -184,6 +201,28 @@ export default async function HomePage({
             </div>
           </div>
         </section>
+
+        {/* ─────────────────────────────────────────────────────────
+            3b. TRENDING BAND
+        ───────────────────────────────────────────────────────── */}
+        <WaveDivider flip intensity="subtle" />
+        <section className="bg-cream-deep py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <SectionHeader
+              eyebrow={t("trending.eyebrow")}
+              title={t("trending.title", { city: trendingCity })}
+              subtitle={t("trending.subtitle")}
+            />
+            <StaggeredListings>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {trendingListings.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </div>
+            </StaggeredListings>
+          </div>
+        </section>
+        <WaveDivider intensity="subtle" />
 
         {/* ─────────────────────────────────────────────────────────
             4. BROWSE ALL LISTINGS

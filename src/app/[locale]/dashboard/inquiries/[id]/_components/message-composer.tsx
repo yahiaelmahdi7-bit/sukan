@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import { useLocale } from "next-intl";
 import { GlassTextarea } from "@/components/ui/glass-input";
 import { sendMessage } from "../../actions";
 
@@ -25,6 +26,8 @@ export default function MessageComposer({
   currentUserId,
   labels,
 }: MessageComposerProps) {
+  const locale = useLocale();
+  const isRtl = locale === "ar";
   const [body, setBody] = useState("");
   const [attachments, setAttachments] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -189,7 +192,7 @@ export default function MessageComposer({
               : { background: "#d4b8aa" }
           }
         >
-          {isPending ? <SpinnerIcon /> : <SendIcon />}
+          {isPending ? <SpinnerIcon /> : <SendIcon rtl={isRtl} />}
         </button>
       </div>
 
@@ -226,7 +229,7 @@ function PaperclipIcon() {
   );
 }
 
-function SendIcon() {
+function SendIcon({ rtl = false }: { rtl?: boolean }) {
   return (
     <svg
       aria-hidden
@@ -238,6 +241,7 @@ function SendIcon() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      style={rtl ? { transform: "scaleX(-1)" } : undefined}
     >
       <line x1="22" y1="2" x2="11" y2="13" />
       <polygon points="22 2 15 22 11 13 2 9 22 2" />

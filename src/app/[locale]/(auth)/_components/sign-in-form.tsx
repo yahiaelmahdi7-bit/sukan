@@ -99,7 +99,7 @@ export default function SignInForm() {
           />
         )}
 
-        <div className="flex justify-end">
+        <div className="flex justify-end rtl:justify-start">
           <Link
             href="/forgot-password"
             className="text-xs text-terracotta/70 transition hover:text-terracotta"

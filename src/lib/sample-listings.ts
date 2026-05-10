@@ -636,6 +636,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-22T09:00:00Z",          // 19 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_225224_894fa9d6-0d7c-4dae-bf45-584444df7143.png",
       "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1600&q=80",
       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=80",
       "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&q=80",
@@ -678,6 +679,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-12T13:00:00Z",          // 29 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_225227_f5b855fd-1365-427e-b8d8-1ba724208135.png",
       "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1600&q=80",
       "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=80",
     ],
@@ -716,6 +718,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-17T10:00:00Z",          // 24 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_225230_d8ccfe5f-fdb9-4361-9e04-9224cb928d99.png",
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80",
       "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
     ],
@@ -755,6 +758,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-19T08:00:00Z",          // 22 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_225233_76125048-d79c-4a43-bbc8-8b5a04270578.png",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80",
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
@@ -838,6 +842,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-23T11:00:00Z",          // 18 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_225526_928bef76-2132-4247-8233-3634d287db8c.png",
       "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80",
       "https://images.unsplash.com/photo-1565098772267-60af42b81ef2?w=1600&q=80",
     ],
@@ -877,6 +882,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-04-14T09:00:00Z",          // 27 days ago
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_225529_308298f9-4c84-465f-8b4c-e59735674228.png",
       "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1600&q=80",
       "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1600&q=80",
       "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=80",
@@ -918,6 +924,7 @@ export const sampleListings: Listing[] = [
     // ── Round 2 fields ──────────────────────────────────────────────────────
     createdAt: "2026-05-08T15:30:00Z",          // 3 days ago → NEW ribbon
     photos: [
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3CTdrgC2CdR16Mhg8ltaktkLuTj/hf_20260510_225531_e168e76a-eb88-4161-9897-43a6a04aa430.png",
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=80",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",

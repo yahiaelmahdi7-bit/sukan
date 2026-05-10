@@ -176,12 +176,12 @@ export default function RecentlyViewedDropdown() {
                           {item.title}
                         </p>
                         <p className="mt-0.5 text-xs">
-                          <span className="font-semibold text-terracotta">
+                          <bdi className="font-semibold text-terracotta">
                             ${item.priceUsd.toLocaleString()}
-                          </span>
-                          <span className="ml-1.5 text-ink/40">
+                          </bdi>
+                          <bdi className="ms-1.5 text-ink/40">
                             ≈ {formatSdg(item.priceUsd)}
-                          </span>
+                          </bdi>
                         </p>
                       </div>
                     </button>

@@ -82,7 +82,7 @@ function HorizontalBar({
   const pct = max > 0 ? (value / max) * 100 : 0;
   return (
     <div className="flex items-center gap-4">
-      <span className="text-sm text-ink w-28 shrink-0 truncate text-end ltr:text-end rtl:text-start">
+      <span className="text-sm text-ink w-28 shrink-0 truncate text-end">
         {label}
       </span>
       <div className="flex-1 h-2 rounded-full bg-sand/50 overflow-hidden border border-white/40">

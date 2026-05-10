@@ -74,8 +74,8 @@ export default function MessageBubble({
           className={[
             "px-4 py-2.5 rounded-2xl text-sm leading-relaxed",
             isOwn
-              ? "text-cream rounded-br-sm"
-              : "glass-warm border border-white/55 text-ink rounded-bl-sm",
+              ? "text-cream rounded-ee-sm"
+              : "glass-warm border border-white/55 text-ink rounded-es-sm",
           ].join(" ")}
           style={
             isOwn

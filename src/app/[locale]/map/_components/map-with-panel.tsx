@@ -239,7 +239,7 @@ function FilterBar({
           aria-hidden
           style={{
             position: 'absolute',
-            [isAr ? 'right' : 'left']: '12px',
+            insetInlineStart: '12px',
             top: '50%',
             transform: 'translateY(-50%)',
             fontSize: '11px',
@@ -261,8 +261,10 @@ function FilterBar({
             background: maxPrice ? 'rgba(255,252,246,0.88)' : 'rgba(255,255,255,0.55)',
             border: maxPrice ? '1px solid rgba(200,135,58,0.5)' : '1px solid rgba(255,255,255,0.55)',
             borderRadius: 'var(--radius-pill)',
-            padding: `6px 12px 6px ${isAr ? '12px' : '22px'}`,
-            paddingRight: isAr ? '22px' : '12px',
+            paddingTop: '6px',
+            paddingBottom: '6px',
+            paddingInlineStart: '22px',
+            paddingInlineEnd: '12px',
             fontSize: '12px',
             color: '#12100C',
             backdropFilter: 'blur(12px)',
