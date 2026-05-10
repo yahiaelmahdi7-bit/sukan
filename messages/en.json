@@ -755,7 +755,20 @@
     "uploading": "Uploading…",
     "uploadFailed": "Upload failed. Please try again.",
     "photoOf": "Photo {index}",
-    "gallery": "Photo gallery"
+    "gallery": "Photo gallery",
+    "aiEnhanced": "AI Enhanced"
+  },
+  "photoTouchup": {
+    "button": "Touch up with AI",
+    "enhancing": "Enhancing… (~10s)",
+    "previewTitle": "AI Enhancement Preview",
+    "before": "Original",
+    "after": "AI Enhanced",
+    "useEnhanced": "Use enhanced",
+    "keepOriginal": "Keep original",
+    "aiEnhanced": "AI Enhanced",
+    "errorGeneric": "Enhancement failed. Try again.",
+    "retry": "Retry"
   },
   "alerts": {
     "saveSearch": "Save search",

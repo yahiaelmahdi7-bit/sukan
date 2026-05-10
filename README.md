@@ -43,6 +43,8 @@ To apply all migrations: `supabase db push`
 | `CRON_SECRET` | Yes | Authenticates Vercel Cron calls to `/api/alerts/check` via `x-cron-secret` header |
 | `ADMIN_EMAIL` | Yes | Destination for listing report notifications |
 | `NEXT_PUBLIC_SITE_URL` | No | Canonical URL used in emails and metadata |
+| `HIGGSFIELD_API_KEY` | Yes (AI photo enhancement) | `POST /api/photos/enhance` — sends landlord photos to Higgsfield for real-estate-tuned image enhancement. If unset the route returns 503. Get your key at [app.higgsfield.ai](https://app.higgsfield.ai). |
+| `HIGGSFIELD_STUB` | No | Set to `true` to run enhancement in stub mode (returns the original photo unchanged) — useful for local dev without credentials. |
 
 ## Brand
 - Name: Sukan / سكن ("housing")

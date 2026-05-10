@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
-import { X } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
+import { PhotoTouchupButton } from "@/components/photo-touchup-button";
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 const ACCEPTED = "image/jpeg,image/png,image/webp,image/gif";
@@ -36,6 +37,8 @@ export function PhotoUpload({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  // Track which photo URLs have been AI-enhanced (by their current URL)
+  const [enhancedUrls, setEnhancedUrls] = useState<Set<string>>(new Set());
 
   async function uploadFiles(files: FileList) {
     setError(null);
@@ -114,6 +117,26 @@ export function PhotoUpload({
     }
   }
 
+  const handlePhotoEnhanced = useCallback(
+    (originalUrl: string, newUrl: string) => {
+      setPhotos((prev) => {
+        const updated = prev.map((p) =>
+          p.url === originalUrl ? { ...p, url: newUrl } : p,
+        );
+        onChange(updated.map((p) => p.url));
+        return updated;
+      });
+      setEnhancedUrls((prev) => {
+        const next = new Set(prev);
+        // Remove the old URL from the enhanced set (if it was previously enhanced)
+        next.delete(originalUrl);
+        next.add(newUrl);
+        return next;
+      });
+    },
+    [onChange],
+  );
+
   const canUploadMore = photos.length < max;
 
   return (
@@ -177,24 +200,52 @@ export function PhotoUpload({
       {/* Thumbnails */}
       {photos.length > 0 && (
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {photos.map((photo, i) => (
-            <div key={photo.url} className="group relative aspect-square overflow-hidden rounded-xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.url}
-                alt={t("photoOf", { index: i + 1 })}
-                className="h-full w-full object-cover"
-              />
-              <button
-                type="button"
-                onClick={() => void removePhoto(i)}
-                aria-label={t("remove")}
-                className="absolute end-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
+          {photos.map((photo, i) => {
+            const isEnhanced = enhancedUrls.has(photo.url);
+            return (
+              <div
+                key={photo.url}
+                className="group relative aspect-square overflow-hidden rounded-xl"
               >
-                <X size={12} aria-hidden="true" />
-              </button>
-            </div>
-          ))}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photo.url}
+                  alt={t("photoOf", { index: i + 1 })}
+                  className="h-full w-full object-cover"
+                />
+
+                {/* Remove button */}
+                <button
+                  type="button"
+                  onClick={() => void removePhoto(i)}
+                  aria-label={t("remove")}
+                  className="absolute end-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition group-hover:opacity-100"
+                >
+                  <X size={12} aria-hidden="true" />
+                </button>
+
+                {/* AI-enhanced badge */}
+                {isEnhanced && (
+                  <div className="absolute start-1 top-1 flex items-center gap-0.5 rounded-full bg-[#C8873A]/90 px-1.5 py-0.5 text-[9px] font-semibold text-white backdrop-blur-sm">
+                    <Sparkles size={8} aria-hidden="true" />
+                    {t("aiEnhanced")}
+                  </div>
+                )}
+
+                {/* Touch up button — visible on hover */}
+                {!isEnhanced && (
+                  <div className="absolute bottom-1 start-1 end-1 flex justify-center opacity-0 transition group-hover:opacity-100">
+                    <PhotoTouchupButton
+                      photoUrl={photo.url}
+                      onEnhanced={(newUrl) =>
+                        handlePhotoEnhanced(photo.url, newUrl)
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
