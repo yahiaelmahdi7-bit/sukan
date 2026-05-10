@@ -227,7 +227,14 @@
     "successBody": "We'll review and publish your listing after payment is confirmed.",
     "reviewTitle": "Listing summary",
     "pricingTitle": "Choose your plan",
-    "paymentTitle": "Payment method"
+    "paymentTitle": "Payment method",
+    "descriptionLabel": "Description",
+    "descriptionEnLabel": "English",
+    "descriptionArLabel": "Arabic",
+    "descriptionEnPlaceholder": "Describe the property in English…",
+    "descriptionArPlaceholder": "صِف العقار باللغة العربية…",
+    "signInRequired": "Please sign in to upload photos.",
+    "submitting": "Publishing…"
   },
   "testimonials": {
     "eyebrow": "Real users",
@@ -324,7 +331,12 @@
       "topPerformers": "Top performing listings",
       "viewsByState": "Views by state",
       "conversionRate": "Inquiry conversion rate",
-      "noData": "No data yet"
+      "noData": "No data yet",
+      "viewsPerListing": "Views per listing",
+      "inquiriesLast30": "Inquiries — last 30 days",
+      "inquiriesTotal": "total inquiries",
+      "inquiriesLabel": "inquiries",
+      "viewsLabel": "views"
     },
     "profile": {
       "fullName": "Full name",
@@ -382,7 +394,10 @@
     },
     "navAnalytics": "Analytics",
     "navProfile": "Profile",
-    "backToSite": "Back to site"
+    "backToSite": "Back to site",
+    "alertsSavedSearches": "Saved searches",
+    "viewingsTab": "Viewings",
+    "reportsTab": "Reports"
   },
   "aiMatch": {
     "title": "AI Property Match",
@@ -620,5 +635,88 @@
     "tip3": "Verify ownership documents — check the deed and seller's ID.",
     "tip4": "Contact through Sukan's WhatsApp link so we have a record of the conversation.",
     "report": "If something feels off, report it →"
+  },
+  "verified": {
+    "tooltip": "Verified landlord",
+    "requestVerification": "Request verification",
+    "pending": "Verification pending",
+    "verified": "Verified",
+    "statusLabel": "Verification status"
+  },
+  "share": {
+    "share": "Share",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "viaWhatsapp": "Share via WhatsApp",
+    "viaTwitter": "Share on X"
+  },
+  "report": {
+    "reportListing": "Report listing",
+    "reasonLabel": "Reason",
+    "reasonScam": "Scam or fraud",
+    "reasonWrongInfo": "Wrong information",
+    "reasonDuplicate": "Duplicate listing",
+    "reasonOffensive": "Offensive content",
+    "reasonOther": "Other",
+    "detailsLabel": "Details (optional)",
+    "submit": "Submit report",
+    "sent": "Report submitted. Thank you.",
+    "error": "Something went wrong. Please try again."
+  },
+  "viewings": {
+    "requestViewing": "Request a viewing",
+    "name": "Your name",
+    "phone": "Phone number",
+    "date": "Preferred date",
+    "time": "Preferred time",
+    "slotMorning": "Morning (9 am – 12 pm)",
+    "slotAfternoon": "Afternoon (12 pm – 5 pm)",
+    "slotEvening": "Evening (5 pm – 8 pm)",
+    "submit": "Send request",
+    "sent": "Viewing request sent. The landlord will be in touch.",
+    "modalTitle": "Request a viewing"
+  },
+  "photos": {
+    "uploadPhotos": "Upload photos",
+    "dropHere": "Drop photos here or",
+    "browse": "browse",
+    "max5": "Up to 5 photos",
+    "maxSize": "5 MB max per photo",
+    "remove": "Remove photo",
+    "uploading": "Uploading…",
+    "uploadFailed": "Upload failed. Please try again.",
+    "photoOf": "Photo {index}",
+    "gallery": "Photo gallery"
+  },
+  "alerts": {
+    "saveSearch": "Save search",
+    "savedSearches": "Saved searches",
+    "alertCreated": "Alert created! You will be notified daily.",
+    "deleteAlert": "Delete alert",
+    "signInToSave": "Sign in to save this search",
+    "modalTitle": "Save this search",
+    "modalDesc": "Get daily email alerts when new listings match your filters."
+  },
+  "reviews": {
+    "reviewsTitle": "Reviews",
+    "leaveReview": "Leave a review",
+    "ratingLabel": "Rating",
+    "commentLabel": "Comment (English)",
+    "commentArLabel": "Comment (Arabic)",
+    "submit": "Submit review",
+    "anonymous": "Anonymous",
+    "noReviews": "No reviews yet. Be the first.",
+    "averageRating": "Average rating",
+    "basedOn": "Based on {count} review(s)"
+  },
+  "ai": {
+    "generateDescription": "Generate with AI",
+    "estimatePrice": "Estimate fair price",
+    "generating": "Generating…",
+    "estimating": "Estimating…",
+    "suggestion": "Based on similar properties: {min} – {max} / {period}",
+    "useSuggested": "Use suggested",
+    "aiUnavailable": "AI is not configured",
+    "error": "Couldn’t generate. Try again."
   }
 }

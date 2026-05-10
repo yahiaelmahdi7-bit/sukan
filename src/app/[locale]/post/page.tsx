@@ -1,4 +1,5 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { createClient } from "@/lib/supabase/server";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import PostWizard from "./_components/post-wizard";
@@ -12,6 +13,12 @@ export default async function PostPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("post");
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const userId = user?.id ?? null;
 
   return (
     <>
@@ -57,7 +64,7 @@ export default async function PostPage({
 
         {/* Wizard — owns its own step indicator */}
         <div className="mx-auto mt-10 max-w-3xl px-4 sm:px-6">
-          <PostWizard />
+          <PostWizard userId={userId} />
         </div>
       </main>
 

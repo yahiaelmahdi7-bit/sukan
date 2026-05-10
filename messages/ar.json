@@ -227,7 +227,14 @@
     "successBody": "سنراجع إعلانك وننشره بعد تأكيد الدفع.",
     "reviewTitle": "ملخص الإعلان",
     "pricingTitle": "اختر الباقة",
-    "paymentTitle": "طريقة الدفع"
+    "paymentTitle": "طريقة الدفع",
+    "descriptionLabel": "الوصف",
+    "descriptionEnLabel": "إنجليزي",
+    "descriptionArLabel": "عربي",
+    "descriptionEnPlaceholder": "صِف العقار باللغة الإنجليزية…",
+    "descriptionArPlaceholder": "صِف العقار باللغة العربية…",
+    "signInRequired": "يرجى تسجيل الدخول لرفع الصور.",
+    "submitting": "جارٍ النشر…"
   },
   "testimonials": {
     "eyebrow": "مستخدمون حقيقيون",
@@ -324,7 +331,12 @@
       "topPerformers": "أفضل الإعلانات أداءً",
       "viewsByState": "المشاهدات حسب الولاية",
       "conversionRate": "معدل تحويل الاستفسارات",
-      "noData": "لا توجد بيانات بعد"
+      "noData": "لا توجد بيانات بعد",
+      "viewsPerListing": "المشاهدات لكل إعلان",
+      "inquiriesLast30": "الاستفسارات — آخر 30 يوماً",
+      "inquiriesTotal": "إجمالي الاستفسارات",
+      "inquiriesLabel": "استفسارات",
+      "viewsLabel": "مشاهدات"
     },
     "profile": {
       "fullName": "الاسم الكامل",
@@ -382,7 +394,10 @@
     },
     "navAnalytics": "التحليلات",
     "navProfile": "الملف الشخصي",
-    "backToSite": "العودة إلى الموقع"
+    "backToSite": "العودة إلى الموقع",
+    "alertsSavedSearches": "عمليات البحث المحفوظة",
+    "viewingsTab": "المعاينات",
+    "reportsTab": "البلاغات"
   },
   "aiMatch": {
     "title": "البحث الذكي بالذكاء الاصطناعي",
@@ -620,5 +635,88 @@
     "tip3": "تحقق من وثائق الملكية — راجع صك التسجيل وهوية البائع.",
     "tip4": "تواصل عبر رابط واتساب سُكَن حتى يكون لدينا سجل للمحادثة.",
     "report": "إذا شعرت بشيء غير سليم، أبلغ عنه ←"
+  },
+  "verified": {
+    "tooltip": "مؤجر موثّق",
+    "requestVerification": "طلب التوثيق",
+    "pending": "التوثيق قيد الانتظار",
+    "verified": "موثّق",
+    "statusLabel": "حالة التوثيق"
+  },
+  "share": {
+    "share": "مشاركة",
+    "copyLink": "نسخ الرابط",
+    "copied": "تم النسخ!",
+    "viaWhatsapp": "مشاركة عبر واتساب",
+    "viaTwitter": "مشاركة على X"
+  },
+  "report": {
+    "reportListing": "الإبلاغ عن الإعلان",
+    "reasonLabel": "السبب",
+    "reasonScam": "احتيال أو نصب",
+    "reasonWrongInfo": "معلومات خاطئة",
+    "reasonDuplicate": "إعلان مكرر",
+    "reasonOffensive": "محتوى مسيء",
+    "reasonOther": "أخرى",
+    "detailsLabel": "تفاصيل (اختياري)",
+    "submit": "إرسال البلاغ",
+    "sent": "تم إرسال البلاغ. شكراً لك.",
+    "error": "حدث خطأ. يرجى المحاولة مجدداً."
+  },
+  "viewings": {
+    "requestViewing": "طلب معاينة",
+    "name": "اسمك",
+    "phone": "رقم الهاتف",
+    "date": "التاريخ المفضّل",
+    "time": "الوقت المفضّل",
+    "slotMorning": "صباحاً (٩ ص – ١٢ م)",
+    "slotAfternoon": "ظهراً (١٢ م – ٥ م)",
+    "slotEvening": "مساءً (٥ م – ٨ م)",
+    "submit": "إرسال الطلب",
+    "sent": "تم إرسال طلب المعاينة. سيتواصل معك المؤجر قريباً.",
+    "modalTitle": "طلب معاينة"
+  },
+  "photos": {
+    "uploadPhotos": "رفع الصور",
+    "dropHere": "اسحب الصور هنا أو",
+    "browse": "تصفّح",
+    "max5": "حتى ٥ صور",
+    "maxSize": "٥ ميغابايت كحدٍّ أقصى للصورة",
+    "remove": "حذف الصورة",
+    "uploading": "جارٍ الرفع…",
+    "uploadFailed": "فشل الرفع. يرجى المحاولة مجدداً.",
+    "photoOf": "صورة {index}",
+    "gallery": "معرض الصور"
+  },
+  "alerts": {
+    "saveSearch": "حفظ البحث",
+    "savedSearches": "عمليات البحث المحفوظة",
+    "alertCreated": "تم إنشاء التنبيه! ستتلقى إشعارات يومية.",
+    "deleteAlert": "حذف التنبيه",
+    "signInToSave": "سجّل دخولك لحفظ هذا البحث",
+    "modalTitle": "حفظ هذا البحث",
+    "modalDesc": "احصل على تنبيهات بريد إلكتروني يومية عند توفر إعلانات جديدة تطابق معاييرك."
+  },
+  "reviews": {
+    "reviewsTitle": "التقييمات",
+    "leaveReview": "اترك تقييماً",
+    "ratingLabel": "التقييم",
+    "commentLabel": "تعليق (بالإنجليزية)",
+    "commentArLabel": "تعليق (بالعربية)",
+    "submit": "إرسال التقييم",
+    "anonymous": "مجهول",
+    "noReviews": "لا توجد تقييمات بعد. كن الأول.",
+    "averageRating": "متوسط التقييم",
+    "basedOn": "بناءً على {count} تقييم"
+  },
+  "ai": {
+    "generateDescription": "إنشاء بالذكاء الاصطناعي",
+    "estimatePrice": "تقدير السعر العادل",
+    "generating": "جارٍ الإنشاء…",
+    "estimating": "جارٍ التقدير…",
+    "suggestion": "بناءً على عقارات مشابهة: {min} – {max} / {period}",
+    "useSuggested": "استخدم المقترح",
+    "aiUnavailable": "الذكاء الاصطناعي غير مفعّل",
+    "error": "تعذّر الإنشاء. حاول مرة أخرى."
   }
 }

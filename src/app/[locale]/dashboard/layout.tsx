@@ -36,6 +36,20 @@ export default async function DashboardLayout({
   const userName = locale === "ar" ? mockUser.full_name_ar : realName;
   const signOutLabel = t("signOut");
 
+  // Check if this user is an agent/admin — used to show admin-only nav items.
+  // Fails soft: if the profiles table doesn't exist yet, isAdmin stays false.
+  let isAdmin = false;
+  try {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_agent")
+      .eq("id", authUser.id)
+      .maybeSingle();
+    isAdmin = profile?.is_agent === true;
+  } catch {
+    // profiles.is_agent column may not exist yet (migration pending)
+  }
+
   return (
     <div className="min-h-screen bg-cream flex flex-col">
       {/* ── Top bar — glass pill matching the main navbar ───────────────────── */}
@@ -113,7 +127,7 @@ export default async function DashboardLayout({
       <div className="flex flex-1 overflow-hidden pt-4">
         {/* Desktop sidebar — floating glass card */}
         <div className="hidden lg:flex h-full ps-4 pb-6">
-          <SidebarNav userName={userName} signOutLabel={signOutLabel} />
+          <SidebarNav userName={userName} signOutLabel={signOutLabel} isAdmin={isAdmin} />
         </div>
 
         {/* Content area — cream so atmosphere bleeds through */}

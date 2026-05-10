@@ -1,7 +1,8 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { sampleListings } from "@/lib/sample-listings";
+import { createClient } from "@/lib/supabase/server";
 import InquiryInbox from "../_components/inquiry-inbox";
 import { getMockInquiries } from "../_data/mock-inquiries";
+import { getInquiriesForUser } from "../_data/inquiries";
 
 export default async function InquiriesPage({
   params,
@@ -12,13 +13,22 @@ export default async function InquiriesPage({
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
 
-  const inquiries = getMockInquiries();
+  // Auth guard double-check (layout already guards, but good practice)
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // Build listing title lookup for the inbox
+  // Real inquiries — fall back to mock when empty (pre-launch demo)
+  const realInquiries = user ? await getInquiriesForUser(user.id) : [];
+  const mockInquiries = getMockInquiries();
+  const inquiries = realInquiries.length > 0 ? realInquiries : mockInquiries;
+
+  // Build listing title lookup from the inquiries themselves
   const listingTitles: Record<string, string> = {};
-  for (const listing of sampleListings) {
-    listingTitles[listing.id] =
-      locale === "ar" ? listing.titleAr : listing.titleEn;
+  for (const inq of inquiries) {
+    listingTitles[inq.listing_id] =
+      locale === "ar" ? inq.listing_title_ar : inq.listing_title_en;
   }
 
   const unreadCount = inquiries.filter((i) => !i.is_read).length;

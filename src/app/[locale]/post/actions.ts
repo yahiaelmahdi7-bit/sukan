@@ -103,3 +103,57 @@ export async function createListing(
   revalidatePath("/listings");
   return { ok: true, listingId: data.id };
 }
+
+// ─── attachPhotos ─────────────────────────────────────────────────────────────
+// Called client-side after createListing succeeds.
+// Inserts rows into listing_photos (created by 20260511000001_storage.sql).
+// Storage path is extracted from the Supabase public URL so we don't need to
+// pass it separately.
+
+export type AttachPhotosResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+export async function attachPhotos(
+  listingId: string,
+  urls: string[],
+): Promise<AttachPhotosResult> {
+  if (urls.length === 0) return { ok: true };
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, error: "Not authenticated" };
+  }
+
+  // Extract storage_path from the public URL.
+  // Supabase public URL pattern: .../storage/v1/object/public/<bucket>/<path>
+  function extractPath(url: string): string {
+    const marker = "/object/public/listing-photos/";
+    const idx = url.indexOf(marker);
+    if (idx === -1) return url; // fallback: store full URL
+    return url.slice(idx + marker.length);
+  }
+
+  const rows = urls.map((url, position) => ({
+    listing_id: listingId,
+    storage_path: extractPath(url),
+    url,
+    position,
+  }));
+
+  const { error } = await supabase.from("listing_photos").insert(rows);
+
+  if (error) {
+    // Non-fatal: photos may still display via photoUrls on listing.
+    // Log server-side but don't block the user.
+    console.error("[attachPhotos] insert error:", error.message);
+    return { ok: false, error: error.message };
+  }
+
+  return { ok: true };
+}

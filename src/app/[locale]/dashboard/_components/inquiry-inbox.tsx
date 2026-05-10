@@ -3,10 +3,10 @@
 import { useState } from "react";
 import InquiryList from "./inquiry-list";
 import InquiryDetail from "./inquiry-detail";
-import type { MockInquiry } from "../_data/mock-inquiries";
+import type { Inquiry } from "../_data/inquiry-types";
 
 interface InquiryInboxProps {
-  inquiries: MockInquiry[];
+  inquiries: Inquiry[];
   locale: string;
   listingTitles: Record<string, string>;
   labels: {
@@ -30,7 +30,7 @@ export default function InquiryInbox({
     inquiries[0]?.id ?? null
   );
 
-  const selected = inquiries.find((i) => i.id === selectedId) ?? null;
+  const selected: Inquiry | null = inquiries.find((i) => i.id === selectedId) ?? null;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-start">

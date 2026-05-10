@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useEffect, useTransition, useId, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useState, useEffect, useTransition, useId } from "react";
+import { useTranslations, useLocale } from "next-intl";
+import { Sparkles } from "lucide-react";
 import GlassPanel from "@/components/glass-panel";
-import { GlassInput } from "@/components/ui/glass-input";
+import { GlassInput, GlassTextarea } from "@/components/ui/glass-input";
 import { GlassSelect } from "@/components/ui/glass-select";
 import { GlassButton } from "@/components/ui/glass-button";
+import { PhotoUpload } from "@/components/photo-upload";
 import PostMap from "./post-map";
+import { createListing, attachPhotos } from "../actions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -56,6 +59,8 @@ export interface PostDraft {
   price: string;
   currency: CurrencyKey;
   period: PeriodKey;
+  descriptionEn: string;
+  descriptionAr: string;
   // Step 2
   state: StateKey | "";
   city: string;
@@ -63,8 +68,8 @@ export interface PostDraft {
   address: string;
   pinLat: number | null;
   pinLng: number | null;
-  // Step 3
-  photos: string[]; // object URLs (ephemeral, not serialized)
+  // Step 3 — Supabase public URLs (safe to persist)
+  photoUrls: string[];
   // Step 4
   tier: TierKey;
   payment: PaymentKey;
@@ -80,19 +85,30 @@ const INITIAL_DRAFT: PostDraft = {
   price: "",
   currency: "USD",
   period: "month",
+  descriptionEn: "",
+  descriptionAr: "",
   state: "",
   city: "",
   neighborhood: "",
   address: "",
   pinLat: null,
   pinLng: null,
-  photos: [],
+  photoUrls: [],
   tier: "standard",
   payment: "stripe",
   termsAccepted: false,
 };
 
 const SESSION_KEY = "sukan:post-draft";
+
+// Temporary listing ID used for storage path during upload
+// A real UUID is used so Supabase path is stable even before DB insert
+function makeTempId() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `tmp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
 
 // ─── Data constants ───────────────────────────────────────────────────────────
 
@@ -160,8 +176,6 @@ const STATE_COORDS: Record<StateKey, [number, number]> = {
   northern: [19.1816, 30.4749],
 };
 
-const MAX_PHOTOS = 10;
-
 // ─── Style helpers ────────────────────────────────────────────────────────────
 
 const labelCls =
@@ -215,7 +229,7 @@ function Stepper({
   );
 }
 
-// ─── Interactive progress bar (client version rendered inside wizard) ─────────
+// ─── Interactive progress bar ─────────────────────────────────────────────────
 
 function WizardProgress({
   step,
@@ -326,23 +340,198 @@ function WizardProgress({
   );
 }
 
+// ─── AI Price Estimate callout ────────────────────────────────────────────────
+
+interface PriceEstimate {
+  min: number;
+  max: number;
+  suggested: number;
+  currency: string;
+  reasoning_en: string;
+  reasoning_ar: string;
+}
+
+function PriceEstimateCallout({
+  estimate,
+  period,
+  locale,
+  onUseSuggested,
+}: {
+  estimate: PriceEstimate;
+  period: PeriodKey;
+  locale: string;
+  onUseSuggested: (price: string) => void;
+}) {
+  const t = useTranslations("ai");
+  const periodLabel =
+    period === "month" ? "month" : period === "year" ? "year" : "total";
+
+  const reasoning =
+    locale === "ar" ? estimate.reasoning_ar : estimate.reasoning_en;
+
+  return (
+    <div
+      className="mt-3 rounded-[var(--radius-glass)] border border-gold/30 p-4 space-y-2"
+      style={{ background: "rgba(200,135,58,0.08)" }}
+    >
+      <p className="text-sm text-parchment font-semibold">
+        {t("suggestion", {
+          min: `${estimate.currency} ${estimate.min.toLocaleString()}`,
+          max: `${estimate.currency} ${estimate.max.toLocaleString()}`,
+          period: periodLabel,
+        })}
+      </p>
+      {reasoning && (
+        <p className="text-xs text-mute-soft leading-relaxed">{reasoning}</p>
+      )}
+      <GlassButton
+        type="button"
+        variant="gold"
+        size="sm"
+        onClick={() => onUseSuggested(String(estimate.suggested))}
+      >
+        {t("useSuggested")} — {estimate.currency} {estimate.suggested.toLocaleString()}
+      </GlassButton>
+    </div>
+  );
+}
+
 // ─── Step 1: Property Details ─────────────────────────────────────────────────
 
 function Step1({
   draft,
   update,
   errors,
+  userId,
 }: {
   draft: PostDraft;
   update: (patch: Partial<PostDraft>) => void;
   errors: Record<string, string>;
+  userId: string | null;
 }) {
   const pt = useTranslations("propertyType");
   const ht = useTranslations("hero");
   const t = useTranslations("post");
+  const ai = useTranslations("ai");
+  const locale = useLocale();
 
   const bedroomsId = useId();
   const bathroomsId = useId();
+
+  const [generatingDesc, setGeneratingDesc] = useState(false);
+  const [descError, setDescError] = useState<string | null>(null);
+  const [estimating, setEstimating] = useState(false);
+  const [estimateError, setEstimateError] = useState<string | null>(null);
+  const [priceEstimate, setPriceEstimate] = useState<PriceEstimate | null>(null);
+
+  async function handleGenerateDescription() {
+    setGeneratingDesc(true);
+    setDescError(null);
+    try {
+      const res = await fetch("/api/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyType: draft.propertyType,
+          bedrooms: draft.bedrooms,
+          bathrooms: draft.bathrooms,
+          areaSqm: draft.area ? Number(draft.area) : null,
+          state: draft.state,
+          city: draft.city,
+          amenities: [],
+          purpose: draft.purpose,
+          price: draft.price ? Number(draft.price) : null,
+        }),
+      });
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        if (res.status === 401) {
+          setDescError(ai("aiUnavailable"));
+        } else {
+          setDescError(body.error ?? ai("error"));
+        }
+        return;
+      }
+      const data = (await res.json()) as {
+        description_en?: string;
+        description_ar?: string;
+      };
+      if (
+        typeof data.description_en !== "string" ||
+        typeof data.description_ar !== "string"
+      ) {
+        setDescError(ai("error"));
+        return;
+      }
+      update({
+        descriptionEn: data.description_en,
+        descriptionAr: data.description_ar,
+      });
+    } catch {
+      setDescError(ai("error"));
+    } finally {
+      setGeneratingDesc(false);
+    }
+  }
+
+  async function handleEstimatePrice() {
+    setEstimating(true);
+    setEstimateError(null);
+    setPriceEstimate(null);
+    try {
+      const res = await fetch("/api/estimate-price", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyType: draft.propertyType,
+          bedrooms: draft.bedrooms,
+          bathrooms: draft.bathrooms,
+          areaSqm: draft.area ? Number(draft.area) : null,
+          state: draft.state,
+          city: draft.city,
+          amenities: [],
+          purpose: draft.purpose,
+        }),
+      });
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        if (res.status === 401) {
+          setEstimateError(ai("aiUnavailable"));
+        } else {
+          setEstimateError(body.error ?? ai("error"));
+        }
+        return;
+      }
+      const data = (await res.json()) as {
+        min?: number;
+        max?: number;
+        suggested?: number;
+        currency?: string;
+        reasoning_en?: string;
+        reasoning_ar?: string;
+      };
+      if (
+        typeof data.min !== "number" ||
+        typeof data.max !== "number" ||
+        typeof data.suggested !== "number"
+      ) {
+        setEstimateError(ai("error"));
+        return;
+      }
+      setPriceEstimate({
+        min: data.min,
+        max: data.max,
+        suggested: data.suggested,
+        currency: data.currency ?? "USD",
+        reasoning_en: data.reasoning_en ?? "",
+        reasoning_ar: data.reasoning_ar ?? "",
+      });
+    } catch {
+      setEstimateError(ai("error"));
+    } finally {
+      setEstimating(false);
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -515,6 +704,91 @@ function Step1({
             {errors.price}
           </p>
         )}
+
+        {/* F7: AI price estimator button */}
+        <div className="mt-2 flex items-center gap-2">
+          <GlassButton
+            type="button"
+            variant="ghost-dark"
+            size="sm"
+            onClick={handleEstimatePrice}
+            disabled={estimating}
+          >
+            <Sparkles
+              size={14}
+              className="text-gold shrink-0"
+              aria-hidden="true"
+            />
+            {estimating ? ai("estimating") : ai("estimatePrice")}
+          </GlassButton>
+        </div>
+        {estimateError && (
+          <p className={errorCls} role="alert">
+            {estimateError}
+          </p>
+        )}
+        {priceEstimate && (
+          <PriceEstimateCallout
+            estimate={priceEstimate}
+            period={draft.period}
+            locale={locale}
+            onUseSuggested={(price) => {
+              update({ price });
+              setPriceEstimate(null);
+            }}
+          />
+        )}
+      </div>
+
+      {/* F6: Description fields with AI generator */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <label className={`${labelCls} mb-0`}>{t("descriptionLabel")}</label>
+          <GlassButton
+            type="button"
+            variant="ghost-dark"
+            size="sm"
+            onClick={handleGenerateDescription}
+            disabled={generatingDesc || !userId}
+          >
+            <Sparkles
+              size={14}
+              className="text-gold shrink-0"
+              aria-hidden="true"
+            />
+            {generatingDesc ? ai("generating") : ai("generateDescription")}
+          </GlassButton>
+        </div>
+        {descError && (
+          <p className={errorCls} role="alert">
+            {descError}
+          </p>
+        )}
+        <div>
+          <label className={`${labelCls} text-[10px]`}>
+            {t("descriptionEnLabel")}
+          </label>
+          <GlassTextarea
+            tone="dark"
+            rows={4}
+            placeholder={t("descriptionEnPlaceholder")}
+            value={draft.descriptionEn}
+            onChange={(e) => update({ descriptionEn: e.target.value })}
+          />
+        </div>
+        <div>
+          <label className={`${labelCls} text-[10px]`} dir="rtl">
+            {t("descriptionArLabel")}
+          </label>
+          <GlassTextarea
+            tone="dark"
+            rows={4}
+            dir="rtl"
+            placeholder={t("descriptionArPlaceholder")}
+            value={draft.descriptionAr}
+            onChange={(e) => update({ descriptionAr: e.target.value })}
+          />
+        </div>
       </div>
     </div>
   );
@@ -646,171 +920,45 @@ function Step2({
   );
 }
 
-// ─── Step 3: Photos ───────────────────────────────────────────────────────────
+// ─── Step 3: Photos (F2) ──────────────────────────────────────────────────────
 
 function Step3({
   draft,
   update,
   errors,
+  userId,
+  tempListingId,
 }: {
   draft: PostDraft;
   update: (patch: Partial<PostDraft>) => void;
   errors: Record<string, string>;
+  userId: string | null;
+  tempListingId: string;
 }) {
   const t = useTranslations("post");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Revoke object URLs on unmount to prevent memory leaks
-  useEffect(() => {
-    const urls = draft.photos;
-    return () => {
-      urls.forEach((url) => URL.revokeObjectURL(url));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function handleFiles(fileList: FileList | null) {
-    if (!fileList) return;
-    const remaining = MAX_PHOTOS - draft.photos.length;
-    if (remaining <= 0) return;
-    const newUrls: string[] = [];
-    Array.from(fileList)
-      .slice(0, remaining)
-      .forEach((file) => {
-        if (file.type.startsWith("image/")) {
-          newUrls.push(URL.createObjectURL(file));
-        }
-      });
-    if (newUrls.length > 0) {
-      update({ photos: [...draft.photos, ...newUrls] });
-    }
-  }
-
-  function removePhoto(index: number) {
-    URL.revokeObjectURL(draft.photos[index]);
-    update({ photos: draft.photos.filter((_, i) => i !== index) });
-  }
-
-  function handleDrop(e: React.DragEvent) {
-    e.preventDefault();
-    handleFiles(e.dataTransfer.files);
+  if (!userId) {
+    return (
+      <div className="py-12 text-center text-mute-soft text-sm">
+        {t("signInRequired")}
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      {/* Drop zone — glass-deep panel with dashed gold border */}
-      <GlassPanel
-        variant="deep"
-        radius="card"
-        shadow={false}
-        highlight={false}
-        className="border border-dashed border-gold/30 hover:border-gold/55 smooth cursor-pointer"
-      >
-        <div
-          role="button"
-          tabIndex={0}
-          aria-label={t("dropzoneHeading")}
-          onClick={() => fileInputRef.current?.click()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ")
-              fileInputRef.current?.click();
-          }}
-          onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
-          className="flex flex-col items-center justify-center gap-3 py-12 px-4"
-        >
-          {/* Upload icon */}
-          <div
-            className="w-14 h-14 rounded-full flex items-center justify-center"
-            style={{
-              background: "rgba(200,135,58,0.12)",
-              boxShadow: "var(--shadow-gold-glow)",
-            }}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="28"
-              height="28"
-              fill="none"
-              className="text-gold"
-              aria-hidden
-            >
-              <path
-                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-              <path
-                d="M12 3v12m0-12l-4 4m4-4l4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-          <p className="text-parchment font-semibold text-sm text-center">
-            {t("dropzoneHeading")}
-          </p>
-          <p className="text-mute-soft text-xs text-center">
-            {t("dropzoneSubtitle")}
-          </p>
-        </div>
-      </GlassPanel>
-
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        className="sr-only"
-        onChange={(e) => handleFiles(e.target.files)}
-        aria-hidden
+      <PhotoUpload
+        userId={userId}
+        listingId={tempListingId}
+        max={5}
+        onChange={(urls) => update({ photoUrls: urls })}
+        initial={draft.photoUrls}
       />
-
-      {errors.photos && (
+      {errors.photoUrls && (
         <p className={errorCls} role="alert">
-          {errors.photos}
+          {errors.photoUrls}
         </p>
       )}
-
-      {/* Thumbnail grid — 6 slots */}
-      <div className="grid grid-cols-3 gap-3">
-        {Array.from({ length: 6 }).map((_, i) => {
-          const url = draft.photos[i];
-          return (
-            <div
-              key={i}
-              className="relative aspect-[4/3] rounded-[var(--radius-card)] overflow-hidden border border-gold/20 glass-deep"
-            >
-              {url ? (
-                <>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={url}
-                    alt={`Photo ${i + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removePhoto(i)}
-                    aria-label={t("removePhoto")}
-                    className="smooth absolute top-1.5 end-1.5 w-7 h-7 rounded-full bg-earth/80 backdrop-blur-md text-parchment flex items-center justify-center text-sm font-bold hover:bg-terracotta"
-                  >
-                    ×
-                  </button>
-                </>
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-mute/50">
-                  <span className="text-xl leading-none">+</span>
-                  <span className="text-xs">{t("photoSlot", { n: i + 1 })}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -895,7 +1043,7 @@ function Step4({
                 {
                   label: t("summaryPhotos"),
                   value: t("summaryPhotosCount", {
-                    count: draft.photos.length,
+                    count: draft.photoUrls.length,
                   }),
                 },
               ].map(({ label, value }) => (
@@ -1223,7 +1371,7 @@ function validate(
     if (!draft.city.trim()) errs.city = t("errorCity");
   }
   if (step === 2) {
-    if (draft.photos.length === 0) errs.photos = t("errorPhotos");
+    if (draft.photoUrls.length === 0) errs.photoUrls = t("errorPhotos");
   }
   if (step === 3) {
     if (!draft.termsAccepted) errs.termsAccepted = t("errorTerms");
@@ -1233,42 +1381,42 @@ function validate(
 
 // ─── Main wizard ──────────────────────────────────────────────────────────────
 
-export default function PostWizard() {
+export default function PostWizard({ userId }: { userId: string | null }) {
   const t = useTranslations("post");
   const [, startTransition] = useTransition();
 
-  const [draft, setDraft] = useState<PostDraft>(() => {
-    // photos are ephemeral (object URLs) — never load from sessionStorage
-    return { ...INITIAL_DRAFT };
-  });
+  // Stable temp ID used as storage path folder during upload
+  const [tempListingId] = useState<string>(() => makeTempId());
+
+  const [draft, setDraft] = useState<PostDraft>(() => ({ ...INITIAL_DRAFT }));
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const STEPS = [t("step1"), t("step2"), t("step3"), t("step4")] as const;
 
-  // Load non-photo draft from sessionStorage on mount
+  // Load persisted draft from sessionStorage on mount
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem(SESSION_KEY);
       if (raw) {
         const saved = JSON.parse(raw) as Partial<PostDraft>;
-        // Never restore photos (object URLs die on page reload)
-        setDraft((prev) => ({ ...prev, ...saved, photos: [] }));
+        setDraft((prev) => ({ ...prev, ...saved }));
       }
     } catch {
       // ignore parse errors
     }
   }, []);
 
-  // Persist draft (without photos) to sessionStorage on every change
+  // Persist draft (including photoUrls — they're stable Supabase public URLs)
   function updateDraft(patch: Partial<PostDraft>) {
     setDraft((prev) => {
       const next = { ...prev, ...patch };
       startTransition(() => {
         try {
-          const { photos: _photos, ...serializable } = next;
-          sessionStorage.setItem(SESSION_KEY, JSON.stringify(serializable));
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify(next));
         } catch {
           // quota exceeded — silently ignore
         }
@@ -1303,7 +1451,7 @@ export default function PostWizard() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const errs = validate(3, draft, (k) =>
       t(k as Parameters<typeof t>[0]),
     );
@@ -1311,10 +1459,64 @@ export default function PostWizard() {
       setErrors(errs);
       return;
     }
-    // TODO: wire to Supabase insert — for now, log + show success state
-    console.log("[Sukan] Post draft submitted:", draft);
-    sessionStorage.removeItem(SESSION_KEY);
-    setSubmitted(true);
+
+    if (!draft.propertyType || !draft.purpose || !draft.state) return;
+
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const state = draft.state as StateKey;
+      const coords = STATE_COORDS[state];
+
+      const result = await createListing({
+        titleEn: draft.descriptionEn
+          ? draft.descriptionEn.slice(0, 80)
+          : `${draft.propertyType} in ${draft.city}`,
+        titleAr: draft.descriptionAr
+          ? draft.descriptionAr.slice(0, 80)
+          : `${draft.propertyType} في ${draft.city}`,
+        descriptionEn: draft.descriptionEn,
+        descriptionAr: draft.descriptionAr,
+        propertyType: draft.propertyType,
+        purpose: draft.purpose,
+        state: draft.state,
+        city: draft.city,
+        neighborhood: draft.neighborhood || null,
+        address: draft.address || null,
+        latitude: draft.pinLat ?? coords[0],
+        longitude: draft.pinLng ?? coords[1],
+        bedrooms: draft.bedrooms,
+        bathrooms: draft.bathrooms,
+        areaSqm: draft.area ? Number(draft.area) : null,
+        price: Number(draft.price),
+        currency: draft.currency,
+        pricePeriod: draft.period,
+        amenities: [],
+        tier: draft.tier,
+        whatsappContact: null,
+      });
+
+      if (!result.ok) {
+        setSubmitError(result.error);
+        setSubmitting(false);
+        return;
+      }
+
+      // Attach uploaded photos to the new listing
+      if (draft.photoUrls.length > 0) {
+        await attachPhotos(result.listingId, draft.photoUrls);
+      }
+
+      sessionStorage.removeItem(SESSION_KEY);
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "An unexpected error occurred.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -1351,16 +1553,33 @@ export default function PostWizard() {
 
       {/* Step content */}
       {step === 0 && (
-        <Step1 draft={draft} update={updateDraft} errors={errors} />
+        <Step1
+          draft={draft}
+          update={updateDraft}
+          errors={errors}
+          userId={userId}
+        />
       )}
       {step === 1 && (
         <Step2 draft={draft} update={updateDraft} errors={errors} />
       )}
       {step === 2 && (
-        <Step3 draft={draft} update={updateDraft} errors={errors} />
+        <Step3
+          draft={draft}
+          update={updateDraft}
+          errors={errors}
+          userId={userId}
+          tempListingId={tempListingId}
+        />
       )}
       {step === 3 && (
         <Step4 draft={draft} update={updateDraft} errors={errors} />
+      )}
+
+      {submitError && (
+        <p className={`${errorCls} mt-4`} role="alert">
+          {submitError}
+        </p>
       )}
 
       {/* Navigation footer */}
@@ -1386,9 +1605,9 @@ export default function PostWizard() {
             variant="terracotta"
             size="md"
             onClick={handleSubmit}
-            disabled={!draft.termsAccepted}
+            disabled={!draft.termsAccepted || submitting}
           >
-            {t("submit")}
+            {submitting ? t("submitting") : t("submit")}
           </GlassButton>
         ) : (
           <GlassButton

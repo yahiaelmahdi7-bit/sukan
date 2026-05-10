@@ -6,6 +6,9 @@ import { usePathname } from "@/i18n/navigation";
 import DashboardSidebar, { type NavKey } from "./dashboard-sidebar";
 
 const ROUTE_TO_KEY: Record<string, NavKey> = {
+  "/dashboard/saved-searches": "savedSearches",
+  "/dashboard/viewings": "viewings",
+  "/dashboard/reports": "reports",
   "/dashboard/inquiries": "inquiries",
   "/dashboard/analytics": "analytics",
   "/dashboard/profile": "profile",
@@ -16,17 +19,20 @@ const ROUTE_TO_KEY: Record<string, NavKey> = {
 interface SidebarNavProps {
   userName: string;
   signOutLabel: string;
+  isAdmin?: boolean;
 }
 
-export default function SidebarNav({ userName, signOutLabel }: SidebarNavProps) {
+export default function SidebarNav({ userName, signOutLabel, isAdmin }: SidebarNavProps) {
   const pathname = usePathname();
 
-  // Find the deepest matching route key
+  // Find the deepest matching route key (longest match wins)
   let active: NavKey = "myListings";
+  let longestMatch = 0;
   for (const [route, key] of Object.entries(ROUTE_TO_KEY)) {
-    if (pathname.includes(route.replace("/dashboard", ""))) {
+    const segment = route.replace("/dashboard", "");
+    if (pathname.includes(segment) && segment.length > longestMatch) {
       active = key;
-      break;
+      longestMatch = segment.length;
     }
   }
 
@@ -35,6 +41,7 @@ export default function SidebarNav({ userName, signOutLabel }: SidebarNavProps) 
       active={active}
       userName={userName}
       signOutLabel={signOutLabel}
+      isAdmin={isAdmin}
     />
   );
 }

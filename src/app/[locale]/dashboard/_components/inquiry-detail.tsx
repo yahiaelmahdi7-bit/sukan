@@ -1,9 +1,9 @@
 "use client";
 
-import type { MockInquiry } from "../_data/mock-inquiries";
+import type { Inquiry } from "../_data/inquiry-types";
 
 interface InquiryDetailProps {
-  inquiry: MockInquiry;
+  inquiry: Inquiry;
   locale: string;
   listingTitle: string;
   labels: {

@@ -11,25 +11,44 @@ import SignOutButton from "./sign-out-button";
 const NAV_ITEMS = [
   { key: "myListings" as const, labelKey: "myListings" as const, href: "/dashboard" },
   { key: "inquiries" as const, labelKey: "inquiries" as const, href: "/dashboard/inquiries" },
+  { key: "savedSearches" as const, labelKey: "alertsSavedSearches" as const, href: "/dashboard/saved-searches" },
   { key: "analytics" as const, labelKey: "navAnalytics" as const, href: "/dashboard/analytics" },
+  { key: "viewings" as const, labelKey: "viewingsTab" as const, href: "/dashboard/viewings" },
   { key: "profile" as const, labelKey: "navProfile" as const, href: "/dashboard/profile" },
   { key: "settings" as const, labelKey: "settings" as const, href: "/dashboard/settings" },
 ];
 
-export type NavKey = "myListings" | "inquiries" | "analytics" | "profile" | "settings";
+// Admin-only nav items
+const ADMIN_NAV_ITEMS = [
+  { key: "reports" as const, labelKey: "reportsTab" as const, href: "/dashboard/reports" },
+];
+
+export type NavKey =
+  | "myListings"
+  | "inquiries"
+  | "savedSearches"
+  | "analytics"
+  | "viewings"
+  | "profile"
+  | "settings"
+  | "reports";
 
 interface DashboardSidebarProps {
   active: NavKey;
   userName: string;
   signOutLabel: string;
+  isAdmin?: boolean;
 }
 
 export default function DashboardSidebar({
   active,
   userName,
   signOutLabel,
+  isAdmin = false,
 }: DashboardSidebarProps) {
   const t = useTranslations("dashboard");
+
+  const visibleAdminItems = isAdmin ? ADMIN_NAV_ITEMS : [];
 
   return (
     <GlassPanel
@@ -63,8 +82,8 @@ export default function DashboardSidebar({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-2.5 py-4 flex flex-col gap-0.5">
-        {NAV_ITEMS.map((item) => {
+      <nav className="flex-1 px-2.5 py-4 flex flex-col gap-0.5 overflow-y-auto">
+        {[...NAV_ITEMS, ...visibleAdminItems].map((item) => {
           const isActive = item.key === active;
           return (
             <Link

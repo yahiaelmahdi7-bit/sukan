@@ -2,6 +2,8 @@ import Image from "next/image";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import FavoriteButton from "@/components/favorite-button";
+import { VerifiedBadge } from "@/components/verified-badge";
+import { StarRating } from "@/components/star-rating";
 import {
   getListingImage,
   getLocaleCity,
@@ -60,9 +62,14 @@ export default function ListingCard({ listing }: { listing: Listing }) {
 
       <div className="p-5">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="line-clamp-1 font-display text-xl leading-tight text-ink">
-            {title}
-          </h3>
+          <div className="flex min-w-0 items-center gap-1.5">
+            <h3 className="line-clamp-1 font-display text-xl leading-tight text-ink">
+              {title}
+            </h3>
+            {listing.ownerVerified === true && (
+              <VerifiedBadge size="sm" tooltipKey="verified.tooltip" />
+            )}
+          </div>
           <span className="whitespace-nowrap rounded-[var(--radius-pill)] border border-sand-dk bg-white/60 px-3 py-0.5 text-[10px] uppercase tracking-[0.14em] text-ink-mid backdrop-blur-sm">
             {t(`states.${listing.state}`)}
           </span>
@@ -108,6 +115,20 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                     maximumFractionDigits: 0,
                   }),
                 })}
+              </span>
+            </>
+          )}
+          {listing.reviewCount !== undefined && listing.reviewCount > 0 && (
+            <>
+              <span aria-hidden>·</span>
+              <span className="inline-flex items-center gap-1">
+                <StarRating
+                  value={listing.averageRating ?? 0}
+                  max={5}
+                  size="sm"
+                  interactive={false}
+                />
+                <span>({listing.reviewCount})</span>
               </span>
             </>
           )}

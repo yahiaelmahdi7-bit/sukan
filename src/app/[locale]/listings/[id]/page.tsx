@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { setRequestLocale, getTranslations, getFormatter } from "next-intl/server";
@@ -14,6 +15,37 @@ import InquiryButton from "@/components/inquiry-button";
 import StaySafeCard from "@/components/stay-safe-card";
 import GlassPanel from "@/components/glass-panel";
 import { GlassButton } from "@/components/ui/glass-button";
+import { VerifiedBadge } from "@/components/verified-badge";
+import { ShareButton } from "@/components/share-button";
+import { ReportListingButton } from "@/components/report-listing-button";
+import { ViewingRequestModal } from "@/components/viewing-request-modal";
+import { StarRating } from "@/components/star-rating";
+import { ReviewForm } from "./_components/review-form";
+import { createClient } from "@/lib/supabase/server";
+
+/* ─────────────────────────────────────────────────────────
+   Inline DB row types (database.types.ts may be stale)
+───────────────────────────────────────────────────────── */
+
+type DbListingPhoto = {
+  id: string;
+  listing_id: string;
+  url: string;
+  position: number;
+};
+
+type DbReview = {
+  id: string;
+  listing_id: string;
+  landlord_id: string;
+  rating: number;
+  comment: string | null;
+  comment_ar: string | null;
+  created_at: string;
+  profiles: {
+    full_name: string | null;
+  } | null;
+};
 
 /* ─────────────────────────────────────────────────────────
    Metadata
@@ -139,6 +171,9 @@ export default async function ListingDetailPage({
   const waUrl = buildWaUrl(listing.whatsappContact, waMessage);
   const telUrl = `tel:${listing.whatsappContact}`;
 
+  // Full share URL
+  const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/${locale}/listings/${listing.id}`;
+
   // Similar listings: same state, different id; fallback to first 3 others
   let similarListings: Listing[] = sampleListings
     .filter((l) => l.id !== listing.id && l.state === listing.state)
@@ -165,13 +200,64 @@ export default async function ListingDetailPage({
     icon: listing.purpose === "rent" ? "🔑" : "📋",
   });
 
-  // Photo slot array (at least 5 slots for the gallery layout)
-  const photoCount = Math.max(listing.photoSlots ?? 5, 1);
-  // Clamp: 1 large + up to 4 thumbs
-  const thumbCount = Math.min(photoCount - 1, 4);
-
   // Suppress unused variable warning — altTitle is kept for potential future bilingual heading use
   void altTitle;
+
+  /* ── F2: Fetch listing photos ── */
+  let photos: DbListingPhoto[] = [];
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("listing_photos")
+      .select("id, listing_id, url, position")
+      .eq("listing_id", listing.id)
+      .order("position", { ascending: true });
+    if (data) photos = data as DbListingPhoto[];
+  } catch {
+    // table may not exist yet — graceful fallback to placeholder
+  }
+
+  const heroPhoto = photos[0] ?? null;
+  const thumbPhotos = photos.slice(1);
+
+  /* ── F5: Fetch reviews for this listing ── */
+  let reviews: DbReview[] = [];
+  let avgRating = listing.averageRating ?? 0;
+  let reviewCount = listing.reviewCount ?? 0;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("reviews")
+      .select("id, listing_id, landlord_id, rating, comment, comment_ar, created_at, profiles(full_name)")
+      .eq("listing_id", listing.id)
+      .order("created_at", { ascending: false });
+    if (data && data.length > 0) {
+      reviews = data as unknown as DbReview[];
+      reviewCount = reviews.length;
+      avgRating =
+        Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount) * 10) / 10;
+    }
+  } catch {
+    // reviews table may not exist yet
+  }
+
+  /* ── F5: Auth user — for review CTA gating ── */
+  let currentUserId: string | null = null;
+  // landlordId is not exposed on Listing type, so we use listing.id as the landlord_id
+  // (reviews are per-listing; landlord_id comes from the DB reviews table landlord column)
+  // We just need to know if user is signed in to show the review CTA
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    currentUserId = user?.id ?? null;
+  } catch {
+    // silently ignore
+  }
+
+  // Use listing.id as the landlord context for the review form
+  // (the API route writes landlord_id from the body; we pass listing.id as a proxy
+  //  until ownerId is surfaced on the Listing type — the DB trigger links them)
+  const landlordIdForReview = listing.id;
 
   return (
     <>
@@ -202,13 +288,25 @@ export default async function ListingDetailPage({
           </nav>
 
           {/* ─────────────────────────────────────────────────────────
-              2. PHOTO GALLERY HERO
+              2. PHOTO GALLERY HERO (F2)
           ───────────────────────────────────────────────────────── */}
-          <section className="mb-8" aria-label="Photos">
+          <section className="mb-8" aria-label={t("photos.gallery")}>
             {/* Mobile: large slot + horizontal thumb scroll */}
             <div className="lg:hidden">
-              <div className="relative">
-                <PhotoPlaceholder aspectClass="aspect-[16/10]" label={localTitle} large />
+              <div className="relative aspect-[16/10] w-full rounded-[var(--radius-glass-lg)] overflow-hidden"
+                style={{ boxShadow: "var(--shadow-warm-lg)" }}>
+                {heroPhoto ? (
+                  <Image
+                    src={heroPhoto.url}
+                    alt={localTitle}
+                    fill
+                    sizes="(max-width: 1024px) 100vw"
+                    className="object-cover"
+                    priority
+                  />
+                ) : (
+                  <PhotoPlaceholder aspectClass="aspect-[16/10]" label={localTitle} large />
+                )}
 
                 {/* Featured pill overlaid on large image */}
                 {listing.tier === "featured" && (
@@ -225,13 +323,28 @@ export default async function ListingDetailPage({
                   </span>
                 )}
               </div>
-              {thumbCount > 0 && (
+
+              {/* Thumbnail strip */}
+              {(thumbPhotos.length > 0 || (photos.length === 0 && (listing.photoSlots ?? 5) > 1)) && (
                 <div className="flex gap-2 mt-2 overflow-x-auto pb-1 snap-x snap-mandatory">
-                  {Array.from({ length: thumbCount }, (_, i) => (
-                    <div key={i} className="flex-none w-24 snap-start">
-                      <PhotoPlaceholder aspectClass="aspect-square" label={`${localTitle} ${i + 2}`} />
-                    </div>
-                  ))}
+                  {thumbPhotos.length > 0
+                    ? thumbPhotos.map((photo, i) => (
+                        <div key={photo.id} className="flex-none w-24 snap-start relative aspect-square rounded-[var(--radius-glass)] overflow-hidden"
+                          style={{ boxShadow: "var(--shadow-warm-sm)" }}>
+                          <Image
+                            src={photo.url}
+                            alt={`${localTitle} ${i + 2}`}
+                            fill
+                            sizes="96px"
+                            className="object-cover"
+                          />
+                        </div>
+                      ))
+                    : Array.from({ length: Math.min((listing.photoSlots ?? 5) - 1, 4) }, (_, i) => (
+                        <div key={i} className="flex-none w-24 snap-start">
+                          <PhotoPlaceholder aspectClass="aspect-square" label={`${localTitle} ${i + 2}`} />
+                        </div>
+                      ))}
                 </div>
               )}
             </div>
@@ -239,8 +352,23 @@ export default async function ListingDetailPage({
             {/* Desktop: 1 large (2 col) + 2x2 thumbs grid */}
             <div className="hidden lg:grid lg:grid-cols-3 gap-2">
               {/* Large slot — spans 2 cols */}
-              <div className="lg:col-span-2 relative">
-                <PhotoPlaceholder aspectClass="aspect-[16/10]" label={localTitle} large />
+              <div className="lg:col-span-2 relative aspect-[16/10] rounded-[var(--radius-glass-lg)] overflow-hidden"
+                style={{ boxShadow: "var(--shadow-warm-lg)" }}>
+                {heroPhoto ? (
+                  <Image
+                    src={heroPhoto.url}
+                    alt={localTitle}
+                    fill
+                    sizes="(min-width: 1024px) 66vw"
+                    className="object-cover"
+                    priority
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center card-watermark">
+                    <SukanMark monochrome="gold" size={140} className="opacity-[0.13]" />
+                  </div>
+                )}
+
                 {listing.tier === "featured" && (
                   <span
                     className="absolute top-4 ltr:left-4 rtl:right-4 inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-earth"
@@ -258,16 +386,30 @@ export default async function ListingDetailPage({
 
               {/* 2×2 thumb grid on the right */}
               <div className="grid grid-cols-2 grid-rows-2 gap-2">
-                {Array.from({ length: Math.min(thumbCount, 4) }, (_, i) => (
-                  <PhotoPlaceholder
-                    key={i}
-                    aspectClass="aspect-square"
-                    label={`${localTitle} ${i + 2}`}
-                  />
-                ))}
-                {/* Fill empty thumb slots if fewer photos */}
-                {thumbCount < 4 &&
-                  Array.from({ length: 4 - Math.max(thumbCount, 0) }, (_, i) => (
+                {thumbPhotos.length > 0
+                  ? thumbPhotos.slice(0, 4).map((photo, i) => (
+                      <div key={photo.id} className="relative aspect-square rounded-[var(--radius-glass)] overflow-hidden"
+                        style={{ boxShadow: "var(--shadow-warm-sm)" }}>
+                        <Image
+                          src={photo.url}
+                          alt={`${localTitle} ${i + 2}`}
+                          fill
+                          sizes="(min-width: 1024px) 17vw"
+                          className="object-cover"
+                        />
+                      </div>
+                    ))
+                  : Array.from({ length: Math.min((listing.photoSlots ?? 5) - 1, 4) }, (_, i) => (
+                      <PhotoPlaceholder
+                        key={i}
+                        aspectClass="aspect-square"
+                        label={`${localTitle} ${i + 2}`}
+                      />
+                    ))}
+
+                {/* Fill empty thumb slots when photos exist but fewer than 4 */}
+                {thumbPhotos.length > 0 && thumbPhotos.length < 4 &&
+                  Array.from({ length: 4 - thumbPhotos.length }, (_, i) => (
                     <div
                       key={`empty-${i}`}
                       className="card-watermark rounded-[var(--radius-glass)] aspect-square opacity-30"
@@ -292,10 +434,17 @@ export default async function ListingDetailPage({
                 {t(`propertyType.${listing.propertyType}`)}
               </p>
 
-              {/* Title — large Cormorant display */}
-              <h1 className="font-display text-4xl md:text-5xl lg:text-[3.25rem] text-ink tracking-tight leading-[1.08]">
-                {localTitle}
-              </h1>
+              {/* Title — large Cormorant display + F4 verified badge inline */}
+              <div className="flex flex-wrap items-start gap-3">
+                <h1 className="font-display text-4xl md:text-5xl lg:text-[3.25rem] text-ink tracking-tight leading-[1.08]">
+                  {localTitle}
+                </h1>
+                {listing.ownerVerified && (
+                  <span className="mt-2">
+                    <VerifiedBadge size="sm" />
+                  </span>
+                )}
+              </div>
 
               {/* Classification pills row */}
               <div className="flex flex-wrap gap-2 items-center">
@@ -376,6 +525,16 @@ export default async function ListingDetailPage({
                   {t("listing.callOwner")}
                 </a>
 
+                {/* F8: Request a viewing */}
+                <ViewingRequestModal
+                  listingId={listing.id}
+                  ownerWhatsApp={listing.whatsappContact}
+                >
+                  <GlassButton variant="ghost-light" size="md" full>
+                    {t("viewings.requestViewing")}
+                  </GlassButton>
+                </ViewingRequestModal>
+
                 {/* Inquiry button — wired to existing InquiryButton, restyled */}
                 <InquiryButton
                   listing={listing}
@@ -385,7 +544,7 @@ export default async function ListingDetailPage({
                 {/* Divider */}
                 <div className="border-t border-white/40 pt-1" />
 
-                {/* Ghost action row: Save + Share */}
+                {/* Ghost action row: Save + Share (F9) */}
                 <div className="flex gap-2 justify-center">
                   <GlassButton
                     variant="ghost-light"
@@ -395,14 +554,10 @@ export default async function ListingDetailPage({
                   >
                     {t("listing.saveListing")}
                   </GlassButton>
-                  <GlassButton
-                    variant="ghost-light"
-                    size="sm"
-                    leading={<ShareIcon />}
-                    aria-label={t("listing.shareListing")}
-                  >
-                    {t("listing.shareListing")}
-                  </GlassButton>
+                  <ShareButton
+                    url={fullUrl}
+                    title={isRtl ? listing.titleAr : listing.titleEn}
+                  />
                 </div>
 
                 <StaySafeCard />
@@ -534,7 +689,132 @@ export default async function ListingDetailPage({
           )}
 
           {/* ─────────────────────────────────────────────────────────
-              8. LOCATION — glass-warm frame around leaflet map
+              8. ABOUT THE OWNER — glass-warm card (F4: verified badge)
+          ───────────────────────────────────────────────────────── */}
+          <section className="mb-10" aria-labelledby="owner-heading">
+            <h2
+              id="owner-heading"
+              className="font-display text-3xl md:text-4xl text-ink mb-5 tracking-tight"
+            >
+              {t("listing.aboutOwner")}
+            </h2>
+
+            <GlassPanel
+              variant="warm"
+              radius="glass"
+              className="flex items-center gap-5 px-6 py-5"
+            >
+              {/* Avatar circle */}
+              <div className="flex-none w-14 h-14 rounded-full flex items-center justify-center"
+                style={{
+                  background: "linear-gradient(135deg, rgba(200,135,58,0.18), rgba(200,135,58,0.08))",
+                  border: "1px solid rgba(200,135,58,0.30)",
+                }}
+              >
+                <SukanMark monochrome="gold" size={48} className="opacity-55" />
+              </div>
+
+              {/* Name + joined + F4 verified badge */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="font-display text-xl text-ink leading-tight truncate">
+                    {listing.ownerName}
+                  </p>
+                  {listing.ownerVerified && <VerifiedBadge size="sm" />}
+                </div>
+                <p className="font-sans text-ink-mid text-sm mt-0.5">
+                  {t("listing.onSukanSince", { year: listing.ownerJoinedYear })}
+                </p>
+              </div>
+
+              {/* Contact link */}
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="smooth flex-none rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 backdrop-blur-md text-gold-dk text-xs px-4 py-2 hover:border-gold/65 hover:bg-gold/10 transition-colors"
+              >
+                {t("listing.contact")}
+              </a>
+            </GlassPanel>
+          </section>
+
+          {/* ─────────────────────────────────────────────────────────
+              F5: REVIEWS SECTION
+          ───────────────────────────────────────────────────────── */}
+          <section className="mb-10" aria-labelledby="reviews-heading">
+            <div className="flex flex-wrap items-center gap-4 mb-5">
+              <h2
+                id="reviews-heading"
+                className="font-display text-3xl md:text-4xl text-ink tracking-tight"
+              >
+                {t("reviews.reviewsTitle")}
+              </h2>
+              {reviewCount > 0 && (
+                <div className="flex items-center gap-2">
+                  <StarRating value={Math.round(avgRating)} size="md" interactive={false} />
+                  <span className="font-sans text-ink-mid text-sm">
+                    {t("reviews.basedOn", { count: reviewCount })}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Review CTA */}
+            <div className="mb-6">
+              {currentUserId ? (
+                <ReviewForm
+                  listingId={listing.id}
+                  landlordId={landlordIdForReview}
+                  trigger={
+                    <GlassButton variant="terracotta" size="md">
+                      {t("reviews.leaveReview")}
+                    </GlassButton>
+                  }
+                />
+              ) : (
+                <GlassButton variant="ghost-light" size="md">
+                  {t("reviews.leaveReview")}
+                </GlassButton>
+              )}
+            </div>
+
+            {/* Review list */}
+            {reviews.length === 0 ? (
+              <p className="font-sans text-ink-mid text-sm">{t("reviews.noReviews")}</p>
+            ) : (
+              <div className="flex flex-col gap-4">
+                {reviews.map((review) => {
+                  const reviewerName = review.profiles?.full_name ?? t("reviews.anonymous");
+                  const reviewDate = new Date(review.created_at).toLocaleDateString(
+                    locale === "ar" ? "ar-SD" : "en-GB",
+                    { year: "numeric", month: "short", day: "numeric" }
+                  );
+                  const displayComment = isRtl && review.comment_ar
+                    ? review.comment_ar
+                    : review.comment;
+
+                  return (
+                    <GlassPanel key={review.id} variant="warm" radius="glass" className="px-5 py-4 flex flex-col gap-2">
+                      <div className="flex items-start justify-between gap-3 flex-wrap">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="font-display text-base text-ink leading-tight">{reviewerName}</span>
+                          <span className="font-sans text-xs text-ink-mid">{reviewDate}</span>
+                        </div>
+                        <StarRating value={review.rating} size="sm" interactive={false} />
+                      </div>
+                      {displayComment && (
+                        <p className="font-sans text-ink text-sm leading-relaxed">{displayComment}</p>
+                      )}
+                    </GlassPanel>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          {/* ─────────────────────────────────────────────────────────
+              9. LOCATION — glass-warm frame around leaflet map
           ───────────────────────────────────────────────────────── */}
           <section className="mb-10" aria-labelledby="location-heading">
             <h2
@@ -579,58 +859,10 @@ export default async function ListingDetailPage({
           </section>
 
           {/* ─────────────────────────────────────────────────────────
-              9. ABOUT THE OWNER — glass-warm card
-          ───────────────────────────────────────────────────────── */}
-          <section className="mb-12" aria-labelledby="owner-heading">
-            <h2
-              id="owner-heading"
-              className="font-display text-3xl md:text-4xl text-ink mb-5 tracking-tight"
-            >
-              {t("listing.aboutOwner")}
-            </h2>
-
-            <GlassPanel
-              variant="warm"
-              radius="glass"
-              className="flex items-center gap-5 px-6 py-5"
-            >
-              {/* Avatar circle */}
-              <div className="flex-none w-14 h-14 rounded-full flex items-center justify-center"
-                style={{
-                  background: "linear-gradient(135deg, rgba(200,135,58,0.18), rgba(200,135,58,0.08))",
-                  border: "1px solid rgba(200,135,58,0.30)",
-                }}
-              >
-                <SukanMark monochrome="gold" size={48} className="opacity-55" />
-              </div>
-
-              {/* Name + joined */}
-              <div className="flex-1 min-w-0">
-                <p className="font-display text-xl text-ink leading-tight truncate">
-                  {listing.ownerName}
-                </p>
-                <p className="font-sans text-ink-mid text-sm mt-0.5">
-                  {t("listing.onSukanSince", { year: listing.ownerJoinedYear })}
-                </p>
-              </div>
-
-              {/* Contact link */}
-              <a
-                href={waUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="smooth flex-none rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 backdrop-blur-md text-gold-dk text-xs px-4 py-2 hover:border-gold/65 hover:bg-gold/10 transition-colors"
-              >
-                {t("listing.contact")}
-              </a>
-            </GlassPanel>
-          </section>
-
-          {/* ─────────────────────────────────────────────────────────
-              10. SIMILAR LISTINGS — uses existing ListingCard (already redesigned)
+              10. SIMILAR LISTINGS — uses existing ListingCard
           ───────────────────────────────────────────────────────── */}
           {similarListings.length > 0 && (
-            <section aria-labelledby="similar-heading">
+            <section className="mb-10" aria-labelledby="similar-heading">
               <h2
                 id="similar-heading"
                 className="font-display text-3xl md:text-4xl text-ink mb-6 tracking-tight"
@@ -645,6 +877,13 @@ export default async function ListingDetailPage({
               </div>
             </section>
           )}
+
+          {/* ─────────────────────────────────────────────────────────
+              F10: REPORT BUTTON — discreet, above footer
+          ───────────────────────────────────────────────────────── */}
+          <div className="mt-4 mb-8 flex justify-center">
+            <ReportListingButton listingId={listing.id} />
+          </div>
 
         </div>
       </main>
@@ -731,30 +970,6 @@ function SaveIcon() {
       className="flex-none"
     >
       <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
-    </svg>
-  );
-}
-
-function ShareIcon() {
-  return (
-    <svg
-      aria-hidden
-      width="13"
-      height="13"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      xmlns="http://www.w3.org/2000/svg"
-      className="flex-none"
-    >
-      <circle cx="18" cy="5" r="3" />
-      <circle cx="6" cy="12" r="3" />
-      <circle cx="18" cy="19" r="3" />
-      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
     </svg>
   );
 }

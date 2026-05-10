@@ -101,6 +101,9 @@ export type Listing = {
   ownerJoinedYear: number;
   photoSlots: number;
   imageUrl?: string;
+  ownerVerified?: boolean;
+  averageRating?: number;
+  reviewCount?: number;
 };
 
 // Curated Unsplash images per property type. Hand-picked to avoid generic

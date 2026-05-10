@@ -1,23 +1,18 @@
+import type { Inquiry } from "./inquiry-types";
+
+export type { Inquiry };
+
 export type InquiryChannel = "whatsapp" | "phone" | "platform";
 
-export type MockInquiry = {
-  id: string;
-  listing_id: string;
-  inquirer_name_en: string;
-  inquirer_name_ar: string;
-  inquirer_phone: string;
-  message_en: string;
-  message_ar: string;
-  channel: InquiryChannel;
-  created_at: string; // ISO-8601
-  is_read: boolean;
-};
+export type MockInquiry = Inquiry;
 
 export function getMockInquiries(): MockInquiry[] {
   return [
     {
       id: "inq-001",
       listing_id: "khartoum-2-3br-apt",
+      listing_title_en: "3-Bedroom Apartment · Khartoum 2",
+      listing_title_ar: "شقة 3 غرف · الخرطوم 2",
       inquirer_name_en: "Amira Hassan",
       inquirer_name_ar: "أميرة حسن",
       inquirer_phone: "+249912100001",
@@ -32,6 +27,8 @@ export function getMockInquiries(): MockInquiry[] {
     {
       id: "inq-002",
       listing_id: "omdurman-villa-thawra",
+      listing_title_en: "Villa · Omdurman Al-Thawra",
+      listing_title_ar: "فيلا · أم درمان الثورة",
       inquirer_name_en: "Tariq Al-Mahi",
       inquirer_name_ar: "طارق المهي",
       inquirer_phone: "+249912100002",
@@ -46,6 +43,8 @@ export function getMockInquiries(): MockInquiry[] {
     {
       id: "inq-003",
       listing_id: "khartoum-2-3br-apt",
+      listing_title_en: "3-Bedroom Apartment · Khartoum 2",
+      listing_title_ar: "شقة 3 غرف · الخرطوم 2",
       inquirer_name_en: "Salma Nour",
       inquirer_name_ar: "سلمى نور",
       inquirer_phone: "+249912100003",
@@ -60,6 +59,8 @@ export function getMockInquiries(): MockInquiry[] {
     {
       id: "inq-004",
       listing_id: "port-sudan-shop",
+      listing_title_en: "Commercial Shop · Sawakin Road, Port Sudan",
+      listing_title_ar: "محل تجاري · شارع سواكن، بورتسودان",
       inquirer_name_en: "Kamal Idris",
       inquirer_name_ar: "كمال إدريس",
       inquirer_phone: "+249912100004",
@@ -74,6 +75,8 @@ export function getMockInquiries(): MockInquiry[] {
     {
       id: "inq-005",
       listing_id: "river-nile-land-shendi",
+      listing_title_en: "Agricultural Land · Shendi, River Nile",
+      listing_title_ar: "أرض زراعية · شندي، نهر النيل",
       inquirer_name_en: "Hind Osman",
       inquirer_name_ar: "هند عثمان",
       inquirer_phone: "+249912100005",
@@ -88,6 +91,8 @@ export function getMockInquiries(): MockInquiry[] {
     {
       id: "inq-006",
       listing_id: "khartoum-2-3br-apt",
+      listing_title_en: "3-Bedroom Apartment · Khartoum 2",
+      listing_title_ar: "شقة 3 غرف · الخرطوم 2",
       inquirer_name_en: "Mustafa Siddiq",
       inquirer_name_ar: "مصطفى صديق",
       inquirer_phone: "+249912100006",

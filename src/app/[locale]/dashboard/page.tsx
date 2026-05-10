@@ -7,6 +7,8 @@ import StatCard from "./_components/stat-card";
 import DashboardTable from "./_components/dashboard-table";
 import { getMockStats } from "./_data/mock-stats";
 import { getMockInquiries } from "./_data/mock-inquiries";
+import { getDashboardStats } from "./_data/stats";
+import { getInquiriesForUser } from "./_data/inquiries";
 
 export default async function DashboardPage({
   params,
@@ -16,9 +18,6 @@ export default async function DashboardPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
-
-  const stats = getMockStats();
-  const inquiries = getMockInquiries();
 
   // Layout has already auth-guarded; safe to read the user here.
   const supabase = await createClient();
@@ -30,7 +29,16 @@ export default async function DashboardPage({
   // the dashboard still demonstrates the layout.
   const myListings = real.length > 0 ? real : sampleListings.slice(0, 4);
 
-  // Build per-listing view / inquiry counts from mock data
+  // Real stats — fall back to mock when DB is empty / tables not yet migrated
+  const mockStats = getMockStats();
+  const realStats = user ? await getDashboardStats(user.id) : null;
+
+  // Real inquiries — fall back to mock when empty (pre-launch demo)
+  const realInquiries = user ? await getInquiriesForUser(user.id) : [];
+  const mockInquiries = getMockInquiries();
+  const inquiries = realInquiries.length > 0 ? realInquiries : mockInquiries;
+
+  // Build per-listing view / inquiry counts
   const viewsByListingId: Record<string, number> = {
     "khartoum-2-3br-apt": 72,
     "omdurman-villa-thawra": 41,
@@ -57,22 +65,19 @@ export default async function DashboardPage({
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-12">
         <StatCard
           label={t("stats.totalListings")}
-          value={stats.totalListings}
-          delta={t("stats.deltaUp", { n: 1 })}
+          value={realStats ? realStats.totalListings : mockStats.totalListings}
         />
         <StatCard
           label={t("stats.activeListings")}
-          value={stats.activeListings}
+          value={mockStats.activeListings}
         />
         <StatCard
           label={t("stats.viewsThisWeek")}
-          value={stats.viewsThisWeek}
-          delta={t("stats.deltaUp", { n: 12 })}
+          value={realStats ? realStats.totalViews : mockStats.viewsThisWeek}
         />
         <StatCard
           label={t("stats.inquiriesCount")}
-          value={stats.inquiriesCount}
-          delta={t("stats.deltaUp", { n: 2 })}
+          value={realStats ? realStats.totalInquiries : mockStats.inquiriesCount}
         />
       </div>
 

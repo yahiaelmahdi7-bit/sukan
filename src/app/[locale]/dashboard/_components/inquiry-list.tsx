@@ -1,9 +1,9 @@
 "use client";
 
-import type { MockInquiry } from "../_data/mock-inquiries";
+import type { Inquiry } from "../_data/inquiry-types";
 
 interface InquiryListProps {
-  inquiries: MockInquiry[];
+  inquiries: Inquiry[];
   locale: string;
   selectedId: string | null;
   onSelect: (id: string) => void;

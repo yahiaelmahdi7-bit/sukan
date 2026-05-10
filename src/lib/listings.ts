@@ -49,7 +49,14 @@ type DbListing = {
   profiles?: {
     full_name: string | null;
     created_at: string;
+    is_verified: boolean | null;
   } | null;
+};
+
+type ReviewAgg = {
+  landlord_id: string;
+  avg_rating: number;
+  review_count: number;
 };
 
 const LISTING_SELECT = `
@@ -57,7 +64,7 @@ const LISTING_SELECT = `
   property_type, purpose, state, city, neighborhood, latitude, longitude,
   bedrooms, bathrooms, area_sqm, price, currency, price_period, amenities,
   tier, status, whatsapp_contact, created_at,
-  profiles!owner_id(full_name, created_at)
+  profiles!owner_id(full_name, created_at, is_verified)
 `;
 
 function toNumber(v: number | string | null | undefined): number | undefined {
@@ -78,6 +85,7 @@ function mapDbListing(row: DbListing): Listing {
   const ownerJoinedYear = row.profiles?.created_at
     ? new Date(row.profiles.created_at).getFullYear()
     : new Date().getFullYear();
+  const ownerVerified = row.profiles?.is_verified === true;
 
   return {
     id: row.id,
@@ -107,7 +115,59 @@ function mapDbListing(row: DbListing): Listing {
     ownerNameAr: ownerName,
     ownerJoinedYear,
     photoSlots: 0,
+    ownerVerified,
   };
+}
+
+/**
+ * Single batched query: fetches rating rows for all listing ids, aggregates
+ * avg + count in-process, and merges into the listings array.
+ * Never issues N+1 queries — one SELECT covers all listings in one round-trip.
+ */
+async function attachLandlordRatings(listings: Listing[]): Promise<Listing[]> {
+  if (listings.length === 0) return listings;
+
+  const listingIds = listings.map((l) => l.id);
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("listing_id, rating")
+      .in("listing_id", listingIds);
+
+    if (error || !data) return listings;
+
+    // Aggregate in-process (one round-trip, group in JS).
+    const agg = new Map<string, ReviewAgg>();
+    for (const row of data as { listing_id: string; rating: number }[]) {
+      const existing = agg.get(row.listing_id);
+      if (existing) {
+        existing.avg_rating =
+          (existing.avg_rating * existing.review_count + row.rating) /
+          (existing.review_count + 1);
+        existing.review_count += 1;
+      } else {
+        agg.set(row.listing_id, {
+          landlord_id: row.listing_id,
+          avg_rating: row.rating,
+          review_count: 1,
+        });
+      }
+    }
+
+    return listings.map((listing) => {
+      const stats = agg.get(listing.id);
+      if (!stats) return listing;
+      return {
+        ...listing,
+        averageRating: Math.round(stats.avg_rating * 10) / 10,
+        reviewCount: stats.review_count,
+      };
+    });
+  } catch {
+    return listings;
+  }
 }
 
 /**
@@ -124,7 +184,8 @@ export async function getActiveListings(): Promise<Listing[]> {
       .order("created_at", { ascending: false });
 
     if (error || !data) return [];
-    return (data as unknown as DbListing[]).map(mapDbListing);
+    const listings = (data as unknown as DbListing[]).map(mapDbListing);
+    return attachLandlordRatings(listings);
   } catch {
     return [];
   }
@@ -136,6 +197,7 @@ export async function getActiveListings(): Promise<Listing[]> {
  */
 export async function getListingsWithSample(): Promise<Listing[]> {
   const real = await getActiveListings();
+  // Sample listings are already rating-free (no DB rows), so no need to attach.
   return [...real, ...sampleListings];
 }
 
@@ -153,7 +215,8 @@ export async function getMyListings(userId: string): Promise<Listing[]> {
       .order("created_at", { ascending: false });
 
     if (error || !data) return [];
-    return (data as unknown as DbListing[]).map(mapDbListing);
+    const listings = (data as unknown as DbListing[]).map(mapDbListing);
+    return attachLandlordRatings(listings);
   } catch {
     return [];
   }
@@ -173,7 +236,10 @@ export async function getListingByIdAsync(id: string): Promise<Listing | undefin
       .maybeSingle();
 
     if (!error && data) {
-      return mapDbListing(data as unknown as DbListing);
+      const [withRating] = await attachLandlordRatings([
+        mapDbListing(data as unknown as DbListing),
+      ]);
+      return withRating;
     }
   } catch {
     // fall through to sample
