@@ -7,12 +7,53 @@ import GlassPanel from "@/components/glass-panel";
 import WaveDivider from "@/components/wave-divider";
 import { guides } from "@/lib/guides";
 import { MapPin, ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Neighborhood Guides",
-  description:
-    "Detailed on-the-ground guides to Sudan's most searched neighbourhoods — power, water, rent, and who lives there.",
-};
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+
+  const title = isAr ? "أدلة الأحياء · سُكَن" : "Neighborhood guides · Sukan";
+  const description = isAr
+    ? "أدلة ميدانية صادقة عن أحياء السودان — الإيجارات والكهرباء والمياه والحياة اليومية في الأماكن الأكثر بحثاً"
+    : "Honest, on-the-ground guides to Sudanese neighborhoods — rents, power, water, and daily life in the most searched areas";
+  const ogImage = guides[0]?.heroImage;
+  const canonicalUrl = `${SITE_URL}/${locale}/guides`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/guides`,
+        ar: `${SITE_URL}/ar/guides`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      locale: isAr ? "ar_SA" : "en_US",
+      ...(ogImage
+        ? { images: [{ url: ogImage, width: 1600, alt: isAr ? "أدلة الأحياء" : "Neighborhood guides" }] }
+        : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  };
+}
 
 const RELIABILITY_COLOR: Record<string, string> = {
   Excellent: "text-emerald-700 bg-emerald-50 border-emerald-200",

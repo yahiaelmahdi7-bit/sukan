@@ -14,6 +14,9 @@ export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));
 }
 
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
 export async function generateMetadata({
   params,
 }: {
@@ -23,11 +26,46 @@ export async function generateMetadata({
   const guide = getGuideBySlug(slug);
   if (!guide) return {};
   const isAr = locale === "ar";
+
+  const name = isAr ? guide.nameAr : guide.nameEn;
+  const title = isAr
+    ? `دليل ${name} · سُكَن`
+    : `${name} guide · Sukan`;
+  const description = isAr
+    ? guide.introAr.slice(0, 140)
+    : guide.introEn.slice(0, 140);
+  const canonicalUrl = `${SITE_URL}/${locale}/guides/${slug}`;
+
   return {
-    title: isAr ? guide.nameAr : guide.nameEn,
-    description: isAr
-      ? guide.introAr.slice(0, 155)
-      : guide.introEn.slice(0, 155),
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/guides/${slug}`,
+        ar: `${SITE_URL}/ar/guides/${slug}`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: "article",
+      locale: isAr ? "ar_SA" : "en_US",
+      images: [
+        {
+          url: guide.heroImage,
+          width: 1600,
+          alt: name,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [guide.heroImage],
+    },
   };
 }
 

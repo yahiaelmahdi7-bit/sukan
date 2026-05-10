@@ -14,6 +14,9 @@ export function generateStaticParams() {
   return insights.map((i) => ({ slug: i.slug }));
 }
 
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
 export async function generateMetadata({
   params,
 }: {
@@ -23,13 +26,44 @@ export async function generateMetadata({
   const insight = getInsightBySlug(slug);
   if (!insight) return {};
   const isAr = locale === "ar";
+
+  const title = isAr ? insight.titleAr : insight.titleEn;
+  const description = isAr
+    ? insight.excerptAr.slice(0, 140)
+    : insight.excerptEn.slice(0, 140);
+  const canonicalUrl = `${SITE_URL}/${locale}/insights/${slug}`;
+
   return {
-    title: isAr ? insight.titleAr : insight.titleEn,
-    description: isAr
-      ? insight.excerptAr
-      : insight.excerptEn,
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/insights/${slug}`,
+        ar: `${SITE_URL}/ar/insights/${slug}`,
+      },
+    },
     openGraph: {
-      images: [{ url: insight.heroImage }],
+      title,
+      description,
+      url: canonicalUrl,
+      type: "article",
+      locale: isAr ? "ar_SA" : "en_US",
+      publishedTime: insight.publishedAt,
+      authors: [insight.authorEn],
+      images: [
+        {
+          url: insight.heroImage,
+          width: 1600,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [insight.heroImage],
     },
   };
 }

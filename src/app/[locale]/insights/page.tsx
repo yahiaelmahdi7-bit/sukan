@@ -7,12 +7,53 @@ import GlassPanel from "@/components/glass-panel";
 import WaveDivider from "@/components/wave-divider";
 import { insights } from "@/lib/insights";
 import { Calendar, ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Market Intelligence",
-  description:
-    "Property market analysis, diaspora guidance, and neighbourhood comparisons for Sudan — written for renters, buyers, and those planning to return.",
-};
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+
+  const title = isAr ? "تحليل السوق · سُكَن" : "Market intelligence · Sukan";
+  const description = isAr
+    ? "تحليل سوق العقارات وإرشادات المغتربين ومقارنات الأحياء في السودان — مكتوبة بصدق لمن يخطط للعودة أو الاستئجار أو الاستثمار"
+    : "Property market analysis, diaspora guidance, and neighbourhood comparisons for Sudan — written honestly for those planning to return, rent, or invest";
+  const ogImage = insights[0]?.heroImage;
+  const canonicalUrl = `${SITE_URL}/${locale}/insights`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${SITE_URL}/en/insights`,
+        ar: `${SITE_URL}/ar/insights`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      locale: isAr ? "ar_SA" : "en_US",
+      ...(ogImage
+        ? { images: [{ url: ogImage, width: 1600, alt: isAr ? "تحليل السوق" : "Market intelligence" }] }
+        : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  };
+}
 
 const CATEGORY_STYLE: Record<string, string> = {
   Market:

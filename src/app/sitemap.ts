@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { sampleListings } from "@/lib/sample-listings";
+import { guides } from "@/lib/guides";
+import { insights } from "@/lib/insights";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
@@ -51,5 +53,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry(`/listings/${listing.id}`, "weekly", 0.8),
   );
 
-  return [...staticRoutes, ...listingRoutes];
+  // Guide index pages (one per locale)
+  const guideIndexRoutes: MetadataRoute.Sitemap = [
+    entry("/guides", "monthly", 0.8),
+  ];
+
+  // Per-guide detail pages — evergreen content, no publishedAt on Guide type
+  const guideDetailRoutes: MetadataRoute.Sitemap = guides.map((guide) =>
+    entry(`/guides/${guide.slug}`, "monthly", 0.7, new Date("2026-04-01")),
+  );
+
+  // Insight index pages (one per locale)
+  const insightIndexRoutes: MetadataRoute.Sitemap = [
+    entry("/insights", "weekly", 0.8),
+  ];
+
+  // Per-insight detail pages — timely, use publishedAt
+  const insightDetailRoutes: MetadataRoute.Sitemap = insights.map((insight) =>
+    entry(
+      `/insights/${insight.slug}`,
+      "weekly",
+      0.6,
+      new Date(insight.publishedAt),
+    ),
+  );
+
+  return [
+    ...staticRoutes,
+    ...listingRoutes,
+    ...guideIndexRoutes,
+    ...guideDetailRoutes,
+    ...insightIndexRoutes,
+    ...insightDetailRoutes,
+  ];
 }

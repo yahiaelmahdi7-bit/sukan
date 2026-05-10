@@ -19,6 +19,8 @@ import HeroSearch from "@/components/hero-search";
 import GlassPanel from "@/components/glass-panel";
 import ActivityTicker from "@/components/activity-ticker";
 import StaggeredListings from "@/components/staggered-listings";
+import LiveBrowsingPill from "@/components/live-browsing-pill";
+import SectionFreshnessPill from "@/components/section-freshness-pill";
 
 export default async function HomePage({
   params,
@@ -141,6 +143,11 @@ export default async function HomePage({
                     </Link>
                   </div>
 
+                  {/* Liveness signal — sits just above the stats border */}
+                  <div className="mt-5 flex justify-center">
+                    <LiveBrowsingPill />
+                  </div>
+
                   {/* Stats */}
                   <HeroStats stats={heroStats} />
                 </GlassPanel>
@@ -164,6 +171,9 @@ export default async function HomePage({
               title={t("trust.stat1")}
               viewAll={{ href: "/listings", label: t("listing.browseAll") + " →" }}
             />
+            <div className="-mt-6 mb-8">
+              <SectionFreshnessPill listings={featuredListings} locale={locale} />
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <StaggeredListings>
@@ -184,6 +194,9 @@ export default async function HomePage({
               title={t("nav.browse")}
               viewAll={{ href: "/listings", label: t("listing.browseAll") + " →" }}
             />
+            <div className="-mt-6 mb-8">
+              <SectionFreshnessPill listings={sampleListings} locale={locale} />
+            </div>
 
             {/* Filter chips — decorative */}
             <div className="flex flex-wrap gap-2 mb-8 -mt-4">

@@ -382,6 +382,9 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           </span>
 
           {/* ── Favorite + Compare buttons ────────────────────────────────── */}
+          {/* verified: round 3 crowding check OK — both buttons are 32×32 (sm),
+              gap-1.5 (6px) → 70px total. Ribbons end ~100px from the start edge;
+              buttons consume ~82px from the end edge. No collision at 320–520px. */}
           <div className="pointer-events-auto absolute top-3 z-20 ltr:right-3 rtl:left-3 flex items-center gap-1.5">
             <CompareButton
               listing={{
