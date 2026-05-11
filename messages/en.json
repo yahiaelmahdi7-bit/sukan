@@ -289,7 +289,25 @@
     "descriptionEnPlaceholder": "Describe the property in English…",
     "descriptionArPlaceholder": "صِف العقار باللغة العربية…",
     "signInRequired": "Please sign in to upload photos.",
-    "submitting": "Publishing…"
+    "submitting": "Publishing…",
+    "editMode": {
+      "pageTitle": "Edit listing: {title}",
+      "pageEyebrow": "Editing",
+      "lastEdited": "Last edited: {date}",
+      "statusPill": "Listing is currently {status}",
+      "discardChanges": "Discard changes",
+      "discardConfirmTitle": "Discard changes?",
+      "discardConfirmBody": "Any unsaved changes will be lost.",
+      "discardConfirm": "Discard",
+      "discardCancel": "Keep editing",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "successHeading": "Listing updated!",
+      "successBody": "Your changes have been saved successfully.",
+      "errorOwnership": "You do not have permission to edit this listing.",
+      "errorNotFound": "Listing not found.",
+      "loadingPhotos": "Loading photos…"
+    }
   },
   "testimonials": {
     "eyebrow": "Real users",

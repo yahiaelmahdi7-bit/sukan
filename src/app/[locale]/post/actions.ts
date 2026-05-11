@@ -4,6 +4,173 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { SudanState, PropertyType, Purpose } from "@/lib/sample-listings";
 
+// ─── updateListing ─────────────────────────────────────────────────────────────
+// Updates an existing listing row. Only the caller's own listings may be edited.
+// Immutable fields (owner_id, created_at, tier) are never touched.
+
+export type UpdateListingInput = Partial<{
+  titleEn: string;
+  titleAr: string;
+  descriptionEn: string;
+  descriptionAr: string;
+  propertyType: PropertyType;
+  purpose: Purpose;
+  state: SudanState;
+  city: string;
+  neighborhood: string | null;
+  address: string | null;
+  latitude: number;
+  longitude: number;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  areaSqm: number | null;
+  price: number;
+  currency: "USD" | "SDG";
+  pricePeriod: "month" | "year" | "total";
+  amenities: string[];
+  whatsappContact: string | null;
+}>;
+
+export type UpdateListingResult =
+  | { ok: true }
+  | { ok: false; error: string; needsAuth?: boolean };
+
+export async function updateListing(
+  listingId: string,
+  input: UpdateListingInput,
+  photoUrls: string[],
+): Promise<UpdateListingResult> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, error: "Sign in to edit a listing", needsAuth: true };
+  }
+
+  // Ownership check: verify the caller owns this listing
+  const { data: existing, error: fetchError } = await supabase
+    .from("listings")
+    .select("id, owner_id")
+    .eq("id", listingId)
+    .maybeSingle();
+
+  if (fetchError || !existing) {
+    return { ok: false, error: "Listing not found." };
+  }
+
+  if (existing.owner_id !== user.id) {
+    return { ok: false, error: "You do not have permission to edit this listing." };
+  }
+
+  // Build the update payload — only include fields that were provided
+  const patch: Record<string, unknown> = {
+    updated_at: new Date().toISOString(),
+  };
+
+  if (input.titleEn !== undefined) patch.title_en = input.titleEn;
+  if (input.titleAr !== undefined) patch.title_ar = input.titleAr;
+  if (input.descriptionEn !== undefined) patch.description_en = input.descriptionEn || null;
+  if (input.descriptionAr !== undefined) patch.description_ar = input.descriptionAr || null;
+  if (input.propertyType !== undefined) patch.property_type = input.propertyType;
+  if (input.purpose !== undefined) patch.purpose = input.purpose;
+  if (input.state !== undefined) patch.state = input.state;
+  if (input.city !== undefined) patch.city = input.city;
+  if (input.neighborhood !== undefined) patch.neighborhood = input.neighborhood;
+  if (input.address !== undefined) patch.address_line = input.address;
+  if (input.latitude !== undefined) patch.latitude = input.latitude;
+  if (input.longitude !== undefined) patch.longitude = input.longitude;
+  if (input.bedrooms !== undefined) patch.bedrooms = input.bedrooms;
+  if (input.bathrooms !== undefined) patch.bathrooms = input.bathrooms;
+  if (input.areaSqm !== undefined) patch.area_sqm = input.areaSqm;
+  if (input.price !== undefined) patch.price = input.price;
+  if (input.currency !== undefined) patch.currency = input.currency;
+  if (input.pricePeriod !== undefined) patch.price_period = input.pricePeriod;
+  if (input.amenities !== undefined) patch.amenities = input.amenities;
+  if (input.whatsappContact !== undefined) patch.whatsapp_contact = input.whatsappContact;
+
+  const { error: updateError } = await supabase
+    .from("listings")
+    .update(patch)
+    .eq("id", listingId);
+
+  if (updateError) {
+    return { ok: false, error: updateError.message };
+  }
+
+  // ── Photo reconciliation ─────────────────────────────────────────────────────
+  // Fetch existing photo rows, diff against new photoUrls, INSERT new / DELETE removed.
+  const { data: existingPhotos } = await supabase
+    .from("listing_photos")
+    .select("id, url, position")
+    .eq("listing_id", listingId)
+    .order("position", { ascending: true });
+
+  const existingRows = (existingPhotos ?? []) as {
+    id: string;
+    url: string | null;
+    position: number;
+  }[];
+
+  const existingUrlSet = new Set(existingRows.map((r) => r.url));
+  const newUrlSet = new Set(photoUrls);
+
+  // DELETE rows whose url is no longer in the new list
+  const toDelete = existingRows.filter((r) => r.url && !newUrlSet.has(r.url));
+  if (toDelete.length > 0) {
+    await supabase
+      .from("listing_photos")
+      .delete()
+      .in(
+        "id",
+        toDelete.map((r) => r.id),
+      );
+  }
+
+  // INSERT rows for new URLs not already in DB
+  function extractPath(url: string): string {
+    const marker = "/object/public/listing-photos/";
+    const idx = url.indexOf(marker);
+    if (idx === -1) return url;
+    return url.slice(idx + marker.length);
+  }
+
+  const toInsert = photoUrls
+    .map((url, position) => ({ url, position }))
+    .filter(({ url }) => !existingUrlSet.has(url))
+    .map(({ url, position }) => ({
+      listing_id: listingId,
+      storage_path: extractPath(url),
+      url,
+      position,
+    }));
+
+  if (toInsert.length > 0) {
+    await supabase.from("listing_photos").insert(toInsert);
+  }
+
+  // UPDATE positions for retained rows so ordering reflects the current photoUrls array
+  const retainedRows = existingRows.filter((r) => r.url && newUrlSet.has(r.url));
+  for (const row of retainedRows) {
+    const newPosition = photoUrls.indexOf(row.url!);
+    if (newPosition !== row.position) {
+      await supabase
+        .from("listing_photos")
+        .update({ position: newPosition })
+        .eq("id", row.id);
+    }
+  }
+
+  revalidatePath("/", "layout");
+  revalidatePath("/listings");
+  revalidatePath(`/listings/${listingId}`);
+  revalidatePath(`/dashboard/listings`);
+
+  return { ok: true };
+}
+
 export type CreateListingInput = {
   titleEn: string;
   titleAr: string;

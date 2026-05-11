@@ -289,7 +289,25 @@
     "descriptionEnPlaceholder": "صِف العقار باللغة الإنجليزية…",
     "descriptionArPlaceholder": "صِف العقار باللغة العربية…",
     "signInRequired": "يرجى تسجيل الدخول لرفع الصور.",
-    "submitting": "جارٍ النشر…"
+    "submitting": "جارٍ النشر…",
+    "editMode": {
+      "pageTitle": "تعديل العقار: {title}",
+      "pageEyebrow": "تعديل",
+      "lastEdited": "آخر تعديل: {date}",
+      "statusPill": "الإعلان حالياً {status}",
+      "discardChanges": "تجاهل التغييرات",
+      "discardConfirmTitle": "تجاهل التغييرات؟",
+      "discardConfirmBody": "ستُفقد أي تغييرات غير محفوظة.",
+      "discardConfirm": "تجاهل",
+      "discardCancel": "متابعة التعديل",
+      "saveChanges": "حفظ التغييرات",
+      "saving": "جارٍ الحفظ…",
+      "successHeading": "تم تحديث الإعلان!",
+      "successBody": "تم حفظ تغييراتك بنجاح.",
+      "errorOwnership": "لا تملك صلاحية تعديل هذا الإعلان.",
+      "errorNotFound": "الإعلان غير موجود.",
+      "loadingPhotos": "جارٍ تحميل الصور…"
+    }
   },
   "testimonials": {
     "eyebrow": "مستخدمون حقيقيون",

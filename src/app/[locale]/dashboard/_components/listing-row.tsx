@@ -221,7 +221,7 @@ export default function ListingRow({
             <ul className="py-1 text-sm">
               <li>
                 <Link
-                  href={`/post?edit=${listing.id}`}
+                  href={`/dashboard/listings/${listing.id}/edit`}
                   className="smooth-fast flex items-center gap-2.5 px-4 py-2.5 text-ink hover:bg-gold/10 hover:text-terracotta"
                   onClick={() => setMenuOpen(false)}
                 >

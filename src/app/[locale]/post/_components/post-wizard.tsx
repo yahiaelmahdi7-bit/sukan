@@ -3,13 +3,14 @@
 import { useState, useEffect, useTransition, useId } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Sparkles } from "lucide-react";
+import { useRouter } from "@/i18n/navigation";
 import GlassPanel from "@/components/glass-panel";
 import { GlassInput, GlassTextarea } from "@/components/ui/glass-input";
 import { GlassSelect } from "@/components/ui/glass-select";
 import { GlassButton } from "@/components/ui/glass-button";
 import { PhotoUpload } from "@/components/photo-upload";
 import PostMap from "./post-map";
-import { createListing, attachPhotos } from "../actions";
+import { createListing, attachPhotos, updateListing } from "../actions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -98,6 +99,10 @@ const INITIAL_DRAFT: PostDraft = {
   payment: "stripe",
   termsAccepted: false,
 };
+
+// PostFormShape is the public name for the draft shape when used externally
+// (e.g. by edit-wizard.tsx passing initialValues).
+export type PostFormShape = PostDraft;
 
 const SESSION_KEY = "sukan:post-draft";
 
@@ -1429,33 +1434,157 @@ function validate(
   return errs;
 }
 
+// ─── Discard-changes confirm dialog ──────────────────────────────────────────
+
+function DiscardDialog({
+  onConfirm,
+  onCancel,
+}: {
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  const t = useTranslations("post");
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="discard-dialog-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+        onClick={onCancel}
+        aria-hidden="true"
+      />
+      <div className="relative z-10 w-full max-w-sm rounded-[var(--radius-glass)] border border-white/55 bg-cream/95 p-6 shadow-[var(--shadow-warm-lg)] backdrop-blur-md">
+        <h3
+          id="discard-dialog-title"
+          className="font-display text-xl text-ink mb-2"
+        >
+          {t("editMode.discardConfirmTitle")}
+        </h3>
+        <p className="text-sm text-ink-mid mb-6">
+          {t("editMode.discardConfirmBody")}
+        </p>
+        <div className="flex items-center justify-end gap-3">
+          <GlassButton
+            type="button"
+            variant="ghost-light"
+            size="sm"
+            onClick={onCancel}
+          >
+            {t("editMode.discardCancel")}
+          </GlassButton>
+          <GlassButton
+            type="button"
+            variant="terracotta"
+            size="sm"
+            onClick={onConfirm}
+          >
+            {t("editMode.discardConfirm")}
+          </GlassButton>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Edit-mode success state ──────────────────────────────────────────────────
+
+function EditSuccessState() {
+  const t = useTranslations("post");
+  return (
+    <div className="flex flex-col items-center justify-center py-16 gap-6 text-center">
+      <div
+        className="w-20 h-20 rounded-full flex items-center justify-center"
+        style={{
+          background: "rgba(200,135,58,0.12)",
+          boxShadow: "var(--shadow-gold-glow)",
+          border: "2px solid rgba(200,135,58,0.45)",
+        }}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="40"
+          height="40"
+          fill="none"
+          aria-hidden
+        >
+          <path
+            d="M5 12l5 5L20 7"
+            stroke="#C8873A"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+      <div>
+        <h2 className="font-display text-3xl text-ink mb-2">
+          {t("editMode.successHeading")}
+        </h2>
+        <p className="text-ink-mid text-sm max-w-sm mx-auto">
+          {t("editMode.successBody")}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main wizard ──────────────────────────────────────────────────────────────
 
-export default function PostWizard({ userId }: { userId: string | null }) {
+export interface PostWizardProps {
+  userId: string | null;
+  /** Pre-fill the wizard with existing listing values (edit mode). */
+  initialValues?: Partial<PostFormShape>;
+  /** The listing ID being edited. Triggers updateListing on submit. */
+  editingListingId?: string;
+  /** "create" (default) uses createListing; "edit" uses updateListing. */
+  mode?: "create" | "edit";
+}
+
+export default function PostWizard({
+  userId,
+  initialValues,
+  editingListingId,
+  mode = "create",
+}: PostWizardProps) {
   const t = useTranslations("post");
   const locale = useLocale();
+  const router = useRouter();
   const [, startTransition] = useTransition();
 
-  // Stable temp ID used as storage path folder during upload
-  const [tempListingId] = useState<string>(() => makeTempId());
+  const isEditMode = mode === "edit";
 
-  const [draft, setDraft] = useState<PostDraft>(() => ({ ...INITIAL_DRAFT }));
+  // In edit mode, use the listing ID itself as the storage folder so new photos
+  // are uploaded directly into the real listing's folder.
+  const [tempListingId] = useState<string>(() =>
+    editingListingId ?? makeTempId(),
+  );
+
+  const [draft, setDraft] = useState<PostDraft>(() => ({
+    ...INITIAL_DRAFT,
+    ...(initialValues ?? {}),
+  }));
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false);
 
-  // Stripe checkout state
+  // Stripe checkout state (create mode only)
   const [stripeLoading, setStripeLoading] = useState(false);
   const [stripeError, setStripeError] = useState<string | null>(null);
-  // Created listing ID — set after createListing succeeds, used for Stripe checkout
   const [createdListingId, setCreatedListingId] = useState<string | null>(null);
 
   const STEPS = [t("step1"), t("step2"), t("step3"), t("step4")] as const;
 
-  // Load persisted draft from sessionStorage on mount
+  // Load persisted draft from sessionStorage on mount (create mode only — edit
+  // mode always uses the server-loaded initialValues).
   useEffect(() => {
+    if (isEditMode) return;
     try {
       const raw = sessionStorage.getItem(SESSION_KEY);
       if (raw) {
@@ -1465,22 +1594,23 @@ export default function PostWizard({ userId }: { userId: string | null }) {
     } catch {
       // ignore parse errors
     }
-  }, []);
+  }, [isEditMode]);
 
-  // Persist draft (including photoUrls — they're stable Supabase public URLs)
+  // Persist draft (create mode only)
   function updateDraft(patch: Partial<PostDraft>) {
     setDraft((prev) => {
       const next = { ...prev, ...patch };
-      startTransition(() => {
-        try {
-          sessionStorage.setItem(SESSION_KEY, JSON.stringify(next));
-        } catch {
-          // quota exceeded — silently ignore
-        }
-      });
+      if (!isEditMode) {
+        startTransition(() => {
+          try {
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(next));
+          } catch {
+            // quota exceeded — silently ignore
+          }
+        });
+      }
       return next;
     });
-    // Clear errors for the changed keys
     const changedKeys = Object.keys(patch);
     setErrors((prev) => {
       const next = { ...prev };
@@ -1508,7 +1638,76 @@ export default function PostWizard({ userId }: { userId: string | null }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  async function handleSubmit() {
+  async function handleSubmitEdit() {
+    if (!editingListingId) return;
+
+    const errs = validate(3, draft, (k) => t(k as Parameters<typeof t>[0]));
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+
+    if (!draft.propertyType || !draft.purpose || !draft.state) return;
+
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const state = draft.state as StateKey;
+      const coords = STATE_COORDS[state];
+
+      const result = await updateListing(
+        editingListingId,
+        {
+          titleEn: draft.descriptionEn
+            ? draft.descriptionEn.slice(0, 80)
+            : `${draft.propertyType} in ${draft.city}`,
+          titleAr: draft.descriptionAr
+            ? draft.descriptionAr.slice(0, 80)
+            : `${draft.propertyType} في ${draft.city}`,
+          descriptionEn: draft.descriptionEn,
+          descriptionAr: draft.descriptionAr,
+          propertyType: draft.propertyType,
+          purpose: draft.purpose,
+          state: draft.state,
+          city: draft.city,
+          neighborhood: draft.neighborhood || null,
+          address: draft.address || null,
+          latitude: draft.pinLat ?? coords[0],
+          longitude: draft.pinLng ?? coords[1],
+          bedrooms: draft.bedrooms,
+          bathrooms: draft.bathrooms,
+          areaSqm: draft.area ? Number(draft.area) : null,
+          price: Number(draft.price),
+          currency: draft.currency,
+          pricePeriod: draft.period,
+          amenities: [],
+          whatsappContact: null,
+        },
+        draft.photoUrls,
+      );
+
+      if (!result.ok) {
+        setSubmitError(result.error);
+        return;
+      }
+
+      setSubmitted(true);
+      // Redirect to the listing detail page after a short delay so the user
+      // can read the success message.
+      setTimeout(() => {
+        router.push(`/listings/${editingListingId}`);
+      }, 1500);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "An unexpected error occurred.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleSubmitCreate() {
     const errs = validate(3, draft, (k) =>
       t(k as Parameters<typeof t>[0]),
     );
@@ -1560,13 +1759,10 @@ export default function PostWizard({ userId }: { userId: string | null }) {
         return;
       }
 
-      // Attach uploaded photos to the new listing
       if (draft.photoUrls.length > 0) {
         await attachPhotos(result.listingId, draft.photoUrls);
       }
 
-      // For featured + card (USD): save the listing ID then trigger Stripe.
-      // The listing is created with status=pending_payment; Stripe webhook activates it.
       if (draft.tier === "featured" && draft.payment === "stripe") {
         setCreatedListingId(result.listingId);
         setSubmitting(false);
@@ -1581,6 +1777,14 @@ export default function PostWizard({ userId }: { userId: string | null }) {
       );
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  function handleSubmit() {
+    if (isEditMode) {
+      void handleSubmitEdit();
+    } else {
+      void handleSubmitCreate();
     }
   }
 
@@ -1604,7 +1808,6 @@ export default function PostWizard({ userId }: { userId: string | null }) {
       const data = (await res.json()) as { ok: boolean; url?: string; error?: string };
 
       if (!data.ok) {
-        // 503 "Payments not configured" — show friendly inline message
         setStripeError(data.error ?? "Could not start checkout");
         return;
       }
@@ -1629,7 +1832,7 @@ export default function PostWizard({ userId }: { userId: string | null }) {
         shadow="lg"
         className="border border-white/55 p-6 sm:p-10 max-w-3xl mx-auto"
       >
-        <SuccessState />
+        {isEditMode ? <EditSuccessState /> : <SuccessState />}
       </GlassPanel>
     );
   }
@@ -1637,103 +1840,130 @@ export default function PostWizard({ userId }: { userId: string | null }) {
   const isLastStep = step === STEPS.length - 1;
 
   return (
-    <GlassPanel
-      variant="warm"
-      radius="glass"
-      highlight
-      shadow="lg"
-      className="border border-white/55 p-6 sm:p-10 max-w-3xl mx-auto"
-    >
-      {/* Progress bar */}
-      <WizardProgress step={step} steps={[...STEPS]} />
-
-      {/* Step heading */}
-      <h2 className="font-display text-3xl text-ink mb-6">
-        {STEPS[step]}
-      </h2>
-
-      {/* Step content */}
-      {step === 0 && (
-        <Step1
-          draft={draft}
-          update={updateDraft}
-          errors={errors}
-          userId={userId}
-        />
-      )}
-      {step === 1 && (
-        <Step2 draft={draft} update={updateDraft} errors={errors} />
-      )}
-      {step === 2 && (
-        <Step3
-          draft={draft}
-          update={updateDraft}
-          errors={errors}
-          userId={userId}
-          tempListingId={tempListingId}
-        />
-      )}
-      {step === 3 && (
-        <Step4
-          draft={draft}
-          update={updateDraft}
-          errors={errors}
-          onStripeCheckout={handleStripeCheckout}
-          stripeLoading={stripeLoading}
-          stripeError={stripeError}
+    <>
+      {showDiscardDialog && (
+        <DiscardDialog
+          onConfirm={() => {
+            setShowDiscardDialog(false);
+            router.push("/dashboard/listings");
+          }}
+          onCancel={() => setShowDiscardDialog(false)}
         />
       )}
 
-      {submitError && (
-        <p className={`${errorCls} mt-4`} role="alert">
-          {submitError}
-        </p>
-      )}
+      <GlassPanel
+        variant="warm"
+        radius="glass"
+        highlight
+        shadow="lg"
+        className="border border-white/55 p-6 sm:p-10 max-w-3xl mx-auto"
+      >
+        {/* Progress bar */}
+        <WizardProgress step={step} steps={[...STEPS]} />
 
-      {/* Navigation footer */}
-      <div className="mt-10 flex items-center justify-between gap-4 border-t border-sand-dk/40 pt-6">
-        {/* Back */}
-        {step > 0 ? (
-          <GlassButton
-            type="button"
-            variant="ghost-light"
-            size="md"
-            onClick={handleBack}
-          >
-            {t("back")}
-          </GlassButton>
-        ) : (
-          <div aria-hidden />
+        {/* Step heading */}
+        <h2 className="font-display text-3xl text-ink mb-6">
+          {STEPS[step]}
+        </h2>
+
+        {/* Step content */}
+        {step === 0 && (
+          <Step1
+            draft={draft}
+            update={updateDraft}
+            errors={errors}
+            userId={userId}
+          />
+        )}
+        {step === 1 && (
+          <Step2 draft={draft} update={updateDraft} errors={errors} />
+        )}
+        {step === 2 && (
+          <Step3
+            draft={draft}
+            update={updateDraft}
+            errors={errors}
+            userId={userId}
+            tempListingId={tempListingId}
+          />
+        )}
+        {step === 3 && (
+          <Step4
+            draft={draft}
+            update={updateDraft}
+            errors={errors}
+            onStripeCheckout={handleStripeCheckout}
+            stripeLoading={stripeLoading}
+            stripeError={stripeError}
+          />
         )}
 
-        {/* Next / Submit */}
-        {isLastStep ? (
-          // When createdListingId is set for featured+stripe, the Stripe button
-          // inside Step4 takes over. Hide the footer submit button.
-          createdListingId && draft.tier === "featured" && draft.payment === "stripe" ? (
+        {submitError && (
+          <p className={`${errorCls} mt-4`} role="alert">
+            {submitError}
+          </p>
+        )}
+
+        {/* Navigation footer */}
+        <div className="mt-10 flex items-center justify-between gap-4 border-t border-sand-dk/40 pt-6">
+          {/* Back / Discard */}
+          {step > 0 ? (
+            <GlassButton
+              type="button"
+              variant="ghost-light"
+              size="md"
+              onClick={handleBack}
+            >
+              {t("back")}
+            </GlassButton>
+          ) : isEditMode ? (
+            <GlassButton
+              type="button"
+              variant="ghost-light"
+              size="md"
+              onClick={() => setShowDiscardDialog(true)}
+            >
+              {t("editMode.discardChanges")}
+            </GlassButton>
+          ) : (
             <div aria-hidden />
+          )}
+
+          {/* Next / Submit */}
+          {isLastStep ? (
+            // In create mode: when createdListingId is set for featured+stripe,
+            // the Stripe button inside Step4 takes over.
+            !isEditMode && createdListingId && draft.tier === "featured" && draft.payment === "stripe" ? (
+              <div aria-hidden />
+            ) : (
+              <GlassButton
+                type="button"
+                variant="terracotta"
+                size="md"
+                onClick={handleSubmit}
+                disabled={!draft.termsAccepted || submitting}
+              >
+                {submitting
+                  ? isEditMode
+                    ? t("editMode.saving")
+                    : t("submitting")
+                  : isEditMode
+                  ? t("editMode.saveChanges")
+                  : t("submit")}
+              </GlassButton>
+            )
           ) : (
             <GlassButton
               type="button"
               variant="terracotta"
               size="md"
-              onClick={handleSubmit}
-              disabled={!draft.termsAccepted || submitting}
+              onClick={handleNext}
             >
-              {submitting ? t("submitting") : t("submit")}
+              {t("next")}
             </GlassButton>
-          )
-        ) : (
-          <GlassButton
-            type="button"
-            variant="terracotta"
-            size="md"
-            onClick={handleNext}
-          >
-            {t("next")}
-          </GlassButton>
-        )}
-      </div>
-    </GlassPanel>
+          )}
+        </div>
+      </GlassPanel>
+    </>
   );
 }
