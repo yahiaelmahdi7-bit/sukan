@@ -96,7 +96,7 @@ export default function OgImage() {
             textAlign: "center",
           }}
         >
-          سوكان · Sukan
+          سُكان · Sukan
         </div>
 
         {/* Tagline */}

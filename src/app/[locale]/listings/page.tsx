@@ -323,7 +323,7 @@ export async function generateMetadata({
   const isAr = locale === "ar";
 
   const title = isAr
-    ? "تصفح العقارات في السودان · سوكان"
+    ? "تصفح العقارات في السودان · سُكان"
     : "Browse Properties in Sudan · Sukan";
   const description = isAr
     ? "شقق وفيلات ومنازل للإيجار والبيع في جميع ولايات السودان — قائمة محدّثة يومياً"
@@ -346,7 +346,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "Sukan — سوكان",
+      siteName: "Sukan — سُكان",
       locale: isAr ? "ar_SD" : "en_US",
     },
     twitter: {

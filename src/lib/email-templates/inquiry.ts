@@ -43,7 +43,7 @@ export function buildInquiryEmail(p: InquiryEmailParams): string {
 
   // ── Copy ──────────────────────────────────────────────────────────────────
   const title = isAr
-    ? `استفسار جديد على ${p.listingTitle} · سوكان`
+    ? `استفسار جديد على ${p.listingTitle} · سُكان`
     : `New inquiry on ${p.listingTitle} · Sukan`;
 
   const preheader = isAr
@@ -55,7 +55,7 @@ export function buildInquiryEmail(p: InquiryEmailParams): string {
     : "You have a new inquiry";
 
   const subText = isAr
-    ? `أرسل <strong>${escHtml(p.inquirerName)}</strong> الرسالة التالية عبر سوكان بخصوص إعلانك.`
+    ? `أرسل <strong>${escHtml(p.inquirerName)}</strong> الرسالة التالية عبر سُكان بخصوص إعلانك.`
     : `<strong>${escHtml(p.inquirerName)}</strong> sent the following message via Sukan about your listing.`;
 
   const labelInquirer = isAr ? "المستفسر" : "Inquirer";
@@ -65,11 +65,11 @@ export function buildInquiryEmail(p: InquiryEmailParams): string {
   const labelMessageUpper = isAr ? "الرسالة" : "MESSAGE";
 
   const ctaWhatsapp = isAr ? "الرد عبر واتساب" : "Reply via WhatsApp";
-  const ctaDashboard = isAr ? "فتح لوحة التحكم في سوكان" : "Open in Sukan dashboard";
+  const ctaDashboard = isAr ? "فتح لوحة التحكم في سُكان" : "Open in Sukan dashboard";
 
   // ── WhatsApp deep-link ────────────────────────────────────────────────────
   const waReplyText = isAr
-    ? `أهلاً، أريد الرد على استفسارك عن إعلاني على سوكان: ${p.listingTitle}`
+    ? `أهلاً، أريد الرد على استفسارك عن إعلاني على سُكان: ${p.listingTitle}`
     : `Hi, I'm replying to your inquiry about my listing on Sukan: ${p.listingTitle}`;
   const waUrl = `https://wa.me/${p.inquirerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(waReplyText)}`;
 
@@ -128,6 +128,6 @@ export function buildInquiryEmail(p: InquiryEmailParams): string {
 
 export function inquiryEmailSubject(listingTitle: string, locale: string): string {
   return locale === "ar"
-    ? `استفسار جديد على ${listingTitle} · سوكان`
+    ? `استفسار جديد على ${listingTitle} · سُكان`
     : `New inquiry on ${listingTitle} · Sukan`;
 }

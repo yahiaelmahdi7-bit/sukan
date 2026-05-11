@@ -70,7 +70,7 @@ export default function DashboardSidebar({
           className="font-display text-xl text-ink leading-none"
           style={{ fontFamily: "var(--font-arabic)" }}
         >
-          سوكان
+          سُكان
         </span>
       </Link>
 

@@ -90,7 +90,7 @@ export default async function HomePage({
   ];
 
   const whatsappText = encodeURIComponent(
-    "Hi, I'd like to list my property on Sukan / مرحباً، أريد نشر عقاري على سوكان"
+    "Hi, I'd like to list my property on Sukan / مرحباً، أريد نشر عقاري على سُكان"
   );
 
   return (

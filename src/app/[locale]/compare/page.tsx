@@ -13,7 +13,7 @@ export async function generateMetadata({
   const isAr = locale === "ar";
 
   return {
-    title: isAr ? "مقارنة العقارات · سوكان" : "Compare Properties · Sukan",
+    title: isAr ? "مقارنة العقارات · سُكان" : "Compare Properties · Sukan",
     description: isAr
       ? "قارن بين العقارات جنباً إلى جنب"
       : "Compare properties side by side",

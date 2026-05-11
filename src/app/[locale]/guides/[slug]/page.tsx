@@ -31,7 +31,7 @@ export async function generateMetadata({
 
   const name = isAr ? guide.nameAr : guide.nameEn;
   const title = isAr
-    ? `دليل ${name} · سوكان`
+    ? `دليل ${name} · سُكان`
     : `${name} guide · Sukan`;
   const description = isAr
     ? guide.introAr.slice(0, 140)
