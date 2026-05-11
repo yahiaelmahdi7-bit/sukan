@@ -289,6 +289,12 @@
     "descriptionEnPlaceholder": "صِف العقار باللغة الإنجليزية…",
     "descriptionArPlaceholder": "صِف العقار باللغة العربية…",
     "signInRequired": "يرجى تسجيل الدخول لرفع الصور.",
+    "authBanner": {
+      "title": "سجّل الدخول للنشر",
+      "body": "يمكنك تعبئة النموذج الآن — تقدّمك محفوظ تلقائياً.",
+      "cta": "تسجيل الدخول",
+      "publishCta": "سجّل الدخول للنشر ←"
+    },
     "submitting": "جارٍ النشر…",
     "editMode": {
       "pageTitle": "تعديل العقار: {title}",

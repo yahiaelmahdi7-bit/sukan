@@ -289,6 +289,12 @@
     "descriptionEnPlaceholder": "Describe the property in English…",
     "descriptionArPlaceholder": "صِف العقار باللغة العربية…",
     "signInRequired": "Please sign in to upload photos.",
+    "authBanner": {
+      "title": "Sign in to publish",
+      "body": "You can fill out the form now — your progress is saved.",
+      "cta": "Sign in",
+      "publishCta": "Sign in to publish →"
+    },
     "submitting": "Publishing…",
     "editMode": {
       "pageTitle": "Edit listing: {title}",

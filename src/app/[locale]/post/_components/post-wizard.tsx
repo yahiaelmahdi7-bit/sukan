@@ -1861,6 +1861,33 @@ export default function PostWizard({
         {/* Progress bar */}
         <WizardProgress step={step} steps={[...STEPS]} />
 
+        {/* Auth gate banner — anonymous users in create mode see this from
+            step 0 so the sign-in expectation is set early, draft auto-saves
+            to sessionStorage and survives the auth redirect. */}
+        {!userId && !isEditMode && (
+          <div
+            role="status"
+            className="mb-6 flex flex-wrap items-center gap-3 rounded-[var(--radius-pill)] border border-gold/45 bg-gold/10 px-4 py-3"
+            style={{ boxShadow: "var(--shadow-warm-sm)" }}
+          >
+            <span className="text-sm font-medium text-ink">
+              {t("authBanner.title")}
+            </span>
+            <span className="text-xs text-ink-mid">
+              {t("authBanner.body")}
+            </span>
+            <a
+              href={`/${locale}/sign-in?next=${encodeURIComponent(`/${locale}/post`)}`}
+              className="smooth-fast ms-auto rounded-[var(--radius-pill)] bg-terracotta px-4 py-1.5 text-xs font-semibold text-cream hover:bg-terracotta-deep"
+              style={{
+                boxShadow: "0 4px 12px rgba(200, 64, 26, 0.22)",
+              }}
+            >
+              {t("authBanner.cta")}
+            </a>
+          </div>
+        )}
+
         {/* Step heading */}
         <h2 className="font-display text-3xl text-ink mb-6">
           {STEPS[step]}
@@ -1935,6 +1962,20 @@ export default function PostWizard({
             // the Stripe button inside Step4 takes over.
             !isEditMode && createdListingId && draft.tier === "featured" && draft.payment === "stripe" ? (
               <div aria-hidden />
+            ) : !userId && !isEditMode ? (
+              // Anonymous user on the final step — gate the publish action.
+              // Draft is already auto-saved to sessionStorage; sign-in returns
+              // them here with everything preserved.
+              <a
+                href={`/${locale}/sign-in?next=${encodeURIComponent(`/${locale}/post`)}`}
+                className="smooth inline-flex items-center justify-center rounded-[var(--radius-pill)] bg-terracotta px-6 py-2.5 text-sm font-semibold text-cream hover:bg-terracotta-deep"
+                style={{
+                  boxShadow:
+                    "0 8px 22px rgba(200, 64, 26, 0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
+                }}
+              >
+                {t("authBanner.publishCta")}
+              </a>
             ) : (
               <GlassButton
                 type="button"
