@@ -45,6 +45,10 @@ To apply all migrations: `supabase db push`
 | `NEXT_PUBLIC_SITE_URL` | No | Canonical URL used in emails and metadata |
 | `HIGGSFIELD_API_KEY` | Yes (AI photo enhancement) | `POST /api/photos/enhance` — sends landlord photos to Higgsfield for real-estate-tuned image enhancement. If unset the route returns 503. Get your key at [app.higgsfield.ai](https://app.higgsfield.ai). |
 | `HIGGSFIELD_STUB` | No | Set to `true` to run enhancement in stub mode (returns the original photo unchanged) — useful for local dev without credentials. |
+| `STRIPE_SECRET_KEY` | For card payments | Stripe secret key (`sk_test_…` or `sk_live_…`). Without this, the card checkout path returns 503 gracefully. |
+| `STRIPE_WEBHOOK_SECRET` | For card payments | Webhook signing secret from your Stripe dashboard (`whsec_…`). Required by `POST /api/stripe/webhook` to verify Stripe signatures. |
+| `STRIPE_PRICE_FEATURED` | For card payments | Stripe Price ID for the $40 featured tier (`price_…`). Create a one-time price of $40 USD in your Stripe dashboard and paste the ID here. |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | No | Only needed if Stripe Elements (inline card form) is added later. Not used in the hosted Checkout flow. |
 
 ## Brand
 - Name: Sukan / سكن ("housing")

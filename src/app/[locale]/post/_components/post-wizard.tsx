@@ -985,10 +985,16 @@ function Step4({
   draft,
   update,
   errors,
+  onStripeCheckout,
+  stripeLoading,
+  stripeError,
 }: {
   draft: PostDraft;
   update: (patch: Partial<PostDraft>) => void;
   errors: Record<string, string>;
+  onStripeCheckout?: () => void;
+  stripeLoading?: boolean;
+  stripeError?: string | null;
 }) {
   const t = useTranslations("post");
   const pt = useTranslations("propertyType");
@@ -1198,6 +1204,34 @@ function Step4({
             </div>
           </div>
 
+          {/* Stripe checkout CTA — shown when stripe is selected and featured tier */}
+          {draft.payment === "stripe" && draft.tier === "featured" && (
+            <div className="space-y-2">
+              <GlassButton
+                type="button"
+                variant="terracotta"
+                size="md"
+                onClick={onStripeCheckout}
+                disabled={stripeLoading}
+                className="w-full"
+              >
+                {stripeLoading
+                  ? "Redirecting to checkout…"
+                  : "Continue to secure checkout →"}
+              </GlassButton>
+              {stripeError === "Payments not configured" ? (
+                <p className="text-xs text-ink-mid text-center">
+                  Card payments aren&apos;t enabled yet. Use Bankak / Cashi /
+                  manual transfer below for now.
+                </p>
+              ) : stripeError ? (
+                <p className="text-xs text-terracotta text-center" role="alert">
+                  {stripeError}
+                </p>
+              ) : null}
+            </div>
+          )}
+
           {/* Per-method instructions */}
           <PaymentInstructions method={draft.payment} />
 
@@ -1399,6 +1433,7 @@ function validate(
 
 export default function PostWizard({ userId }: { userId: string | null }) {
   const t = useTranslations("post");
+  const locale = useLocale();
   const [, startTransition] = useTransition();
 
   // Stable temp ID used as storage path folder during upload
@@ -1410,6 +1445,12 @@ export default function PostWizard({ userId }: { userId: string | null }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Stripe checkout state
+  const [stripeLoading, setStripeLoading] = useState(false);
+  const [stripeError, setStripeError] = useState<string | null>(null);
+  // Created listing ID — set after createListing succeeds, used for Stripe checkout
+  const [createdListingId, setCreatedListingId] = useState<string | null>(null);
 
   const STEPS = [t("step1"), t("step2"), t("step3"), t("step4")] as const;
 
@@ -1524,6 +1565,14 @@ export default function PostWizard({ userId }: { userId: string | null }) {
         await attachPhotos(result.listingId, draft.photoUrls);
       }
 
+      // For featured + card (USD): save the listing ID then trigger Stripe.
+      // The listing is created with status=pending_payment; Stripe webhook activates it.
+      if (draft.tier === "featured" && draft.payment === "stripe") {
+        setCreatedListingId(result.listingId);
+        setSubmitting(false);
+        return;
+      }
+
       sessionStorage.removeItem(SESSION_KEY);
       setSubmitted(true);
     } catch (err) {
@@ -1532,6 +1581,42 @@ export default function PostWizard({ userId }: { userId: string | null }) {
       );
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleStripeCheckout() {
+    const listingId = createdListingId;
+    if (!listingId) return;
+
+    setStripeLoading(true);
+    setStripeError(null);
+
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-next-intl-locale": locale,
+        },
+        body: JSON.stringify({ listingId }),
+      });
+
+      const data = (await res.json()) as { ok: boolean; url?: string; error?: string };
+
+      if (!data.ok) {
+        // 503 "Payments not configured" — show friendly inline message
+        setStripeError(data.error ?? "Could not start checkout");
+        return;
+      }
+
+      if (data.url) {
+        sessionStorage.removeItem(SESSION_KEY);
+        window.location.href = data.url;
+      }
+    } catch {
+      setStripeError("Network error — please try again.");
+    } finally {
+      setStripeLoading(false);
     }
   }
 
@@ -1589,7 +1674,14 @@ export default function PostWizard({ userId }: { userId: string | null }) {
         />
       )}
       {step === 3 && (
-        <Step4 draft={draft} update={updateDraft} errors={errors} />
+        <Step4
+          draft={draft}
+          update={updateDraft}
+          errors={errors}
+          onStripeCheckout={handleStripeCheckout}
+          stripeLoading={stripeLoading}
+          stripeError={stripeError}
+        />
       )}
 
       {submitError && (
@@ -1616,15 +1708,21 @@ export default function PostWizard({ userId }: { userId: string | null }) {
 
         {/* Next / Submit */}
         {isLastStep ? (
-          <GlassButton
-            type="button"
-            variant="terracotta"
-            size="md"
-            onClick={handleSubmit}
-            disabled={!draft.termsAccepted || submitting}
-          >
-            {submitting ? t("submitting") : t("submit")}
-          </GlassButton>
+          // When createdListingId is set for featured+stripe, the Stripe button
+          // inside Step4 takes over. Hide the footer submit button.
+          createdListingId && draft.tier === "featured" && draft.payment === "stripe" ? (
+            <div aria-hidden />
+          ) : (
+            <GlassButton
+              type="button"
+              variant="terracotta"
+              size="md"
+              onClick={handleSubmit}
+              disabled={!draft.termsAccepted || submitting}
+            >
+              {submitting ? t("submitting") : t("submit")}
+            </GlassButton>
+          )
         ) : (
           <GlassButton
             type="button"
