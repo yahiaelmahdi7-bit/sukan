@@ -49,7 +49,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   const listingTitle = listing?.title_en ?? body.listing_id;
 
   const appBase =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukan.app";
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukansd.com";
   const adminVerifyUrl = `${appBase}/admin/listings/${body.listing_id}`;
 
   // Send admin notification email — non-fatal

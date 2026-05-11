@@ -94,7 +94,7 @@ export function buildAlertEmail(p: AlertEmailParams): string {
   const appBase =
     typeof process !== "undefined" && process.env.NEXT_PUBLIC_APP_URL
       ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "")
-      : "https://sukan.app";
+      : "https://sukansd.com";
 
   // Show up to 3 listing cards
   const topListings = p.listings.slice(0, 3);

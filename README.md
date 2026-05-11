@@ -3,7 +3,7 @@
 Sudan's first AI-powered property listing platform. Mobile-first bilingual (Arabic/English) PWA connecting landlords, tenants, and diaspora investors.
 
 ## Status
-Pre-alpha. Live preview at [sukan.vercel.app](https://sukan.vercel.app). Auto-deploys from `main` via Vercel + GitHub integration.
+Pre-alpha. Live preview at [sukansd.com](https://sukansd.com). Auto-deploys from `main` via Vercel + GitHub integration.
 
 ## Stack
 - Next.js 16 (App Router, Cache Components)
@@ -38,7 +38,7 @@ To apply all migrations: `supabase db push`
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase client (browser + server) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Yes | `/api/alerts/check` cron — bypasses RLS to scan all alerts |
 | `RESEND_API_KEY` | Yes | Inquiry, viewing, report, and alert notification emails |
-| `RESEND_FROM_EMAIL` | No | From address for all Resend emails (defaults to `Sukan <noreply@sukan.app>`) |
+| `RESEND_FROM_EMAIL` | No | From address for all Resend emails (defaults to `Sukan <noreply@sukansd.com>`) |
 | `ANTHROPIC_API_KEY` | Yes (AI features) | `/api/generate-description` and `/api/estimate-price` |
 | `CRON_SECRET` | Yes | Authenticates Vercel Cron calls to `/api/alerts/check` via `x-cron-secret` header |
 | `ADMIN_EMAIL` | Yes | Destination for listing report notifications |

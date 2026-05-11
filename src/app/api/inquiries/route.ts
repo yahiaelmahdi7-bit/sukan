@@ -14,7 +14,7 @@ import { sendInquiryEmail } from "@/lib/resend";
 
 // TODO: Wire landlordEmail to profiles.email once landlord profiles exist.
 // For now a hardcoded placeholder is used so the flow can be demoed end-to-end.
-const FALLBACK_LANDLORD_EMAIL = "inquiries@sukan.app";
+const FALLBACK_LANDLORD_EMAIL = "inquiries@sukansd.com";
 
 const InquirySchema = z.object({
   listingId: z.string().min(1),
@@ -58,9 +58,9 @@ export async function POST(req: NextRequest) {
   const listingTitle = locale === "ar" ? listing.titleAr : listing.titleEn;
 
   // Build the canonical listing URL for the email CTA.
-  // NEXT_PUBLIC_APP_URL should be set in Vercel env vars (e.g. https://sukan.app).
+  // NEXT_PUBLIC_APP_URL should be set in Vercel env vars (e.g. https://sukansd.com).
   const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukan.app";
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukansd.com";
   const listingUrl = `${appUrl}/${locale}/listings/${listing.id}`;
 
   // Insert into Supabase — RLS policy "inquiries: public insert" allows anon

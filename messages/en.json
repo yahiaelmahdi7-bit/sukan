@@ -675,7 +675,7 @@
     "title": "Privacy Policy",
     "lastUpdated": "Last updated: {date}",
     "introTitle": "Introduction",
-    "introBody": "Sukan ('we', 'our', or 'us') operates the Sukan platform, accessible at sukan.app and associated mobile applications. This Privacy Policy explains how we collect, use, disclose, and safeguard information about users of our service — tenants, landlords, agents, and diaspora investors. By using Sukan, you agree to the practices described in this document. If you disagree with any part, please discontinue use of the platform.",
+    "introBody": "Sukan ('we', 'our', or 'us') operates the Sukan platform, accessible at sukansd.com and associated mobile applications. This Privacy Policy explains how we collect, use, disclose, and safeguard information about users of our service — tenants, landlords, agents, and diaspora investors. By using Sukan, you agree to the practices described in this document. If you disagree with any part, please discontinue use of the platform.",
     "collectTitle": "What we collect",
     "collectBody": "We collect information you provide directly: account registration data (email address, full name, phone number, and chosen password hash), listing content (property descriptions, photos, location coordinates, and pricing), and inquiry messages sent through the platform. We also collect data generated through your use of the service: browsing behaviour, search queries, pages visited, time on page, and device identifiers. When you contact a landlord via WhatsApp through a Sukan-generated link, we record that an inquiry was initiated — but we do not access the content of your WhatsApp conversation. We use cookies and similar tracking technologies as described in the Cookies section below.",
     "useTitle": "How we use your information",
@@ -685,13 +685,13 @@
     "retentionTitle": "Storage and retention",
     "retentionBody": "Your data is stored on servers located in the EU (AWS eu-central-1 region). We retain account data for as long as your account is active. If you delete your account, we remove your personal profile and listings within 30 days, subject to any legal obligations requiring longer retention (for example, payment records which may be retained for up to seven years for tax compliance). Anonymised, aggregated data derived from your usage is retained indefinitely for analytics purposes.",
     "rightsTitle": "Your rights",
-    "rightsBody": "You have the right to access the personal data we hold about you, to request corrections, and to request deletion of your account and associated data. You may also object to certain processing activities or request that we restrict processing while a complaint is under review. To exercise any of these rights, contact us at privacy@sukan.app. We will respond within 30 days. If you believe your rights have been violated, you have the right to lodge a complaint with the applicable data protection authority.",
+    "rightsBody": "You have the right to access the personal data we hold about you, to request corrections, and to request deletion of your account and associated data. You may also object to certain processing activities or request that we restrict processing while a complaint is under review. To exercise any of these rights, contact us at privacy@sukansd.com. We will respond within 30 days. If you believe your rights have been violated, you have the right to lodge a complaint with the applicable data protection authority.",
     "cookiesTitle": "Cookies",
     "cookiesBody": "Sukan uses strictly necessary session cookies to maintain your logged-in state, and optional analytics cookies (via Plausible Analytics, a privacy-first provider that does not fingerprint users or share data with advertisers) to understand aggregate usage patterns. We do not use third-party advertising cookies. You can disable optional cookies through your browser settings at any time without affecting core platform functionality.",
     "changesTitle": "Changes to this policy",
     "changesBody": "We may update this Privacy Policy from time to time to reflect changes in our practices or applicable law. When we make material changes, we will notify you by email (if you have an account) and by posting a prominent notice on the platform at least 14 days before the changes take effect. Your continued use of Sukan after the effective date constitutes acceptance of the revised policy.",
     "contactTitle": "Contact",
-    "contactBody": "For privacy-related questions or to exercise your rights, please email privacy@sukan.app. For general support, contact hello@sukan.app. We aim to respond to all inquiries within two business days."
+    "contactBody": "For privacy-related questions or to exercise your rights, please email privacy@sukansd.com. For general support, contact hello@sukansd.com. We aim to respond to all inquiries within two business days."
   },
   "terms": {
     "title": "Terms of Service",
@@ -705,7 +705,7 @@
     "listingsPolicyTitle": "Listings policy",
     "listingsPolicyBody": "Listings must represent real properties that the poster has lawful authority to rent or sell. We prohibit: fraudulent listings, listings for properties the poster does not control, discriminatory listings that refuse tenants based on ethnicity, gender, religion, or national origin, listings for properties acquired through illegal means, and duplicate or spam listings. Sukan reserves the right to remove any listing at its sole discretion and without prior notice if it violates this policy or applicable law.",
     "paymentsTitle": "Payments and refunds",
-    "paymentsBody": "Listing fees are charged in USD. Standard listings cost $15 for 30 days; featured listings cost $40 for 30 days. Payment is processed via Stripe (card) or bank transfer. Listing fees are non-refundable once a listing has been published, except where Sukan removes the listing for reasons attributable to Sukan (for example, a technical error in our publishing system). Refund requests must be submitted within 7 days of the original payment to hello@sukan.app.",
+    "paymentsBody": "Listing fees are charged in USD. Standard listings cost $15 for 30 days; featured listings cost $40 for 30 days. Payment is processed via Stripe (card) or bank transfer. Listing fees are non-refundable once a listing has been published, except where Sukan removes the listing for reasons attributable to Sukan (for example, a technical error in our publishing system). Refund requests must be submitted within 7 days of the original payment to hello@sukansd.com.",
     "disclaimerTitle": "Intermediary disclaimer",
     "disclaimerBody": "Sukan acts solely as a technology intermediary. We do not act as a real estate agent, broker, escrow agent, or legal adviser. We do not verify the legal title to any property, nor do we guarantee the accuracy of any information provided by a landlord or agent. Any transaction entered into between users on the basis of a Sukan listing is between those users alone. Sukan is not liable for any loss arising from such transactions, including but not limited to deposit loss, fraudulent listings, or misrepresentation by a landlord or tenant.",
     "privacyRefTitle": "Privacy",
@@ -719,7 +719,7 @@
     "changesTitle": "Changes to these terms",
     "changesBody": "We may update these Terms from time to time. We will notify users of material changes by email (if you have an account) and by posting a notice on the platform at least 14 days before the changes take effect. Your continued use of Sukan after the effective date constitutes acceptance of the revised Terms.",
     "contactTitle": "Contact",
-    "contactBody": "For questions about these Terms, please email legal@sukan.app. For general support, contact hello@sukan.app."
+    "contactBody": "For questions about these Terms, please email legal@sukansd.com. For general support, contact hello@sukansd.com."
   },
   "contact": {
     "eyebrow": "Get in touch",
@@ -729,13 +729,13 @@
     "whatsappBody": "The fastest way to reach us. Message our team directly for listing help, diaspora inquiries, or general questions. We're online 7 days a week.",
     "whatsappCta": "Message on WhatsApp",
     "emailTitle": "Email",
-    "emailBody": "Prefer email? Send us a message at hello@sukan.app. We respond within 2 business days. For privacy-specific queries, use privacy@sukan.app.",
-    "emailCta": "hello@sukan.app",
+    "emailBody": "Prefer email? Send us a message at hello@sukansd.com. We respond within 2 business days. For privacy-specific queries, use privacy@sukansd.com.",
+    "emailCta": "hello@sukansd.com",
     "telegramTitle": "Telegram channel",
     "telegramBody": "Follow our Telegram channel for new listing alerts, market updates, and platform announcements. Channel coming soon.",
     "telegramCta": "Coming soon",
     "hiringTitle": "We're hiring",
-    "hiringBody": "We're a small, remote-first Sudanese diaspora team. If you're passionate about Sudan, real estate, and building things that matter — we'd love to hear from you. Drop us a line at hello@sukan.app with the subject line 'Joining the team'.",
+    "hiringBody": "We're a small, remote-first Sudanese diaspora team. If you're passionate about Sudan, real estate, and building things that matter — we'd love to hear from you. Drop us a line at hello@sukansd.com with the subject line 'Joining the team'.",
     "officeTitle": "Office address",
     "officeBody": "We operate remotely for now. A Khartoum office is coming — watch this space."
   },

@@ -4,7 +4,7 @@ import GlassPanel from "@/components/glass-panel";
 import { MessageCircle, Mail, Send, MapPin, Briefcase } from "lucide-react";
 
 const SITE_URL =
-  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukansd.com").replace(/\/$/, "");
 
 export async function generateMetadata({
   params,
@@ -139,7 +139,7 @@ export default async function ContactPage({
                 {t("emailBody")}
               </p>
               <a
-                href="mailto:hello@sukan.app"
+                href="mailto:hello@sukansd.com"
                 className="smooth inline-flex w-fit items-center gap-2 rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 px-5 py-2.5 text-sm font-semibold text-gold-dk backdrop-blur-md hover:border-gold/70 hover:bg-gold/10"
               >
                 <Mail size={14} aria-hidden />

@@ -310,7 +310,7 @@ function buildResultSummary(params: ParsedParams, total: number, locale: string)
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const SITE_URL =
-  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukansd.com").replace(/\/$/, "");
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 

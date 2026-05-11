@@ -67,7 +67,7 @@ type DbReview = {
 ───────────────────────────────────────────────────────── */
 
 const SITE_URL =
-  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app").replace(/\/$/, "");
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukansd.com").replace(/\/$/, "");
 
 export async function generateMetadata({
   params,
@@ -207,7 +207,7 @@ export default async function ListingDetailPage({
   const telUrl = `tel:${listing.whatsappContact}`;
 
   // Full share URL
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukansd.com";
   const fullUrl = `${siteUrl}/${locale}/listings/${listing.id}`;
 
   // Similar listings: same state, different id; fallback to first 3 others

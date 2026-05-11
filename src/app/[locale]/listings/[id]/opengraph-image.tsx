@@ -227,7 +227,7 @@ export default async function ListingOgImage({
               textTransform: "uppercase",
             }}
           >
-            sukan.app
+            sukansd.com
           </div>
         </div>
       </div>

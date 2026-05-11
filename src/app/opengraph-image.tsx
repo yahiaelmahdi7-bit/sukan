@@ -148,7 +148,7 @@ export default function OgImage() {
             textTransform: "uppercase",
           }}
         >
-          sukan.app
+          sukansd.com
         </div>
       </div>
     ),

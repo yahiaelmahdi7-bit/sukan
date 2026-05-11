@@ -4,7 +4,7 @@ import { guides } from "@/lib/guides";
 import { insights } from "@/lib/insights";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://sukansd.com";
 
 type ChangeFreq =
   | "always"

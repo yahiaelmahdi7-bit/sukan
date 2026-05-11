@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   description:
     "Sudan's first AI-powered property listing platform. Verified rentals and sales across all 18 states, built bilingual EN/AR for tenants, landlords, and the diaspora.",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukan.app",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukansd.com",
   ),
   applicationName: "Sukan",
   authors: [{ name: "Sukan" }],

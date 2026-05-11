@@ -49,7 +49,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   // Build dashboard deep-links for the landlord's Confirm / Decline CTAs.
   // These are best-effort — the viewing row is already saved regardless.
   const appBase =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukan.app";
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukansd.com";
   const confirmUrl = `${appBase}/dashboard/viewings/${viewing.id}?action=confirm`;
   const declineUrl = `${appBase}/dashboard/viewings/${viewing.id}?action=decline`;
   const listingUrl = `${appBase}/en/listings/${body.listing_id}`;

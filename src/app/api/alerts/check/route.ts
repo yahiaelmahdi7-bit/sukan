@@ -79,7 +79,7 @@ export async function POST(req: Request): Promise<NextResponse> {
 
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const appBase =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukan.app";
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukansd.com";
 
   let alertsMatched = 0;
   let emailsSent = 0;

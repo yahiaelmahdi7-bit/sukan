@@ -12,7 +12,7 @@ import type { Listing } from "@/lib/sample-listings";
 
 const ORG_NAME = "Sukan";
 const ORG_NAME_AR = "سُكَن";
-const ORG_LOGO = "https://sukan.app/icon.png";
+const ORG_LOGO = "https://sukansd.com/icon.png";
 
 function truncate(text: string, max = 200): string {
   if (!text) return "";

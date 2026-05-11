@@ -148,7 +148,7 @@ export default function TwitterImage() {
             textTransform: "uppercase",
           }}
         >
-          sukan.app
+          sukansd.com
         </div>
       </div>
     ),

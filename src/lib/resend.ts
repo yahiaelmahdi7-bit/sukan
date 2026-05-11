@@ -52,7 +52,7 @@ function getResend(): Resend | null {
 }
 
 function getFrom(): string {
-  return process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukan.app>";
+  return process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukansd.com>";
 }
 
 async function sendEmail(

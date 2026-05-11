@@ -11,7 +11,7 @@ interface WhatsAppCtaProps {
    */
   phone?: string;
   listingTitle: string;
-  /** Absolute URL of the listing page, e.g. https://sukan.app/en/listings/abc */
+  /** Absolute URL of the listing page, e.g. https://sukansd.com/en/listings/abc */
   listingUrl: string;
   locale: "en" | "ar";
   className?: string;
