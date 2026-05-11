@@ -1082,5 +1082,12 @@
     "statusFeatured": "Featured",
     "lastActivity": "Last activity",
     "noResults": "No listings match your search."
+  },
+  "search": {
+    "placeholder": "Search by city, neighborhood, or keyword…",
+    "seeAll": "See all results for '{query}'",
+    "sectionStates": "States",
+    "sectionNeighborhoods": "Neighborhoods",
+    "sectionListings": "Listings"
   }
 }

@@ -1082,5 +1082,12 @@
     "statusFeatured": "مميّز",
     "lastActivity": "آخر نشاط",
     "noResults": "لا توجد إعلانات تطابق بحثك."
+  },
+  "search": {
+    "placeholder": "ابحث بالمدينة أو الحي أو الكلمة المفتاحية…",
+    "seeAll": "عرض كل نتائج '{query}'",
+    "sectionStates": "الولايات",
+    "sectionNeighborhoods": "الأحياء",
+    "sectionListings": "الإعلانات"
   }
 }
