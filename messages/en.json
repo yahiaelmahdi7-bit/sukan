@@ -26,6 +26,8 @@
     "tenantSubtitle": "Verified listings across all 18 states. Bilingual. Built for tenants and the diaspora.",
     "landlordTitle": "List your property in 60 seconds",
     "landlordSubtitle": "WhatsApp our bot or use the web form. We handle photos, translations, and matching.",
+    "landlordTitleWaitlist": "WhatsApp listing — coming soon",
+    "landlordSubtitleWaitlist": "Be first to know when our WhatsApp listing bot goes live. Drop your email and we'll let you know.",
     "search": "Search homes",
     "postProperty": "Post a property",
     "stateLabel": "State",
@@ -1137,5 +1139,12 @@
     "close": "Close photo viewer",
     "prev": "Previous photo",
     "next": "Next photo"
+  },
+  "waitlist": {
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Join the waitlist",
+    "success": "You're on the list — we'll be in touch.",
+    "error": "Something went wrong. Please try again."
   }
 }

@@ -3,7 +3,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import JsonLd from "@/components/json-ld";
 import { buildOrganizationLD, buildWebSiteLD } from "@/lib/json-ld";
-import { Search, Home, Plane, ShieldCheck, Languages, Globe, MessageCircle } from "lucide-react";
+import { Search, Home, Plane, ShieldCheck, Languages, Globe } from "lucide-react";
 import SukanMark from "@/components/sukan-mark";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -20,6 +20,7 @@ import AIMatchButton from "@/components/ai-match-button";
 import { sampleListings } from "@/lib/sample-listings";
 import HeroSearch from "@/components/hero-search";
 import GlassPanel from "@/components/glass-panel";
+import { WaitlistForm } from "@/components/waitlist-form";
 import ActivityTicker from "@/components/activity-ticker";
 import StaggeredListings from "@/components/staggered-listings";
 import LiveBrowsingPill from "@/components/live-browsing-pill";
@@ -88,10 +89,6 @@ export default async function HomePage({
     { value: t("hero.statStatesValue"), label: t("hero.statStates") },
   ];
 
-  const whatsappText = encodeURIComponent(
-    "Hi, I'd like to list my property on Sukan / مرحباً، أريد نشر عقاري على سُكان"
-  );
-
   return (
     <>
       <JsonLd data={buildOrganizationLD({ siteUrl: SITE_URL })} />
@@ -157,32 +154,17 @@ export default async function HomePage({
                   />
 
                   <h2 className="mb-3 pe-12 font-display text-2xl leading-[1.15] tracking-tight text-ink md:text-3xl">
-                    {t("hero.landlordTitle")}
+                    {t("hero.landlordTitleWaitlist")}
                   </h2>
 
-                  <p className="mb-6 text-sm leading-relaxed text-ink-soft">
-                    {t("hero.landlordSubtitle")}
+                  <p className="mb-5 text-sm leading-relaxed text-ink-soft">
+                    {t("hero.landlordSubtitleWaitlist")}
                   </p>
 
-                  {/* WhatsApp CTA — green gradient */}
-                  <a
-                    href={`https://wa.me/249912345678?text=${whatsappText}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="smooth mb-3 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-pill)] px-6 py-3 text-sm font-semibold text-white hover:brightness-[1.05]"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #25d366 0%, #1eb558 100%)",
-                      boxShadow:
-                        "0 8px 22px rgba(37, 211, 102, 0.30), inset 0 1px 0 rgba(255,255,255,0.22)",
-                    }}
-                  >
-                    <MessageCircle size={16} aria-hidden />
-                    {t("hero.whatsappCta")}
-                  </a>
+                  <WaitlistForm source="whatsapp_bot" />
 
                   {/* Secondary web link */}
-                  <div className="text-center">
+                  <div className="mt-3 text-center">
                     <Link
                       href="/post"
                       className="smooth-fast text-xs text-ink-mid hover:text-ink"
