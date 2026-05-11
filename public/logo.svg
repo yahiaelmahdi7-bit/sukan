@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="96" fill="#12100C"/>
+  <defs>
+    <linearGradient id="g" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#C8873A"/>
+      <stop offset="100%" stop-color="#E0A857"/>
+    </linearGradient>
+  </defs>
+  <!-- Wave 1 -->
+  <path d="M64 120 C128 72,208 72,256 112 C304 152,384 176,448 136 C432 152,384 196,320 172 C256 148,176 144,112 168 C80 180,64 160,64 144 Z" fill="url(#g)"/>
+  <!-- Wave 2 -->
+  <path d="M64 216 C128 176,208 168,256 208 C304 248,392 264,448 228 C432 244,384 284,320 264 C256 244,176 240,112 264 C80 276,64 256,64 240 Z" fill="url(#g)"/>
+  <!-- Wave 3 -->
+  <path d="M64 312 C128 272,208 268,256 304 C304 340,392 356,448 324 C436 340,384 372,320 356 C256 340,176 336,112 356 C80 364,64 348,64 336 Z" fill="url(#g)"/>
+  <!-- Three dots -->
+  <circle cx="192" cy="416" r="16" fill="#D4943F"/>
+  <circle cx="256" cy="416" r="16" fill="#D4943F"/>
+  <circle cx="320" cy="416" r="16" fill="#D4943F"/>
+</svg>

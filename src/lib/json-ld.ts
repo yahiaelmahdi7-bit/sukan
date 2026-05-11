@@ -12,7 +12,7 @@ import type { Listing } from "@/lib/sample-listings";
 
 const ORG_NAME = "Sukan";
 const ORG_NAME_AR = "سُكَن";
-const ORG_LOGO = "https://sukansd.com/icon.png";
+const ORG_LOGO_PATH = "/logo.svg";
 
 function truncate(text: string, max = 200): string {
   if (!text) return "";
@@ -57,7 +57,7 @@ export function buildOrganizationLD(input: OrganizationLDInput): unknown {
     url: siteUrl,
     logo: {
       "@type": "ImageObject",
-      url: ORG_LOGO,
+      url: `${siteUrl}${ORG_LOGO_PATH}`,
       width: 512,
       height: 512,
     },
@@ -309,7 +309,7 @@ export function buildArticleLD(input: ArticleLDInput): unknown {
       name: ORG_NAME,
       logo: {
         "@type": "ImageObject",
-        url: ORG_LOGO,
+        url: `${siteUrl}${ORG_LOGO_PATH}`,
       },
     },
   };

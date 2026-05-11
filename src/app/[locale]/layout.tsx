@@ -74,6 +74,11 @@ export const metadata: Metadata = {
     title: "Sukan",
     statusBarStyle: "black-translucent",
   },
+  icons: {
+    icon: [{ url: "/icon.png", sizes: "32x32", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/icon.png",
+  },
   openGraph: {
     type: "website",
     siteName: "Sukan — سُكَن",
@@ -85,6 +90,14 @@ export const metadata: Metadata = {
       "Verified property listings across all 18 states. Bilingual EN / AR. Built for tenants, landlords, and the diaspora.",
     locale: "en_US",
     alternateLocale: "ar_SD",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Sukan — Sudan's home for housing",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -96,6 +109,7 @@ export const metadata: Metadata = {
     },
     description:
       "Verified property listings across all 18 states. Bilingual EN / AR. Built for tenants, landlords, and the diaspora.",
+    images: ["/opengraph-image.png"],
   },
 };
 
