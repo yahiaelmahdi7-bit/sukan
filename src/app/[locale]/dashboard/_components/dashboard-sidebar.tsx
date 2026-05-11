@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { key: "settings" as const, labelKey: "settings" as const, href: "/dashboard/settings" },
 ];
 
-// Admin-only nav items
+// Admin-only nav items (dashboard-section routes)
 const ADMIN_NAV_ITEMS = [
   { key: "reports" as const, labelKey: "reportsTab" as const, href: "/dashboard/reports" },
 ];
@@ -112,6 +112,22 @@ export default function DashboardSidebar({
           );
         })}
       </nav>
+
+      {/* Admin tools — only when isAdmin */}
+      {isAdmin && (
+        <div className="px-2.5 pb-2 border-t border-white/30 pt-3">
+          <p className="px-4 mb-1 text-[9px] uppercase tracking-[0.18em] text-gold-dk font-semibold">
+            Admin
+          </p>
+          <Link
+            href="/admin/verify"
+            className="smooth-fast flex items-center gap-3 px-4 py-2.5 rounded-[var(--radius-pill)] text-sm font-medium text-ink-mid hover:text-ink hover:bg-white/40 border border-transparent"
+          >
+            <span className="inline-block w-4 h-4 shrink-0 rounded-full bg-terracotta/20 border border-terracotta/30" />
+            {t("adminVerifyNav")}
+          </Link>
+        </div>
+      )}
 
       {/* Sign out */}
       <div className="px-2.5 py-4 border-t border-white/30">

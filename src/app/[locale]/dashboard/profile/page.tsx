@@ -1,62 +1,15 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { Resend } from "resend";
-import { revalidatePath } from "next/cache";
 import ProfileForm from "./_profile-form";
 import { getMockUser } from "../_data/mock-user";
 import GlassPanel from "@/components/glass-panel";
 import { VerifiedBadge } from "@/components/verified-badge";
+import { requestVerification as _requestVerification } from "@/app/[locale]/admin/verify/actions";
 
-// ── Verification server action ──────────────────────────────────────────────
-
+// Wrap so `form action` gets a void-returning server action
 async function requestVerification() {
   "use server";
-
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
-
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const apiKey = process.env.RESEND_API_KEY;
-
-  if (!adminEmail || !apiKey) return;
-
-  // Fetch profile details for the email body
-  let profileDetails = { full_name: null as string | null, phone: null as string | null };
-  try {
-    const { data } = await supabase
-      .from("profiles")
-      .select("full_name, phone")
-      .eq("id", user.id)
-      .maybeSingle();
-    if (data) profileDetails = data as typeof profileDetails;
-  } catch {
-    // profiles may not have these columns yet
-  }
-
-  const resend = new Resend(apiKey);
-  const from = process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukan.app>";
-
-  try {
-    await resend.emails.send({
-      from,
-      to: [adminEmail],
-      subject: `Verification request — ${profileDetails.full_name ?? user.email}`,
-      html: `
-        <p><strong>User ID:</strong> ${user.id}</p>
-        <p><strong>Email:</strong> ${user.email ?? "—"}</p>
-        <p><strong>Name:</strong> ${profileDetails.full_name ?? "—"}</p>
-        <p><strong>Phone:</strong> ${profileDetails.phone ?? "—"}</p>
-        <p>Please review and set <code>is_verified = true</code> on their profile.</p>
-      `,
-    });
-  } catch {
-    // email failure is non-fatal
-  }
-
-  revalidatePath("/[locale]/dashboard/profile", "page");
+  await _requestVerification();
 }
 
 // ── Page ────────────────────────────────────────────────────────────────────
@@ -81,17 +34,19 @@ export default async function ProfilePage({
   // Fetch verification status from profiles
   let isVerified = false;
   let verifiedAt: string | null = null;
+  let verificationRequestedAt: string | null = null;
 
   try {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("is_verified, updated_at")
+      .select("is_verified, updated_at, verification_requested_at")
       .eq("id", authUser?.id ?? "")
       .maybeSingle();
     isVerified = profile?.is_verified === true;
     verifiedAt = isVerified ? (profile?.updated_at ?? null) : null;
+    verificationRequestedAt = profile?.verification_requested_at ?? null;
   } catch {
-    // profiles table may not have is_verified yet — migration pending
+    // profiles table may not have these columns yet — migration pending
   }
 
   const verifiedDate = verifiedAt
@@ -101,6 +56,9 @@ export default async function ProfilePage({
         year: "numeric",
       })
     : null;
+
+  // Show "submitted" state when request has been sent but not yet actioned
+  const hasRequestedVerification = verificationRequestedAt !== null && !isVerified;
 
   return (
     <div className="px-6 py-10 max-w-2xl mx-auto">
@@ -134,14 +92,20 @@ export default async function ProfilePage({
 
           {/* Request verification — only when unverified */}
           {!isVerified && (
-            <form action={requestVerification}>
-              <button
-                type="submit"
-                className="smooth-fast inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 px-4 py-2 text-sm font-semibold text-gold-dk hover:border-gold/70 hover:bg-gold/10 hover:text-terracotta backdrop-blur-sm"
-              >
-                {tv("requestVerification")}
-              </button>
-            </form>
+            hasRequestedVerification ? (
+              <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-gold/40 bg-gold/8 px-4 py-2 text-sm font-semibold text-gold-dk">
+                ✓ {tv("requestSubmitted")}
+              </span>
+            ) : (
+              <form action={requestVerification}>
+                <button
+                  type="submit"
+                  className="smooth-fast inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-gold/40 bg-white/45 px-4 py-2 text-sm font-semibold text-gold-dk hover:border-gold/70 hover:bg-gold/10 hover:text-terracotta backdrop-blur-sm"
+                >
+                  {tv("requestVerification")}
+                </button>
+              </form>
+            )
           )}
         </div>
       </GlassPanel>

@@ -45,12 +45,12 @@ export default async function DashboardLayout({
   try {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("is_agent")
+      .select("is_agent, is_admin")
       .eq("id", authUser.id)
       .maybeSingle();
-    isAdmin = profile?.is_agent === true;
+    isAdmin = profile?.is_admin === true || profile?.is_agent === true;
   } catch {
-    // profiles.is_agent column may not exist yet (migration pending)
+    // profiles columns may not exist yet (migration pending)
   }
 
   return (

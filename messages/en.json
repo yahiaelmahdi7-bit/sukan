@@ -468,7 +468,8 @@
     "alertsSavedSearches": "Saved searches",
     "viewingsTab": "Viewings",
     "reportsTab": "Reports",
-    "backToHome": "Sukan — back to home"
+    "backToHome": "Sukan — back to home",
+    "adminVerifyNav": "Verify landlords"
   },
   "aiMatch": {
     "title": "AI Property Match",
@@ -716,6 +717,7 @@
   "verified": {
     "tooltip": "Verified landlord",
     "requestVerification": "Request verification",
+    "requestSubmitted": "Request submitted",
     "pending": "Verification pending",
     "verified": "Verified",
     "statusLabel": "Verification status"
@@ -975,6 +977,32 @@
     "eyebrow": "Hot right now",
     "title": "Trending in {city}",
     "subtitle": "The properties everyone's looking at this week."
+  },
+  "adminVerify": {
+    "eyebrow": "Admin",
+    "title": "Verify landlords",
+    "statsVerified": "verified",
+    "statsPending": "pending",
+    "statsTotal": "profiles",
+    "colUser": "User",
+    "colRole": "Role",
+    "colJoined": "Joined",
+    "colListings": "Listings",
+    "colStatus": "Status",
+    "colAction": "Action",
+    "actionVerify": "Verify",
+    "actionRevoke": "Revoke",
+    "revokeConfirm": "Revoke this user's verification? They will lose their verified badge.",
+    "verifying": "Verifying…",
+    "revoking": "Revoking…",
+    "statusPending": "Pending",
+    "requestedOn": "Requested {date}",
+    "anonymous": "Unknown user",
+    "emptyTitle": "No profiles yet",
+    "emptyBody": "Once users sign up, they will appear here.",
+    "fetchError": "Could not load profiles. Please try again.",
+    "notAuthorizedTitle": "Not authorized",
+    "notAuthorizedBody": "This page is for admins only."
   },
   "dashboardOverview": {
     "greeting": "Welcome back, {firstName}",

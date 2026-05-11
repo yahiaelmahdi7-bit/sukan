@@ -468,7 +468,8 @@
     "alertsSavedSearches": "عمليات البحث المحفوظة",
     "viewingsTab": "المعاينات",
     "reportsTab": "البلاغات",
-    "backToHome": "سُكَن — العودة للرئيسية"
+    "backToHome": "سُكَن — العودة للرئيسية",
+    "adminVerifyNav": "توثيق الملاك"
   },
   "aiMatch": {
     "title": "البحث الذكي بالذكاء الاصطناعي",
@@ -716,6 +717,7 @@
   "verified": {
     "tooltip": "مؤجر موثّق",
     "requestVerification": "طلب التوثيق",
+    "requestSubmitted": "تم إرسال الطلب",
     "pending": "التوثيق قيد الانتظار",
     "verified": "موثّق",
     "statusLabel": "حالة التوثيق"
@@ -975,6 +977,32 @@
     "eyebrow": "الأكثر تداولاً",
     "title": "الأكثر طلباً في {city}",
     "subtitle": "العقارات التي يبحث عنها الجميع هذا الأسبوع."
+  },
+  "adminVerify": {
+    "eyebrow": "المشرف",
+    "title": "توثيق الملاك",
+    "statsVerified": "موثّق",
+    "statsPending": "معلّق",
+    "statsTotal": "ملف",
+    "colUser": "المستخدم",
+    "colRole": "الدور",
+    "colJoined": "تاريخ الانضمام",
+    "colListings": "الإعلانات",
+    "colStatus": "الحالة",
+    "colAction": "إجراء",
+    "actionVerify": "توثيق",
+    "actionRevoke": "إلغاء",
+    "revokeConfirm": "هل تريد إلغاء توثيق هذا المستخدم؟ سيفقد شارة التوثيق.",
+    "verifying": "جارٍ التوثيق…",
+    "revoking": "جارٍ الإلغاء…",
+    "statusPending": "معلّق",
+    "requestedOn": "طلب في {date}",
+    "anonymous": "مستخدم مجهول",
+    "emptyTitle": "لا توجد ملفات شخصية بعد",
+    "emptyBody": "عند تسجيل المستخدمين ستظهر ملفاتهم هنا.",
+    "fetchError": "تعذّر تحميل الملفات الشخصية. حاول مجدداً.",
+    "notAuthorizedTitle": "غير مصرح",
+    "notAuthorizedBody": "هذه الصفحة للمشرفين فقط."
   },
   "dashboardOverview": {
     "greeting": "أهلاً بعودتك يا {firstName}",

@@ -8,6 +8,11 @@ export interface Profile {
   preferred_locale: string | null;
   phone: string | null;
   whatsapp: string | null;
+  is_agent: boolean;
+  is_admin: boolean;
+  is_verified: boolean;
+  verified_at: string | null;
+  verification_requested_at: string | null;
   created_at: string;
   updated_at: string;
 }
