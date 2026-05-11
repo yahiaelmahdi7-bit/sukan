@@ -1,22 +1,108 @@
 {
-  "name": "Sukan — سُكَن",
+  "name": "Sukan — Sudan's home for housing",
   "short_name": "Sukan",
   "description": "Sudan's home for housing. Verified property listings across all 18 states, bilingual EN/AR, built for tenants, landlords, and the diaspora.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#12100C",
+  "background_color": "#FDF8F0",
   "theme_color": "#12100C",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["business", "lifestyle", "shopping"],
   "icons": [
     {
       "src": "/icon",
       "sizes": "32x32",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/apple-icon",
       "sizes": "180x180",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse listings",
+      "short_name": "Browse",
+      "description": "Browse verified property listings across Sudan",
+      "url": "/listings",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Post a property",
+      "short_name": "Post",
+      "description": "List your property for rent or sale",
+      "url": "/post",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Saved properties",
+      "short_name": "Saved",
+      "description": "View your saved and favourited properties",
+      "url": "/saved",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Sukan listings page on desktop"
+    },
+    {
+      "src": "/screenshots/mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Sukan listings page on mobile"
     }
   ]
 }

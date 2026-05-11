@@ -507,13 +507,18 @@
     "close": "Close"
   },
   "errors": {
-    "notFoundTitle": "Page not found",
-    "notFoundBody": "That listing or page may have moved or expired. Try browsing our latest listings.",
-    "notFoundBrowse": "Browse all listings",
-    "notFoundHome": "Go home",
-    "genericTitle": "Something went wrong",
-    "genericBody": "An unexpected error occurred. You can try again or return to the home page.",
-    "tryAgain": "Try again"
+    "notFoundTitle": "We couldn't find that page",
+    "notFoundBody": "The page you were looking for may have moved, been removed, or never existed. Here are some places to explore instead.",
+    "notFoundBrowse": "Browse listings",
+    "notFoundMap": "Open the map",
+    "notFoundGuides": "Read the guides",
+    "notFoundHome": "Back to home",
+    "genericTitle": "Something went a bit sideways",
+    "genericBody": "We've logged it and we're looking into it. Try again in a moment, or head somewhere else.",
+    "tryAgain": "Try again",
+    "listingNotFoundTitle": "This listing isn't available right now",
+    "listingNotFoundBody": "It may have been removed or renamed. Here are some you might like instead.",
+    "listingNotFoundBrowse": "Browse all listings"
   },
   "loading": {
     "message": "Loading...",
