@@ -1,9 +1,9 @@
-"use client";
-
-import React from "react";
+// Server Component — purely declarative stagger animation via CSS.
+// No state, effects, or browser APIs needed.
+import { Children, type ReactNode } from "react";
 
 interface StaggeredListingsProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function StaggeredListings({ children }: StaggeredListingsProps) {
@@ -29,7 +29,7 @@ export default function StaggeredListings({ children }: StaggeredListingsProps) 
         }
       `}</style>
 
-      {React.Children.map(children, (child, index) => (
+      {Children.map(children, (child, index) => (
         <div
           className="sukan-stagger-child"
           style={{

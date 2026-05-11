@@ -1,3 +1,10 @@
+"use client";
+
+// VerifiedBadge is consumed by listing-card.tsx (a client component) and by
+// several server pages. In Next.js, a client component can be imported from
+// a server page (it becomes a client boundary), but an async server component
+// cannot be rendered from inside a client component tree. Because listing-card
+// is "use client", we keep VerifiedBadge as a client component too.
 import { useTranslations } from "next-intl";
 
 interface VerifiedBadgeProps {

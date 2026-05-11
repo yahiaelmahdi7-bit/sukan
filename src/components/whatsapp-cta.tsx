@@ -1,14 +1,7 @@
-"use client";
-
-// One-tap WhatsApp deep-link CTA button.
-// Renders a green gradient pill that opens wa.me with a pre-filled message
-// in the appropriate language.
-// TODO: wire `phone` prop to the real owner phone number from Supabase once
-//       the owner profile schema surfaces it consistently (currently accessed
-//       via listing.whatsappContact in the page — pass that through here).
-
+// Server Component — renders a static anchor tag, no client interactivity needed.
+// Uses next-intl getTranslations() (server-side) instead of useTranslations().
 import { MessageCircle } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 interface WhatsAppCtaProps {
   /**
@@ -29,14 +22,14 @@ function digitsOnly(phone: string): string {
   return phone.replace(/\D/g, "");
 }
 
-export function WhatsAppCta({
+export async function WhatsAppCta({
   phone = "+249912345678", // TODO: wire to real owner phone from DB
   listingTitle,
   listingUrl,
-  locale,
+  locale: _locale,
   className = "",
 }: WhatsAppCtaProps) {
-  const t = useTranslations("whatsapp");
+  const t = await getTranslations("whatsapp");
   const label = t("cta");
   const message = t("message", { title: listingTitle, url: listingUrl });
 

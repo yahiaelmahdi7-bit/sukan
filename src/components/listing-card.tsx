@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations, useFormatter } from "next-intl";
+import { CREAM_BLUR } from "@/lib/blur";
 import { Link } from "@/i18n/navigation";
 import FavoriteButton from "@/components/favorite-button";
 import { VerifiedBadge } from "@/components/verified-badge";
@@ -82,6 +83,9 @@ function PhotoCarousel({
           alt={i === 0 ? title : `${title} – photo ${i + 1}`}
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          quality={80}
+          placeholder="blur"
+          blurDataURL={CREAM_BLUR}
           className="absolute inset-0 object-cover transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
           style={{
             opacity: i === activeIdx ? 1 : 0,
@@ -145,6 +149,7 @@ function AgentAvatar({
             alt={name}
             fill
             sizes="26px"
+            quality={75}
             className="rounded-full object-cover"
           />
         ) : (
@@ -303,6 +308,10 @@ export default function ListingCard({ listing }: { listing: Listing }) {
               alt={title}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              quality={80}
+              placeholder="blur"
+              blurDataURL={CREAM_BLUR}
+              priority
               className="object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
             />
           )}

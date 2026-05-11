@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { CREAM_BLUR } from "@/lib/blur";
 import { useTranslations } from "next-intl";
 import { setRequestLocale, getTranslations, getFormatter } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -399,6 +400,9 @@ export default async function ListingDetailPage({
                     alt={localTitle}
                     fill
                     sizes="(max-width: 1024px) 100vw"
+                    quality={85}
+                    placeholder="blur"
+                    blurDataURL={CREAM_BLUR}
                     className="object-cover"
                     priority
                   />
@@ -434,6 +438,9 @@ export default async function ListingDetailPage({
                             alt={`${localTitle} ${i + 2}`}
                             fill
                             sizes="96px"
+                            quality={75}
+                            placeholder="blur"
+                            blurDataURL={CREAM_BLUR}
                             className="object-cover"
                           />
                         </div>
@@ -460,6 +467,9 @@ export default async function ListingDetailPage({
                     alt={localTitle}
                     fill
                     sizes="(min-width: 1024px) 66vw"
+                    quality={85}
+                    placeholder="blur"
+                    blurDataURL={CREAM_BLUR}
                     className="object-cover"
                     priority
                   />
@@ -495,6 +505,9 @@ export default async function ListingDetailPage({
                         alt={`${localTitle} ${i + 2}`}
                         fill
                         sizes="(min-width: 1024px) 17vw"
+                        quality={75}
+                        placeholder="blur"
+                        blurDataURL={CREAM_BLUR}
                         className="object-cover"
                       />
                     </div>
