@@ -101,8 +101,9 @@ export default function HeroSearch() {
       <div className="grid grid-cols-2 gap-4">
         {/* State */}
         <div>
-          <label className={labelBase}>{t("hero.stateLabel")}</label>
+          <label htmlFor="hero-state" className={labelBase}>{t("hero.stateLabel")}</label>
           <select
+            id="hero-state"
             value={state}
             onChange={(e) => setState(e.target.value)}
             className={fieldBase}
@@ -118,8 +119,9 @@ export default function HeroSearch() {
 
         {/* Property type */}
         <div>
-          <label className={labelBase}>{t("hero.typeLabel")}</label>
+          <label htmlFor="hero-type" className={labelBase}>{t("hero.typeLabel")}</label>
           <select
+            id="hero-type"
             value={propertyType}
             onChange={(e) => setPropertyType(e.target.value)}
             className={fieldBase}
@@ -135,14 +137,16 @@ export default function HeroSearch() {
 
         {/* Purpose toggle — segmented */}
         <div>
-          <label className={labelBase}>{t("hero.purposeLabel")}</label>
+          <p id="hero-purpose-label" className={labelBase}>{t("hero.purposeLabel")}</p>
           <div
             role="group"
+            aria-labelledby="hero-purpose-label"
             className="inline-flex w-full rounded-[var(--radius-pill)] border border-white/55 bg-white/45 p-1 backdrop-blur-md"
           >
             <button
               type="button"
               onClick={() => setPurpose("rent")}
+              aria-pressed={purpose === "rent"}
               className={`smooth-fast flex-1 rounded-[var(--radius-pill)] py-1.5 text-xs font-semibold ${
                 purpose === "rent"
                   ? "bg-terracotta text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
@@ -154,6 +158,7 @@ export default function HeroSearch() {
             <button
               type="button"
               onClick={() => setPurpose("sale")}
+              aria-pressed={purpose === "sale"}
               className={`smooth-fast flex-1 rounded-[var(--radius-pill)] py-1.5 text-xs font-semibold ${
                 purpose === "sale"
                   ? "bg-terracotta text-cream shadow-[0_2px_10px_rgba(200,64,26,0.30)]"
@@ -167,8 +172,9 @@ export default function HeroSearch() {
 
         {/* Max price */}
         <div>
-          <label className={labelBase}>{t("hero.priceLabel")}</label>
+          <label htmlFor="hero-max-price" className={labelBase}>{t("hero.priceLabel")}</label>
           <input
+            id="hero-max-price"
             type="number"
             min={0}
             step={50}

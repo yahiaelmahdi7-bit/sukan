@@ -143,11 +143,11 @@ export function PhotoUpload({
     <div className="flex flex-col gap-3">
       {/* Drop zone */}
       {canUploadMore && (
-        <div
+        <label
+          htmlFor="photo-upload-input"
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
           className={[
             "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-6 py-8 text-center transition smooth-fast",
             dragging
@@ -177,15 +177,17 @@ export function PhotoUpload({
           <p className="text-xs text-[#12100C]/40">
             {t("max5")} &middot; {t("maxSize")}
           </p>
-        </div>
+        </label>
       )}
 
       <input
         ref={inputRef}
+        id="photo-upload-input"
         type="file"
         accept={ACCEPTED}
         multiple
         className="sr-only"
+        aria-label={t("uploadPhotos")}
         onChange={(e) => {
           if (e.target.files?.length) {
             void uploadFiles(e.target.files);
@@ -195,7 +197,7 @@ export function PhotoUpload({
         }}
       />
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
 
       {/* Thumbnails */}
       {photos.length > 0 && (

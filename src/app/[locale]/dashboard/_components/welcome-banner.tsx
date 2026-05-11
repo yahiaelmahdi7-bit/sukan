@@ -96,14 +96,14 @@ export default function WelcomeBanner({ data, locale, labels }: WelcomeBannerPro
         <div className="flex items-center gap-2 rounded-[var(--radius-pill)] border border-white/50 bg-white/40 px-4 py-2 backdrop-blur-sm self-start shrink-0">
           {isVerified ? (
             <>
-              <CheckCircle size={14} className="text-green-600 shrink-0" />
+              <CheckCircle size={14} className="text-green-600 shrink-0" aria-hidden="true" />
               <span className="text-xs font-medium text-green-700">
                 {labels.verified}
               </span>
             </>
           ) : (
             <>
-              <AlertCircle size={14} className="text-amber-500 shrink-0" />
+              <AlertCircle size={14} className="text-amber-500 shrink-0" aria-hidden="true" />
               <Link
                 href="/dashboard/profile"
                 className="smooth text-xs font-medium text-amber-700 hover:text-terracotta"

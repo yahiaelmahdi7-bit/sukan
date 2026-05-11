@@ -70,17 +70,18 @@ export default async function Navbar() {
         <Link
           href="/"
           className="smooth-fast flex items-center gap-3 py-2 text-ink hover:text-terracotta"
-          title="Sukan · سُكَن"
+          aria-label="Sukan — home"
         >
           <SukanMark size={34} title={brand("name")} />
           <span className="flex flex-col leading-none">
             <span
+              lang="ar"
               className="font-display text-lg tracking-wide text-ink"
               style={{ fontFamily: "var(--font-arabic)" }}
             >
               سُكَن
             </span>
-            <span className="font-display text-[11px] italic tracking-[0.18em] text-ink-mid">
+            <span className="font-display text-[11px] italic tracking-[0.18em] text-ink-mid" aria-hidden="true">
               SUKAN
             </span>
           </span>
@@ -153,9 +154,11 @@ export default async function Navbar() {
 
               <Link
                 href="/dashboard"
+                aria-label={firstName ? t("greeting", { name: firstName }) : t("dashboard")}
                 className="smooth-fast hidden items-center gap-2 rounded-[var(--radius-pill)] border border-white/60 bg-white/50 px-2.5 py-1 text-sm text-ink hover:border-gold/50 hover:bg-gold/10 md:inline-flex"
               >
                 <span
+                  aria-hidden="true"
                   className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-semibold text-earth"
                   style={{
                     background:
@@ -165,7 +168,7 @@ export default async function Navbar() {
                   {userInitials}
                 </span>
                 {/* First-name greeting — hidden below lg, falls back gracefully */}
-                <span className="hidden lg:inline">
+                <span className="hidden lg:inline" aria-hidden="true">
                   {firstName ? (
                     t("greeting", { name: firstName })
                   ) : (

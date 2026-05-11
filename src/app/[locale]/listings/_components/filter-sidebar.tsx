@@ -254,9 +254,10 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
 
       {/* ─── Purpose ────────────────────────────────────────────────────────── */}
       <div className={groupDivider}>
-        <p className={`mb-3 ${groupHeader}`}>{t("browse.purposeLabel")}</p>
+        <p id="filter-purpose-label" className={`mb-3 ${groupHeader}`}>{t("browse.purposeLabel")}</p>
         <div
           role="group"
+          aria-labelledby="filter-purpose-label"
           className="inline-flex w-full rounded-[var(--radius-pill)] border border-white/55 bg-white/45 p-1 backdrop-blur-md"
         >
           {(["", "rent", "sale"] as const).map((val) => {
@@ -269,6 +270,7 @@ export default function FilterSidebar({ className = "", onClose }: FilterSidebar
               <button
                 key={val}
                 type="button"
+                aria-pressed={active}
                 onClick={() => push({ purpose: val || undefined, page: undefined })}
                 className={`smooth-fast flex-1 rounded-[var(--radius-pill)] px-3 py-1.5 text-xs font-semibold ${
                   active

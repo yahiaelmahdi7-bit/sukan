@@ -15,7 +15,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-3">
               <SukanMark size={40} title={brand("name")} />
-              <span className="font-display text-2xl text-ink">
+              <span lang="ar" className="font-display text-2xl text-ink">
                 {brand("name")}
               </span>
             </div>
@@ -101,7 +101,7 @@ export default function Footer() {
           <span>
             © {year} {brand("name")}. {t("rights")}.
           </span>
-          <span aria-hidden className="wave-divider w-32 opacity-60" />
+          <span aria-hidden="true" className="wave-divider w-32 opacity-60" />
         </div>
       </div>
     </footer>

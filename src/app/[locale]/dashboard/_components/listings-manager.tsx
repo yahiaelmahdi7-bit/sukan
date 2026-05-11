@@ -171,6 +171,7 @@ export default function ListingsManager({
               key={pill.key}
               type="button"
               onClick={() => setFilterStatus(pill.key)}
+              aria-pressed={filterStatus === pill.key}
               className={[
                 "smooth-fast rounded-[var(--radius-pill)] px-4 py-1.5 text-xs font-semibold border",
                 filterStatus === pill.key
@@ -216,6 +217,7 @@ export default function ListingsManager({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={labels.searchPlaceholder}
+              aria-label={labels.searchPlaceholder}
               className="smooth-fast rounded-[var(--radius-pill)] border border-white/60 bg-white/45 py-1.5 ps-8 pe-4 text-xs text-ink placeholder:text-ink-mid/60 hover:border-gold/50 backdrop-blur-sm focus:outline-none focus:ring-1 focus:ring-gold/40 w-40 sm:w-52"
             />
           </div>

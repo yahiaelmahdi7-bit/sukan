@@ -123,12 +123,17 @@ export default function AIMatchModal({ open, onClose }: AIMatchModalProps) {
     el.style.height = `${Math.min(el.scrollHeight, maxH)}px`;
   }, [input]);
 
-  // Focus textarea when modal opens
+  // Focus textarea when modal opens; close on Escape
   useEffect(() => {
     if (open) {
       setTimeout(() => textareaRef.current?.focus(), 50);
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+      };
+      document.addEventListener("keydown", onKey);
+      return () => document.removeEventListener("keydown", onKey);
     }
-  }, [open]);
+  }, [open, onClose]);
 
   const handleSend = useCallback(() => {
     const text = input.trim();
@@ -163,15 +168,21 @@ export default function AIMatchModal({ open, onClose }: AIMatchModalProps) {
       onClick={handleOverlayClick}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
     >
-      <div className="flex w-full max-w-2xl flex-col rounded-[var(--radius-card)] border border-gold/20 bg-earth shadow-2xl shadow-black/60">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="ai-match-title"
+        className="flex w-full max-w-2xl flex-col rounded-[var(--radius-card)] border border-gold/20 bg-earth shadow-2xl shadow-black/60"
+      >
         {/* Header */}
         <div className="flex items-center gap-3 border-b border-gold/15 px-6 py-4">
-          <SukanMark size={32} monochrome="gold" />
+          <SukanMark size={32} monochrome="gold" aria-hidden="true" />
           <div className="flex-1">
-            <h2 className="font-display text-lg text-parchment">{t("title")}</h2>
+            <h2 id="ai-match-title" className="font-display text-lg text-parchment">{t("title")}</h2>
             <p className="text-xs text-mute-soft">{t("subtitle")}</p>
           </div>
           <button
+            type="button"
             onClick={onClose}
             aria-label={t("close")}
             className="rounded-full p-2 text-mute-soft transition hover:bg-earth-soft hover:text-parchment"
@@ -181,10 +192,14 @@ export default function AIMatchModal({ open, onClose }: AIMatchModalProps) {
         </div>
 
         {/* Messages region */}
-        <div className="flex max-h-[60vh] min-h-[40vh] flex-col gap-4 overflow-y-auto p-6">
+        <div
+          className="flex max-h-[60vh] min-h-[40vh] flex-col gap-4 overflow-y-auto p-6"
+          aria-live="polite"
+          aria-label={t("messagesRegion")}
+        >
           {/* Error toast */}
           {error && (
-            <div className="rounded-xl border border-terracotta/30 bg-parchment-warm px-4 py-3 text-sm text-earth">
+            <div role="alert" className="rounded-xl border border-terracotta/30 bg-parchment-warm px-4 py-3 text-sm text-earth">
               {t("errorGeneric")}
             </div>
           )}
@@ -250,6 +265,7 @@ export default function AIMatchModal({ open, onClose }: AIMatchModalProps) {
               {(["starter1", "starter2", "starter3"] as const).map((key) => (
                 <button
                   key={key}
+                  type="button"
                   onClick={() => prefill(t(key))}
                   className="rounded-pill border border-gold/25 px-3 py-1.5 text-xs text-mute-soft transition hover:border-gold/50 hover:text-parchment"
                 >

@@ -85,6 +85,16 @@ export default function OnboardingTour() {
     setVisible(false);
   }, []);
 
+  // Close on Escape
+  useEffect(() => {
+    if (!visible) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") dismiss();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [visible, dismiss]);
+
   const next = useCallback(() => {
     if (step < STEPS.length - 1) {
       setStep((s) => s + 1);

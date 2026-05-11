@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Menu, X, Home, Users, BookOpen, TrendingUp, Info, Heart, Clock, LogIn } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
@@ -27,28 +27,48 @@ export default function MobileMenu({
   const tm = useTranslations("mobileMenu");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   // Close on route change
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
-  // Close on Escape key
+  // Close on Escape key + return focus to trigger
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const close = useCallback(() => setOpen(false), []);
+  // Move focus into drawer when it opens
+  useEffect(() => {
+    if (open) {
+      // Focus the first focusable element inside the drawer
+      const firstFocusable = drawerRef.current?.querySelector<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      firstFocusable?.focus();
+    }
+  }, [open]);
+
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
 
   return (
     <>
       {/* ── Hamburger trigger — only visible below md ────────────────────── */}
       <button
+        ref={triggerRef}
         type="button"
         aria-label={tm("open")}
         aria-expanded={open}
@@ -74,6 +94,7 @@ export default function MobileMenu({
 
           {/* Drawer card — slides in from end edge */}
           <div
+            ref={drawerRef}
             id="mobile-drawer"
             role="dialog"
             aria-modal="true"
@@ -204,6 +225,12 @@ export default function MobileMenu({
             @keyframes sk_drawer_in_rtl {
               from { transform: translateX(-100%); opacity: 0.6; }
               to   { transform: translateX(0);     opacity: 1; }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              #mobile-drawer,
+              #mobile-drawer ~ * {
+                animation: none !important;
+              }
             }
           `}</style>
         </>

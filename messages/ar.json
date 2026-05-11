@@ -459,14 +459,16 @@
       "about": "حول",
       "message": "الرسالة",
       "respondedAt": "أُرسلت",
-      "unread": "غير مقروء"
+      "unread": "غير مقروء",
+      "selectToRead": "اختر استفساراً للقراءة"
     },
     "navAnalytics": "التحليلات",
     "navProfile": "الملف الشخصي",
     "backToSite": "العودة إلى الموقع",
     "alertsSavedSearches": "عمليات البحث المحفوظة",
     "viewingsTab": "المعاينات",
-    "reportsTab": "البلاغات"
+    "reportsTab": "البلاغات",
+    "backToHome": "سُكَن — العودة للرئيسية"
   },
   "aiMatch": {
     "title": "البحث الذكي بالذكاء الاصطناعي",
@@ -482,7 +484,8 @@
     "notConfigured": "لم يُهيَّأ البحث الذكي بعد — أضف مفتاح Anthropic API إلى ملف .env.local لتفعيله.",
     "errorGeneric": "عذراً، حدث خطأ ما. حاول مجدداً.",
     "close": "إغلاق",
-    "tryAgain": "حاول مجدداً"
+    "tryAgain": "حاول مجدداً",
+    "messagesRegion": "رسائل الدردشة"
   },
   "inquiry": {
     "title": "أرسل رسالة",
@@ -730,7 +733,8 @@
     "detailsLabel": "تفاصيل (اختياري)",
     "submit": "إرسال البلاغ",
     "sent": "تم إرسال البلاغ. شكراً لك.",
-    "error": "حدث خطأ. يرجى المحاولة مجدداً."
+    "error": "حدث خطأ. يرجى المحاولة مجدداً.",
+    "cancel": "إلغاء"
   },
   "viewings": {
     "requestViewing": "طلب معاينة",
@@ -743,7 +747,10 @@
     "slotEvening": "مساءً (٥ م – ٨ م)",
     "submit": "إرسال الطلب",
     "sent": "تم إرسال طلب المعاينة. سيتواصل معك المؤجر قريباً.",
-    "modalTitle": "طلب معاينة"
+    "modalTitle": "طلب معاينة",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "errorGeneric": "حدث خطأ. يرجى المحاولة مجدداً."
   },
   "photos": {
     "uploadPhotos": "رفع الصور",
@@ -786,6 +793,10 @@
     "commentLabel": "تعليق (بالإنجليزية)",
     "commentArLabel": "تعليق (بالعربية)",
     "submit": "إرسال التقييم",
+    "successMessage": "شكراً — تم إرسال تقييمك.",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "errorGeneric": "حدث خطأ. يرجى المحاولة مجدداً.",
     "anonymous": "مجهول",
     "noReviews": "لا توجد تقييمات بعد. كن الأول.",
     "averageRating": "متوسط التقييم",

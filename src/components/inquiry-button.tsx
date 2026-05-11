@@ -40,6 +40,7 @@ export default function InquiryButton({
       <button
         type="button"
         onClick={handleOpen}
+        aria-haspopup="dialog"
         className={
           className ??
           "flex items-center justify-center rounded-[var(--radius-pill)] bg-terracotta hover:bg-terracotta-deep text-parchment font-semibold px-5 py-3.5 text-sm transition-colors w-full"

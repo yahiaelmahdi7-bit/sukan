@@ -71,17 +71,19 @@ export function ReviewForm({ listingId, landlordId, trigger }: ReviewFormProps) 
   return (
     <>
       {/* Trigger slot — whatever the parent passes */}
-      <span
+      <button
+        type="button"
         onClick={openDialog}
-        style={{ display: "contents" }}
-        role="presentation"
+        aria-haspopup="dialog"
+        className="contents"
       >
         {trigger}
-      </span>
+      </button>
 
       {/* Native dialog */}
       <dialog
         ref={dialogRef}
+        aria-labelledby="review-dialog-title"
         onClick={(e) => {
           // Close when clicking the backdrop
           if (e.target === dialogRef.current) closeDialog();
@@ -95,13 +97,13 @@ export function ReviewForm({ listingId, landlordId, trigger }: ReviewFormProps) 
         <div className="px-6 py-6 flex flex-col gap-5">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl text-ink tracking-tight">
+            <h2 id="review-dialog-title" className="font-display text-2xl text-ink tracking-tight">
               {t("leaveReview")}
             </h2>
             <button
               type="button"
               onClick={closeDialog}
-              aria-label="Close"
+              aria-label={t("close")}
               className="smooth rounded-full w-8 h-8 flex items-center justify-center text-ink-mid hover:bg-sand-dk/30 transition-colors"
             >
               ✕
@@ -110,17 +112,17 @@ export function ReviewForm({ listingId, landlordId, trigger }: ReviewFormProps) 
 
           {status === "sent" ? (
             /* Success state */
-            <div className="flex flex-col items-center gap-3 py-6 text-center">
-              <span className="text-3xl" aria-hidden>✓</span>
-              <p className="font-sans text-ink text-sm">{t("submit")}</p>
+            <div role="status" className="flex flex-col items-center gap-3 py-6 text-center">
+              <span className="text-3xl" aria-hidden="true">✓</span>
+              <p className="font-sans text-ink text-sm">{t("successMessage")}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               {/* Star rating */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-gold-dk">
+              <div role="group" aria-labelledby="review-rating-label" className="flex flex-col gap-1.5">
+                <p id="review-rating-label" className="text-xs font-semibold uppercase tracking-wider text-gold-dk">
                   {t("ratingLabel")}
-                </label>
+                </p>
                 <StarRating
                   value={rating}
                   interactive
@@ -131,10 +133,11 @@ export function ReviewForm({ listingId, landlordId, trigger }: ReviewFormProps) 
 
               {/* English comment */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-gold-dk">
+                <label htmlFor="review-comment" className="text-xs font-semibold uppercase tracking-wider text-gold-dk">
                   {t("commentLabel")}
                 </label>
                 <GlassTextarea
+                  id="review-comment"
                   tone="light"
                   rows={3}
                   value={comment}
@@ -145,10 +148,11 @@ export function ReviewForm({ listingId, landlordId, trigger }: ReviewFormProps) 
 
               {/* Arabic comment */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-gold-dk">
+                <label htmlFor="review-comment-ar" className="text-xs font-semibold uppercase tracking-wider text-gold-dk">
                   {t("commentArLabel")}
                 </label>
                 <GlassTextarea
+                  id="review-comment-ar"
                   tone="light"
                   rows={3}
                   value={commentAr}
@@ -161,8 +165,8 @@ export function ReviewForm({ listingId, landlordId, trigger }: ReviewFormProps) 
 
               {/* Error message */}
               {status === "error" && (
-                <p className="text-sm text-terracotta" role="alert">
-                  {errorMsg ?? t("submit")}
+                <p className="text-sm text-terracotta" role="alert" id="review-error">
+                  {errorMsg ?? t("errorGeneric")}
                 </p>
               )}
 
@@ -174,7 +178,7 @@ export function ReviewForm({ listingId, landlordId, trigger }: ReviewFormProps) 
                   size="sm"
                   onClick={closeDialog}
                 >
-                  {t("ratingLabel")}
+                  {t("cancel")}
                 </GlassButton>
                 <GlassButton
                   type="submit"

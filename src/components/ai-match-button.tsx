@@ -29,13 +29,15 @@ export default function AIMatchButton({
   return (
     <>
       <button
+        type="button"
         onClick={handleOpen}
+        aria-haspopup="dialog"
         className={
           className ??
           "inline-flex items-center gap-2 rounded-pill border border-gold/40 px-5 py-2.5 text-sm font-medium text-gold transition hover:border-gold hover:bg-gold/10"
         }
       >
-        <Sparkles size={16} />
+        <Sparkles size={16} aria-hidden="true" />
         {children ?? t("openButton")}
       </button>
 

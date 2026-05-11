@@ -33,15 +33,24 @@ export function SaveSearchButton() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Close on outside click
+  // Close on outside click or Escape
   useEffect(() => {
     function onOutside(e: MouseEvent) {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     }
-    if (open) document.addEventListener("mousedown", onOutside);
-    return () => document.removeEventListener("mousedown", onOutside);
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    if (open) {
+      document.addEventListener("mousedown", onOutside);
+      document.addEventListener("keydown", onKey);
+    }
+    return () => {
+      document.removeEventListener("mousedown", onOutside);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   async function handleSave() {
@@ -85,6 +94,8 @@ export function SaveSearchButton() {
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-haspopup="true"
         className="inline-flex items-center gap-1.5 rounded-full border border-[#C8873A]/40 bg-white/60 px-3 py-1.5 text-sm text-[#C8873A] backdrop-blur-sm transition hover:bg-[#C8873A]/10"
       >
         <Bell size={14} aria-hidden="true" />

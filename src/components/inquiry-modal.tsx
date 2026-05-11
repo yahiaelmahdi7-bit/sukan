@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, useState, useId } from "react";
+import { useTransition, useState, useId, useRef, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
@@ -30,6 +30,12 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
   const [submitted, setSubmitted] = useState(false);
 
   const [isPending, startTransition] = useTransition();
+  const firstFocusRef = useRef<HTMLButtonElement>(null);
+
+  // Move focus to the close button when modal mounts
+  useEffect(() => {
+    firstFocusRef.current?.focus();
+  }, []);
 
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === e.currentTarget) onClose();
@@ -192,6 +198,7 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
             </p>
           </div>
           <button
+            ref={firstFocusRef}
             type="button"
             onClick={onClose}
             aria-label={t("close")}
@@ -220,6 +227,8 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
                 setMessage(e.target.value);
                 if (submitState === "error") setSubmitState("idle");
               }}
+              aria-invalid={submitState === "error" ? "true" : undefined}
+              aria-describedby={submitState === "error" ? `${uid}-error` : undefined}
               className="py-3.5 px-4 text-base bg-earth-soft border border-gold/20 rounded-md text-parchment placeholder:text-mute-soft focus:outline-none focus:border-gold/50 transition-colors resize-none"
               placeholder={t("messagePlaceholder")}
             />
@@ -228,6 +237,7 @@ export default function InquiryModal({ listing, onClose }: InquiryModalProps) {
           {/* Inline error */}
           {submitState === "error" && errorMessage && (
             <p
+              id={`${uid}-error`}
               role="alert"
               className="rounded-md bg-terracotta/10 border border-terracotta/30 px-4 py-3 text-sm text-terracotta"
             >

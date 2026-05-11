@@ -62,10 +62,11 @@ export default function DashboardSidebar({
       <Link
         href="/"
         className="smooth-fast flex items-center gap-3 px-6 py-6 border-b border-white/40 hover:opacity-80"
-        title="Back to Sukan"
+        aria-label={t("backToHome")}
       >
         <SukanMark size={30} />
         <span
+          lang="ar"
           className="font-display text-xl text-ink leading-none"
           style={{ fontFamily: "var(--font-arabic)" }}
         >

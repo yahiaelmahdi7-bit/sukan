@@ -5,10 +5,10 @@ import GlassPanel from "@/components/glass-panel";
 import type { ActivityRow } from "../_data/overview";
 
 const ICON_MAP: Record<ActivityRow["icon"], React.ReactNode> = {
-  eye: <Eye size={14} />,
-  heart: <Heart size={14} />,
-  message: <MessageSquare size={14} />,
-  "trending-up": <TrendingUp size={14} />,
+  eye: <Eye size={14} aria-hidden="true" />,
+  heart: <Heart size={14} aria-hidden="true" />,
+  message: <MessageSquare size={14} aria-hidden="true" />,
+  "trending-up": <TrendingUp size={14} aria-hidden="true" />,
 };
 
 const ICON_COLOR: Record<ActivityRow["icon"], string> = {

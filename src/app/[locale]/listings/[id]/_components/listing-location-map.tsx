@@ -142,7 +142,6 @@ export default function ListingLocationMap({
           type="button"
           onClick={handleCopyCoords}
           className={actionClass}
-          aria-label={labels.copyCoords}
           aria-live="polite"
         >
           {copied ? (

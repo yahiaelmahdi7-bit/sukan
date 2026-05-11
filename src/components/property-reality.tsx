@@ -165,42 +165,42 @@ export default async function PropertyReality({
       {/* 2-col mobile / 3-col desktop grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-6">
         <StatCell
-          icon={<Zap size={14} strokeWidth={2} />}
+          icon={<Zap size={14} strokeWidth={2} aria-hidden="true" />}
           label={t("propertyRealityPower")}
           value={powerValue}
           highlight={powerHighlight}
           muted={powerMuted}
         />
         <StatCell
-          icon={<Droplet size={14} strokeWidth={2} />}
+          icon={<Droplet size={14} strokeWidth={2} aria-hidden="true" />}
           label={t("propertyRealityWater")}
           value={waterValue}
           highlight={waterHighlight}
           muted={!waterHighlight}
         />
         <StatCell
-          icon={<Snowflake size={14} strokeWidth={2} />}
+          icon={<Snowflake size={14} strokeWidth={2} aria-hidden="true" />}
           label={t("propertyRealityCooling")}
           value={coolingValue}
           highlight={coolingHighlight}
           muted={!coolingHighlight}
         />
         <StatCell
-          icon={<Car size={14} strokeWidth={2} />}
+          icon={<Car size={14} strokeWidth={2} aria-hidden="true" />}
           label={t("propertyRealityParking")}
           value={parkingValue}
           highlight={parkingHighlight}
           muted={!parkingHighlight}
         />
         <StatCell
-          icon={<Sofa size={14} strokeWidth={2} />}
+          icon={<Sofa size={14} strokeWidth={2} aria-hidden="true" />}
           label={t("propertyRealityFurnishing")}
           value={furnishingValue}
           highlight={furnishingHighlight}
           muted={!furnishingHighlight}
         />
         <StatCell
-          icon={<Plane size={14} strokeWidth={2} />}
+          icon={<Plane size={14} strokeWidth={2} aria-hidden="true" />}
           label={t("propertyRealityAirport")}
           value={airportValue}
           muted={airportMuted}

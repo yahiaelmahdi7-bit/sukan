@@ -65,7 +65,7 @@ function StatusPill({ status, labels }: { status: ListingStatus; labels: Listing
           boxShadow: "0 2px 8px rgba(200,135,58,0.30)",
         }}
       >
-        <Star size={9} />
+        <Star size={9} aria-hidden="true" />
         {labels.featured}
       </span>
     );
@@ -109,15 +109,24 @@ export default function ListingRow({
   const status = statusForListing(listing);
   const imgSrc = getListingImage(listing);
 
-  // Close menu on outside click
+  // Close menu on outside click or Escape
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
       }
     }
-    if (menuOpen) document.addEventListener("click", onDocClick);
-    return () => document.removeEventListener("click", onDocClick);
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    if (menuOpen) {
+      document.addEventListener("click", onDocClick);
+      document.addEventListener("keydown", onKeyDown);
+    }
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, [menuOpen]);
 
   return (
@@ -154,7 +163,7 @@ export default function ListingRow({
               {title}
             </p>
             {listing.ownerVerified && (
-              <BadgeCheck size={14} className="shrink-0 text-sky-500" />
+              <BadgeCheck size={14} className="shrink-0 text-sky-500" aria-hidden="true" />
             )}
           </div>
           <p className="text-xs text-ink-mid mt-0.5 truncate">
@@ -168,17 +177,17 @@ export default function ListingRow({
 
         {/* Stats strip */}
         <div className="hidden sm:flex items-center gap-4 shrink-0">
-          <span className="flex items-center gap-1 text-xs text-ink-mid">
-            <Eye size={12} className="text-gold-dk" />
-            <span className="font-display text-sm text-ink">{views}</span>
+          <span className="flex items-center gap-1 text-xs text-ink-mid" title={labels.viewsLabel}>
+            <Eye size={12} className="text-gold-dk" aria-hidden="true" />
+            <span className="font-display text-sm text-ink" aria-label={`${views} ${labels.viewsLabel}`}>{views}</span>
           </span>
-          <span className="flex items-center gap-1 text-xs text-ink-mid">
-            <MessageSquare size={12} className="text-gold-dk" />
-            <span className="font-display text-sm text-ink">{inquiries}</span>
+          <span className="flex items-center gap-1 text-xs text-ink-mid" title={labels.inquiriesLabel}>
+            <MessageSquare size={12} className="text-gold-dk" aria-hidden="true" />
+            <span className="font-display text-sm text-ink" aria-label={`${inquiries} ${labels.inquiriesLabel}`}>{inquiries}</span>
           </span>
-          <span className="flex items-center gap-1 text-xs text-ink-mid">
-            <Heart size={12} className="text-terracotta" />
-            <span className="font-display text-sm text-ink">{saves}</span>
+          <span className="flex items-center gap-1 text-xs text-ink-mid" title={labels.savesLabel}>
+            <Heart size={12} className="text-terracotta" aria-hidden="true" />
+            <span className="font-display text-sm text-ink" aria-label={`${saves} ${labels.savesLabel}`}>{saves}</span>
           </span>
         </div>
 
@@ -198,10 +207,11 @@ export default function ListingRow({
           type="button"
           aria-label="Actions"
           aria-expanded={menuOpen}
+          aria-haspopup="true"
           onClick={() => setMenuOpen((v) => !v)}
           className="smooth-fast flex h-8 w-8 items-center justify-center rounded-full border border-white/50 bg-white/40 text-ink-mid hover:border-gold/50 hover:bg-white/70 hover:text-ink backdrop-blur-sm"
         >
-          <MoreHorizontal size={15} />
+          <MoreHorizontal size={15} aria-hidden="true" />
         </button>
 
         {menuOpen && (
@@ -215,7 +225,7 @@ export default function ListingRow({
                   className="smooth-fast flex items-center gap-2.5 px-4 py-2.5 text-ink hover:bg-gold/10 hover:text-terracotta"
                   onClick={() => setMenuOpen(false)}
                 >
-                  <Edit3 size={13} />
+                  <Edit3 size={13} aria-hidden="true" />
                   {labels.edit}
                 </Link>
               </li>
@@ -228,7 +238,7 @@ export default function ListingRow({
                     // TODO: wire pause action to Supabase status update
                   }}
                 >
-                  <PauseCircle size={13} />
+                  <PauseCircle size={13} aria-hidden="true" />
                   {labels.pause}
                 </button>
               </li>
@@ -241,7 +251,7 @@ export default function ListingRow({
                     // TODO: wire boost action (open upsell modal or redirect to /post?boost=id)
                   }}
                 >
-                  <Zap size={13} />
+                  <Zap size={13} aria-hidden="true" />
                   {labels.boost}
                 </button>
               </li>
@@ -254,7 +264,7 @@ export default function ListingRow({
                     // TODO: wire duplicate — clone listing row in DB and redirect to edit
                   }}
                 >
-                  <Copy size={13} />
+                  <Copy size={13} aria-hidden="true" />
                   {labels.duplicate}
                 </button>
               </li>
@@ -267,7 +277,7 @@ export default function ListingRow({
                     // TODO: wire delete with confirmation dialog
                   }}
                 >
-                  <Trash2 size={13} />
+                  <Trash2 size={13} aria-hidden="true" />
                   {labels.delete}
                 </button>
               </li>

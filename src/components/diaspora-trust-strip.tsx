@@ -21,28 +21,28 @@ export default async function DiasporaTrustStrip({ locale }: DiasporaTrustStripP
 
   const PILLARS: Pillar[] = [
     {
-      icon: <ShieldCheck size={32} strokeWidth={1.5} />,
+      icon: <ShieldCheck size={32} strokeWidth={1.5} aria-hidden="true" />,
       title: t("trustVerifiedTitle"),
       body: t("trustVerifiedBody"),
       linkHref: "/agents",
       linkLabel: t("trustVerifiedLink"),
     },
     {
-      icon: <MapPin size={32} strokeWidth={1.5} />,
+      icon: <MapPin size={32} strokeWidth={1.5} aria-hidden="true" />,
       title: t("trustGuidesTitle"),
       body: t("trustGuidesBody"),
       linkHref: "/guides",
       linkLabel: t("trustGuidesLink"),
     },
     {
-      icon: <TrendingUp size={32} strokeWidth={1.5} />,
+      icon: <TrendingUp size={32} strokeWidth={1.5} aria-hidden="true" />,
       title: t("trustInsightsTitle"),
       body: t("trustInsightsBody"),
       linkHref: "/insights",
       linkLabel: t("trustInsightsLink"),
     },
     {
-      icon: <MessageCircle size={32} strokeWidth={1.5} />,
+      icon: <MessageCircle size={32} strokeWidth={1.5} aria-hidden="true" />,
       title: t("trustWhatsappTitle"),
       body: t("trustWhatsappBody"),
       // No link — pure trust signal

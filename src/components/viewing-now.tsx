@@ -52,6 +52,11 @@ export function ViewingNow({ listingId }: ViewingNowProps) {
         .sukan-dot-pulse {
           animation: sukan-pulse 2.2s ease-in-out infinite;
         }
+        @media (prefers-reduced-motion: reduce) {
+          .sukan-dot-pulse {
+            animation: none;
+          }
+        }
       `}</style>
 
       <span

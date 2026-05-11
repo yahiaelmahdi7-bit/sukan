@@ -93,7 +93,7 @@ export default function RecentlyViewedDropdown() {
       {/* Dropdown panel */}
       {open && (
         <div
-          role="dialog"
+          role="region"
           aria-label={t("label")}
           className="absolute end-0 top-full z-50 mt-2 w-80 origin-top-right sm:w-96"
           style={{
@@ -123,7 +123,7 @@ export default function RecentlyViewedDropdown() {
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  aria-label="Close"
+                  aria-label={t("close")}
                   className="smooth-fast rounded-full p-0.5 text-ink/40 hover:text-ink/70"
                 >
                   <X size={14} />

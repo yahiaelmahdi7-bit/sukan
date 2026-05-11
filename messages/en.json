@@ -459,14 +459,16 @@
       "about": "About",
       "message": "Message",
       "respondedAt": "Sent",
-      "unread": "Unread"
+      "unread": "Unread",
+      "selectToRead": "Select an inquiry to read"
     },
     "navAnalytics": "Analytics",
     "navProfile": "Profile",
     "backToSite": "Back to site",
     "alertsSavedSearches": "Saved searches",
     "viewingsTab": "Viewings",
-    "reportsTab": "Reports"
+    "reportsTab": "Reports",
+    "backToHome": "Sukan — back to home"
   },
   "aiMatch": {
     "title": "AI Property Match",
@@ -482,7 +484,8 @@
     "notConfigured": "AI matching is not configured yet — paste your Anthropic API key in .env.local to enable.",
     "errorGeneric": "Sorry, something went wrong. Try again.",
     "close": "Close",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "messagesRegion": "Chat messages"
   },
   "inquiry": {
     "title": "Send a message",
@@ -730,7 +733,8 @@
     "detailsLabel": "Details (optional)",
     "submit": "Submit report",
     "sent": "Report submitted. Thank you.",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "cancel": "Cancel"
   },
   "viewings": {
     "requestViewing": "Request a viewing",
@@ -743,7 +747,10 @@
     "slotEvening": "Evening (5 pm – 8 pm)",
     "submit": "Send request",
     "sent": "Viewing request sent. The landlord will be in touch.",
-    "modalTitle": "Request a viewing"
+    "modalTitle": "Request a viewing",
+    "cancel": "Cancel",
+    "close": "Close",
+    "errorGeneric": "Something went wrong. Please try again."
   },
   "photos": {
     "uploadPhotos": "Upload photos",
@@ -786,6 +793,10 @@
     "commentLabel": "Comment (English)",
     "commentArLabel": "Comment (Arabic)",
     "submit": "Submit review",
+    "successMessage": "Thank you — your review has been submitted.",
+    "cancel": "Cancel",
+    "close": "Close",
+    "errorGeneric": "Something went wrong. Please try again.",
     "anonymous": "Anonymous",
     "noReviews": "No reviews yet. Be the first.",
     "averageRating": "Average rating",

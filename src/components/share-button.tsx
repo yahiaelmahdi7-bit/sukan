@@ -15,15 +15,24 @@ export function ShareButton({ url, title }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
+  // Close on outside click or Escape
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
       }
     }
-    if (open) document.addEventListener("mousedown", onClickOutside);
-    return () => document.removeEventListener("mousedown", onClickOutside);
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    if (open) {
+      document.addEventListener("mousedown", onClickOutside);
+      document.addEventListener("keydown", onKey);
+    }
+    return () => {
+      document.removeEventListener("mousedown", onClickOutside);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   async function handleCopy() {
@@ -45,6 +54,8 @@ export function ShareButton({ url, title }: ShareButtonProps) {
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         aria-label={t("share")}
+        aria-expanded={open}
+        aria-haspopup="true"
         className="inline-flex items-center gap-1.5 rounded-full border border-[#C8873A]/40 bg-white/60 px-3 py-1.5 text-sm text-[#C8873A] backdrop-blur-sm transition hover:bg-[#C8873A]/10"
       >
         <Share2 size={14} aria-hidden="true" />

@@ -27,7 +27,7 @@ export default function NumberedStep({
       </span>
 
       {/* Icon */}
-      <div className="mb-5 text-gold w-11 h-11 flex items-center justify-center">
+      <div className="mb-5 text-gold w-11 h-11 flex items-center justify-center" aria-hidden="true">
         {icon}
       </div>
 

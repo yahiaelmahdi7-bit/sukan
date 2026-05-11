@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "@/i18n/navigation";
 import DashboardSidebar, { type NavKey } from "./dashboard-sidebar";
 
@@ -22,7 +22,20 @@ export default function MobileNavToggle({
   signOutLabel,
 }: MobileNavToggleProps) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   let active: NavKey = "myListings";
   for (const [route, key] of Object.entries(ROUTE_TO_KEY)) {
@@ -36,8 +49,11 @@ export default function MobileNavToggle({
     <>
       {/* Glass pill hamburger button */}
       <button
+        ref={triggerRef}
         type="button"
         aria-label="Open navigation"
+        aria-expanded={open}
+        aria-haspopup="true"
         onClick={() => setOpen(true)}
         className="smooth-fast lg:hidden w-9 h-9 flex items-center justify-center rounded-full border border-white/60 bg-white/40 text-ink-mid hover:border-gold/50 hover:text-ink hover:bg-gold/10 backdrop-blur-sm"
       >
@@ -49,7 +65,13 @@ export default function MobileNavToggle({
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex" onClick={() => setOpen(false)}>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation"
+          className="fixed inset-0 z-50 flex"
+          onClick={() => { setOpen(false); triggerRef.current?.focus(); }}
+        >
           {/* Frosted cream scrim */}
           <div className="absolute inset-0 bg-cream/60 backdrop-blur-sm" />
           <div

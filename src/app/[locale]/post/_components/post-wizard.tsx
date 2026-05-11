@@ -417,6 +417,10 @@ function Step1({
 
   const bedroomsId = useId();
   const bathroomsId = useId();
+  const areaId = useId();
+  const priceId = useId();
+  const descEnId = useId();
+  const descArId = useId();
 
   const [generatingDesc, setGeneratingDesc] = useState(false);
   const [descError, setDescError] = useState<string | null>(null);
@@ -652,8 +656,9 @@ function Step1({
 
       {/* Area */}
       <div>
-        <label className={labelCls}>{t("areaLabel")}</label>
+        <label htmlFor={areaId} className={labelCls}>{t("areaLabel")}</label>
         <GlassInput
+          id={areaId}
           tone="light"
           type="number"
           min={0}
@@ -665,9 +670,10 @@ function Step1({
 
       {/* Price + currency + period */}
       <div>
-        <label className={labelCls}>{t("priceLabel")}</label>
+        <label htmlFor={priceId} className={labelCls}>{t("priceLabel")}</label>
         <div className="grid grid-cols-1 sm:grid-cols-[1fr_7rem_8rem] gap-2">
           <GlassInput
+            id={priceId}
             tone="light"
             type="number"
             min={0}
@@ -765,10 +771,11 @@ function Step1({
           </p>
         )}
         <div>
-          <label className={`${labelCls}`}>
+          <label htmlFor={descEnId} className={`${labelCls}`}>
             {t("descriptionEnLabel")}
           </label>
           <GlassTextarea
+            id={descEnId}
             tone="light"
             rows={4}
             placeholder={t("descriptionEnPlaceholder")}
@@ -777,10 +784,11 @@ function Step1({
           />
         </div>
         <div>
-          <label className={`${labelCls}`} dir="rtl">
+          <label htmlFor={descArId} className={`${labelCls}`} dir="rtl">
             {t("descriptionArLabel")}
           </label>
           <GlassTextarea
+            id={descArId}
             tone="light"
             rows={4}
             dir="rtl"
@@ -807,6 +815,10 @@ function Step2({
 }) {
   const t = useTranslations("post");
   const st = useTranslations("states");
+  const stateId = useId();
+  const cityId = useId();
+  const neighborhoodId = useId();
+  const addressId = useId();
 
   const coords =
     draft.state && STATE_COORDS[draft.state as StateKey]
@@ -817,8 +829,9 @@ function Step2({
     <div className="space-y-6">
       {/* State */}
       <div>
-        <label className={labelCls}>{t("stateLabel")}</label>
+        <label htmlFor={stateId} className={labelCls}>{t("stateLabel")}</label>
         <GlassSelect
+          id={stateId}
           tone="light"
           value={draft.state}
           onChange={(e) =>
@@ -845,8 +858,9 @@ function Step2({
 
       {/* City */}
       <div>
-        <label className={labelCls}>{t("cityLabel")}</label>
+        <label htmlFor={cityId} className={labelCls}>{t("cityLabel")}</label>
         <GlassInput
+          id={cityId}
           tone="light"
           type="text"
           placeholder={t("cityPlaceholder")}
@@ -862,8 +876,9 @@ function Step2({
 
       {/* Neighborhood (optional) */}
       <div>
-        <label className={labelCls}>{t("neighborhoodLabel")}</label>
+        <label htmlFor={neighborhoodId} className={labelCls}>{t("neighborhoodLabel")}</label>
         <GlassInput
+          id={neighborhoodId}
           tone="light"
           type="text"
           placeholder={t("neighborhoodPlaceholder")}
@@ -874,8 +889,9 @@ function Step2({
 
       {/* Address line (optional) */}
       <div>
-        <label className={labelCls}>{t("addressLabel")}</label>
+        <label htmlFor={addressId} className={labelCls}>{t("addressLabel")}</label>
         <GlassInput
+          id={addressId}
           tone="light"
           type="text"
           placeholder={t("addressPlaceholder")}

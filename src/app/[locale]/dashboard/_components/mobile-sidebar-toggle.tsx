@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import DashboardSidebar, { type NavKey } from "./dashboard-sidebar";
 
 interface MobileSidebarToggleProps {
@@ -15,13 +15,29 @@ export default function MobileSidebarToggle({
   signOutLabel,
 }: MobileSidebarToggleProps) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
     <>
       {/* Glass pill hamburger button — only visible on small screens */}
       <button
+        ref={triggerRef}
         type="button"
         aria-label="Open navigation"
+        aria-expanded={open}
+        aria-haspopup="true"
         onClick={() => setOpen(true)}
         className="smooth-fast lg:hidden w-9 h-9 flex items-center justify-center rounded-full border border-white/60 bg-white/40 text-ink-mid hover:border-gold/50 hover:text-ink hover:bg-gold/10 backdrop-blur-sm"
       >
@@ -41,8 +57,11 @@ export default function MobileSidebarToggle({
       {/* Drawer overlay */}
       {open && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation"
           className="fixed inset-0 z-50 flex"
-          onClick={() => setOpen(false)}
+          onClick={() => { setOpen(false); triggerRef.current?.focus(); }}
         >
           {/* Frosted cream scrim */}
           <div className="absolute inset-0 bg-cream/60 backdrop-blur-sm" />

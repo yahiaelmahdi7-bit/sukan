@@ -136,6 +136,11 @@ export default function CompareTray() {
           from { transform: translateY(0);    opacity: 1; }
           to   { transform: translateY(110%); opacity: 0; }
         }
+        @media (prefers-reduced-motion: reduce) {
+          [aria-label] {
+            animation: none !important;
+          }
+        }
       `}</style>
 
       <div

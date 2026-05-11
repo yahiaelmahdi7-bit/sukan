@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useId } from "react";
 import { useTranslations } from "next-intl";
 import { Sparkles, Loader2, X, CheckCircle, AlertCircle } from "lucide-react";
 
@@ -18,10 +18,25 @@ export function PhotoTouchupButton({
   onEnhanced,
 }: PhotoTouchupButtonProps) {
   const t = useTranslations("photoTouchup");
+  const uid = useId();
   const [state, setState] = useState<TouchupState>("idle");
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // Close preview on Escape
+  useEffect(() => {
+    if (state !== "preview") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleKeep();
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-clear error after 5 s
   useEffect(() => {
@@ -81,6 +96,7 @@ export function PhotoTouchupButton({
   if (state === "idle") {
     return (
       <button
+        ref={triggerRef}
         type="button"
         onClick={handleEnhance}
         className="
@@ -157,7 +173,7 @@ export function PhotoTouchupButton({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={t("previewTitle")}
+        aria-labelledby={`${uid}-preview-title`}
         className="
           fixed inset-0 z-50 flex items-center justify-center p-4
           sm:p-6
@@ -178,7 +194,7 @@ export function PhotoTouchupButton({
                 className="text-[#C8873A]"
                 aria-hidden="true"
               />
-              <h2 className="text-sm font-semibold text-[#12100C]">
+              <h2 id={`${uid}-preview-title`} className="text-sm font-semibold text-[#12100C]">
                 {t("previewTitle")}
               </h2>
             </div>

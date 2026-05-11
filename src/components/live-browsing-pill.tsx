@@ -60,6 +60,11 @@ export default function LiveBrowsingPill() {
         .sukan-pulse-dot {
           animation: sukan-pulse 1.8s ease-in-out infinite;
         }
+        @media (prefers-reduced-motion: reduce) {
+          .sukan-pulse-dot {
+            animation: none;
+          }
+        }
       `}</style>
 
       <span

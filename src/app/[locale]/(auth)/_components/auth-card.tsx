@@ -20,7 +20,7 @@ export default function AuthCard({
   footer,
 }: AuthCardProps) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-transparent px-4 py-16">
+    <main className="flex min-h-screen items-center justify-center bg-transparent px-4 py-16">
       {/* Local gold haze behind the card */}
       <div
         aria-hidden
@@ -63,6 +63,6 @@ export default function AuthCard({
           </div>
         )}
       </GlassPanel>
-    </div>
+    </main>
   );
 }

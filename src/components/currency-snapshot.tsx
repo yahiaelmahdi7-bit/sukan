@@ -34,7 +34,7 @@ export default async function CurrencySnapshot({
             className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
             style={{ background: "rgba(200,135,58,0.15)" }}
           >
-            <TrendingUp size={20} className="text-gold-dk" strokeWidth={1.5} />
+            <TrendingUp size={20} className="text-gold-dk" strokeWidth={1.5} aria-hidden="true" />
           </div>
 
           <div className="flex flex-col gap-1">
@@ -73,7 +73,7 @@ export default async function CurrencySnapshot({
       className="inline-flex items-center gap-2.5 rounded-[var(--radius-pill)] border border-gold/35 bg-gold/8 px-4 py-2 backdrop-blur-sm"
       style={{ boxShadow: "0 2px 10px rgba(200,135,58,0.10)" }}
     >
-      <TrendingUp size={14} className="shrink-0 text-gold-dk" strokeWidth={1.5} />
+      <TrendingUp size={14} className="shrink-0 text-gold-dk" strokeWidth={1.5} aria-hidden="true" />
       <bdi className="text-sm font-semibold text-ink">
         1 USD ≈{" "}
         <span className="text-gold-dk">{USD_TO_SDG.toLocaleString()} SDG</span>

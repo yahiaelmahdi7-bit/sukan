@@ -122,9 +122,15 @@ export default async function LocaleLayout({
       className={`${cormorant.variable} ${lato.variable} ${notoNaskh.variable} h-full antialiased`}
     >
       <body className="relative min-h-full flex flex-col bg-earth text-parchment">
+        {/* Skip-to-content — first focusable element on every page */}
+        <a href="#main" className="skip-link">
+          {locale === "ar" ? "انتقل إلى المحتوى الرئيسي" : "Skip to main content"}
+        </a>
         <Atmosphere />
         <NextIntlClientProvider>
-          {children}
+          <div id="main">
+            {children}
+          </div>
           <BackToDashboardPill />
         </NextIntlClientProvider>
       </body>

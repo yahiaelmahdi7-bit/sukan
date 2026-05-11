@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { GlassTextarea } from "@/components/ui/glass-input";
 
+import { useId } from "react";
+
 const REASONS = ["scam", "wrong_info", "duplicate", "offensive", "other"] as const;
 type Reason = (typeof REASONS)[number];
 
@@ -13,6 +15,7 @@ interface ReportListingButtonProps {
 
 export function ReportListingButton({ listingId }: ReportListingButtonProps) {
   const t = useTranslations("report");
+  const uid = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [reason, setReason] = useState<Reason>("scam");
   const [details, setDetails] = useState("");
@@ -64,6 +67,7 @@ export function ReportListingButton({ listingId }: ReportListingButtonProps) {
       {/* Native <dialog> for accessibility — works without a portal */}
       <dialog
         ref={dialogRef}
+        aria-labelledby={`${uid}-title`}
         onClick={(e) => {
           // Close when clicking the backdrop
           if (e.target === dialogRef.current) closeDialog();
@@ -71,18 +75,30 @@ export function ReportListingButton({ listingId }: ReportListingButtonProps) {
         className="m-auto max-w-md w-full rounded-2xl border border-white/40 bg-[#FDF8F0] p-0 shadow-xl backdrop:bg-black/40 backdrop:backdrop-blur-sm"
       >
         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
-          <h2 className="font-display text-xl text-[#12100C]">{t("reportListing")}</h2>
+          <h2 id={`${uid}-title`} className="font-display text-xl text-[#12100C]">{t("reportListing")}</h2>
 
           {status === "sent" ? (
-            <p className="text-sm text-green-700">{t("sent")}</p>
+            <>
+              <p role="status" className="text-sm text-green-700">{t("sent")}</p>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={closeDialog}
+                  className="rounded-full bg-[#C8401A] px-4 py-2 text-sm font-medium text-white"
+                >
+                  {t("submit")}
+                </button>
+              </div>
+            </>
           ) : (
             <>
               {/* Reason */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-[#12100C]/60 uppercase tracking-wide">
+                <label htmlFor={`${uid}-reason`} className="text-xs font-medium text-[#12100C]/60 uppercase tracking-wide">
                   {t("reasonLabel")}
                 </label>
                 <select
+                  id={`${uid}-reason`}
                   value={reason}
                   onChange={(e) => setReason(e.target.value as Reason)}
                   required
@@ -98,10 +114,11 @@ export function ReportListingButton({ listingId }: ReportListingButtonProps) {
 
               {/* Details */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-[#12100C]/60 uppercase tracking-wide">
+                <label htmlFor={`${uid}-details`} className="text-xs font-medium text-[#12100C]/60 uppercase tracking-wide">
                   {t("detailsLabel")}
                 </label>
                 <GlassTextarea
+                  id={`${uid}-details`}
                   tone="light"
                   rows={3}
                   value={details}
@@ -111,7 +128,7 @@ export function ReportListingButton({ listingId }: ReportListingButtonProps) {
               </div>
 
               {status === "error" && (
-                <p className="text-xs text-red-600">{t("error")}</p>
+                <p role="alert" id={`${uid}-error`} className="text-xs text-red-600">{t("error")}</p>
               )}
 
               <div className="flex justify-end gap-2">
@@ -120,8 +137,7 @@ export function ReportListingButton({ listingId }: ReportListingButtonProps) {
                   onClick={closeDialog}
                   className="rounded-full border border-[#12100C]/15 px-4 py-2 text-sm text-[#12100C]/60 hover:bg-[#12100C]/5 transition"
                 >
-                  {/* generic cancel label — already in common namespace */}
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
@@ -132,18 +148,6 @@ export function ReportListingButton({ listingId }: ReportListingButtonProps) {
                 </button>
               </div>
             </>
-          )}
-
-          {status === "sent" && (
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={closeDialog}
-                className="rounded-full bg-[#C8401A] px-4 py-2 text-sm font-medium text-white"
-              >
-                Close
-              </button>
-            </div>
           )}
         </form>
       </dialog>
