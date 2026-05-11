@@ -116,6 +116,10 @@ export type Listing = {
   // ── Verification + demo flags ──────────────────────────────────────────────
   verificationTier?: "landlord-verified" | "property-verified" | "visited";
   isDemo?: boolean;
+  // ── Video tour ─────────────────────────────────────────────────────────────
+  videoTourUrl?: string;
+  // ── Price history (newest first) ──────────────────────────────────────────
+  priceHistory?: { price: number; date: string; currency: "USD" | "SDG" }[];
 };
 
 // Curated Unsplash images per property type. Hand-picked to avoid generic

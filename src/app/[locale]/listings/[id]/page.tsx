@@ -24,6 +24,8 @@ import GlassPanel from "@/components/glass-panel";
 import { GlassButton } from "@/components/ui/glass-button";
 import { VerifiedBadge } from "@/components/verified-badge";
 import { VerificationBadge } from "@/components/verification-badge";
+import { VideoTourButton } from "@/components/video-tour-button";
+import { PriceHistoryTimeline } from "@/components/price-history-timeline";
 import { ShareButton } from "@/components/share-button";
 import { ReportListingButton } from "@/components/report-listing-button";
 import { ViewingRequestModal } from "@/components/viewing-request-modal";
@@ -448,6 +450,16 @@ export default async function ListingDetailPage({
                     })}
                     <span className="opacity-70"> {periodSuffix}</span>
                   </p>
+                )}
+
+                {listing.priceHistory && listing.priceHistory.length > 1 && (
+                  <PriceHistoryTimeline history={listing.priceHistory} />
+                )}
+
+                {listing.videoTourUrl && (
+                  <div className="mt-3">
+                    <VideoTourButton url={listing.videoTourUrl} />
+                  </div>
                 )}
               </div>
 

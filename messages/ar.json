@@ -119,6 +119,8 @@
     "ribbonPriceReduced": "تخفيض السعر",
     "demoBadge": "إعلان تجريبي",
     "demoBadgeTooltip": "هذا إعلان تجريبي — بيانات افتراضية لاختبار التصميم.",
+    "watchTour": "مشاهدة الجولة",
+    "priceHistory": "تاريخ السعر",
     "listedToday": "نُشر اليوم",
     "listedYesterday": "نُشر أمس",
     "listedDaysAgo": "{count, plural, =0 {اليوم} =1 {أمس} =2 {قبل يومين} few {قبل # أيام} many {قبل # يوماً} other {قبل # يوم}}",
@@ -382,7 +384,8 @@
     "filter": "تصفية",
     "clear": "مسح",
     "showAll": "عرض الكل",
-    "noResults": "لا توجد نتائج"
+    "noResults": "لا توجد نتائج",
+    "close": "إغلاق"
   },
   "map": {
     "eyebrow": "استكشف السودان",

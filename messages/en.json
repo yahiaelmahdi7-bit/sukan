@@ -119,6 +119,8 @@
     "ribbonPriceReduced": "PRICE REDUCED",
     "demoBadge": "Demo listing",
     "demoBadgeTooltip": "This is a demo listing — placeholder data for layout testing.",
+    "watchTour": "Watch tour",
+    "priceHistory": "Price history",
     "listedToday": "Listed today",
     "listedYesterday": "Listed yesterday",
     "listedDaysAgo": "{count, plural, =0 {Listed today} =1 {Listed yesterday} other {Listed # days ago}}",
@@ -382,7 +384,8 @@
     "filter": "Filter",
     "clear": "Clear",
     "showAll": "Show all",
-    "noResults": "No results"
+    "noResults": "No results",
+    "close": "Close"
   },
   "map": {
     "eyebrow": "Explore Sudan",

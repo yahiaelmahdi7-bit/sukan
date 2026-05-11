@@ -10,7 +10,7 @@ import { VerifiedBadge } from "@/components/verified-badge";
 import { VerificationBadge } from "@/components/verification-badge";
 import { DemoBadge } from "@/components/demo-badge";
 import { StarRating } from "@/components/star-rating";
-import { Car, Sofa, Zap, Droplet, Snowflake, MapPin, Navigation } from "lucide-react";
+import { Car, Sofa, Zap, Droplet, Snowflake, MapPin, Navigation, Play } from "lucide-react";
 import {
   getListingImage,
   getLocaleCity,
@@ -419,6 +419,21 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           <span className="absolute bottom-3 ltr:right-3 rtl:left-3 z-20 rounded-[var(--radius-pill)] border border-white/15 bg-ink/55 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-cream backdrop-blur-md backdrop-saturate-150">
             {t(`propertyType.${listing.propertyType}`)}
           </span>
+
+          {/* ── Video tour play overlay (center) ─────────────────────────── */}
+          {listing.videoTourUrl && (
+            <span
+              aria-label={t("listing.watchTour")}
+              className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+            >
+              <span
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-white/35 text-white shadow-lg backdrop-blur-md transition group-hover:scale-110"
+                style={{ background: "rgba(18,16,12,0.55)" }}
+              >
+                <Play size={22} fill="currentColor" aria-hidden />
+              </span>
+            </span>
+          )}
 
           {/* ── View count: bottom-left ───────────────────────────────────── */}
           <span className="absolute bottom-3 ltr:left-3 rtl:right-3 z-20 inline-flex items-center gap-1 rounded-[var(--radius-pill)] border border-white/15 bg-ink/55 px-2.5 py-0.5 text-[10px] text-cream/90 backdrop-blur-md">
