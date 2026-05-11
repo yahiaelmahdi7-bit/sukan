@@ -272,6 +272,366 @@ Neither side is objectively better. They are different answers to the same quest
 
 لا ضفة أفضل بشكل موضوعي. هما إجابتان مختلفتان على السؤال ذاته: ما نوع الحياة التي تريد بناءها في الخرطوم الكبرى؟`,
   },
+  {
+    slug: "verifying-sudanese-property-from-abroad",
+    titleEn:
+      "Verifying a Sudanese property from abroad: a 6-step checklist",
+    titleAr:
+      "التحقق من عقار سوداني من الخارج: قائمة مرجعية من ٦ خطوات",
+    publishedAt: "2026-05-08",
+    authorEn: "Sukan Editorial",
+    authorAr: "تحرير سُكَن",
+    excerptEn:
+      "Title deed lookup, agent verification, live video walkthroughs, escrow alternatives, currency timing, and knowing when to wire versus when to hold — six practical steps that protect diaspora renters and buyers from the most common traps.",
+    excerptAr:
+      "البحث في صك الملكية، والتحقق من الوسيط، والجولة الفيديو المباشرة، وبدائل الضمان المحتجز، وتوقيت العملة، ومعرفة متى تُحوّل ومتى تنتظر — ست خطوات عملية تحمي المغتربين المستأجرين والمشترين من أكثر المزالق شيوعاً.",
+    heroImage:
+      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&auto=format&fit=crop",
+    category: "Diaspora",
+    bodyEn: `Wiring money to Sudan for a property you have never physically inspected is, for thousands of diaspora families, an act of faith. It should not be. The risks are real and well-documented: deposits paid for apartments already occupied by someone else, purchase prices transferred for land with contested titles, annual rents paid in advance for properties with undisclosed structural problems. What follows is not a counsel of despair — most transactions conclude without incident — but a practical checklist that separates the families who transact safely from those who share cautionary stories in community forums.
+
+**Step 1: Run the title deed through the state land registry**
+
+The first thing to ask any seller or landlord is not the price. It is: "Can I see the registration number from the relevant state land registry?" In Khartoum, the authority is the Khartoum State Land Registry (Tasjeel Al-Aradhi). In Port Sudan, the Red Sea State equivalent. In Wad Madani, the Al-Jazirah State registry.
+
+A legitimate registered title has a number. You or a trusted local contact can verify that number corresponds to the described property by visiting or calling the registry. A seller who offers a private "certificate of ownership" or a witnessed document but cannot produce a registry number is presenting something with no formal legal standing. Your recourse after payment in that scenario is close to zero.
+
+The pattern to watch for: sellers who have genuinely bought or inherited property using traditional arrangements that predate formal registration — a genuine seller, a real property, and yet no registry number because the transaction was never formalised. This is common in older Omdurman and Bahri neighbourhoods. The property may be legitimate in the community's eyes, but you carry the risk of any future legal challenge. Insist on formalisation before money moves.
+
+**Step 2: Do the live video walkthrough, properly**
+
+Photos lie by omission. Pre-recorded video can be from a different unit entirely. The minimum standard for a remote transaction is a live WhatsApp or Zoom call during which someone with actual access to the property walks you from the street entrance through every room, opens every window, flushes every toilet, runs every tap, shows you the roof water tank, and opens the electrical panel to confirm what generator or mains supply is in place.
+
+This takes twenty to thirty minutes and is non-negotiable for any transaction over $500. A landlord who declines this standard for a remote tenant should be disqualifying themselves from consideration.
+
+Better than a self-guided walkthrough by the landlord or agent: arrange for an independent local verifier — a friend, family member, or paid inspection service that is not connected to the agent — to conduct the walkthrough separately. The agent's incentive is to close. Your verifier's incentive should be your accuracy.
+
+**Step 3: Verify your agent**
+
+Sudan has no licensing system for real estate agents. The word "agent" covers everyone from a decade-long professional with a known track record to someone who read a listing on Facebook this morning and decided to represent it. Before paying any agent fee or trusting an agent's verification of a property, establish three things: their full name and national ID number; references from at least two previous clients you can contact independently (not numbers they provide — names you find through community networks); and a coherent answer to "which neighbourhoods have you worked in and for how long?"
+
+An agent with five years of experience in Khartoum Riyadh or Garden City will be known in that community. Verify the knowledge, not just the claim.
+
+Agent fees in Sudan are not regulated: typically one month's rent for a successful placement, paid by the party who engaged the agent or split. Be wary of anyone who demands fees before showing any properties or providing references.
+
+**Step 4: Understand the escrow landscape and work with what exists**
+
+Sudan does not have formal escrow infrastructure. This is the honest starting point. The institutional gap that protects buyers and renters in regulated property markets — a neutral account that holds funds until conditions are verified — does not exist in a standardised form here.
+
+What exists instead: conditional payment through a trusted mutual third party. The most reliable version of this is a family member trusted by both parties, or a community elder whose reputation spans both networks. Funds sit with that person and transfer when physical keys are in the renter's hands and a 48-hour inspection period has passed without dispute.
+
+Some platforms and NGO-adjacent services are beginning to offer basic transaction facilitation. These are nascent. For now, the practical rule is: do not wire more money than you can afford to lose until a trusted person physically holds the keys on your behalf.
+
+**Step 5: Get the currency timing right**
+
+The SDG-USD parallel rate in Sudan is volatile. A transfer timed poorly can arrive worth 10–20% less than you planned. Several practical principles apply:
+
+If the transaction is USD-denominated, wire in USD and specify to the receiving hawala or transfer service that delivery should be in USD or at a rate agreed and recorded in writing before the transfer. A WhatsApp confirmation of the agreed rate from the counterparty is enforceable evidence in a dispute.
+
+If the transaction is SDG-denominated, convert as close to the payment date as possible. Do not hold SDG for weeks while paperwork concludes — depreciation in that window is a real cost.
+
+Always do a small verification transfer first: send $200–300 and confirm it arrives correctly and at what rate before sending the main amount. The extra step costs two days. A failed large transfer costs much more.
+
+**Step 6: Know when to wire versus when to hold**
+
+The single most common diaspora property mistake is paying before conditions are verified. The principle: funds should move only when something tangible and verified moves in return.
+
+Reasonable to wire: a holding deposit of one month's rent once you have completed the live video walkthrough, the title check, and the agent verification — and once a trusted local contact has physically confirmed the property exists and is vacant as described.
+
+Not reasonable to wire: a full advance rent payment, a purchase deposit, or any amount above a nominal holding sum before keys are in trusted hands and the title has been independently verified.
+
+The social pressure in diaspora transactions is real — landlords who say the unit will be gone tomorrow, agents who create urgency. Good properties do move quickly in markets like Khartoum 2 and Riyadh. The answer to this pressure is not to skip steps; it is to have your local verifier ready before you start looking, so the process takes days rather than weeks.
+
+---
+
+None of this makes Sudan's property market exceptional in its risks — every market has information asymmetries that hurt remote buyers. Sudan's version is specific and navigable once you understand it. The families who transact well are not luckier; they are more prepared.`,
+    bodyAr: `تحويل الأموال إلى السودان لعقار لم تُفتّشه جسدياً قط هو، بالنسبة لآلاف العائلات المغتربة، فعل توكّل. ينبغي ألا يكون كذلك. المخاطر حقيقية وموثقة جيداً: ودائع دُفعت لشقق يسكنها أشخاص آخرون، وأسعار شراء حُوِّلت لأراضٍ متنازع على ملكيتها، وإيجارات سنوية دُفعت مقدماً لعقارات ذات مشكلات هيكلية لم تُكشف. ما يلي ليس توصية باليأس — معظم الصفقات تُتم دون حوادث — بل قائمة مرجعية عملية تُفرّق بين العائلات التي تتعامل بأمان وتلك التي تشارك قصص التحذير في منتديات المجتمع.
+
+**الخطوة الأولى: ابحث في صك الملكية عبر سجل الأراضي الحكومي**
+
+أول ما تسأل عنه أي بائع أو مالك ليس السعر. بل: "هل يمكنني رؤية رقم التسجيل من سجل الأراضي الحكومي المختص؟" في الخرطوم، الجهة هي سجل أراضي ولاية الخرطوم (تسجيل الأراضي). في بورتسودان، النظير في ولاية البحر الأحمر. في ودمدني، سجل أراضي ولاية الجزيرة.
+
+الملكية المسجلة الشرعية لها رقم. يمكنك أنت أو جهة اتصال محلية موثوقة التحقق من أن الرقم يقابل العقار الموصوف بزيارة السجل أو الاتصال به. بائع يُقدم "شهادة ملكية" خاصة أو وثيقة مشهوداً عليها لكنه لا يستطيع إثبات رقم التسجيل يُقدم شيئاً لا سند قانوني رسمي له. ملجأك بعد الدفع في هذا السيناريو يكاد يكون معدوماً.
+
+النمط الذي يجب الانتباه إليه: بائعون اشتروا أو ورثوا الملكية عبر ترتيبات تقليدية تسبق التسجيل الرسمي — بائع حقيقي وعقار حقيقي وبدون رقم سجل لأن الصفقة لم تُضفَ إليها الرسمية قط. هذا شائع في أحياء أم درمان وبحري القديمة. قد يكون العقار شرعياً في نظر المجتمع، لكنك تحمل مخاطر أي طعن قانوني مستقبلي. أصرّ على الإضفاء الرسمي قبل تحرك الأموال.
+
+**الخطوة الثانية: أجرِ جولة الفيديو المباشرة بالشكل الصحيح**
+
+الصور تكذب بالحذف. الفيديو المسجل مسبقاً قد يكون من وحدة مختلفة كلياً. الحد الأدنى لصفقة عن بُعد هو مكالمة واتساب أو زوم مباشرة يسير فيها شخص لديه وصول فعلي للعقار من مدخل الشارع عبر كل غرفة، يفتح كل نافذة، يُسيل كل مرحاض، يُشغّل كل صنبور، يُريك خزان المياه على السطح، ويفتح لوحة الكهرباء لتأكيد ما هو متاح من مولد أو اتصال بالشبكة.
+
+هذا يستغرق عشرين إلى ثلاثين دقيقة وهو غير قابل للتفاوض في أي صفقة تتجاوز ٥٠٠ دولار. مالك يرفض هذا المعيار لمستأجر عن بُعد يجب أن يُستبعد من الاعتبار تلقائياً.
+
+أفضل من جولة موجَّهة ذاتياً من المالك أو الوسيط: رتّب لمتحقق محلي مستقل — صديق أو فرد عائلي أو خدمة فحص مدفوعة غير مرتبطة بالوسيط — لإجراء الجولة بشكل منفصل. حافز الوسيط هو إغلاق الصفقة. حافز متحققك يجب أن يكون دقتك.
+
+**الخطوة الثالثة: تحقق من وسيطك**
+
+لا يوجد في السودان نظام ترخيص للوسطاء العقاريين. كلمة "وسيط" تشمل كل شخص من محترف ذي عشر سنوات خبرة وسجل معروف إلى شخص قرأ إعلاناً على فيسبوك هذا الصباح وقرر تمثيله. قبل دفع أي رسوم وسيط أو الوثوق بتحقق وسيط من عقار، أثبت ثلاثة أشياء: اسمه الكامل ورقم هويته الوطنية؛ مراجع من عميلين سابقين على الأقل تستطيع التواصل معهما باستقلالية (ليس أرقاماً يُعطيها — بل أسماء تجدها عبر شبكات المجتمع)؛ وإجابة متماسكة على "في أي أحياء عملت ولكم من الوقت؟"
+
+وسيط ذو خمس سنوات خبرة في الخرطوم الرياض أو جاردن سيتي سيكون معروفاً في ذلك المجتمع. تحقق من المعرفة لا من الادعاء فحسب.
+
+رسوم الوسيط في السودان غير منظمة: عادةً شهر إيجار لعملية ناجحة تُدفع من الطرف الذي استعان بالوسيط أو مقسّمة. احذر من أي شخص يطالب برسوم قبل عرض أي عقارات أو تقديم مراجع.
+
+**الخطوة الرابعة: افهم مشهد الضمان المحتجز واعمل بما هو متاح**
+
+لا يوجد في السودان بنية تحتية رسمية للضمان المحتجز. هذه نقطة البداية الصادقة. الفجوة المؤسسية التي تحمي المشترين والمستأجرين في الأسواق العقارية المنظمة — حساب محايد يحتجز الأموال حتى تُتحقق الشروط — لا وجود لها بشكل معياري هنا.
+
+ما يوجد بدلاً منه: الدفع المشروط عبر طرف ثالث مشترك موثوق. النسخة الأكثر موثوقية هي فرد عائلي موثوق به من كلا الطرفين، أو شيخ مجتمع تمتد سمعته عبر كلا الشبكتين. تبقى الأموال لدى هذا الشخص وتُحوَّل حين تكون مفاتيح العقار في يد المستأجر وانقضت مدة فحص ٤٨ ساعة دون نزاع.
+
+بعض المنصات والخدمات المرتبطة بالمنظمات غير الحكومية تبدأ في تقديم تيسير أساسي للمعاملات. هذه في طور النشأة. في الوقت الراهن، القاعدة العملية هي: لا تُحوّل أكثر مما تستطيع تحمّل خسارته حتى يحمل شخص موثوق المفاتيح فعلياً نيابةً عنك.
+
+**الخطوة الخامسة: اضبط توقيت العملة بدقة**
+
+السعر الموازي للجنيه السوداني مقابل الدولار متقلب. تحويل مُوقَّت بشكل سيئ قد يصل بقيمة أقل بـ١٠–٢٠٪ مما خططت له. تنطبق عدة مبادئ عملية:
+
+إن كانت الصفقة مسعَّرة بالدولار، حوّل بالدولار وحدد لخدمة الحوالة أو التحويل المتلقية أن التسليم يجب أن يكون بالدولار أو بسعر متفق ومُسجَّل كتابةً قبل التحويل. تأكيد واتساب للسعر المتفق عليه من الطرف المقابل هو دليل يمكن الاحتجاج به في نزاع.
+
+إن كانت الصفقة مسعَّرة بالجنيه السوداني، حوّل أقرب ما يمكن من موعد الدفع. لا تحتفظ بالجنيه لأسابيع ريثما تُكتمل الأوراق — الانخفاض في تلك الفترة تكلفة حقيقية.
+
+قم دائماً بتحويل تحقق صغير أولاً: أرسل ٢٠٠–٣٠٠ دولار وتأكد من وصوله بالشكل الصحيح وبأي سعر قبل إرسال المبلغ الرئيسي. الخطوة الإضافية تكلف يومين. تحويل رئيسي فاشل يكلف أكثر بكثير.
+
+**الخطوة السادسة: اعرف متى تُحوّل ومتى تنتظر**
+
+أكثر أخطاء العقار لدى المغتربين شيوعاً هو الدفع قبل التحقق من الشروط. المبدأ: يجب أن تتحرك الأموال فقط حين يتحرك شيء ملموس ومتحقق في المقابل.
+
+مقبول التحويل: وديعة حجز بشهر إيجار واحد بمجرد إتمام جولة الفيديو المباشرة والتحقق من الصك والتحقق من الوسيط — وبمجرد أن جهة اتصال محلية موثوقة أكدت جسدياً أن العقار موجود وشاغر كما وُصف.
+
+غير مقبول التحويل: دفعة إيجار مقدمة كاملة، أو وديعة شراء، أو أي مبلغ فوق وديعة احتجاز اسمية قبل وجود المفاتيح في يد موثوقة والتحقق المستقل من الصك.
+
+الضغط الاجتماعي في صفقات المغتربين حقيقي — ملاك يقولون إن الوحدة ستُؤخذ غداً، ووسطاء يصنعون الإلحاح. العقارات الجيدة تتحرك بسرعة في أسواق كالخرطوم ٢ والرياض. الإجابة على هذا الضغط ليست تجاوز الخطوات؛ بل أن تجهّز متحققك المحلي قبل أن تبدأ البحث، حتى تستغرق العملية أياماً لا أسابيع.
+
+---
+
+لا شيء من هذا يجعل السوق العقاري السوداني استثنائياً في مخاطره — كل سوق لديه تفاوتات معلومات تضر بالمشترين عن بُعد. النسخة السودانية محددة وقابلة للتنقل حين تفهمها. العائلات التي تتعامل جيداً ليست أوفر حظاً؛ هي أكثر استعداداً.`,
+  },
+  {
+    slug: "power-water-generators-what-listings-dont-say",
+    titleEn:
+      "Power, water, generators: what every Sudanese landlord knows that listings don't say",
+    titleAr:
+      "الكهرباء والمياه والمولدات: ما يعرفه كل مالك سوداني ولا تقوله القوائم",
+    publishedAt: "2026-05-04",
+    authorEn: "Sukan Editorial",
+    authorAr: "تحرير سُكَن",
+    excerptEn:
+      "An honest look at infrastructure realities across Khartoum, Bahri, and Omdurman — and how to read between the lines of what listings don't say about power and water.",
+    excerptAr:
+      "نظرة صادقة على واقع البنية التحتية في الخرطوم وبحري وأم درمان — وكيفية قراءة ما بين سطور ما لا تقوله قوائم العقارات عن الكهرباء والمياه.",
+    heroImage:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&auto=format&fit=crop",
+    category: "Neighborhoods",
+    bodyEn: `Every property listing in Khartoum mentions the apartment's bedrooms, its floor, its distance from a main road. Almost none of them mention the thing that will shape your daily life more than any of those features: how many hours a day you will actually have electricity, whether the water pressure dies in July, and what the building's generator arrangement costs to run.
+
+This is not dishonesty on the part of landlords and agents — it is a shared assumption that tenants already know the infrastructure realities and will ask the right questions. Most diaspora and international tenants do not know, and do not ask, and then discover the truth one humid August afternoon when the power has been out since noon and the water pressure in the fourth-floor bathroom has dropped to a trickle.
+
+**How to read the Khartoum grid**
+
+The national electricity grid in Khartoum is managed by the Sudan Electricity Transmission and Distribution Company. The practical experience for a tenant is determined less by which company manages the grid and more by which circuit your building sits on, and whether your landlord has invested in backup.
+
+The grid in greater Khartoum can be thought of in rough tiers. The first tier — diplomatic zones, parts of Khartoum 2, the area around key government buildings — gets informal priority because the political cost of cutting power to embassies and senior officials is higher than the political cost of cutting power to residential neighbourhoods. Buildings in or adjacent to these zones benefit tangentially. The second tier covers the main residential and commercial corridors: Amarat, Riyadh, Khartoum 3, Garden City, Kafouri in Bahri. Here, cuts are real and daily, but they pattern somewhat predictably — often rotating by sector, with the cut cycle running four to eight hours off, eight to twelve hours on. The third tier covers older residential areas, peripheral suburbs, and anywhere the grid infrastructure is most aged: parts of Mulazimin in Omdurman, older Bahri industrial neighbourhoods, and any area where the substation is known to be overloaded.
+
+What matters most, and what no listing tells you, is the building's position relative to these circuits — and more importantly, what backup arrangement, if any, exists.
+
+**The generator question: what to ask and how to ask it**
+
+Sudan's private generator market is enormous and entirely informal. Every fuel station sells diesel. Every market has generator parts. The result is that there is an enormous range in backup quality across buildings that would appear identical on a listing.
+
+The questions to ask before signing any lease:
+
+"Does the building have a generator?" (Yes/No — basic but worth confirming)
+
+"How many kilowatts is it?" (A small 5kW generator powers lights and fans. A 20kW unit powers air conditioning. A building that claims "generator" without specifying capacity may be describing something that runs a single stairwell light.)
+
+"What does it cover?" (Common areas only? Or does it extend to apartments? Which floors?)
+
+"Who manages it and how is fuel paid for?" (Some buildings include generator fuel in the rent — ask this explicitly, because the monthly fuel cost for a building's generator running eight-hour shifts can be $200–400, and the question is who is paying it.)
+
+"How quickly does it kick in when the power goes off?" (An automatic transfer switch cuts in within thirty seconds — you barely notice. A manual generator that requires someone to walk to a shed and pull a cord can leave you dark for thirty minutes or more.)
+
+The most expensive buildings in Khartoum 2 and Riyadh have answered all of these questions well. Most mid-market buildings in Khartoum 3 and Bahri have answered some of them. Older stock in Omdurman has often answered none.
+
+**Water: the forgotten variable**
+
+The water conversation is simpler than the power conversation but equally important and equally absent from listings.
+
+Khartoum's piped water system supplies different parts of the city from different treatment and pumping points, and the pressure varies considerably. The basic question is: does the building have a roof-top storage tank? In almost all quality apartment buildings, the answer should be yes — a tank that refills when pressure is available and releases by gravity when it is not. If the answer is no, any ground-floor pressure problem directly affects your taps.
+
+The second question: when was the tank last cleaned? In buildings with absentee landlords or poor management, tanks are sometimes neglected for years. Algae, sediment, and occasionally rodents find their way into neglected tanks. This is not a theoretical problem — it has genuine health implications. Ask. Look if you can.
+
+The geography of water pressure in greater Khartoum follows its own logic. Bahri's newer areas — Kafouri, the planned residential zones along the eastern ring — have pipe networks extended relatively recently and pressure can be inconsistent, particularly in summer when agricultural and industrial demand peaks in the north bank's industrial corridor. Central Khartoum's older network, paradoxically, sometimes has better consistent pressure in the zones it was designed for. Omdurman is genuinely variable: some streets near the White Nile have good pressure; older interior streets can drop to almost nothing in a dry summer peak week.
+
+**What to do with this information**
+
+The practical conclusion is not to avoid any neighbourhood — it is to ask specific questions before any transaction and to price what you are actually getting, not what the listing implies.
+
+A Khartoum 2 villa at $900/month with full generator coverage, automatic transfer, and a clean rooftop tank is genuinely different from the same villa at $700/month where you supply your own generator fuel arrangement and pray the municipal water is enough. The numbers are different. The life is different. The listing will not tell you which one you are renting.
+
+Ask. Walk in on a weekday at 2pm when the grid load is highest and see what the power situation is. Run the taps. Ask when the tank was last cleaned. Talk to a neighbour on a different floor if you can. The five minutes of due diligence has a better return than almost anything else you can do in a Sudanese property search.`,
+    bodyAr: `كل قائمة عقارية في الخرطوم تذكر غرف الشقة وطابقها وبُعدها عن الشارع الرئيسي. لا تكاد أي منها تذكر الشيء الذي سيُشكّل حياتك اليومية أكثر من أي من تلك الخصائص: عدد الساعات التي ستمتلك فيها الكهرباء فعلياً كل يوم، وما إذا كان ضغط المياه يختفي في يوليو، وما الذي تكلّفه ترتيبات مولد المبنى.
+
+هذا ليس عدم أمانة من جانب الملاك والوسطاء — بل افتراض مشترك بأن المستأجرين يعرفون بالفعل واقع البنية التحتية وسيطرحون الأسئلة الصحيحة. معظم المغتربين والمستأجرين الدوليين لا يعرفون ولا يسألون، ثم يكتشفون الحقيقة في ظهيرة أغسطس رطبة حين تكون الكهرباء منقطعة منذ الظهر وضغط المياه في حمام الطابق الرابع قد نزل إلى خيط رفيع.
+
+**كيف تقرأ شبكة الخرطوم**
+
+الشبكة الكهربائية الوطنية في الخرطوم يديرها معيار الكهرباء السودانية. التجربة العملية للمستأجر تتحدد بدرجة أقل من قِبَل الشركة التي تدير الشبكة وأكثر من قِبَل الدائرة التي يقع مبناك عليها، وما إذا كان مالكك قد استثمر في احتياطي.
+
+يمكن تصور الشبكة في الخرطوم الكبرى على مستويات تقريبية. المستوى الأول — المناطق الدبلوماسية وأجزاء من الخرطوم ٢ والمناطق المحيطة بالمباني الحكومية الرئيسية — تحظى بأولوية غير رسمية لأن التكلفة السياسية لقطع الكهرباء عن السفارات وكبار المسؤولين أعلى من التكلفة السياسية لقطعها عن الأحياء السكنية. المباني الواقعة في هذه المناطق أو المجاورة لها تستفيد بالتبعية. المستوى الثاني يشمل الممرات السكنية والتجارية الرئيسية: العمارات والرياض والخرطوم ٣ وجاردن سيتي وكفوري في بحري. هنا الانقطاعات حقيقية ويومية، لكنها تأخذ نمطاً يمكن التنبؤ به نسبياً — غالباً متناوب حسب القطاع، مع دورة انقطاع من أربع إلى ثماني ساعات إيقاف وثماني إلى اثنتي عشرة ساعة تشغيل. المستوى الثالث يشمل الأحياء السكنية القديمة والضواحي الطرفية وأي منطقة تكون فيها البنية التحتية للشبكة أكثر تقادماً: أجزاء من الملازمين في أم درمان وأحياء بحري الصناعية القديمة وأي منطقة يُعرف فيها المحول الفرعي بالحمل الزائد.
+
+الأهم، وما لا تُخبرك به أي قائمة، هو موقع المبنى بالنسبة لهذه الدوائر — والأهم من ذلك، ما هو الترتيب الاحتياطي إن وُجد.
+
+**سؤال المولد: ماذا تسأل وكيف**
+
+سوق المولدات الخاصة في السودان ضخم وغير رسمي بالكامل. كل محطة وقود تبيع الديزل. كل سوق فيه قطع غيار مولدات. النتيجة هي أن ثمة تفاوتاً هائلاً في جودة الاحتياطي بين المباني التي قد تبدو متطابقة في القائمة.
+
+الأسئلة التي تطرحها قبل توقيع أي عقد إيجار:
+
+"هل يمتلك المبنى مولداً؟" (نعم/لا — أساسي لكنه يستحق التأكيد)
+
+"كم كيلوواطه؟" (مولد صغير بـ٥ كيلوواط يُشغّل الأنوار والمراوح. وحدة ٢٠ كيلوواط تُشغّل التكييف. مبنى يدّعي "وجود مولد" دون تحديد الطاقة قد يصف شيئاً يُشغّل ضوء درج واحد فحسب.)
+
+"ماذا يغطي؟" (المناطق المشتركة فقط؟ أم يمتد إلى الشقق؟ أي طوابق؟)
+
+"من يديره وكيف تُدفع تكاليف الوقود؟" (بعض المباني تشمل وقود المولد في الإيجار — اسأل هذا صراحةً، لأن تكلفة الوقود الشهرية لمولد مبنى يعمل ثماني ساعات يومياً يمكن أن تبلغ ٢٠٠–٤٠٠ دولار، والسؤال من يدفعها.)
+
+"كم يستغرق التشغيل حين تنقطع الكهرباء؟" (مفتاح تحويل تلقائي يعمل خلال ثلاثين ثانية — لا تكاد تلاحظ. مولد يدوي يستلزم من شخص ما المشي إلى غرفة وسحب حبل قد يتركك في الظلام نصف ساعة أو أكثر.)
+
+أغلى المباني في الخرطوم ٢ والرياض أجابت على كل هذه الأسئلة جيداً. معظم مباني السوق المتوسط في الخرطوم ٣ وبحري أجابت على بعضها. المخزون القديم في أم درمان أجاب في الغالب على لا شيء.
+
+**المياه: المتغير المنسي**
+
+محادثة المياه أبسط من محادثة الكهرباء لكنها بالقدر نفسه من الأهمية وبالقدر نفسه غائبة عن القوائم.
+
+نظام المياه المنقولة في الخرطوم يُمدّ أجزاء مختلفة من المدينة من نقاط معالجة وضخ مختلفة، والضغط يتفاوت تفاوتاً كبيراً. السؤال الأساسي هو: هل يمتلك المبنى خزان تخزين على السطح؟ في تقريباً جميع مباني الشقق الجيدة الجودة، الإجابة يجب أن تكون نعم — خزان يُعاد ملؤه حين يكون الضغط متاحاً ويُطلق بالجاذبية حين لا يكون. إن كانت الإجابة لا، فأي مشكلة ضغط في الطابق الأرضي تؤثر مباشرةً على صنابيرك.
+
+السؤال الثاني: متى نُظِّف الخزان آخر مرة؟ في المباني ذات الملاك الغائبين أو الإدارة الضعيفة، تُهمل الخزانات أحياناً لسنوات. الطحالب والرواسب وأحياناً القوارض تجد طريقها إلى الخزانات المهملة. هذه ليست مشكلة نظرية — لها تداعيات صحية حقيقية. اسأل. انظر إن استطعت.
+
+جغرافيا ضغط المياه في الخرطوم الكبرى تتبع منطقها الخاص. مناطق بحري الأحدث — كفوري والمناطق السكنية المخططة على طول الحلقة الشرقية — شبكات أنابيبها امتدت حديثاً نسبياً والضغط يمكن أن يكون متقطعاً، لا سيما في الصيف حين يبلغ الطلب الزراعي والصناعي ذروته في الممر الصناعي للضفة الشمالية. الشبكة القديمة لوسط الخرطوم، ومفارقة، أحياناً تتمتع بضغط منتظم أفضل في المناطق التي صُمِّمت لخدمتها. أم درمان متقلبة فعلاً: بعض الشوارع القريبة من النيل الأبيض لديها ضغط جيد؛ الشوارع الداخلية القديمة يمكن أن تنخفض إلى ما لا يكاد يُذكر في ذروة صيفية جافة.
+
+**ما تفعله بهذه المعلومات**
+
+الاستنتاج العملي ليس تجنب أي حي — بل طرح أسئلة محددة قبل أي صفقة وتسعير ما تحصل عليه فعلاً لا ما يُضمره الإعلان.
+
+فيلا في الخرطوم ٢ بـ٩٠٠ دولار شهرياً مع تغطية كاملة بالمولد ومفتاح تحويل تلقائي وخزان سطح نظيف مختلفة فعلاً عن الفيلا ذاتها بـ٧٠٠ دولار حيث تدبّر ترتيب وقود المولد بنفسك وتأمل أن تكفي المياه البلدية. الأرقام مختلفة. الحياة مختلفة. القائمة لن تخبرك أي الاثنتين تستأجر.
+
+اسأل. ادخل في يوم عمل الساعة الثانية ظهراً حين يكون حمل الشبكة في أعلاه وانظر إلى وضع الكهرباء. افتح الصنابير. اسأل متى نُظِّف الخزان آخر مرة. تحدث إلى جار في طابق آخر إن استطعت. دقائق الخمس للعناية الواجبة لها عائد أفضل من تقريباً أي شيء آخر تستطيع فعله في بحث العقار السوداني.`,
+  },
+  {
+    slug: "khartoum-vs-rest-q2-2026-rentals",
+    titleEn:
+      "Khartoum vs the rest: where Q2 2026 rentals are heading",
+    titleAr: "الخرطوم مقابل البقية: إلى أين تتجه إيجارات الربع الثاني من ٢٠٢٦",
+    publishedAt: "2026-05-10",
+    authorEn: "Sukan Editorial",
+    authorAr: "تحرير سُكَن",
+    excerptEn:
+      "A quarterly read on rental price pressure across Sudan's top five cities. Diaspora demand spikes around Eid and summer break are reshaping seasonal patterns in ways that landlords feel and tenants should understand.",
+    excerptAr:
+      "قراءة ربع سنوية لضغط أسعار الإيجار عبر أبرز خمس مدن سودانية. ارتفاع طلب المغتربين حول العيد والإجازة الصيفية يعيد تشكيل الأنماط الموسمية بطرق يشعر بها الملاك ويجب أن يفهمها المستأجرون.",
+    heroImage:
+      "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&auto=format&fit=crop",
+    category: "Market",
+    bodyEn: `Sudan's property market is often described as if it were one market. It is not. It is five or six city economies operating on different cycles, different supply constraints, and fundamentally different demand drivers. What is true of Khartoum Riyadh in May 2026 tells you almost nothing about the rental dynamics in Atbara or Kassala. This quarterly read separates the five cities that matter for diaspora and returning renters and gives an honest account of where things stand as Q2 2026 opens.
+
+**Khartoum: tight at the top, soft in the middle**
+
+Greater Khartoum is the market that shapes all other perceptions, and the Q2 picture is consistent with the Q1 pattern: the top end is tight and moving upward, the middle is holding, and the lower end is softening.
+
+In Khartoum 2 and Riyadh — the two neighbourhoods that absorb most diaspora demand — asking rents for two-bedroom apartments in USD continue to track upward. The combination of genuine supply constraint (very little new quality construction), rising generator investment (landlords are spending more on backup infrastructure and pricing it into rent), and accelerating diaspora demand ahead of the Eid season has produced asking rents in Khartoum 2 that are now running 20–25% above their Q2 2025 levels in USD terms.
+
+Khartoum Garden City and Burri are showing a similar pattern, albeit off a lower base. The discovery of these neighbourhoods by diaspora families who have been priced out of Khartoum 2 is a Q1 2026 development that appears to be continuing: enquiries have risen, vacancy rates have dropped, and a handful of landlords who had not priced in USD are now doing so.
+
+Khartoum Amarat remains the market's stable centre: rents there are rising, but more slowly, driven by commercial demand and the office-residential mix that insulates it from pure diaspora cyclicality. Khartoum 3 is the outlier — new supply, price-sensitive domestic tenants, and limited diaspora pull have kept prices flat or declining in SDG terms.
+
+**Port Sudan: the post-2023 price plateau**
+
+Port Sudan's rental market ran very hot in 2023 and 2024 as displacement-driven internal migration flooded the city. By Q1 2026, that surge has largely been absorbed and the market is at a plateau — prices are not falling, but the rapid escalation has stopped.
+
+Corniche-facing apartments, which commanded a 30–50% premium at the peak of the displacement crisis, are now trading at a more sustainable 15–25% above comparable inland units. The city's permanent population has grown by an estimated 15–20% since 2022, and that structural demand supports the current price level. For diaspora families who were considering Port Sudan as an alternative to Khartoum, the window of relative value may have closed somewhat: rents are now high enough relative to the city's services and infrastructure that the calculus requires honest assessment of what you are paying for.
+
+**Wad Madani: agricultural cycle-driven stability**
+
+Wad Madani's rental market follows the agricultural calendar of the Gezira scheme more than it follows the Khartoum calendar. Q2 is planting preparation season in the scheme, which brings government agricultural extension workers, NGO monitors, and equipment contractors into the city temporarily — a modest seasonal bump in demand for furnished and short-let units.
+
+Overall, Wad Madani remains the most affordable city on this list at a structural level. A family can rent a three-bedroom house in the city center for under $150 per month in SDG terms. The currency conversion challenge for diaspora renters — landlords here are SDG-only — remains the main friction point rather than the price level itself.
+
+**Kassala: demand steady, supply thin**
+
+Kassala's rental market is fundamentally supply-constrained rather than demand-constrained. The city has consistent demand from government-posted staff, NGO workers supporting the regional refugee response, and a steady stream of agricultural contractors and researchers. What it lacks is adequate formal rental supply: much of the city's housing is owner-occupied or informally arranged within extended family networks.
+
+Rents in Kassala are low in absolute terms ($60–180 per month for a two to three-bedroom home) but the finding of a quality unit at those prices requires local network access that external renters simply do not have. The gap between listed and unlisted supply is larger in Kassala than in any other major Sudanese city.
+
+**Atbara: stable and overlooked**
+
+Atbara's rental market barely registers in national property discussions, which understates its functionality. The city has genuine steady-state demand from railway and infrastructure sector workers, teachers, and hospital staff on posting rotations. The price level ($200–500/month for a three-bedroom home) reflects the wage levels of those sectors, not any shortage of supply. The market is liquid in a quiet way: units become available, units get filled, landlords and tenants know each other or know someone who knows someone. No platform captures this market effectively.
+
+**The Eid and summer demand spike: what to expect**
+
+The most predictable seasonal force in Sudan's diaspora-driven rental markets is the pattern around Eid Al-Adha and the summer school holiday window, which typically sees the largest concentration of diaspora families returning or visiting. For Q2 2026, Eid Al-Adha falls in early June, and the summer holiday window for diaspora families with school-age children in Gulf countries, the UK, and Canada runs from late June through August.
+
+The practical effect: diaspora families who have not yet secured accommodation for a summer return are now competing with each other for the remaining quality stock in Khartoum 2, Riyadh, and Garden City. Landlords in those neighbourhoods are aware of this cycle and will price for it.
+
+The advice for families in this position is straightforward but uncomfortable: commit earlier than feels natural. A lease signed in May is cheaper than the same lease offered in June. A landlord who agrees to hold a unit for three weeks on a modest deposit in May is more likely to honour that agreement than one approached in late June when their options have improved.
+
+Families who can commit to twelve-month leases are in a structurally stronger position than those seeking six-month or summer-only arrangements. Twelve-month tenants provide the income certainty that landlords are managing for; short-term tenants during a demand spike are a worse deal for landlords even at a higher rate. Price accordingly when negotiating.
+
+**What the next quarter looks like**
+
+Q3 2026 will be shaped by three forces: post-Eid supply release (some families who held units for visits will release them after summer), the northern hemisphere school return in September (which brings diaspora families back, tightening supply again briefly), and the cumulative effect of generator-infrastructure investment on the stock of quality-rated units.
+
+The structural direction of Khartoum's top-end rental market is upward, and has been for three years. That direction is unlikely to change in the next quarter absent a significant improvement in grid reliability — which would reduce the generator premium that currently inflates rents — or a significant addition to quality supply, which the construction pipeline does not yet show.
+
+For renters, the market is navigable with preparation. For landlords with well-maintained, generator-equipped stock in the right postcodes, it remains one of the more rational investments available in greater Khartoum.`,
+    bodyAr: `كثيراً ما يُوصف سوق العقارات السوداني كما لو كان سوقاً واحداً. ليس كذلك. بل هو خمسة أو ستة اقتصادات مدنية تعمل وفق دورات مختلفة وقيود عرض مختلفة ومحركات طلب مختلفة جوهرياً. ما ينطبق على الخرطوم الرياض في مايو ٢٠٢٦ لا يُخبرك تقريباً بشيء عن ديناميكيات الإيجار في عطبرة أو كسلا. هذه القراءة الربع سنوية تُفرّق بين المدن الخمس الأهم للمغتربين والمستأجرين العائدين وتُقدم تقييماً صادقاً للوضع مع فتح الربع الثاني من ٢٠٢٦.
+
+**الخرطوم: ضيق في القمة، ليونة في المنتصف**
+
+الخرطوم الكبرى هي السوق الذي يُشكّل كل التصورات الأخرى، وصورة الربع الثاني تتسق مع نمط الربع الأول: القمة ضيقة وتتحرك صعوداً، والمنتصف ثابت، والطرف الأدنى يلين.
+
+في الخرطوم ٢ والرياض — الحيّين اللذين يستوعبان معظم طلب المغتربين — تواصل الإيجارات المطلوبة للشقق ذات الغرفتين بالدولار التتبع للأعلى. مزيج القيد الحقيقي في العرض (شبه غياب لبناء جيد جديد) وارتفاع استثمار المولدات (الملاك ينفقون أكثر على البنية التحتية الاحتياطية ويُسعّرونها في الإيجار) وتسارع طلب المغتربين قبيل موسم العيد أنتج إيجارات مطلوبة في الخرطوم ٢ تعمل الآن بارتفاع ٢٠–٢٥٪ فوق مستويات الربع الثاني من ٢٠٢٥ بالدولار.
+
+جاردن سيتي وبري في الخرطوم تُظهران نمطاً مشابهاً وإن من قاعدة أدنى. اكتشاف العائلات المغتربة لهذين الحيين بعد أن ضاق بهم الخرطوم ٢ هو تطور الربع الأول من ٢٠٢٦ الذي يبدو أنه مستمر: الاستفسارات ارتفعت ومعدلات الشواغر انخفضت وحفنة من الملاك الذين لم يُسعّروا بالدولار باتوا يفعلون ذلك.
+
+الخرطوم العمارات يبقى المركز الثابت للسوق: الإيجارات ترتفع لكن بوتيرة أبطأ، تدفعها الطلب التجاري والمزيج المكتبي-السكني الذي يُعزلها عن دورية المغتربين الخالصة. الخرطوم ٣ هو الاستثناء — عرض جديد ومستأجرون محليون حساسون للسعر وجاذبية محدودة للمغتربين أبقت الأسعار مستقرة أو منخفضة بالجنيه.
+
+**بورتسودان: هضبة الأسعار ما بعد ٢٠٢٣**
+
+سوق الإيجار في بورتسودان كان شديد الحرارة في ٢٠٢٣ و٢٠٢٤ مع فيضان الهجرة الداخلية المدفوعة بالنزوح في المدينة. بحلول الربع الأول من ٢٠٢٦، استُوعبت تلك الموجة إلى حد بعيد والسوق على هضبة — الأسعار لا تنخفض، لكن التصاعد السريع توقف.
+
+الشقق المطلة على الكورنيش التي طالبت بعلاوة ٣٠–٥٠٪ في ذروة أزمة النزوح، تتداول الآن بعلاوة أكثر استدامة من ١٥–٢٥٪ فوق الوحدات المماثلة في الداخل. نمت السكان الدائمة للمدينة بنسبة ١٥–٢٠٪ تقديراً منذ ٢٠٢٢، وهذا الطلب الهيكلي يدعم مستوى الأسعار الراهن. للعائلات المغتربة التي كانت تعتبر بورتسودان بديلاً للخرطوم، ربما انغلق نافذة القيمة النسبية نسبياً: الإيجارات الآن مرتفعة بما يكفي نسبة إلى خدمات المدينة وبنيتها التحتية لتستوجب حساباً صادقاً لما تدفعه مقابله.
+
+**ودمدني: استقرار مدفوع بالدورة الزراعية**
+
+يتبع سوق الإيجار في ودمدني التقويم الزراعي لمشروع الجزيرة أكثر مما يتبع تقويم الخرطوم. الربع الثاني هو موسم تحضير الزراعة في المشروع، مما يجلب عمال الإرشاد الحكومي الزراعي ومراقبي المنظمات غير الحكومية ومقاولي المعدات إلى المدينة مؤقتاً — ارتفاع موسمي متواضع في الطلب على الوحدات المفروشة وقصيرة الإيجار.
+
+بشكل عام، تبقى ودمدني المدينة الأرخص في هذه القائمة على المستوى الهيكلي. عائلة يمكنها استئجار منزل ثلاث غرف في مركز المدينة بأقل من ١٥٠ دولار شهرياً بالجنيه. تحدي تحويل العملة للمستأجرين المغتربين — الملاك هنا بالجنيه حصراً — يبقى نقطة الاحتكاك الرئيسية لا مستوى السعر ذاته.
+
+**كسلا: طلب ثابت وعرض شحيح**
+
+سوق الإيجار في كسلا مقيّد بالعرض جوهرياً لا بالطلب. للمدينة طلب ثابت من موظفي الحكومة المُكلَّفين وعمال المنظمات الداعمة للاستجابة الإقليمية للاجئين وتدفق ثابت من مقاولي الزراعة والباحثين. ما تفتقر إليه هو عرض إيجار رسمي كافٍ: كثير من مساكن المدينة يسكنها أصحابها أو مُرتَّبة بشكل غير رسمي داخل الشبكات العائلية الممتدة.
+
+الإيجارات في كسلا منخفضة بمعايير مطلقة (٦٠–١٨٠ دولار شهرياً لمنزل غرفتين إلى ثلاث) لكن إيجاد وحدة جيدة بتلك الأسعار يستلزم وصولاً للشبكة المحلية ببساطة لا يمتلكه المستأجرون الخارجيون. الفجوة بين العرض المُدرج وغير المُدرج أكبر في كسلا من أي مدينة سودانية كبرى أخرى.
+
+**عطبرة: ثابتة ومهملة**
+
+سوق الإيجار في عطبرة بالكاد يرد في النقاشات العقارية الوطنية، مما يُقلّل من تقدير فاعليته. للمدينة طلب ثابت حقيقي من عمال قطاع السكك الحديدية والبنية التحتية والمعلمين والعاملين في المستشفيات ضمن دورات التكليف. مستوى السعر (٢٠٠–٥٠٠ دولار شهرياً لمنزل ثلاث غرف) يعكس مستويات أجور تلك القطاعات لا أي نقص في العرض. السوق سائل بطريقة هادئة: وحدات تُتاح ووحدات تُملأ وملاك ومستأجرون يعرفون بعضهم أو يعرفون من يعرف من. لا منصة تلتقط هذا السوق بفاعلية.
+
+**ارتفاع طلب العيد والصيف: ما تتوقعه**
+
+أكثر القوى الموسمية قدرة على التنبؤ في الأسواق الإيجارية المدفوعة بالمغتربين هو النمط حول عيد الأضحى ونافذة إجازة الصيف المدرسية، التي تشهد عادةً أكبر تركّز لعائلات المغتربين العائدين أو الزائرين. في الربع الثاني من ٢٠٢٦، يصادف عيد الأضحى مطلع يونيو، وتمتد نافذة الإجازة الصيفية لعائلات المغتربين ذوي الأبناء في سن الدراسة في دول الخليج والمملكة المتحدة وكندا من أواخر يونيو حتى أغسطس.
+
+الأثر العملي: العائلات المغتربة التي لم تُؤمّن بعد مسكناً لعودة صيفية باتت تتنافس مع بعضها على المخزون الجيد المتبقي في الخرطوم ٢ والرياض وجاردن سيتي. الملاك في تلك الأحياء يدركون هذه الدورة وسيُسعّرون لها.
+
+النصيحة للعائلات في هذا الوضع مباشرة لكنها غير مريحة: التزمي مبكراً مما يبدو طبيعياً. عقد إيجار موقّع في مايو أرخص من العقد ذاته المعروض في يونيو. مالك يوافق على حجز الوحدة لثلاثة أسابيع بوديعة متواضعة في مايو أكثر احتمالاً للوفاء بالاتفاق من مالك يُقترب منه في أواخر يونيو حين تحسّنت خياراته.
+
+العائلات القادرة على الالتزام بعقود اثني عشر شهراً في موقع هيكلي أقوى من تلك التي تسعى لترتيبات ستة أشهر أو صيف فقط. المستأجرون لاثني عشر شهراً يوفرون يقين الدخل الذي يديره الملاك؛ المستأجرون قصيرو الأمد خلال ارتفاع الطلب صفقة أسوأ للملاك حتى بسعر أعلى. سعّر وفق ذلك حين تتفاوض.
+
+**ما يبدو عليه الربع القادم**
+
+سيُشكَّل الربع الثالث من ٢٠٢٦ بثلاثة عوامل: إطلاق العرض ما بعد العيد (بعض العائلات التي حجزت وحدات للزيارة ستُطلقها بعد الصيف)، وعودة الفصل الدراسي للنصف الشمالي من الكرة في سبتمبر (التي تعيد عائلات المغتربين مضيّقةً العرض مجدداً بإيجاز)، والأثر التراكمي لاستثمار البنية التحتية للمولدات على مخزون الوحدات ذات التقييم الجيد.
+
+الاتجاه الهيكلي لسوق الإيجار الراقي في الخرطوم صاعد، ومستمر منذ ثلاث سنوات. من غير المرجح أن يتغير هذا الاتجاه في الربع القادم غياب تحسن جوهري في موثوقية الشبكة — مما سيُقلل من علاوة المولد التي تُضخّم الإيجارات حالياً — أو إضافة جوهرية للعرض الجيد، وهو ما لا تُظهره خطوط الإنشاء بعد.
+
+للمستأجرين، السوق قابل للتنقل مع الاستعداد. للملاك ذوي المخزون الجيد الصيانة المجهز بمولد في الرموز البريدية الصحيحة، يبقى من الاستثمارات الأكثر عقلانية المتاحة في الخرطوم الكبرى.`,
+  },
 ];
 
 export function getInsightBySlug(slug: string): Insight | null {

@@ -346,6 +346,190 @@ export const guides: Guide[] = [
     },
   },
   {
+    slug: "khartoum-garden-city-burri",
+    nameEn: "Khartoum Garden City / Burri",
+    nameAr: "الخرطوم جاردن سيتي / بري",
+    state: "khartoum",
+    heroImage:
+      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&auto=format&fit=crop",
+    introEn:
+      "Garden City and Burri sit in the arc of eastern Khartoum between the Blue Nile and the airport road — a zone that diaspora families have quietly claimed as their own over the past two decades. The neighbourhood is a mix of older mid-rise apartment blocks from the 1980s and 1990s, newer compound villas behind high walls, and a scattering of embassy annexes and international NGO offices that give the area a particular calibre of upkeep. Streets here are wider than central Khartoum, trees survive in the median strips, and the density stays low enough to feel residential even at midday. For families returning from the Gulf or North America who want proximity to the airport and a degree of physical privacy, Garden City and Burri consistently top the shortlist.",
+    introAr:
+      "تقع جاردن سيتي وبري في القوس الشرقي من الخرطوم بين النيل الأزرق وطريق المطار — منطقة استوطنتها عائلات المغتربين بهدوء على مدى العقدين الماضيين. يجمع الحي بين مباني شقق متوسطة الارتفاع تعود إلى الثمانينيات والتسعينيات، وفيلات مسوّرة أحدث خلف جدران عالية، وتوزع متفرق من ملحقات السفارات ومكاتب المنظمات الدولية يمنح المنطقة مستوى لافتاً من الصيانة. الشوارع هنا أوسع من وسط الخرطوم، والأشجار تصمد في الجزر الوسطية، والكثافة تبقى منخفضة بما يجعل الطابع سكنياً حتى في منتصف النهار. للعائلات العائدة من الخليج أو أمريكا الشمالية التي تريد القرب من المطار وقدراً من الخصوصية، تتصدر جاردن سيتي وبري القائمة المختصرة باستمرار.",
+    sections: [
+      {
+        titleEn: "Who lives here",
+        titleAr: "من يسكن هنا",
+        bodyEn:
+          "Garden City and Burri have attracted a particular profile: Sudanese professionals who spent years in Riyadh, Dubai, or London and want a home that does not feel like a downgrade. The neighbourhood has an unusually high proportion of owner-occupiers who bought or built in the 1990s and 2000s, many of them diaspora families who remitted consistently until they could afford a compound purchase. The rental market that exists is largely sub-letting — children of owners who have moved abroad leasing their parents' ground floors. Embassy staff and UN personnel account for a secondary demand layer, keeping standards high and vacancy rates low. The community skews educated, cosmopolitan, and socially quiet.",
+        bodyAr:
+          "استقطبت جاردن سيتي وبري ملفاً بعينه: محترفون سودانيون أمضوا سنوات في الرياض أو دبي أو لندن ويريدون منزلاً لا يبدو تراجعاً عن ما اعتادوه. يتمتع الحي بنسبة غير عادية من السكان أصحاب الملك ممن اشتروا أو بنوا في التسعينيات والألفية، كثير منهم عائلات مغتربة حوّلت باستمرار حتى استطاعت شراء مجمع. السوق الإيجاري القائم هو في معظمه تأجير من الباطن — أبناء الملاك المغتربين يؤجرون الطوابق الأرضية لبيوت آبائهم. يمثل موظفو السفارات وهيئات الأمم المتحدة طبقة طلب ثانوية تُبقي المعايير مرتفعة ومعدلات الشواغر منخفضة. المجتمع في مجمله متعلم وكوسموبوليتاني وهادئ اجتماعياً.",
+      },
+      {
+        titleEn: "What it's like day-to-day",
+        titleAr: "الحياة اليومية",
+        bodyEn:
+          "Power reliability in Garden City and Burri sits at the better end of the Khartoum scale — the area benefits from a grid circuit shared with embassy and diplomatic zones, which enjoy a degree of informal priority. Expect eight to eleven hours of grid supply, with most quality compounds running generator backup that covers the remainder. Water pressure is generally good; the pipe network serving this corridor has benefited from periodic NGO-funded maintenance. Day-to-day retail is somewhat thin compared to Khartoum 3 or Amarat: there is no central souq, but a handful of neighbourhood grocery shops, a pharmacy, and a bakery cover basics. For anything larger, the Riyadh shopping strip is ten minutes by car. The airport corridor is the defining geographic advantage — early-morning and late-night flights are significantly less stressful when you are six kilometres from the terminal.",
+        bodyAr:
+          "موثوقية الكهرباء في جاردن سيتي وبري من الأفضل في الخرطوم — تستفيد المنطقة من دائرة كهربائية مشتركة مع مناطق السفارات والدبلوماسيين التي تحظى بأولوية غير رسمية. توقع ثماني إلى إحدى عشرة ساعة من إمداد الشبكة، ومعظم المجمعات الجيدة تشغّل مولدات احتياطية تغطي الباقي. ضغط المياه جيد عموماً؛ شبكة الأنابيب التي تخدم هذا الممر استفادت من صيانة دورية بتمويل المنظمات الدولية. التجزئة اليومية محدودة نسبياً مقارنة بالخرطوم ٣ أو العمارات: لا يوجد سوق مركزي، لكن حفنة من محلات البقالة الحيّية وصيدلية ومخبز تغطي الأساسيات. لأي شيء أكبر، شارع تسوق الرياض على بُعد عشر دقائق بالسيارة. ممر المطار هو الميزة الجغرافية الحاسمة — الرحلات المبكرة وأواخر الليل أقل إرهاقاً بكثير حين تكون على بعد ستة كيلومترات من الصالة.",
+      },
+      {
+        titleEn: "What to know before renting",
+        titleAr: "ما يجب معرفته قبل الاستئجار",
+        bodyEn:
+          "Garden City and Burri landlords are among Khartoum's most internationally-minded — most price in USD, understand lease agreements in writing, and are familiar with the expectations of diaspora or international tenants. The trade-off is that they also price accordingly: a two-bedroom apartment in a well-maintained compound will rarely appear below $500 per month. Sub-letting arrangements require the original owner's written consent — this is often overlooked, creating legal ambiguity if the primary lease is challenged. If renting remotely, verify that the person showing the property actually has authority to lease it, not just the keys. The best Garden City and Burri units rarely surface on public platforms — a trusted local contact or an agent who works specifically this corridor is worth more than any app.",
+        bodyAr:
+          "ملاك جاردن سيتي وبري من أكثر ملاك الخرطوم توجهاً دولياً — معظمهم يسعّرون بالدولار ويفهمون عقود الإيجار المكتوبة ويدركون توقعات المستأجرين المغتربين والدوليين. المقابل هو أنهم يسعّرون وفق ذلك: شقة بغرفتين في مجمع جيد الصيانة نادراً ما تظهر بأقل من ٥٠٠ دولار شهرياً. ترتيبات الإيجار من الباطن تستلزم موافقة خطية من المالك الأصلي — كثيراً ما يُتغاضى عن هذا، مما يخلق غموضاً قانونياً إن طُعن في عقد الإيجار الأساسي. إن كنت تستأجر عن بُعد، تحقق من أن الشخص الذي يُريك العقار لديه فعلاً صلاحية تأجيره لا مجرد المفاتيح. أفضل وحدات جاردن سيتي وبري نادراً ما تظهر على المنصات العامة — جهة اتصال محلية موثوقة أو وسيط يعمل تحديداً في هذا الممر تستحق أكثر من أي تطبيق.",
+      },
+    ],
+    vitals: {
+      typicalRentEn: "$500–1,200/mo for a 2BR apartment",
+      typicalRentAr: "٥٠٠–١٢٠٠ دولار/شهر لشقة غرفتين",
+      powerReliability: "Good",
+      waterReliability: "Good",
+      diasporaFavored: true,
+      nearestAirportKm: 6,
+    },
+  },
+  {
+    slug: "khartoum-riyadh",
+    nameEn: "Khartoum Riyadh",
+    nameAr: "الخرطوم الرياض",
+    state: "khartoum",
+    heroImage:
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&auto=format&fit=crop",
+    introEn:
+      "Riyadh is Khartoum's most deliberately modern residential neighbourhood — planned in the 1970s and 1980s with wider boulevards, setback buildings, and a grid that still feels ordered compared to the organic density of older quarters. Named for the Saudi capital whose influence on Sudanese architecture, wealth, and aspiration is visible on every street, Riyadh has become the address of choice for diaspora families returning from the Gulf with specific expectations about space, services, and social environment. The neighbourhood clusters around a main shopping and restaurant strip that runs for several blocks — the closest Khartoum gets to a genuine commercial high street — and spills into quieter villa compounds behind. Rents are the second-highest in the city, and for many families, the investment is justified.",
+    introAr:
+      "الرياض هو الحي السكني الأكثر حداثةً وعمدية في الخرطوم — مُخطَّط في السبعينيات والثمانينيات بشوارع رئيسية أوسع ومبانٍ متراجعة عن حدود الشارع وشبكة لا تزال تبدو منظمة مقارنة بكثافة الأحياء القديمة العضوية. سُمّي تيمّناً بالعاصمة السعودية التي يبدو تأثيرها على العمارة والثروة والطموح السوداني جلياً في كل شارع، وأصبح الرياض العنوان المفضل لعائلات المغتربين العائدين من الخليج بتوقعات محددة بشأن المساحة والخدمات والبيئة الاجتماعية. يتمحور الحي حول شارع تسوق ومطاعم رئيسي يمتد لعدة بنايات — أقرب ما وصلت إليه الخرطوم من شارع تجاري حقيقي — ثم يتسع إلى مجمعات فيلات أهدأ خلفه. الإيجارات الثانية الأعلى في المدينة، ولكثير من العائلات الاستثمار مبرر.",
+    sections: [
+      {
+        titleEn: "Who lives here",
+        titleAr: "من يسكن هنا",
+        bodyEn:
+          "Riyadh is diaspora Khartoum in concentrated form: senior professionals returning from Saudi Arabia, the Emirates, Kuwait, and Qatar who want an environment that does not disorient them after years abroad. The neighbourhood also houses a significant contingent of Gulf-based Sudanese who maintain a Riyadh property without living in it full-time, using it for family visits and as an eventual return base. International school families cluster here — the corridor to several private schools runs through or near Riyadh, making morning drop-offs practical. There is a visible social layer of business owners and entrepreneurs, people who run import-export operations or contracting firms and who use the neighbourhood's commercial strip as much as its residential quiet.",
+        bodyAr:
+          "الرياض هو الخرطوم المغتربة في صورة مكثّفة: محترفون رفيعو المستوى يعودون من المملكة العربية السعودية والإمارات والكويت وقطر ويريدون بيئة لا تزعزع توازنهم بعد سنوات في الخارج. يضم الحي أيضاً شريحة كبيرة من السودانيين المقيمين في الخليج الذين يمتلكون عقاراً في الرياض دون الإقامة فيه بدوام كامل، يستخدمونه لزيارات العائلة وقاعدة عودة محتملة. تتجمع عائلات المدارس الدولية هنا — يمر الممر إلى عدة مدارس خاصة عبر الرياض أو بالقرب منه مما يُسهّل إيصال الأبناء صباحاً. ثمة طبقة اجتماعية مرئية من أصحاب الأعمال والرواد، ممن يديرون عمليات الاستيراد والتصدير أو شركات المقاولات ويستخدمون الشريط التجاري للحي بقدر ما يستخدمون هدوءه السكني.",
+      },
+      {
+        titleEn: "What it's like day-to-day",
+        titleAr: "الحياة اليومية",
+        bodyEn:
+          "Power in Riyadh is the best in Khartoum by reliable accounts — the area's commercial strip and the density of businesses with their own generator investments create an informal grid resilience that benefits residential neighbours. In the villa compounds, many landlords have invested in high-capacity generators that cover gaps without the tenant ever noticing. Water supply is good throughout the neighbourhood; pipe networks here are better maintained than in older quarters. The commercial strip provides genuine daily convenience: supermarkets that stock imported goods, several decent restaurants, a pharmacy open late, and service businesses — tailors, printers, logistics offices — that make daily life functional. The airport, four kilometres away, is close enough to reach in fifteen minutes even at moderate traffic.",
+        bodyAr:
+          "الكهرباء في الرياض الأفضل في الخرطوم وفق روايات موثوقة — يخلق الشريط التجاري للحي وكثافة الأعمال ذات مولداتها الخاصة مرونة شبكية غير رسمية تفيد الجيران السكنيين. في مجمعات الفيلات، استثمر كثير من الملاك في مولدات عالية الطاقة تغطي الانقطاعات دون أن يلحظ المستأجر ذلك. إمداد المياه جيد في أرجاء الحي؛ شبكات الأنابيب هنا أفضل صيانةً من الأحياء القديمة. يوفر الشريط التجاري راحة يومية حقيقية: سوبرماركت يخزّن سلعاً مستوردة، وعدة مطاعم محترمة، وصيدلية تعمل حتى الليل، وأعمال خدمية — خياطون وطابعات ومكاتب لوجستية — تجعل الحياة اليومية وظيفية. المطار على بُعد أربعة كيلومترات، قريب بما يكفي للوصول إليه في خمس عشرة دقيقة حتى في ازدحام معتدل.",
+      },
+      {
+        titleEn: "What to know before renting",
+        titleAr: "ما يجب معرفته قبل الاستئجار",
+        bodyEn:
+          "Riyadh is Khartoum's most transparent rental market: written leases are the norm, USD pricing is standard for quality units, and agents who work this area tend to be more professionally oriented than the city average. The premium over comparable Khartoum 2 stock is real — expect to pay $100–200 more per month for equivalent space — and for many families the payoff is the commercial access and social environment. One practical note: the restaurant strip creates noise on weekends and evenings that extends into some of the closer residential blocks; visit on a Thursday or Friday evening to calibrate. If you are negotiating a long lease, ask specifically about service charges — some buildings levy monthly fees for security, cleaning, and generator fuel that are not always disclosed upfront.",
+        bodyAr:
+          "الرياض هو أكثر أسواق الإيجار في الخرطوم شفافية: عقود الإيجار المكتوبة هي القاعدة، والتسعير بالدولار معيار للوحدات الجيدة، والوسطاء العاملون في هذه المنطقة أكثر احترافاً من متوسط المدينة. العلاوة على مخزون الخرطوم ٢ المماثل حقيقية — توقع دفع ١٠٠–٢٠٠ دولار أكثر شهرياً للمساحة المعادلة — ولكثير من العائلات العائد هو الوصول التجاري والبيئة الاجتماعية. ملاحظة عملية: يخلق شريط المطاعم ضجيجاً في عطلات نهاية الأسبوع والأمسيات يمتد إلى بعض المباني السكنية الأقرب؛ قم بزيارة مساء الخميس أو الجمعة للمعايرة. إن كنت تتفاوض على عقد طويل، اسأل تحديداً عن رسوم الخدمات — بعض المباني تفرض رسوماً شهرية للأمن والنظافة ووقود المولد لا تُكشف دائماً مسبقاً.",
+      },
+    ],
+    vitals: {
+      typicalRentEn: "$800–1,800/mo for a 2BR apartment",
+      typicalRentAr: "٨٠٠–١٨٠٠ دولار/شهر لشقة غرفتين",
+      powerReliability: "Excellent",
+      waterReliability: "Good",
+      diasporaFavored: true,
+      nearestAirportKm: 4,
+    },
+  },
+  {
+    slug: "bahri-kafouri",
+    nameEn: "Bahri Kafouri",
+    nameAr: "بحري كفوري",
+    state: "khartoum",
+    heroImage:
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1600&auto=format&fit=crop",
+    introEn:
+      "Kafouri sits on the eastern flank of Bahri — Khartoum North — in what was, until relatively recently, the city's developmental frontier. Planned residential blocks replaced farmland and open desert here in a construction wave that peaked in the 2000s and early 2010s, leaving Kafouri with a distinctly newer fabric than the older Bahri riverside neighbourhoods: wider streets, more standardised apartment blocks, and a grid that was designed rather than accumulated. The neighbourhood has become a practical choice for families who want a modern apartment at a price point below the premium Khartoum 2 and Riyadh corridors, without sacrificing the social capital of the greater Khartoum address. A growing diaspora community has begun to take notice.",
+    introAr:
+      "يقع كفوري على الجانب الشرقي من بحري — الخرطوم بحري — فيما كان حتى وقت قريب الحدود التنموية للمدينة. حلّت المجمعات السكنية المخططة محل الأراضي الزراعية والصحراء المفتوحة في موجة بناء بلغت ذروتها في الألفية الأولى ومطلع العشرينيات، تاركةً لكفوري نسيجاً أحدث وضوحاً من أحياء بحري الكورنيش القديمة: شوارع أوسع ومبانٍ شقق أكثر توحداً وشبكة صُمِّمت عمداً بدلاً من تراكمها عضوياً. أصبح الحي خياراً عملياً للعائلات التي تريد شقة حديثة بسعر أدنى من ممرات الخرطوم ٢ والرياض الراقية دون التضحية بالرأسمال الاجتماعي لعنوان الخرطوم الكبرى. وبدأ مجتمع مغتربين متنامٍ في الالتفات إليه.",
+    sections: [
+      {
+        titleEn: "Who lives here",
+        titleAr: "من يسكن هنا",
+        bodyEn:
+          "Kafouri's residential population skews young and upwardly mobile: teachers, engineers, and mid-level civil servants who bought or rented in the 2010s and have stayed as the neighbourhood matured. There is a meaningful diaspora presence — primarily Sudanese-Canadian and Sudanese-British families who found Kafouri when Khartoum 2 and Riyadh rents moved out of reach, and discovered a community that is friendly, functional, and still affordable. The neighbourhood has a particularly strong internal community culture: residents' WhatsApp groups coordinate everything from generator-sharing to collective negotiations with building management. For a family arriving without deep Khartoum roots, Kafouri's newer-neighbourhood social openness can be easier to enter than the more established social hierarchies of older quarters.",
+        bodyAr:
+          "يميل السكان السكنيون في كفوري إلى الشباب والطموح الاجتماعي: معلمون ومهندسون وموظفون حكوميون من المستويات المتوسطة اشتروا أو استأجروا في العشرينيات وبقوا مع نضج الحي. ثمة حضور مغترب ذو بال — في المقام الأول عائلات سودانية-كندية وسودانية-بريطانية وجدت كفوري حين ابتعدت إيجارات الخرطوم ٢ والرياض عن متناولها، واكتشفت مجتمعاً ودوداً وظيفياً ولا يزال بأسعار معقولة. يتميز الحي بثقافة مجتمع داخلي قوية بشكل خاص: مجموعات واتساب للسكان تنسّق كل شيء من تشارك المولدات إلى التفاوض الجماعي مع إدارة المبنى. للعائلة الوافدة دون جذور عميقة في الخرطوم، الانفتاح الاجتماعي لحي كفوري الأحدث يمكن أن يكون أسهل دخولاً من التراتبيات الاجتماعية الأكثر رسوخاً في الأحياء القديمة.",
+      },
+      {
+        titleEn: "What it's like day-to-day",
+        titleAr: "الحياة اليومية",
+        bodyEn:
+          "Power in Kafouri is good by greater Khartoum standards — the newer grid infrastructure serving this side of Bahri tends to be more reliable than the ageing systems in central Khartoum. Expect eight to twelve hours of supply on a typical day, with individual buildings varying considerably based on their own backup arrangements. Water is the honest variable: the distribution network here was extended quickly to serve a rapidly developing area and pressure can drop significantly in the summer months, particularly on upper floors. Roof-top storage tanks are not just standard — they are essential. The neighbourhood has decent ground-level retail along its main arteries: fresh produce markets, pharmacies, and several tea and food stalls that operate from early morning. The Khartoum North industrial zone nearby gives the area its working-week hum.",
+        bodyAr:
+          "الكهرباء في كفوري جيدة بمعايير الخرطوم الكبرى — البنية التحتية للشبكة الأحدث التي تخدم هذا الجانب من بحري تميل إلى أن تكون أكثر موثوقية من الأنظمة المتقادمة في وسط الخرطوم. توقع ثماني إلى اثنتي عشرة ساعة من الإمداد في يوم عادي مع تفاوت ملحوظ بين المباني بحسب ترتيباتها الاحتياطية الخاصة. المياه هي المتغير الصادق: شبكة التوزيع هنا امتدت بسرعة لخدمة منطقة تطورت بوتيرة سريعة ويمكن أن ينخفض الضغط بشكل ملحوظ في أشهر الصيف، لا سيما في الطوابق العليا. خزانات التخزين على الأسطح ليست معيارية فحسب — بل ضرورة. يمتلك الحي تجزئة جيدة على مستوى الشارع على طول شرايينه الرئيسية: أسواق منتجات طازجة وصيدليات وعدة أكشاك للشاي والطعام تعمل من الصباح الباكر. المنطقة الصناعية للخرطوم بحري القريبة تمنح المنطقة ضجّتها أيام أسبوع العمل.",
+      },
+      {
+        titleEn: "What to know before renting",
+        titleAr: "ما يجب معرفته قبل الاستئجار",
+        bodyEn:
+          "Kafouri's rental market is more formalised than older Bahri neighbourhoods — written leases and agent networks have become standard as the neighbourhood gentrified. Pricing is primarily in SDG, though diaspora tenants will often find landlords willing to negotiate USD terms. The fourteen-kilometre distance to Khartoum International Airport is the neighbourhood's most commonly cited drawback for frequent flyers; at peak traffic, the journey via the ring road can take forty-five minutes. Diaspora families who have been here consistently report that the neighbourhood's value-for-space ratio is the best in greater Khartoum: a three-bedroom apartment at $400–900 per month delivers a quality and modernity that comparably-priced units in older central Khartoum quarters do not. Check the building's water arrangements carefully before signing; pump and tank maintenance varies significantly between buildings.",
+        bodyAr:
+          "سوق الإيجار في كفوري أكثر رسوخاً من أحياء بحري القديمة — عقود الإيجار المكتوبة وشبكات الوسطاء باتت معيارية مع رقي الحي. التسعير بالجنيه السوداني في المقام الأول، وإن كان المستأجرون المغتربون سيجدون في الغالب ملاكاً مستعدين للتفاوض بشروط الدولار. المسافة الأربعة عشر كيلومتراً إلى مطار الخرطوم الدولي هي أكثر ما يُذكر كعيب للحي للمسافرين المتكررين؛ في ذروة الازدحام، يمكن أن تستغرق الرحلة عبر الطريق الدائري خمساً وأربعين دقيقة. العائلات المغتربة التي أقامت هنا باستمرار تُفيد بأن نسبة القيمة مقابل المساحة في الحي هي الأفضل في الخرطوم الكبرى: شقة بثلاث غرف بين ٤٠٠ و٩٠٠ دولار شهرياً توفر جودة وحداثة لا توفرهما وحدات مماثلة السعر في أحياء وسط الخرطوم القديمة. تحقق بعناية من ترتيبات المياه في المبنى قبل التوقيع؛ صيانة المضخة والخزان تتفاوت تفاوتاً كبيراً بين المباني.",
+      },
+    ],
+    vitals: {
+      typicalRentEn: "$400–900/mo for a 3BR apartment",
+      typicalRentAr: "٤٠٠–٩٠٠ دولار/شهر لشقة ثلاث غرف",
+      powerReliability: "Good",
+      waterReliability: "Variable",
+      diasporaFavored: true,
+      nearestAirportKm: 14,
+    },
+  },
+  {
+    slug: "atbara",
+    nameEn: "Atbara",
+    nameAr: "عطبرة",
+    state: "river_nile",
+    heroImage:
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&auto=format&fit=crop",
+    introEn:
+      "Atbara is Sudan's railway city — a fact that shaped everything from its grid plan to its social character to its rental market. The city grew at the junction of the Nile and the Atbara River specifically because the British colonial administration chose this point to base the Sudan Railways workshop in 1906, and for a century the locomotive repair sheds, the railway hospital, and the engineers' quarters defined urban life here. Today those sheds are quieter than they were, but the culture they created persists: Atbara is a city of skilled workers, practical people, and an educated workforce of engineers and teachers who have kept the city's institutions — its hospital, its schools, its technical college — running through decades of political turbulence. For families connected to River Nile State or northern Sudan, Atbara offers a functional, affordable, and surprisingly dignified city life.",
+    introAr:
+      "عطبرة هي مدينة السكك الحديدية في السودان — حقيقة شكّلت كل شيء من تخطيطها الشبكي إلى طابعها الاجتماعي وسوق إيجارها. نمت المدينة عند ملتقى النيل ونهر عطبرة تحديداً لأن الإدارة الاستعمارية البريطانية اختارت هذه النقطة لتأسيس ورش السكك الحديدية السودانية عام ١٩٠٦، وطوال قرن من الزمن كانت أسطح إصلاح القاطرات ومستشفى السكك الحديدية وأحياء المهندسين تُحدِّد الحياة الحضرية هنا. اليوم تلك الأسطح أهدأ مما كانت عليه، لكن الثقافة التي أوجدتها باقية: عطبرة مدينة عمال مهرة وناس عمليين وقوى عاملة متعلمة من المهندسين والمعلمين حافظوا على مؤسسات المدينة — مستشفاها ومدارسها وكليتها التقنية — طوال عقود من الاضطراب السياسي. للعائلات المرتبطة بولاية نهر النيل أو شمال السودان، تقدم عطبرة حياة مدينة وظيفية ميسورة التكلفة وذات كرامة مفاجئة.",
+    sections: [
+      {
+        titleEn: "Who lives here",
+        titleAr: "من يسكن هنا",
+        bodyEn:
+          "Atbara's population is more occupationally homogenous than most Sudanese cities — engineers, railway and infrastructure technicians, hospital workers, and teachers make up the backbone of permanent residents. The university and technical institute draw a transient student population that keeps the rental market for smaller units active. Demand from the public sector is consistent and relatively recession-resistant: government-posted employees rotate through on two to three-year assignments, always needing accommodation. There is no significant diaspora-returnee community in Atbara in the way Khartoum or Port Sudan have — the city does not pull people back in the same way — but it does attract specialists who are posted here for infrastructure and railway rehabilitation projects, creating a secondary demand layer for furnished units.",
+        bodyAr:
+          "سكان عطبرة أكثر تجانساً مهنياً من معظم المدن السودانية — المهندسون وفنيو السكك الحديدية والبنية التحتية والعمال الصحيون والمعلمون يشكلون عمود فقرات السكان الدائمين. الجامعة والمعهد التقني يجلبان طلاباً متغيرين يُبقيان سوق الإيجار للوحدات الصغيرة نشطاً. الطلب من القطاع العام ثابت ومقاوم للركود نسبياً: موظفو الحكومة المُكلَّفون يتداولون في مهام مدتها سنتان إلى ثلاث، ويحتاجون دائماً إلى مسكن. لا يوجد مجتمع مغتربين عائدين ذو شأن في عطبرة بالطريقة التي تحظى بها الخرطوم أو بورتسودان — المدينة لا تستقطب العائدين بنفس الطريقة — لكنها تستقطب متخصصين مُكلَّفين هنا لمشاريع إعادة تأهيل البنية التحتية والسكك الحديدية، مما يخلق طبقة طلب ثانوية للوحدات المفروشة.",
+      },
+      {
+        titleEn: "What it's like day-to-day",
+        titleAr: "الحياة اليومية",
+        bodyEn:
+          "Power in Atbara is variable and tied to the national grid's reliability in River Nile State, which experiences cuts that pattern differently from Khartoum — longer in summer when air-conditioning load on the northern grid peaks, shorter in winter. Generator culture is present but not universal; many households manage with solar charging for lights and phone power. Water supply is generally good — the Nile is close, the city's water infrastructure was built by engineers and has been maintained with an engineer's care. The central souq is compact but well-stocked for a city of this size: good produce markets, a decent pharmacy row, and the railway workers' cooperative shops that have been there since the colonial era and still run. The Atbara-Nile confluence, a fifteen-minute walk from the city center, is one of northern Sudan's more underrated natural vantage points.",
+        bodyAr:
+          "الكهرباء في عطبرة متقلبة ومرتبطة بموثوقية الشبكة الوطنية في ولاية نهر النيل، التي تعاني انقطاعات تتخذ نمطاً مختلفاً عن الخرطوم — أطول في الصيف حين يبلغ حمل تكييف الهواء على شبكة الشمال ذروته، وأقصر في الشتاء. ثقافة المولدات موجودة لكنها ليست شاملة؛ كثير من الأسر تكتفي بالشحن الشمسي للإضاءة وشحن الهواتف. إمداد المياه جيد عموماً — النيل قريب، والبنية التحتية للمياه في المدينة بُنيت بأيدي مهندسين وصُونت بعناية مهندسية. السوق المركزي مدمج لكنه متنوع لمدينة بهذا الحجم: أسواق منتجات جيدة وصف صيدليات محتشم ومتاجر تعاونية لعمال السكك الحديدية موجودة منذ الحقبة الاستعمارية ولا تزال تعمل. ملتقى عطبرة والنيل على بُعد خمس عشرة دقيقة مشياً من مركز المدينة، من أكثر نقاط المشاهدة الطبيعية في شمال السودان إهمالاً رغم جمالها.",
+      },
+      {
+        titleEn: "What to know before renting",
+        titleAr: "ما يجب معرفته قبل الاستئجار",
+        bodyEn:
+          "Atbara's rental market is small, affordable, and almost entirely informal. A three-bedroom family home for $200–500 per month is realistic across most of the city; the upper end of that range gets you a well-maintained house in the older railway quarter, which has the most character. Pricing is in SDG; landlords here have essentially no experience with USD transactions, so diaspora renters need to manage currency conversion independently. The nearest commercial airport is over 270 kilometres away — Khartoum International — making Atbara a destination for families with genuine roots here or a specific reason to be in the city, rather than a casual relocation choice. Rail connections south to Khartoum and north toward Port Sudan, though irregular, are Atbara's transport pride; the train journey to Khartoum, when it runs, is a distinct experience and takes six to eight hours depending on connections.",
+        bodyAr:
+          "سوق الإيجار في عطبرة صغير وميسور التكلفة وغير رسمي بالكامل تقريباً. منزل عائلي بثلاث غرف مقابل ٢٠٠–٥٠٠ دولار شهرياً واقعي في معظم أرجاء المدينة؛ الطرف الأعلى من هذا النطاق يمنحك منزلاً جيد الصيانة في حي السكك الحديدية القديم الذي يتمتع بأكبر قدر من الطابع المميز. التسعير بالجنيه السوداني؛ لا خبرة تذكر للملاك هنا في معاملات الدولار، لذا على المستأجرين المغتربين إدارة تحويل العملة باستقلالية. أقرب مطار تجاري يبعد أكثر من ٢٧٠ كيلومتراً — مطار الخرطوم الدولي — مما يجعل عطبرة وجهة للعائلات ذات الجذور الحقيقية هنا أو سبب محدد للوجود في المدينة، لا خياراً عشوائياً لإعادة التوطن. الاتصالات السككية جنوباً إلى الخرطوم وشمالاً نحو بورتسودان، وإن كانت غير منتظمة، هي كبرياء وسائل النقل في عطبرة؛ رحلة القطار إلى الخرطوم، حين تسير، تجربة مميزة تستغرق ست إلى ثماني ساعات حسب الاتصالات.",
+      },
+    ],
+    vitals: {
+      typicalRentEn: "$200–500/mo for a 3BR home",
+      typicalRentAr: "٢٠٠–٥٠٠ دولار/شهر لمنزل بثلاث غرف",
+      powerReliability: "Variable",
+      waterReliability: "Good",
+      diasporaFavored: false,
+      nearestAirportKm: 270,
+    },
+  },
+  {
     slug: "kassala-town",
     nameEn: "Kassala Town",
     nameAr: "مدينة كسلا",
