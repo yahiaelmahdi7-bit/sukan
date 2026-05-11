@@ -7,6 +7,7 @@ import "../globals.css";
 import { routing, localeDirection, type Locale } from "@/i18n/routing";
 import Atmosphere from "@/components/atmosphere";
 import BackToDashboardPill from "@/components/back-to-dashboard-pill";
+import { UserLocationProvider } from "@/components/user-location-provider";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -128,10 +129,12 @@ export default async function LocaleLayout({
         </a>
         <Atmosphere />
         <NextIntlClientProvider>
-          <div id="main">
-            {children}
-          </div>
-          <BackToDashboardPill />
+          <UserLocationProvider>
+            <div id="main">
+              {children}
+            </div>
+            <BackToDashboardPill />
+          </UserLocationProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -102,6 +102,7 @@ export type Listing = {
   photoSlots: number;
   imageUrl?: string;
   ownerVerified?: boolean;
+  ownerCity?: string;
   averageRating?: number;
   reviewCount?: number;
   // ── New optional fields added in round 2 ──────────────────────────────────

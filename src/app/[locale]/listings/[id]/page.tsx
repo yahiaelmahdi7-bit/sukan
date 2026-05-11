@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { setRequestLocale, getTranslations, getFormatter } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -744,6 +745,12 @@ export default async function ListingDetailPage({
                 <p className="font-sans text-ink-mid text-sm mt-0.5">
                   {t("listing.onSukanSince", { year: listing.ownerJoinedYear })}
                 </p>
+                {listing.ownerCity && (
+                  <p className="font-sans text-ink-mid text-xs mt-1 flex items-center gap-1">
+                    <MapPin size={11} className="text-gold-dk flex-none" aria-hidden />
+                    {listing.ownerCity}
+                  </p>
+                )}
               </div>
 
               {/* Contact link */}

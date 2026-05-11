@@ -50,6 +50,7 @@ type DbListing = {
     full_name: string | null;
     created_at: string;
     is_verified: boolean | null;
+    city: string | null;
   } | null;
 };
 
@@ -64,7 +65,7 @@ const LISTING_SELECT = `
   property_type, purpose, state, city, neighborhood, latitude, longitude,
   bedrooms, bathrooms, area_sqm, price, currency, price_period, amenities,
   tier, status, whatsapp_contact, created_at,
-  profiles!owner_id(full_name, created_at, is_verified)
+  profiles!owner_id(full_name, created_at, is_verified, city)
 `;
 
 function toNumber(v: number | string | null | undefined): number | undefined {
@@ -86,6 +87,7 @@ function mapDbListing(row: DbListing): Listing {
     ? new Date(row.profiles.created_at).getFullYear()
     : new Date().getFullYear();
   const ownerVerified = row.profiles?.is_verified === true;
+  const ownerCity = row.profiles?.city ?? undefined;
 
   return {
     id: row.id,
@@ -116,6 +118,7 @@ function mapDbListing(row: DbListing): Listing {
     ownerJoinedYear,
     photoSlots: 0,
     ownerVerified,
+    ownerCity,
   };
 }
 

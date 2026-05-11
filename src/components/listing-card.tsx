@@ -8,7 +8,7 @@ import { Link } from "@/i18n/navigation";
 import FavoriteButton from "@/components/favorite-button";
 import { VerifiedBadge } from "@/components/verified-badge";
 import { StarRating } from "@/components/star-rating";
-import { Car, Sofa, Zap, Droplet, Snowflake } from "lucide-react";
+import { Car, Sofa, Zap, Droplet, Snowflake, MapPin, Navigation } from "lucide-react";
 import {
   getListingImage,
   getLocaleCity,
@@ -18,6 +18,8 @@ import {
 } from "@/lib/sample-listings";
 import type { Locale } from "@/i18n/routing";
 import CompareButton from "@/components/compare-button";
+import { useUserLocation } from "@/components/user-location-provider";
+import { haversineKm, formatDistance } from "@/lib/distance";
 
 // ─── Extended fields (all optional, no Listing type mutation) ───────────────
 type ListingExtras = {
@@ -132,11 +134,13 @@ function AgentAvatar({
   name,
   online,
   replyTimeLabel,
+  city,
 }: {
   avatar?: string;
   name: string;
   online?: boolean;
   replyTimeLabel?: string;
+  city?: string;
 }) {
   const initial = name.trim()[0]?.toUpperCase() ?? "S";
 
@@ -179,6 +183,15 @@ function AgentAvatar({
           {replyTimeLabel}
         </span>
       )}
+      {city && (
+        <span
+          className="flex items-center gap-0.5 whitespace-nowrap text-ink-mid"
+          style={{ fontSize: 10, lineHeight: "14px" }}
+        >
+          <MapPin size={8} className="text-gold-dk flex-none" />
+          {city}
+        </span>
+      )}
     </div>
   );
 }
@@ -192,6 +205,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   const title = getLocaleTitle(listing, locale);
   const city = getLocaleCity(listing, locale);
   const neighborhood = getLocaleNeighborhood(listing, locale);
+  const userLocation = useUserLocation();
 
   // Cast to extended type — all extras are optional
   const x = listing as Listing & ListingExtras;
@@ -267,9 +281,23 @@ export default function ListingCard({ listing }: { listing: Listing }) {
       ? t("listing.periodSuffixYear")
       : "";
 
+  // ── Distance to listing ────────────────────────────────────────────────────
+  const distanceLabel: string | undefined =
+    userLocation && listing.latitude && listing.longitude
+      ? formatDistance(
+          haversineKm(
+            userLocation.lat,
+            userLocation.lng,
+            listing.latitude,
+            listing.longitude,
+          ),
+        )
+      : undefined;
+
   // ── Owner info ─────────────────────────────────────────────────────────────
   const ownerDisplayName =
     typeof x.ownerName === "string" ? x.ownerName : listing.ownerName;
+  const ownerCity = listing.ownerCity;
 
   return (
     <>
@@ -506,11 +534,12 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                     ? t("listing.replyTime", { hours: x.ownerReplyTime })
                     : undefined
                 }
+                city={ownerCity}
               />
             </div>
           </div>
 
-          {/* Beds / baths / area / rating row */}
+          {/* Beds / baths / area / rating / distance row */}
           <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-ink-mid">
             {listing.bedrooms !== undefined && (
               <span>
@@ -552,6 +581,15 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                   </span>
                 </>
               )}
+            {distanceLabel && (
+              <>
+                <span aria-hidden>·</span>
+                <span className="inline-flex items-center gap-1 text-gold-dk font-medium">
+                  <Navigation size={10} aria-hidden />
+                  {distanceLabel}
+                </span>
+              </>
+            )}
           </div>
         </div>
       </Link>
