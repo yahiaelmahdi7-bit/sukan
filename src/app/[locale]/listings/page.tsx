@@ -42,6 +42,7 @@ interface ParsedParams {
   sort: SortKey;
   page: number;
   view: "list" | "map";
+  q?: string;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -129,7 +130,10 @@ function parseSearchParams(raw: Record<string, string | string[] | undefined>): 
   const rawView = typeof raw.view === "string" ? raw.view : undefined;
   const view: "list" | "map" = rawView === "map" ? "map" : "list";
 
-  return { region, state, neighborhood, type, purpose, maxPrice, minBedrooms, amenities, sort, page, view };
+  // q — free-text search query (set by the hero autocomplete via ?q=)
+  const q = typeof raw.q === "string" ? raw.q.trim() || undefined : undefined;
+
+  return { region, state, neighborhood, type, purpose, maxPrice, minBedrooms, amenities, sort, page, view, q };
 }
 
 // ─── Filtering + sorting + pagination ────────────────────────────────────────
@@ -192,6 +196,22 @@ function filterListings(params: ParsedParams, source: Listing[]): FilterResult {
   if (params.amenities.length > 0) {
     results = results.filter((l) =>
       params.amenities.every((a) => l.amenities.includes(a))
+    );
+  }
+
+  // Free-text search — case-insensitive match across title, description,
+  // city, and neighborhood fields in both languages.
+  if (params.q) {
+    const needle = params.q.toLowerCase();
+    results = results.filter((l) =>
+      l.titleEn.toLowerCase().includes(needle) ||
+      l.titleAr.toLowerCase().includes(needle) ||
+      l.descriptionEn.toLowerCase().includes(needle) ||
+      l.descriptionAr.toLowerCase().includes(needle) ||
+      l.city.toLowerCase().includes(needle) ||
+      (l.cityAr ?? "").toLowerCase().includes(needle) ||
+      (l.neighborhood ?? "").toLowerCase().includes(needle) ||
+      (l.neighborhoodAr ?? "").toLowerCase().includes(needle)
     );
   }
 
@@ -278,6 +298,10 @@ function buildResultSummary(params: ParsedParams, total: number, locale: string)
       : null;
     const label = (isAr ? hood?.ar : hood?.en) ?? params.neighborhood;
     parts.push(isAr ? `· حي ${label}` : `· ${label} neighborhood`);
+  }
+
+  if (params.q) {
+    parts.push(isAr ? `· "${params.q}"` : `· matching "${params.q}"`);
   }
 
   return parts.join(" ");
@@ -382,7 +406,8 @@ export default async function ListingsPage({
     !!parsed.purpose ||
     parsed.maxPrice !== undefined ||
     parsed.minBedrooms !== undefined ||
-    parsed.amenities.length > 0;
+    parsed.amenities.length > 0 ||
+    !!parsed.q;
 
   const resultSummary = buildResultSummary(parsed, total, locale);
 

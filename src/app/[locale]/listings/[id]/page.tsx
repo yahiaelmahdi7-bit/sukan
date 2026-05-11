@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { CREAM_BLUR } from "@/lib/blur";
 import { useTranslations } from "next-intl";
 import { setRequestLocale, getTranslations, getFormatter } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -18,6 +16,7 @@ import ListingCard from "@/components/listing-card";
 import { sampleListings, type Listing } from "@/lib/sample-listings";
 import { getListingByIdAsync } from "@/lib/listings";
 import ListingLocationMap from "./_components/listing-location-map";
+import { PhotoGalleryClient } from "./_components/photo-gallery-client";
 import InquiryButton from "@/components/inquiry-button";
 import StaySafeCard from "@/components/stay-safe-card";
 import GlassPanel from "@/components/glass-panel";
@@ -156,33 +155,7 @@ function buildWaUrl(phone: string, message: string): string {
   return `https://wa.me/${digitsOnly(phone)}?text=${encodeURIComponent(message)}`;
 }
 
-/* ─────────────────────────────────────────────────────────
-   Photo Gallery Placeholder
-───────────────────────────────────────────────────────── */
-
-function PhotoPlaceholder({
-  aspectClass,
-  label,
-  large,
-}: {
-  aspectClass: string;
-  label: string;
-  large?: boolean;
-}) {
-  return (
-    <div
-      className={`card-watermark overflow-hidden relative ${aspectClass} w-full ${large ? "rounded-[var(--radius-glass-lg)]" : "rounded-[var(--radius-glass)]"}`}
-      aria-label={label}
-      role="img"
-      style={large ? { boxShadow: "var(--shadow-warm-lg)" } : { boxShadow: "var(--shadow-warm-sm)" }}
-    >
-      {/* Watermark centered */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-        <SukanMark monochrome="gold" size={large ? 140 : 80} className="opacity-[0.13]" />
-      </div>
-    </div>
-  );
-}
+/* PhotoPlaceholder removed — gallery rendering delegated to PhotoGalleryClient */
 
 /* ─────────────────────────────────────────────────────────
    Page
@@ -280,7 +253,6 @@ export default async function ListingDetailPage({
   }
 
   const heroPhoto = photos[0] ?? null;
-  const thumbPhotos = photos.slice(1);
 
   /* ── F5: Fetch reviews for this listing ── */
   let reviews: DbReview[] = [];
@@ -388,142 +360,18 @@ export default async function ListingDetailPage({
 
           {/* ─────────────────────────────────────────────────────────
               2. PHOTO GALLERY HERO (F2)
+              Gallery rendering + lightbox state live in PhotoGalleryClient
+              (client component). The server component passes the fetched
+              photos + title as serialisable props.
           ───────────────────────────────────────────────────────── */}
           <section id="photos" className="mb-8" aria-label={t("photos.gallery")}>
-            {/* Mobile: large slot + horizontal thumb scroll */}
-            <div className="lg:hidden">
-              <div className="relative aspect-[16/10] w-full rounded-[var(--radius-glass-lg)] overflow-hidden"
-                style={{ boxShadow: "var(--shadow-warm-lg)" }}>
-                {heroPhoto ? (
-                  <Image
-                    src={heroPhoto.url}
-                    alt={localTitle}
-                    fill
-                    sizes="(max-width: 1024px) 100vw"
-                    quality={85}
-                    placeholder="blur"
-                    blurDataURL={CREAM_BLUR}
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  <PhotoPlaceholder aspectClass="aspect-[16/10]" label={localTitle} large />
-                )}
-
-                {/* Featured pill overlaid on large image */}
-                {listing.tier === "featured" && (
-                  <span
-                    className="absolute top-4 ltr:left-4 rtl:right-4 inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-earth"
-                    style={{
-                      background: "linear-gradient(135deg, #e0a857 0%, #c8873a 100%)",
-                      boxShadow:
-                        "0 4px 14px rgba(200, 135, 58, 0.35), inset 0 1px 0 rgba(255,255,255,0.35)",
-                    }}
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-earth/70" aria-hidden />
-                    ★ {t("listing.featured")}
-                  </span>
-                )}
-              </div>
-
-              {/* Thumbnail strip */}
-              {(thumbPhotos.length > 0 || (photos.length === 0 && (listing.photoSlots ?? 5) > 1)) && (
-                <div className="flex gap-2 mt-2 overflow-x-auto pb-1 snap-x snap-mandatory">
-                  {thumbPhotos.length > 0
-                    ? thumbPhotos.map((photo, i) => (
-                        <div key={photo.id} className="flex-none w-24 snap-start relative aspect-square rounded-[var(--radius-glass)] overflow-hidden"
-                          style={{ boxShadow: "var(--shadow-warm-sm)" }}>
-                          <Image
-                            src={photo.url}
-                            alt={`${localTitle} ${i + 2}`}
-                            fill
-                            sizes="96px"
-                            quality={75}
-                            placeholder="blur"
-                            blurDataURL={CREAM_BLUR}
-                            className="object-cover"
-                          />
-                        </div>
-                      ))
-                    : Array.from({ length: Math.min((listing.photoSlots ?? 5) - 1, 4) }, (_, i) => (
-                        <div key={i} className="flex-none w-24 snap-start">
-                          <PhotoPlaceholder aspectClass="aspect-square" label={`${localTitle} ${i + 2}`} />
-                        </div>
-                      ))}
-                </div>
-              )}
-            </div>
-
-            {/* Desktop: when no photos, render ONE clean wide placeholder
-                (avoids a 5-tile empty grid). When photos exist, fall back
-                to the 1-large + 2×2-thumbs gallery. */}
-            <div className={`hidden lg:grid gap-2 ${photos.length === 0 ? "lg:grid-cols-1" : "lg:grid-cols-3"}`}>
-              {/* Large slot — spans 2 cols when thumbs render, full width when no photos */}
-              <div className={`relative aspect-[16/10] rounded-[var(--radius-glass-lg)] overflow-hidden ${photos.length === 0 ? "" : "lg:col-span-2"}`}
-                style={{ boxShadow: "var(--shadow-warm-lg)" }}>
-                {heroPhoto ? (
-                  <Image
-                    src={heroPhoto.url}
-                    alt={localTitle}
-                    fill
-                    sizes="(min-width: 1024px) 66vw"
-                    quality={85}
-                    placeholder="blur"
-                    blurDataURL={CREAM_BLUR}
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center card-watermark">
-                    <SukanMark monochrome="gold" size={140} className="opacity-[0.13]" />
-                  </div>
-                )}
-
-                {listing.tier === "featured" && (
-                  <span
-                    className="absolute top-4 ltr:left-4 rtl:right-4 inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-earth"
-                    style={{
-                      background: "linear-gradient(135deg, #e0a857 0%, #c8873a 100%)",
-                      boxShadow:
-                        "0 4px 14px rgba(200, 135, 58, 0.35), inset 0 1px 0 rgba(255,255,255,0.35)",
-                    }}
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-earth/70" aria-hidden />
-                    ★ {t("listing.featured")}
-                  </span>
-                )}
-              </div>
-
-              {/* 2×2 thumb grid — only when at least one extra photo exists */}
-              {thumbPhotos.length > 0 && (
-                <div className="grid grid-cols-2 grid-rows-2 gap-2">
-                  {thumbPhotos.slice(0, 4).map((photo, i) => (
-                    <div key={photo.id} className="relative aspect-square rounded-[var(--radius-glass)] overflow-hidden"
-                      style={{ boxShadow: "var(--shadow-warm-sm)" }}>
-                      <Image
-                        src={photo.url}
-                        alt={`${localTitle} ${i + 2}`}
-                        fill
-                        sizes="(min-width: 1024px) 17vw"
-                        quality={75}
-                        placeholder="blur"
-                        blurDataURL={CREAM_BLUR}
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-
-                  {/* Fill empty thumb slots when photos exist but fewer than 4 */}
-                  {thumbPhotos.length < 4 &&
-                    Array.from({ length: 4 - thumbPhotos.length }, (_, i) => (
-                      <div
-                        key={`empty-${i}`}
-                        className="card-watermark rounded-[var(--radius-glass)] aspect-square opacity-30"
-                      />
-                    ))}
-                </div>
-              )}
-            </div>
+            <PhotoGalleryClient
+              photos={photos}
+              title={localTitle}
+              tier={listing.tier}
+              featuredLabel={t("listing.featured")}
+              isRtl={isRtl}
+            />
           </section>
 
           {/* ─────────────────────────────────────────────────────────

@@ -433,7 +433,27 @@
       "role": "Account type",
       "roleTenant": "Tenant",
       "roleLandlord": "Landlord",
-      "roleAgent": "Agent"
+      "roleAgent": "Agent",
+      "bio": "About you",
+      "bioPlaceholder": "A short intro — who you are, what you do, what you're looking for…",
+      "bioChars": "{count}/280",
+      "avatarUpload": "Upload photo",
+      "avatarDragDrop": "Drag & drop or click to upload",
+      "avatarHint": "JPG, PNG, WEBP — max 5 MB",
+      "avatarUploading": "Uploading…",
+      "avatarError": "Upload failed. Please try again.",
+      "whatsappOptIn": "Allow WhatsApp contact from inquirers",
+      "phonePrefix": "+249",
+      "phoneLabel": "Sudan phone number",
+      "completenessTitle": "Profile completeness",
+      "completenessMissingAvatar": "Upload a photo",
+      "completenessMissingBio": "Write a short bio",
+      "completenessMissingPhone": "Add your phone number",
+      "completenessMissingName": "Add your full name",
+      "completenessDone": "Your profile is complete!",
+      "saved": "Saved",
+      "saving": "Saving…",
+      "saveError": "Couldn't save. Please try again."
     },
     "settings": "Settings",
     "signOut": "Sign out",
@@ -1088,6 +1108,14 @@
     "seeAll": "See all results for '{query}'",
     "sectionStates": "States",
     "sectionNeighborhoods": "Neighborhoods",
-    "sectionListings": "Listings"
+    "sectionListings": "Listings",
+    "filterChip": "\"{query}\""
+  },
+  "lightbox": {
+    "dialogLabel": "Photo gallery — {title}",
+    "counter": "{current} / {total}",
+    "close": "Close photo viewer",
+    "prev": "Previous photo",
+    "next": "Next photo"
   }
 }

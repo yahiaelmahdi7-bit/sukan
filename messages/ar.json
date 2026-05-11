@@ -433,7 +433,27 @@
       "role": "نوع الحساب",
       "roleTenant": "مستأجر",
       "roleLandlord": "مالك",
-      "roleAgent": "وكيل"
+      "roleAgent": "وكيل",
+      "bio": "نبذة عنك",
+      "bioPlaceholder": "مقدمة قصيرة — من أنت، وماذا تفعل، وما الذي تبحث عنه…",
+      "bioChars": "{count}/280",
+      "avatarUpload": "رفع صورة",
+      "avatarDragDrop": "اسحب وأفلت أو انقر للرفع",
+      "avatarHint": "JPG، PNG، WEBP — بحد أقصى 5 ميغابايت",
+      "avatarUploading": "جارٍ الرفع…",
+      "avatarError": "فشل الرفع. حاول مرة أخرى.",
+      "whatsappOptIn": "السماح بالتواصل عبر واتساب للمستفسرين",
+      "phonePrefix": "+249",
+      "phoneLabel": "رقم هاتف سوداني",
+      "completenessTitle": "اكتمال الملف الشخصي",
+      "completenessMissingAvatar": "رفع صورة شخصية",
+      "completenessMissingBio": "اكتب نبذة قصيرة",
+      "completenessMissingPhone": "أضف رقم هاتفك",
+      "completenessMissingName": "أضف اسمك الكامل",
+      "completenessDone": "ملفك الشخصي مكتمل!",
+      "saved": "تم الحفظ",
+      "saving": "جارٍ الحفظ…",
+      "saveError": "تعذّر الحفظ. حاول مرة أخرى."
     },
     "settings": "الإعدادات",
     "signOut": "تسجيل الخروج",
@@ -1088,6 +1108,14 @@
     "seeAll": "عرض كل نتائج '{query}'",
     "sectionStates": "الولايات",
     "sectionNeighborhoods": "الأحياء",
-    "sectionListings": "الإعلانات"
+    "sectionListings": "الإعلانات",
+    "filterChip": "\"{query}\""
+  },
+  "lightbox": {
+    "dialogLabel": "معرض الصور — {title}",
+    "counter": "{current} / {total}",
+    "close": "إغلاق عارض الصور",
+    "prev": "الصورة السابقة",
+    "next": "الصورة التالية"
   }
 }

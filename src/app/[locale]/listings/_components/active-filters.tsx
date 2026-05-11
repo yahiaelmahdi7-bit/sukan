@@ -131,6 +131,16 @@ export default function ActiveFilters() {
     });
   });
 
+  // Free-text search query chip
+  const q = searchParams.get("q");
+  if (q) {
+    chips.push({
+      key: "q",
+      label: t("search.filterChip", { query: q }),
+      remove: () => pushWithout("q"),
+    });
+  }
+
   if (chips.length === 0) return null;
 
   return (

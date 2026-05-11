@@ -1,9 +1,8 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import ProfileForm from "./_profile-form";
-import { getMockUser } from "../_data/mock-user";
 import GlassPanel from "@/components/glass-panel";
 import { VerifiedBadge } from "@/components/verified-badge";
+import { ProfileEditor, type ProfileRow } from "./_components/profile-editor";
 import { requestVerification as _requestVerification } from "@/app/[locale]/admin/verify/actions";
 
 // Wrap so `form action` gets a void-returning server action
@@ -29,36 +28,64 @@ export default async function ProfilePage({
     data: { user: authUser },
   } = await supabase.auth.getUser();
 
-  const mockUser = getMockUser();
+  // ── Fetch profile row ───────────────────────────────────────────────────────
 
-  // Fetch verification status from profiles
+  let profile: ProfileRow = {
+    full_name: null,
+    phone: null,
+    bio: null,
+    avatar_url: null,
+    whatsapp_opt_in: false,
+  };
   let isVerified = false;
   let verifiedAt: string | null = null;
   let verificationRequestedAt: string | null = null;
 
   try {
-    const { data: profile } = await supabase
+    const { data } = await supabase
       .from("profiles")
-      .select("is_verified, updated_at, verification_requested_at")
+      .select(
+        "full_name, phone, bio, avatar_url, whatsapp_opt_in, is_verified, updated_at, verification_requested_at",
+      )
       .eq("id", authUser?.id ?? "")
       .maybeSingle();
-    isVerified = profile?.is_verified === true;
-    verifiedAt = isVerified ? (profile?.updated_at ?? null) : null;
-    verificationRequestedAt = profile?.verification_requested_at ?? null;
+
+    if (data) {
+      const row = data as {
+        full_name: string | null;
+        phone: string | null;
+        bio: string | null;
+        avatar_url: string | null;
+        whatsapp_opt_in: boolean | null;
+        is_verified: boolean | null;
+        updated_at: string | null;
+        verification_requested_at: string | null;
+      };
+
+      profile = {
+        full_name: row.full_name,
+        phone: row.phone,
+        bio: row.bio,
+        avatar_url: row.avatar_url,
+        whatsapp_opt_in: row.whatsapp_opt_in,
+      };
+      isVerified = row.is_verified === true;
+      verifiedAt = isVerified ? (row.updated_at ?? null) : null;
+      verificationRequestedAt = row.verification_requested_at ?? null;
+    }
   } catch {
-    // profiles table may not have these columns yet — migration pending
+    // profiles table may not expose all columns yet — migration still propagating
   }
 
   const verifiedDate = verifiedAt
-    ? new Date(verifiedAt).toLocaleDateString(locale === "ar" ? "ar-SD" : "en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
+    ? new Date(verifiedAt).toLocaleDateString(
+        locale === "ar" ? "ar-SD" : "en-GB",
+        { day: "numeric", month: "long", year: "numeric" },
+      )
     : null;
 
-  // Show "submitted" state when request has been sent but not yet actioned
-  const hasRequestedVerification = verificationRequestedAt !== null && !isVerified;
+  const hasRequestedVerification =
+    verificationRequestedAt !== null && !isVerified;
 
   return (
     <div className="px-6 py-10 max-w-2xl mx-auto">
@@ -91,8 +118,8 @@ export default async function ProfilePage({
           </div>
 
           {/* Request verification — only when unverified */}
-          {!isVerified && (
-            hasRequestedVerification ? (
+          {!isVerified &&
+            (hasRequestedVerification ? (
               <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-gold/40 bg-gold/8 px-4 py-2 text-sm font-semibold text-gold-dk">
                 ✓ {tv("requestSubmitted")}
               </span>
@@ -105,18 +132,18 @@ export default async function ProfilePage({
                   {tv("requestVerification")}
                 </button>
               </form>
-            )
-          )}
+            ))}
         </div>
       </GlassPanel>
 
-      {/* ── Profile edit form ────────────────────────────────────────────── */}
-      <ProfileForm
-        user={mockUser}
-        locale={locale}
+      {/* ── Profile editor ─────────────────────────────────────────────────── */}
+      <ProfileEditor
+        profile={profile}
         labels={{
           fullName: t("profile.fullName"),
           phone: t("profile.phone"),
+          phoneLabel: t("profile.phoneLabel"),
+          phonePrefix: t("profile.phonePrefix"),
           whatsapp: t("profile.whatsapp"),
           city: t("profile.city"),
           role: t("profile.role"),
@@ -124,6 +151,24 @@ export default async function ProfilePage({
           roleLandlord: t("profile.roleLandlord"),
           roleAgent: t("profile.roleAgent"),
           saveChanges: t("saveChanges"),
+          bio: t("profile.bio"),
+          bioPlaceholder: t("profile.bioPlaceholder"),
+          bioChars: t("profile.bioChars"),
+          avatarUpload: t("profile.avatarUpload"),
+          avatarDragDrop: t("profile.avatarDragDrop"),
+          avatarHint: t("profile.avatarHint"),
+          avatarUploading: t("profile.avatarUploading"),
+          avatarError: t("profile.avatarError"),
+          whatsappOptIn: t("profile.whatsappOptIn"),
+          completenessTitle: t("profile.completenessTitle"),
+          completenessMissingAvatar: t("profile.completenessMissingAvatar"),
+          completenessMissingBio: t("profile.completenessMissingBio"),
+          completenessMissingPhone: t("profile.completenessMissingPhone"),
+          completenessMissingName: t("profile.completenessMissingName"),
+          completenessDone: t("profile.completenessDone"),
+          saved: t("profile.saved"),
+          saving: t("profile.saving"),
+          saveError: t("profile.saveError"),
         }}
       />
     </div>
