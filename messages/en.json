@@ -36,7 +36,8 @@
     "rent": "To rent",
     "sale": "To buy",
     "priceLabel": "Max price (USD)",
-    "aiMatchTeaser": "✦ Try AI-powered property matching",
+    "aiMatchTeaser": "✦ Describe your ideal home in plain English or Arabic — we'll match you",
+    "howWeVerify": "How we verify listings →",
     "statListings": "Listings",
     "statStates": "States",
     "statVerified": "Verified",
@@ -333,7 +334,7 @@
     "matchCta": "AI property match"
   },
   "statesSection": {
-    "title": "Listings across all 18 states",
+    "title": "Explore homes on the map",
     "subtitle": "Browse properties by state — from Khartoum to Kassala, Northern to Blue Nile."
   },
   "auth": {

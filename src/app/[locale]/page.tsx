@@ -86,7 +86,6 @@ export default async function HomePage({
   const heroStats = [
     { value: t("hero.statListingsValue"), label: t("hero.statListings") },
     { value: t("hero.statStatesValue"), label: t("hero.statStates") },
-    { value: t("hero.statVerifiedValue"), label: t("hero.statVerified") },
   ];
 
   const whatsappText = encodeURIComponent(
@@ -199,6 +198,16 @@ export default async function HomePage({
 
                   {/* Stats */}
                   <HeroStats stats={heroStats} />
+
+                  {/* Verification link — replaces the 98% Verified stat */}
+                  <div className="mt-4 text-center">
+                    <Link
+                      href="/verification"
+                      className="smooth-fast text-xs text-ink-mid hover:text-terracotta"
+                    >
+                      {t("hero.howWeVerify")}
+                    </Link>
+                  </div>
                 </GlassPanel>
               </div>
             </div>
