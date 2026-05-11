@@ -77,11 +77,11 @@ export function wrapEmail({
   const lang = isAr ? "ar" : "en";
 
   const wordmark = isAr
-    ? "سُكَن &nbsp;&nbsp; <span style=\"font-family:Lato,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:#C8873A;letter-spacing:0.06em;\">SUKAN</span>"
-    : "Sukan &nbsp;&nbsp; <span style=\"font-family:Lato,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#C8873A;letter-spacing:0.12em;\">سُكَن</span>";
+    ? "سوكان &nbsp;&nbsp; <span style=\"font-family:Lato,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:#C8873A;letter-spacing:0.06em;\">SUKAN</span>"
+    : "Sukan &nbsp;&nbsp; <span style=\"font-family:Lato,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#C8873A;letter-spacing:0.12em;\">سوكان</span>";
 
   const footerBrand = isAr
-    ? "أُرسل من سُكَن &middot; Sudan&rsquo;s home for housing"
+    ? "أُرسل من سوكان &middot; Sudan&rsquo;s home for housing"
     : "Sent by Sukan &middot; Sudan&rsquo;s home for housing";
 
   const footerNoteHtml = footerNote

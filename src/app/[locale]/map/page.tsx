@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isAr = locale === "ar";
-  const title = isAr ? "خريطة العقارات في السودان · سُكَن" : "Sudan Property Map · Sukan";
+  const title = isAr ? "خريطة العقارات في السودان · سوكان" : "Sudan Property Map · Sukan";
   const description = isAr
     ? "استعرض عقارات السودان على الخريطة — شقق وفيلات ومنازل في جميع الولايات"
     : "Explore Sudan properties on an interactive map — apartments, villas, and houses across all states";
@@ -36,7 +36,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "Sukan — سُكَن",
+      siteName: "Sukan — سوكان",
       locale: isAr ? "ar_SD" : "en_US",
     },
     twitter: { card: "summary_large_image", title, description },

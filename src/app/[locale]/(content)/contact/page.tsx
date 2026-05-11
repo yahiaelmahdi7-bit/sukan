@@ -13,9 +13,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isAr = locale === "ar";
-  const title = isAr ? "تواصل معنا · سُكَن" : "Contact Us · Sukan";
+  const title = isAr ? "تواصل معنا · سوكان" : "Contact Us · Sukan";
   const description = isAr
-    ? "تواصل مع فريق سُكَن عبر واتساب أو البريد الإلكتروني أو تيليغرام"
+    ? "تواصل مع فريق سوكان عبر واتساب أو البريد الإلكتروني أو تيليغرام"
     : "Get in touch with the Sukan team via WhatsApp, email, or Telegram";
   const canonicalUrl = `${SITE_URL}/${locale}/contact`;
 
@@ -35,7 +35,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "Sukan — سُكَن",
+      siteName: "Sukan — سوكان",
       locale: isAr ? "ar_SD" : "en_US",
     },
     twitter: { card: "summary_large_image", title, description },

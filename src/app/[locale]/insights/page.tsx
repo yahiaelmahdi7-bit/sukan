@@ -20,7 +20,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const isAr = locale === "ar";
 
-  const title = isAr ? "تحليل السوق · سُكَن" : "Market intelligence · Sukan";
+  const title = isAr ? "تحليل السوق · سوكان" : "Market intelligence · Sukan";
   const description = isAr
     ? "تحليل سوق العقارات وإرشادات المغتربين ومقارنات الأحياء في السودان — مكتوبة بصدق لمن يخطط للعودة أو الاستئجار أو الاستثمار"
     : "Property market analysis, diaspora guidance, and neighbourhood comparisons for Sudan — written honestly for those planning to return, rent, or invest";
@@ -222,7 +222,7 @@ export default async function InsightsIndexPage({
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
             <p className="text-sm leading-relaxed text-ink-soft">
               {isAr
-                ? "تصدر تقارير سُكَن بناءً على بيانات السوق وخبرة ميدانية. هذه آراء تحريرية لا استشارات مالية أو قانونية."
+                ? "تصدر تقارير سوكان بناءً على بيانات السوق وخبرة ميدانية. هذه آراء تحريرية لا استشارات مالية أو قانونية."
                 : "Sukan insights are based on market data and on-the-ground experience. These are editorial opinions, not financial or legal advice."}
             </p>
           </div>

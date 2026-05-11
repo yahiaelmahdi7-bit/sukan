@@ -39,7 +39,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "Sukan — سُكَن",
+      siteName: "Sukan — سوكان",
       locale: isAr ? "ar_SD" : "en_US",
     },
     twitter: { card: "summary_large_image", title, description },

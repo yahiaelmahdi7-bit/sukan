@@ -20,7 +20,7 @@ export const insights: Insight[] = [
     titleAr: "سوق الإيجار في الخرطوم — الربع الأول من ٢٠٢٦: أين ترتفع الأسعار",
     publishedAt: "2026-04-08",
     authorEn: "Sukan Editorial",
-    authorAr: "تحرير سُكَن",
+    authorAr: "تحرير سوكان",
     excerptEn:
       "Diaspora demand, power-reliability premiums, and the USD-SDG divide are reshaping Khartoum's rental market in patterns that are becoming predictable — and navigable.",
     excerptAr:
@@ -90,7 +90,7 @@ The structural forces driving Khartoum 2 and Amarat prices upward — diaspora d
     titleAr: "دليل المغترب: ٥ أشياء تتحقق منها قبل تحويل الأموال إلى الوطن",
     publishedAt: "2026-03-15",
     authorEn: "Sukan Editorial",
-    authorAr: "تحرير سُكَن",
+    authorAr: "تحرير سوكان",
     excerptEn:
       "Buying or renting property in Sudan from abroad is not impossible — but it requires specific verification steps that protect you in ways a verbal agreement never will.",
     excerptAr:
@@ -199,7 +199,7 @@ None of this is designed to make you distrust Sudan's property market categorica
     titleAr: "بحري أم أم درمان: أي ضفتَي النهر تناسب عائلتك؟",
     publishedAt: "2026-02-20",
     authorEn: "Sukan Editorial",
-    authorAr: "تحرير سُكَن",
+    authorAr: "تحرير سوكان",
     excerptEn:
       "Two cities, one river. The choice between Bahri and Omdurman is not just about geography — it is about pace, roots, and what kind of Khartoum life you want.",
     excerptAr:
@@ -280,7 +280,7 @@ Neither side is objectively better. They are different answers to the same quest
       "التحقق من عقار سوداني من الخارج: قائمة مرجعية من ٦ خطوات",
     publishedAt: "2026-05-08",
     authorEn: "Sukan Editorial",
-    authorAr: "تحرير سُكَن",
+    authorAr: "تحرير سوكان",
     excerptEn:
       "Title deed lookup, agent verification, live video walkthroughs, escrow alternatives, currency timing, and knowing when to wire versus when to hold — six practical steps that protect diaspora renters and buyers from the most common traps.",
     excerptAr:
@@ -411,7 +411,7 @@ None of this makes Sudan's property market exceptional in its risks — every ma
       "الكهرباء والمياه والمولدات: ما يعرفه كل مالك سوداني ولا تقوله القوائم",
     publishedAt: "2026-05-04",
     authorEn: "Sukan Editorial",
-    authorAr: "تحرير سُكَن",
+    authorAr: "تحرير سوكان",
     excerptEn:
       "An honest look at infrastructure realities across Khartoum, Bahri, and Omdurman — and how to read between the lines of what listings don't say about power and water.",
     excerptAr:
@@ -521,7 +521,7 @@ Ask. Walk in on a weekday at 2pm when the grid load is highest and see what the 
     titleAr: "الخرطوم مقابل البقية: إلى أين تتجه إيجارات الربع الثاني من ٢٠٢٦",
     publishedAt: "2026-05-10",
     authorEn: "Sukan Editorial",
-    authorAr: "تحرير سُكَن",
+    authorAr: "تحرير سوكان",
     excerptEn:
       "A quarterly read on rental price pressure across Sudan's top five cities. Diaspora demand spikes around Eid and summer break are reshaping seasonal patterns in ways that landlords feel and tenants should understand.",
     excerptAr:

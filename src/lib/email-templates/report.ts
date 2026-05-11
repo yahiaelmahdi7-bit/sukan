@@ -68,7 +68,7 @@ export function buildReportEmail(p: ReportEmailParams): string {
   const isAr = p.locale === "ar";
 
   const title = isAr
-    ? `[تقرير] ${p.listingTitle} · سُكَن`
+    ? `[تقرير] ${p.listingTitle} · سوكان`
     : `[Report] ${p.listingTitle} · Sukan`;
 
   const preheader = isAr
@@ -128,6 +128,6 @@ export function buildReportEmail(p: ReportEmailParams): string {
 
 export function reportEmailSubject(listingTitle: string, locale: string): string {
   return locale === "ar"
-    ? `[تقرير] ${listingTitle} · سُكَن`
+    ? `[تقرير] ${listingTitle} · سوكان`
     : `[Report] ${listingTitle} · Sukan`;
 }

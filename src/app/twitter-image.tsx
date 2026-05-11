@@ -96,7 +96,7 @@ export default function TwitterImage() {
             textAlign: "center",
           }}
         >
-          سُكَن · Sukan
+          سوكان · Sukan
         </div>
 
         {/* Tagline */}

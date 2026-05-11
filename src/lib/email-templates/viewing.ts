@@ -54,7 +54,7 @@ export function buildViewingLandlordEmail(p: ViewingEmailParams): string {
   const isAr = p.locale === "ar";
 
   const title = isAr
-    ? `طلب معاينة لـ ${p.listingTitle} · سُكَن`
+    ? `طلب معاينة لـ ${p.listingTitle} · سوكان`
     : `Viewing request for ${p.listingTitle} · Sukan`;
 
   const preheader = isAr
@@ -64,7 +64,7 @@ export function buildViewingLandlordEmail(p: ViewingEmailParams): string {
   const headingText = isAr ? "طلب معاينة جديد" : "New viewing request";
 
   const subText = isAr
-    ? `طلب <strong>${escHtml(p.requesterName)}</strong> معاينة إعلانك عبر سُكَن.`
+    ? `طلب <strong>${escHtml(p.requesterName)}</strong> معاينة إعلانك عبر سوكان.`
     : `<strong>${escHtml(p.requesterName)}</strong> has requested a viewing of your listing via Sukan.`;
 
   const labelRequester = isAr ? "الطالب" : "Requester";
@@ -127,7 +127,7 @@ export function buildViewingReceiptEmail(p: ViewingReceiptParams): string {
   const isAr = p.locale === "ar";
 
   const title = isAr
-    ? `تم استلام طلب معاينتك · سُكَن`
+    ? `تم استلام طلب معاينتك · سوكان`
     : `Viewing request received · Sukan`;
 
   const preheader = isAr
@@ -176,12 +176,12 @@ export function buildViewingReceiptEmail(p: ViewingReceiptParams): string {
 
 export function viewingLandlordSubject(listingTitle: string, locale: string): string {
   return locale === "ar"
-    ? `طلب معاينة لـ ${listingTitle} · سُكَن`
+    ? `طلب معاينة لـ ${listingTitle} · سوكان`
     : `Viewing request for ${listingTitle} · Sukan`;
 }
 
 export function viewingReceiptSubject(listingTitle: string, locale: string): string {
   return locale === "ar"
-    ? `تم استلام طلب معاينتك لـ ${listingTitle} · سُكَن`
+    ? `تم استلام طلب معاينتك لـ ${listingTitle} · سوكان`
     : `Viewing request confirmed — ${listingTitle} · Sukan`;
 }

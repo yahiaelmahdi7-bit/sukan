@@ -68,7 +68,7 @@ export function buildAlertEmail(p: AlertEmailParams): string {
   const count = p.listings.length;
 
   const title = isAr
-    ? `${count} إعلان${count > 1 ? "ات" : ""} جديد${count > 1 ? "ة" : ""} في ${p.searchLabel} · سُكَن`
+    ? `${count} إعلان${count > 1 ? "ات" : ""} جديد${count > 1 ? "ة" : ""} في ${p.searchLabel} · سوكان`
     : `${count} new listing${count > 1 ? "s" : ""} matched your search · Sukan`;
 
   const preheader = isAr
@@ -169,7 +169,7 @@ export function alertEmailSubject(
   locale: string,
 ): string {
   if (locale === "ar") {
-    return `${count} إعلان${count > 1 ? "ات" : ""} جديد${count > 1 ? "ة" : ""} في ${searchLabel} · سُكَن`;
+    return `${count} إعلان${count > 1 ? "ات" : ""} جديد${count > 1 ? "ة" : ""} في ${searchLabel} · سوكان`;
   }
   return `${count} new listing${count > 1 ? "s" : ""} matched your search · Sukan`;
 }

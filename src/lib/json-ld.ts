@@ -11,7 +11,7 @@ import type { Listing } from "@/lib/sample-listings";
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
 const ORG_NAME = "Sukan";
-const ORG_NAME_AR = "سُكَن";
+const ORG_NAME_AR = "سوكان";
 const ORG_LOGO_PATH = "/logo.svg";
 
 function truncate(text: string, max = 200): string {

@@ -88,7 +88,7 @@ export async function generateMetadata({
 
   // Locale-aware title: "<title> · <city>, <state> · Sukan"
   const metaTitle = isAr
-    ? `${title} · ${cityLabel}، ${stateLabel} · سُكَن`
+    ? `${title} · ${cityLabel}، ${stateLabel} · سوكان`
     : `${title} · ${cityLabel}, ${stateLabel} · Sukan`;
 
   // Truncate description to ≤160 chars
@@ -119,7 +119,7 @@ export async function generateMetadata({
       title: metaTitle,
       description,
       url: canonicalUrl,
-      siteName: "Sukan — سُكَن",
+      siteName: "Sukan — سوكان",
       locale: isAr ? "ar_SD" : "en_US",
       images: absoluteOgImage
         ? [{ url: absoluteOgImage, alt: title, width: 1200, height: 630 }]

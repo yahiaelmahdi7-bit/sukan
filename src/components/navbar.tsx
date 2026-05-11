@@ -79,7 +79,7 @@ export default async function Navbar() {
               className="font-display text-lg tracking-wide text-ink"
               style={{ fontFamily: "var(--font-arabic)" }}
             >
-              سُكَن
+              سوكان
             </span>
             <span className="font-display text-[11px] italic tracking-[0.18em] text-ink-mid" aria-hidden="true">
               SUKAN

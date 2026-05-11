@@ -20,7 +20,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const isAr = locale === "ar";
 
-  const title = isAr ? "أدلة الأحياء · سُكَن" : "Neighborhood guides · Sukan";
+  const title = isAr ? "أدلة الأحياء · سوكان" : "Neighborhood guides · Sukan";
   const description = isAr
     ? "أدلة ميدانية صادقة عن أحياء السودان — الإيجارات والكهرباء والمياه والحياة اليومية في الأماكن الأكثر بحثاً"
     : "Honest, on-the-ground guides to Sudanese neighborhoods — rents, power, water, and daily life in the most searched areas";

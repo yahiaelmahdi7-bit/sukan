@@ -14,9 +14,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isAr = locale === "ar";
-  const title = isAr ? "عن سُكَن — منصة العقارات السودانية" : "About Sukan — Sudan's Property Platform";
+  const title = isAr ? "عن سوكان — منصة العقارات السودانية" : "About Sukan — Sudan's Property Platform";
   const description = isAr
-    ? "تعرّف على سُكَن، المنصة العقارية السودانية الأولى باللغتين العربية والإنجليزية"
+    ? "تعرّف على سوكان، المنصة العقارية السودانية الأولى باللغتين العربية والإنجليزية"
     : "Learn about Sukan, Sudan's first bilingual EN/AR property marketplace for tenants, landlords, and diaspora";
   const canonicalUrl = `${SITE_URL}/${locale}/about`;
 
@@ -36,7 +36,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "Sukan — سُكَن",
+      siteName: "Sukan — سوكان",
       locale: isAr ? "ar_SD" : "en_US",
     },
     twitter: { card: "summary_large_image", title, description },

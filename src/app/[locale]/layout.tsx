@@ -81,7 +81,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "Sukan — سُكَن",
+    siteName: "Sukan — سوكان",
     title: {
       default: "Sukan — Sudan's home for housing",
       template: "%s · Sukan",
