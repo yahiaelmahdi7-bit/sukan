@@ -117,6 +117,8 @@
     "mapTitle": "Location on map",
     "ribbonNew": "NEW",
     "ribbonPriceReduced": "PRICE REDUCED",
+    "demoBadge": "Demo listing",
+    "demoBadgeTooltip": "This is a demo listing — placeholder data for layout testing.",
     "listedToday": "Listed today",
     "listedYesterday": "Listed yesterday",
     "listedDaysAgo": "{count, plural, =0 {Listed today} =1 {Listed yesterday} other {Listed # days ago}}",
@@ -766,6 +768,14 @@
     "pending": "Verification pending",
     "verified": "Verified",
     "statusLabel": "Verification status"
+  },
+  "verification": {
+    "tierLandlord": "Landlord verified",
+    "tierProperty": "Property verified",
+    "tierVisited": "Visited by Sukan",
+    "tooltipLandlord": "We called the landlord and confirmed ownership.",
+    "tooltipProperty": "We checked the property deed and matched the photos.",
+    "tooltipVisited": "A local Sukan partner visited and confirmed the property exists."
   },
   "share": {
     "share": "Share",

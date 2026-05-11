@@ -7,6 +7,8 @@ import { CREAM_BLUR } from "@/lib/blur";
 import { Link } from "@/i18n/navigation";
 import FavoriteButton from "@/components/favorite-button";
 import { VerifiedBadge } from "@/components/verified-badge";
+import { VerificationBadge } from "@/components/verification-badge";
+import { DemoBadge } from "@/components/demo-badge";
 import { StarRating } from "@/components/star-rating";
 import { Car, Sofa, Zap, Droplet, Snowflake, MapPin, Navigation } from "lucide-react";
 import {
@@ -299,6 +301,12 @@ export default function ListingCard({ listing }: { listing: Listing }) {
     typeof x.ownerName === "string" ? x.ownerName : listing.ownerName;
   const ownerCity = listing.ownerCity;
 
+  // ── Demo detection ────────────────────────────────────────────────────────
+  // Treat as demo when explicitly flagged, or when the contact name is a
+  // single letter (placeholder data from early seed runs).
+  const isDemoListing =
+    listing.isDemo === true || (ownerDisplayName?.trim().length ?? 0) <= 1;
+
   return (
     <>
       {/* Keyframe for dot pop – lives in component to avoid globals.css edit */}
@@ -401,6 +409,10 @@ export default function ListingCard({ listing }: { listing: Listing }) {
                 </span>
               </span>
             )}
+
+            {listing.verificationTier && (
+              <VerificationBadge tier={listing.verificationTier} size="sm" />
+            )}
           </div>
 
           {/* ── Property type pill: bottom-right ─────────────────────────── */}
@@ -422,21 +434,24 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           {/* verified: round 3 crowding check OK — both buttons are 32×32 (sm),
               gap-1.5 (6px) → 70px total. Ribbons end ~100px from the start edge;
               buttons consume ~82px from the end edge. No collision at 320–520px. */}
-          <div className="pointer-events-auto absolute top-3 z-20 ltr:right-3 rtl:left-3 flex items-center gap-1.5">
-            <CompareButton
-              listing={{
-                id: listing.id,
-                title,
-                image: photos[0],
-                priceUsd: listing.priceUsd,
-                state: listing.state,
-                bedrooms: listing.bedrooms,
-                bathrooms: listing.bathrooms,
-                areaSqm: listing.areaSqm,
-              }}
-              size="sm"
-            />
-            <FavoriteButton listingId={listing.id} size="sm" />
+          <div className="pointer-events-auto absolute top-3 z-20 ltr:right-3 rtl:left-3 flex flex-col items-end gap-1.5">
+            <div className="flex items-center gap-1.5">
+              <CompareButton
+                listing={{
+                  id: listing.id,
+                  title,
+                  image: photos[0],
+                  priceUsd: listing.priceUsd,
+                  state: listing.state,
+                  bedrooms: listing.bedrooms,
+                  bathrooms: listing.bathrooms,
+                  areaSqm: listing.areaSqm,
+                }}
+                size="sm"
+              />
+              <FavoriteButton listingId={listing.id} size="sm" />
+            </div>
+            {isDemoListing && <DemoBadge size="sm" />}
           </div>
         </div>
 

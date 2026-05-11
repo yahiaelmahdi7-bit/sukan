@@ -23,6 +23,7 @@ import StaySafeCard from "@/components/stay-safe-card";
 import GlassPanel from "@/components/glass-panel";
 import { GlassButton } from "@/components/ui/glass-button";
 import { VerifiedBadge } from "@/components/verified-badge";
+import { VerificationBadge } from "@/components/verification-badge";
 import { ShareButton } from "@/components/share-button";
 import { ReportListingButton } from "@/components/report-listing-button";
 import { ViewingRequestModal } from "@/components/viewing-request-modal";
@@ -395,11 +396,12 @@ export default async function ListingDetailPage({
                 <h1 className="font-display text-4xl md:text-5xl lg:text-[3.25rem] text-ink tracking-tight leading-[1.08]">
                   {localTitle}
                 </h1>
-                {listing.ownerVerified && (
-                  <span className="mt-2">
-                    <VerifiedBadge size="sm" />
-                  </span>
-                )}
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {listing.ownerVerified && <VerifiedBadge size="sm" />}
+                  {listing.verificationTier && (
+                    <VerificationBadge tier={listing.verificationTier} size="md" />
+                  )}
+                </div>
               </div>
 
               {/* Classification pills row */}

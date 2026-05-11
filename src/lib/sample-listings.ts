@@ -113,6 +113,9 @@ export type Listing = {
   ownerAvatar?: string;
   ownerOnline?: boolean;
   ownerReplyTime?: number;
+  // ── Verification + demo flags ──────────────────────────────────────────────
+  verificationTier?: "landlord-verified" | "property-verified" | "visited";
+  isDemo?: boolean;
 };
 
 // Curated Unsplash images per property type. Hand-picked to avoid generic
