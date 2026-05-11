@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { Resend } from "resend";
+import { sendViewingEmail } from "@/lib/resend";
 import { z } from "zod";
 
 const BodySchema = z.object({
@@ -46,61 +46,51 @@ export async function POST(req: Request): Promise<NextResponse> {
     );
   }
 
-  // Send notification emails if Resend is configured
-  const resendKey = process.env.RESEND_API_KEY;
-  if (resendKey) {
-    try {
-      const resend = new Resend(resendKey);
-      const from = process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukan.app>";
+  // Build dashboard deep-links for the landlord's Confirm / Decline CTAs.
+  // These are best-effort — the viewing row is already saved regardless.
+  const appBase =
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukan.app";
+  const confirmUrl = `${appBase}/dashboard/viewings/${viewing.id}?action=confirm`;
+  const declineUrl = `${appBase}/dashboard/viewings/${viewing.id}?action=decline`;
+  const listingUrl = `${appBase}/en/listings/${body.listing_id}`;
 
-      // Look up listing + owner profile for landlord email
-      const { data: listing } = await supabase
-        .from("listings")
-        .select("title_en, owner_id, profiles:owner_id(phone, whatsapp)")
-        .eq("id", body.listing_id)
-        .single();
+  // Look up listing title and owner_id for the email (best-effort, non-fatal)
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("title_en, title_ar, owner_id")
+    .eq("id", body.listing_id)
+    .single();
 
-      const listingTitle = listing?.title_en ?? body.listing_id;
+  const listingTitle = listing?.title_en ?? body.listing_id;
 
-      // Email to requester if they are signed in and have an email
-      if (user?.email) {
-        await resend.emails.send({
-          from,
-          to: [user.email],
-          subject: `Viewing request confirmed — ${listingTitle}`,
-          text: [
-            `Hi ${body.requester_name},`,
-            "",
-            `Your viewing request for "${listingTitle}" has been received.`,
-            body.preferred_date ? `Preferred date: ${body.preferred_date}` : null,
-            body.preferred_time ? `Preferred time: ${body.preferred_time}` : null,
-            "",
-            "The landlord will be in touch to confirm.",
-            "",
-            "— Sukan سُكَن",
-          ]
-            .filter((l) => l !== null)
-            .join("\n"),
-        });
-      }
+  // TODO: Landlord email is only reachable via service role key (not available
+  // in the browser client path). Wire listing.owner_id → profiles.email once
+  // service-role access is added here. For now, landlord email is skipped.
+  const landlordEmail: string | null = null;
 
-      // Email to landlord — look up their email via auth admin is not available
-      // from the browser client; fetch from profiles using owner_id
-      if (listing?.owner_id) {
-        const { data: ownerProfile } = await supabase
-          .from("profiles")
-          .select("full_name")
-          .eq("id", listing.owner_id)
-          .single();
-
-        // Landlord email is only accessible via service role; skip if unavailable
-        // This is a best-effort notification — the viewing row is already saved
-        void ownerProfile; // suppress unused-var lint
-      }
-    } catch {
-      // Email failure is non-fatal
+  // Fire-and-forget; errors are logged but never bubble up to the HTTP response.
+  sendViewingEmail({
+    locale: "en",
+    listingTitle,
+    listingUrl,
+    requesterName: body.requester_name,
+    requesterPhone: body.requester_phone,
+    requesterEmail: user?.email ?? null,
+    preferredDate: body.preferred_date,
+    preferredTime: body.preferred_time,
+    confirmUrl,
+    declineUrl,
+    landlordEmail,
+  }).then((result) => {
+    if (!result.landlord.ok && result.landlord.reason !== "no_landlord_email" && result.landlord.reason !== "not_configured") {
+      console.error("[viewings] Landlord email failed:", result.landlord.reason);
     }
-  }
+    if (!result.tenant.ok && result.tenant.reason !== "no_tenant_email" && result.tenant.reason !== "not_configured") {
+      console.error("[viewings] Tenant receipt email failed:", result.tenant.reason);
+    }
+  }).catch(() => {
+    // Non-fatal — viewing row is already persisted
+  });
 
   return NextResponse.json({ ok: true, viewing_id: viewing.id });
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { Resend } from "resend";
+import { sendReportEmail } from "@/lib/resend";
 import { z } from "zod";
 
 const REASON_VALUES = ["scam", "wrong_info", "duplicate", "offensive", "other"] as const;
@@ -39,23 +39,36 @@ export async function POST(req: Request): Promise<NextResponse> {
     return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   }
 
-  // Send admin notification email if configured
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const resendKey = process.env.RESEND_API_KEY;
+  // Look up listing title for the email subject (best-effort, non-fatal)
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("title_en")
+    .eq("id", body.listing_id)
+    .single();
 
-  if (adminEmail && resendKey) {
-    try {
-      const resend = new Resend(resendKey);
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukan.app>",
-        to: [adminEmail],
-        subject: `Listing reported: ${body.listing_id}`,
-        text: `Reason: ${body.reason}\n\n${body.details ?? "(no details)"}\n\nListing ID: ${body.listing_id}\nReporter: ${body.reporter_email ?? reporterId ?? "anonymous"}`,
-      });
-    } catch {
-      // Email failure is non-fatal — report was already saved
+  const listingTitle = listing?.title_en ?? body.listing_id;
+
+  const appBase =
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukan.app";
+  const adminVerifyUrl = `${appBase}/admin/listings/${body.listing_id}`;
+
+  // Send admin notification email — non-fatal
+  sendReportEmail({
+    locale: "en",
+    listingId: body.listing_id,
+    listingTitle,
+    adminVerifyUrl,
+    reason: body.reason,
+    details: body.details,
+    reporterEmail: body.reporter_email ?? null,
+    reporterId,
+  }).then((result) => {
+    if (!result.ok && result.reason !== "not_configured" && result.reason !== "no_admin_email_configured") {
+      console.error("[reports] Admin email failed:", result.reason);
     }
-  }
+  }).catch(() => {
+    // Non-fatal — report row is already persisted
+  });
 
   return NextResponse.json({ ok: true });
 }

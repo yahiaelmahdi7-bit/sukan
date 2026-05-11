@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { Resend } from "resend";
+import { sendAlertEmail, type AlertListingItem } from "@/lib/resend";
 
 // ---------------------------------------------------------------------------
 // Admin Supabase client — bypasses RLS using the service role key.
@@ -78,11 +78,11 @@ export async function POST(req: Request): Promise<NextResponse> {
   }
 
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const appBase =
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://sukan.app";
+
   let alertsMatched = 0;
   let emailsSent = 0;
-
-  const resend = resendKey ? new Resend(resendKey) : null;
-  const from = process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukan.app>";
 
   for (const alert of alerts as PriceAlert[]) {
     // Build query for matching listings created in last 24h
@@ -93,56 +93,68 @@ export async function POST(req: Request): Promise<NextResponse> {
       .eq("purpose", alert.purpose)
       .gte("created_at", since);
 
-    if (alert.state) {
-      query = query.eq("state", alert.state);
-    }
-    if (alert.property_type) {
-      query = query.eq("property_type", alert.property_type);
-    }
-    if (alert.max_price != null) {
-      query = query.lte("price", alert.max_price);
-    }
+    if (alert.state) query = query.eq("state", alert.state);
+    if (alert.property_type) query = query.eq("property_type", alert.property_type);
+    if (alert.max_price != null) query = query.lte("price", alert.max_price);
 
     const { data: matches } = await query;
-
     if (!matches || matches.length === 0) continue;
 
     alertsMatched++;
 
-    if (!resend) continue;
+    // Skip email dispatch if Resend is not configured
+    if (!resendKey) continue;
 
-    // Fetch the user's email via admin auth API
+    // Fetch user email + display name via admin auth API
     const { data: userData } = await supabase.auth.admin.getUserById(alert.user_id);
     const userEmail = userData?.user?.email;
-
     if (!userEmail) continue;
 
-    // Build listing summary
-    const listingLines = (matches as MatchedListing[])
-      .map(
-        (l) =>
-          `• ${l.title_en ?? "Listing"} — $${l.price} USD — ${l.city}, ${l.state}\n  https://sukan.app/listings/${l.id}`,
-      )
-      .join("\n\n");
+    // Best-effort first name from user_metadata; fall back to "there"
+    const firstName =
+      (userData.user?.user_metadata?.full_name as string | undefined)
+        ?.split(" ")[0] ?? "there";
 
-    try {
-      await resend.emails.send({
-        from,
-        to: [userEmail],
-        subject: `${matches.length} new listing${matches.length > 1 ? "s" : ""} matching your Sukan alert`,
-        text: [
-          "New listings matching your saved search on Sukan:",
-          "",
-          listingLines,
-          "",
-          "Manage your alerts at https://sukan.app/alerts",
-          "",
-          "— Sukan سُكَن",
-        ].join("\n"),
-      });
+    // Build search label from alert criteria (e.g. "Khartoum, Sudan")
+    const searchLabel = [alert.state, alert.property_type]
+      .filter(Boolean)
+      .join(", ") || "Sudan";
+
+    // Build search-params URL for "see all matches" CTA
+    const searchParams = new URLSearchParams();
+    if (alert.state) searchParams.set("state", alert.state);
+    if (alert.property_type) searchParams.set("property_type", alert.property_type);
+    if (alert.max_price != null) searchParams.set("max_price", String(alert.max_price));
+    searchParams.set("purpose", alert.purpose);
+    const allMatchesUrl = `${appBase}/en/listings?${searchParams.toString()}`;
+    const unsubscribeUrl = `${appBase}/dashboard/saved-searches`;
+
+    // Map DB rows to the AlertListingItem shape expected by the template
+    const listingItems: AlertListingItem[] = (matches as MatchedListing[]).map((l) => ({
+      id: l.id,
+      titleEn: l.title_en,
+      titleAr: l.title_ar,
+      price: l.price,
+      currency: l.currency,
+      city: l.city,
+      state: l.state,
+    }));
+
+    const result = await sendAlertEmail({
+      locale: "en",
+      recipientEmail: userEmail,
+      firstName,
+      searchLabel,
+      listings: listingItems,
+      allMatchesUrl,
+      unsubscribeUrl,
+      alertId: alert.id,
+    });
+
+    if (result.ok) {
       emailsSent++;
-    } catch {
-      // Non-fatal — continue to next alert
+    } else if (result.reason !== "not_configured") {
+      console.error(`[alerts] Email failed for alert ${alert.id}:`, result.reason);
     }
   }
 

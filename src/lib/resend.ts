@@ -1,233 +1,233 @@
+/**
+ * resend.ts — Sukan transactional email senders
+ *
+ * All HTML is generated from the shared email design system in
+ * src/lib/email-templates/*.ts — table-based, inline styles, bilingual.
+ *
+ * Each function:
+ *  - Returns { ok: false, reason: 'not_configured' } when RESEND_API_KEY
+ *    is absent (non-fatal for callers).
+ *  - Returns { ok: true, id } on success or { ok: false, reason } on error.
+ */
+
 import { Resend } from "resend";
+import {
+  buildInquiryEmail,
+  inquiryEmailSubject,
+} from "./email-templates/inquiry";
+import {
+  buildViewingLandlordEmail,
+  buildViewingReceiptEmail,
+  viewingLandlordSubject,
+  viewingReceiptSubject,
+} from "./email-templates/viewing";
+import {
+  buildReportEmail,
+  reportEmailSubject,
+} from "./email-templates/report";
+import {
+  buildAlertEmail,
+  alertEmailSubject,
+  type AlertListingItem,
+} from "./email-templates/alert";
 
-export interface SendInquiryEmailParams {
-  landlordEmail: string;
-  listingTitle: string;
-  listingUrl: string;
-  inquirerName: string;
-  inquirerPhone: string;
-  message: string;
-  locale: string;
-}
+// Re-export types so callers can import from one place
+export type { AlertListingItem };
 
-export type SendInquiryEmailResult =
+// ---------------------------------------------------------------------------
+// Shared result type
+// ---------------------------------------------------------------------------
+
+export type EmailResult =
   | { ok: true; id: string }
   | { ok: false; reason: string };
 
-/**
- * Sends a new-inquiry notification email to the landlord.
- *
- * Returns { ok: false, reason: 'not_configured' } when RESEND_API_KEY is not
- * set — callers must treat this as a non-fatal soft failure.
- */
-export async function sendInquiryEmail(
-  params: SendInquiryEmailParams,
-): Promise<SendInquiryEmailResult> {
-  const apiKey = process.env.RESEND_API_KEY;
+// ---------------------------------------------------------------------------
+// Internal: get Resend client or return not_configured
+// ---------------------------------------------------------------------------
 
-  if (!apiKey) {
-    return { ok: false, reason: "not_configured" };
-  }
+function getResend(): Resend | null {
+  const key = process.env.RESEND_API_KEY;
+  return key ? new Resend(key) : null;
+}
 
-  const {
-    landlordEmail,
-    listingTitle,
-    listingUrl,
-    inquirerName,
-    inquirerPhone,
-    message,
-    locale,
-  } = params;
+function getFrom(): string {
+  return process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukan.app>";
+}
 
-  const from =
-    process.env.RESEND_FROM_EMAIL ?? "Sukan <noreply@sukan.app>";
-
-  const isAr = locale === "ar";
-
-  const subject = isAr
-    ? "استفسار جديد على إعلانك في سُكَن"
-    : "New inquiry on your Sukan listing";
-
-  // WhatsApp deep-link for the landlord to reply to the inquirer
-  const waReplyText = isAr
-    ? `أهلاً، أريد الرد على استفسارك عن إعلاني على سُكَن: ${listingTitle}`
-    : `Hi, I'm replying to your inquiry about my listing on Sukan: ${listingTitle}`;
-  const waUrl = `https://wa.me/${inquirerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(waReplyText)}`;
-
-  const html = buildEmailHtml({
-    isAr,
-    listingTitle,
-    listingUrl,
-    inquirerName,
-    inquirerPhone,
-    message,
-    waUrl,
-  });
+async function sendEmail(
+  to: string,
+  subject: string,
+  html: string,
+): Promise<EmailResult> {
+  const resend = getResend();
+  if (!resend) return { ok: false, reason: "not_configured" };
 
   try {
-    const resend = new Resend(apiKey);
     const result = await resend.emails.send({
-      from,
-      to: [landlordEmail],
+      from: getFrom(),
+      to: [to],
       subject,
       html,
     });
 
-    if (result.error) {
-      return { ok: false, reason: result.error.message };
-    }
-
-    if (!result.data?.id) {
-      return { ok: false, reason: "no_id_returned" };
-    }
-
+    if (result.error) return { ok: false, reason: result.error.message };
+    if (!result.data?.id) return { ok: false, reason: "no_id_returned" };
     return { ok: true, id: result.data.id };
   } catch (err: unknown) {
-    const message =
-      err instanceof Error ? err.message : "unknown_error";
-    return { ok: false, reason: message };
+    const reason = err instanceof Error ? err.message : "unknown_error";
+    return { ok: false, reason };
   }
 }
 
-/* ─────────────────────────────────────────────────────────
-   HTML email builder
-   Max-width 560 table layout — resilient across email clients.
-   Brand palette: parchment bg (#FDF8F0), earth text (#12100C),
-   terracotta accent (#C8401A).
-───────────────────────────────────────────────────────── */
+// ---------------------------------------------------------------------------
+// sendInquiryEmail
+// Landlord receives this when a prospective tenant messages about a listing.
+// ---------------------------------------------------------------------------
 
-interface BuildEmailHtmlParams {
-  isAr: boolean;
+export interface SendInquiryEmailParams {
+  landlordEmail: string;
+  locale: string;
   listingTitle: string;
   listingUrl: string;
+  listingImageUrl?: string;
   inquirerName: string;
   inquirerPhone: string;
   message: string;
-  waUrl: string;
 }
 
-function buildEmailHtml(p: BuildEmailHtmlParams): string {
-  const dir = p.isAr ? "rtl" : "ltr";
+export type SendInquiryEmailResult = EmailResult;
 
-  const labelInquirer = p.isAr ? "المستفسر" : "Inquirer";
-  const labelPhone = p.isAr ? "الهاتف" : "Phone";
-  const labelListing = p.isAr ? "الإعلان" : "Listing";
-  const labelMessage = p.isAr ? "الرسالة" : "Message";
-  const ctaWhatsapp = p.isAr ? "الرد عبر واتساب" : "Reply via WhatsApp";
-  const ctaView = p.isAr ? "عرض الإعلان على سُكَن" : "View on Sukan";
-  const headingText = p.isAr
-    ? "استفسار جديد على إعلانك"
-    : "New inquiry on your listing";
-  const subheadingText = p.isAr
-    ? "أرسل أحد المستخدمين الرسالة التالية عبر سُكَن."
-    : "Someone sent you the following message via Sukan.";
-  const footerText = p.isAr
-    ? "أُرسل من سُكَن &middot; Sukan"
-    : "Sent from Sukan &middot; سُكَن";
-
-  return `<!DOCTYPE html>
-<html lang="${p.isAr ? "ar" : "en"}" dir="${dir}">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${headingText}</title>
-</head>
-<body style="margin:0;padding:0;background:#FDF8F0;font-family:Georgia,'Times New Roman',serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FDF8F0;">
-    <tr>
-      <td align="center" style="padding:40px 16px;">
-
-        <!-- Outer card -->
-        <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(18,16,12,0.08);">
-
-          <!-- Header band -->
-          <tr>
-            <td style="background:#12100C;padding:28px 32px 24px;text-align:${p.isAr ? "right" : "left"};">
-              <!-- Wordmark -->
-              <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:22px;font-weight:bold;color:#C8873A;letter-spacing:0.04em;">
-                Sukan &nbsp;&nbsp; <span style="font-size:18px;color:#C8873A;">سُكَن</span>
-              </p>
-              <p style="margin:0;font-family:Georgia,serif;font-size:13px;color:#8c7c69;">
-                ${p.isAr ? "بيت السودان للسكن" : "Sudan's home for housing"}
-              </p>
-            </td>
-          </tr>
-
-          <!-- Body -->
-          <tr>
-            <td style="padding:32px 32px 24px;direction:${dir};">
-              <h1 style="margin:0 0 8px;font-family:Georgia,serif;font-size:22px;color:#12100C;font-weight:bold;">
-                ${headingText}
-              </h1>
-              <p style="margin:0 0 28px;font-size:14px;color:#5a4f42;line-height:1.6;">
-                ${subheadingText}
-              </p>
-
-              <!-- Details table -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e8ddd0;border-radius:8px;overflow:hidden;margin-bottom:24px;">
-                ${buildRow(labelInquirer, p.inquirerName, true)}
-                ${buildRow(labelPhone, p.inquirerPhone, false)}
-                ${buildRow(labelListing, p.listingTitle, false)}
-              </table>
-
-              <!-- Message block -->
-              <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#8c7c69;font-family:Georgia,serif;">
-                ${labelMessage}
-              </p>
-              <div style="background:#fdf4e8;border-left:3px solid #C8401A;padding:14px 18px;border-radius:4px;margin-bottom:28px;font-size:14px;color:#12100C;line-height:1.7;white-space:pre-wrap;">${escapeHtml(p.message)}</div>
-
-              <!-- CTAs -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
-                <tr>
-                  <td style="padding-${p.isAr ? "left" : "right"}:8px;">
-                    <a href="${p.waUrl}" style="display:block;text-align:center;background:#C8401A;color:#ffffff;text-decoration:none;padding:13px 20px;border-radius:999px;font-size:14px;font-weight:bold;font-family:Georgia,serif;">
-                      ${ctaWhatsapp}
-                    </a>
-                  </td>
-                  <td style="padding-${p.isAr ? "right" : "left"}:8px;">
-                    <a href="${p.listingUrl}" style="display:block;text-align:center;background:#ffffff;color:#C8401A;text-decoration:none;padding:13px 20px;border-radius:999px;font-size:14px;font-weight:bold;font-family:Georgia,serif;border:1.5px solid #C8401A;">
-                      ${ctaView}
-                    </a>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="background:#f7f0e6;padding:18px 32px;border-top:1px solid #e8ddd0;text-align:center;">
-              <p style="margin:0;font-size:12px;color:#8c7c69;font-family:Georgia,serif;">
-                ${footerText}
-              </p>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
+export async function sendInquiryEmail(
+  params: SendInquiryEmailParams,
+): Promise<SendInquiryEmailResult> {
+  const html = buildInquiryEmail(params);
+  const subject = inquiryEmailSubject(params.listingTitle, params.locale);
+  return sendEmail(params.landlordEmail, subject, html);
 }
 
-function buildRow(label: string, value: string, isFirst: boolean): string {
-  const borderTop = isFirst ? "" : "border-top:1px solid #e8ddd0;";
-  return `
-  <tr>
-    <td style="${borderTop}padding:10px 16px;width:30%;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#8c7c69;background:#fdf8f0;font-family:Georgia,serif;">
-      ${label}
-    </td>
-    <td style="${borderTop}padding:10px 16px;font-size:14px;color:#12100C;font-family:Georgia,serif;">
-      ${escapeHtml(value)}
-    </td>
-  </tr>`;
+// ---------------------------------------------------------------------------
+// sendViewingEmail
+// Two emails: one to the landlord (with Confirm/Decline CTAs) and one to
+// the tenant as a receipt.  Both are sent in parallel; failures are non-fatal.
+// ---------------------------------------------------------------------------
+
+export interface SendViewingEmailParams {
+  locale: string;
+  listingTitle: string;
+  listingUrl: string;
+  listingImageUrl?: string;
+  requesterName: string;
+  requesterPhone: string;
+  requesterEmail?: string | null;
+  preferredDate?: string;
+  preferredTime?: string;
+  /** deep-link to dashboard that sets status=confirmed */
+  confirmUrl: string;
+  /** deep-link to dashboard that sets status=declined */
+  declineUrl: string;
+  /** Landlord email — required for the landlord notification */
+  landlordEmail?: string | null;
 }
 
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+export interface SendViewingEmailResult {
+  landlord: EmailResult;
+  tenant: EmailResult;
+}
+
+export async function sendViewingEmail(
+  params: SendViewingEmailParams,
+): Promise<SendViewingEmailResult> {
+  const [landlordResult, tenantResult] = await Promise.all([
+    // Landlord email
+    params.landlordEmail
+      ? sendEmail(
+          params.landlordEmail,
+          viewingLandlordSubject(params.listingTitle, params.locale),
+          buildViewingLandlordEmail(params),
+        )
+      : Promise.resolve<EmailResult>({ ok: false, reason: "no_landlord_email" }),
+
+    // Tenant receipt
+    params.requesterEmail
+      ? sendEmail(
+          params.requesterEmail,
+          viewingReceiptSubject(params.listingTitle, params.locale),
+          buildViewingReceiptEmail({
+            locale: params.locale,
+            requesterName: params.requesterName,
+            listingTitle: params.listingTitle,
+            listingUrl: params.listingUrl,
+            preferredDate: params.preferredDate,
+            preferredTime: params.preferredTime,
+          }),
+        )
+      : Promise.resolve<EmailResult>({ ok: false, reason: "no_tenant_email" }),
+  ]);
+
+  return { landlord: landlordResult, tenant: tenantResult };
+}
+
+// ---------------------------------------------------------------------------
+// sendReportEmail
+// Admin receives this when a listing is reported.
+// ---------------------------------------------------------------------------
+
+export interface SendReportEmailParams {
+  locale?: string;
+  listingId: string;
+  listingTitle: string;
+  adminVerifyUrl: string;
+  reason: "scam" | "wrong_info" | "duplicate" | "offensive" | "other";
+  details?: string;
+  reporterEmail?: string | null;
+  reporterId?: string | null;
+}
+
+export type SendReportEmailResult = EmailResult;
+
+export async function sendReportEmail(
+  params: SendReportEmailParams,
+): Promise<SendReportEmailResult> {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail) return { ok: false, reason: "no_admin_email_configured" };
+
+  const locale = params.locale ?? "en";
+  const html = buildReportEmail({ ...params, locale });
+  const subject = reportEmailSubject(params.listingTitle, locale);
+  return sendEmail(adminEmail, subject, html);
+}
+
+// ---------------------------------------------------------------------------
+// sendAlertEmail
+// Tenant receives this daily when their saved search matches new listings.
+// ---------------------------------------------------------------------------
+
+export interface SendAlertEmailParams {
+  locale: string;
+  recipientEmail: string;
+  firstName: string;
+  searchLabel: string;
+  listings: AlertListingItem[];
+  allMatchesUrl: string;
+  unsubscribeUrl: string;
+  alertId: string;
+}
+
+export type SendAlertEmailResult = EmailResult;
+
+export async function sendAlertEmail(
+  params: SendAlertEmailParams,
+): Promise<SendAlertEmailResult> {
+  if (params.listings.length === 0) {
+    return { ok: false, reason: "no_listings" };
+  }
+
+  const html = buildAlertEmail(params);
+  const subject = alertEmailSubject(
+    params.listings.length,
+    params.searchLabel,
+    params.locale,
+  );
+  return sendEmail(params.recipientEmail, subject, html);
 }
