@@ -60,6 +60,11 @@ const nextConfig: NextConfig = {
     // next-intl at the import level instead of shipping the full package.
     optimizePackageImports: ["lucide-react", "next-intl"],
   },
+  // The Supabase Auth email hook reads the brand HTML templates from disk at
+  // request time. Ensure they're included in the serverless function bundle.
+  outputFileTracingIncludes: {
+    "/api/auth/email-hook": ["./supabase/email-templates/**/*"],
+  },
 };
 
 export default withNextIntl(nextConfig);

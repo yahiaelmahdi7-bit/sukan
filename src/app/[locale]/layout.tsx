@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Lato, Noto_Naskh_Arabic } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -8,6 +8,12 @@ import { routing, localeDirection, type Locale } from "@/i18n/routing";
 import Atmosphere from "@/components/atmosphere";
 import BackToDashboardPill from "@/components/back-to-dashboard-pill";
 import { UserLocationProvider } from "@/components/user-location-provider";
+import JsonLd from "@/components/json-ld";
+import { buildOrganizationLD, buildWebSiteLD } from "@/lib/json-ld";
+
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sukansd.com"
+).replace(/\/$/, "");
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -68,7 +74,6 @@ export const metadata: Metadata = {
     address: false,
   },
   manifest: "/manifest.webmanifest",
-  themeColor: "#12100C",
   appleWebApp: {
     capable: true,
     title: "Sukan",
@@ -113,6 +118,10 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#12100C",
+};
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -137,6 +146,8 @@ export default async function LocaleLayout({
       className={`${cormorant.variable} ${lato.variable} ${notoNaskh.variable} h-full antialiased`}
     >
       <body className="relative min-h-full flex flex-col bg-earth text-parchment">
+        <JsonLd data={buildOrganizationLD({ siteUrl: SITE_URL })} />
+        <JsonLd data={buildWebSiteLD({ siteUrl: SITE_URL })} />
         {/* Skip-to-content — first focusable element on every page */}
         <a href="#main" className="skip-link">
           {locale === "ar" ? "انتقل إلى المحتوى الرئيسي" : "Skip to main content"}

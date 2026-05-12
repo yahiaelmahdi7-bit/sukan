@@ -47,6 +47,9 @@ importers:
       resend:
         specifier: ^6.12.3
         version: 6.12.3
+      standardwebhooks:
+        specifier: ^1.0.0
+        version: 1.0.0
       stripe:
         specifier: ^17.7.0
         version: 17.7.0

@@ -1,7 +1,10 @@
 import type { MetadataRoute } from "next";
-import { sampleListings } from "@/lib/sample-listings";
+import { sampleListings, SUDAN_STATES } from "@/lib/sample-listings";
+import { getActiveListings } from "@/lib/listings";
 import { guides } from "@/lib/guides";
 import { insights } from "@/lib/insights";
+import { sudanNeighborhoods } from "@/lib/sudan-neighborhoods";
+import { stateToUrlSlug } from "@/lib/state-labels";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://sukansd.com";
@@ -31,12 +34,13 @@ function entry(
       languages: {
         en: `${BASE_URL}/en${cleanPath}`,
         ar: `${BASE_URL}/ar${cleanPath}`,
+        "x-default": `${BASE_URL}/en${cleanPath}`,
       },
     },
   };
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     entry("/", "daily", 1.0),
     entry("/listings", "daily", 0.9),
@@ -51,9 +55,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // /compare is intentionally excluded — noindex, pure client state, no SEO value
   ];
 
-  const listingRoutes: MetadataRoute.Sitemap = sampleListings.map((listing) =>
-    entry(`/listings/${listing.id}`, "weekly", 0.8),
+  // Pull real active listings from Supabase. Fall back to the sample catalog
+  // if the DB is unreachable so search engines never get an empty sitemap.
+  let realListings: { id: string; createdAt?: string }[] = [];
+  try {
+    const active = await getActiveListings();
+    realListings = active.map((l) => ({ id: l.id, createdAt: l.createdAt }));
+  } catch {
+    realListings = [];
+  }
+
+  const realListingRoutes: MetadataRoute.Sitemap = realListings.map((l) =>
+    entry(
+      `/listings/${l.id}`,
+      "weekly",
+      0.85,
+      l.createdAt ? new Date(l.createdAt) : undefined,
+    ),
   );
+
+  const sampleListingRoutes: MetadataRoute.Sitemap = sampleListings.map(
+    (listing) => entry(`/listings/${listing.id}`, "weekly", 0.7),
+  );
+
+  const listingRoutes: MetadataRoute.Sitemap = [
+    ...realListingRoutes,
+    ...sampleListingRoutes,
+  ];
 
   // Guide index pages (one per locale)
   const guideIndexRoutes: MetadataRoute.Sitemap = [
@@ -80,6 +108,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ),
   );
 
+  // Area landing pages — index, per state, per neighborhood. Big SEO surface.
+  const areaIndexRoute: MetadataRoute.Sitemap = [
+    entry("/areas", "weekly", 0.7),
+  ];
+
+  const stateAreaRoutes: MetadataRoute.Sitemap = SUDAN_STATES.map((state) =>
+    entry(`/areas/${stateToUrlSlug(state)}`, "weekly", 0.8),
+  );
+
+  const neighborhoodAreaRoutes: MetadataRoute.Sitemap = SUDAN_STATES.flatMap(
+    (state) => {
+      const list = sudanNeighborhoods[state] ?? [];
+      return list.map((nb) =>
+        entry(
+          `/areas/${stateToUrlSlug(state)}/${nb.slug}`,
+          "weekly",
+          0.7,
+        ),
+      );
+    },
+  );
+
   return [
     ...staticRoutes,
     ...listingRoutes,
@@ -87,5 +137,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...guideDetailRoutes,
     ...insightIndexRoutes,
     ...insightDetailRoutes,
+    ...areaIndexRoute,
+    ...stateAreaRoutes,
+    ...neighborhoodAreaRoutes,
   ];
 }
