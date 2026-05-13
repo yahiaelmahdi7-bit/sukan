@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import 'leaflet/dist/leaflet.css';
-import { useEffect, useRef, useState } from 'react';
-import type * as L from 'leaflet';
+import "leaflet/dist/leaflet.css";
+import { useEffect, useRef, useState } from "react";
+import type * as L from "leaflet";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type MarkerVariant = 'state' | 'listing' | 'pin' | 'priceLabel';
+export type MarkerVariant = "state" | "listing" | "pin" | "priceLabel";
 
 export interface MapMarker {
   id: string;
@@ -19,10 +19,10 @@ export interface MapMarker {
   popupHtml?: string;
   // priceLabel variant extras
   priceLabel?: string;
-  tone?: 'rent' | 'sale' | 'featured';
+  tone?: "rent" | "sale" | "featured";
 }
 
-export type TileSet = 'satellite' | 'street';
+export type TileSet = "satellite" | "street";
 
 export interface LeafletMapProps {
   center: [number, number];
@@ -64,7 +64,7 @@ function stateIconHtml(count: number | undefined): string {
           padding:0 3px;
           border:1.5px solid #12100C;
         ">${count}</span>`
-      : '';
+      : "";
 
   return `<div style="
     position:relative;
@@ -134,31 +134,31 @@ function pinIconHtml(): string {
   </div>`;
 }
 
-function priceLabelIconHtml(priceLabel: string, tone: 'rent' | 'sale' | 'featured'): string {
+function priceLabelIconHtml(priceLabel: string, tone: "rent" | "sale" | "featured"): string {
   let bg: string;
   let color: string;
   let prefix: string;
   let animClass: string;
 
   switch (tone) {
-    case 'rent':
-      bg = 'linear-gradient(135deg, #2A8B4F, #1A6B3A)';
-      color = '#FDF8F0';
-      prefix = '';
-      animClass = '';
+    case "rent":
+      bg = "linear-gradient(135deg, #2A8B4F, #1A6B3A)";
+      color = "#FDF8F0";
+      prefix = "";
+      animClass = "";
       break;
-    case 'sale':
-      bg = 'linear-gradient(135deg, #E55A30, #C8401A)';
-      color = '#FDF8F0';
-      prefix = '';
-      animClass = '';
+    case "sale":
+      bg = "linear-gradient(135deg, #E55A30, #C8401A)";
+      color = "#FDF8F0";
+      prefix = "";
+      animClass = "";
       break;
-    case 'featured':
+    case "featured":
     default:
-      bg = 'linear-gradient(135deg, #E8B84B, #C8873A)';
-      color = '#12100C';
-      prefix = '★ ';
-      animClass = 'sukan-pin-pulse';
+      bg = "linear-gradient(135deg, #E8B84B, #C8873A)";
+      color = "#12100C";
+      prefix = "★ ";
+      animClass = "sukan-pin-pulse";
       break;
   }
 
@@ -192,7 +192,7 @@ function priceLabelIconHtml(priceLabel: string, tone: 'rent' | 'sale' | 'feature
       height:0;
       border-left:5px solid transparent;
       border-right:5px solid transparent;
-      border-top:7px solid ${tone === 'rent' ? '#1A6B3A' : tone === 'sale' ? '#C8401A' : '#C8873A'};
+      border-top:7px solid ${tone === "rent" ? "#1A6B3A" : tone === "sale" ? "#C8401A" : "#C8873A"};
       margin-top:-1px;
     "></div>
   </div>`;
@@ -220,7 +220,7 @@ type TileLayerConfig = {
   subdomains?: string;
 };
 
-const TILE_LAYERS: Record<'satellite' | 'street', TileLayerConfig> = MAPBOX_TOKEN
+const TILE_LAYERS: Record<"satellite" | "street", TileLayerConfig> = MAPBOX_TOKEN
   ? {
       satellite: {
         url: `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`,
@@ -241,17 +241,17 @@ const TILE_LAYERS: Record<'satellite' | 'street', TileLayerConfig> = MAPBOX_TOKE
     }
   : {
       satellite: {
-        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         attribution:
-          'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+          "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
         maxZoom: 19,
       },
       street: {
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         maxZoom: 20,
-        subdomains: 'abcd',
+        subdomains: "abcd",
       },
     };
 
@@ -263,10 +263,10 @@ export default function LeafletMap({
   markers = [],
   draggable = false,
   onMarkerDrag,
-  height = '400px',
+  height = "400px",
   interactive = true,
-  className = '',
-  tileSet = 'street',
+  className = "",
+  tileSet = "street",
   onMarkerClick,
 }: LeafletMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -283,9 +283,9 @@ export default function LeafletMap({
     let map: L.Map;
 
     (async () => {
-      const leafletModule = await import('leaflet');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const L = (leafletModule.default ?? leafletModule) as typeof import('leaflet');
+      const leafletModule = await import("leaflet");
+
+      const L = (leafletModule.default ?? leafletModule) as typeof import("leaflet");
 
       if (mapRef.current) return; // already mounted
 
@@ -333,9 +333,9 @@ export default function LeafletMap({
     activeTileRef.current = activeTile;
     if (!mapRef.current || !tileLayerRef.current) return;
     (async () => {
-      const leafletModule = await import('leaflet');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const L = (leafletModule.default ?? leafletModule) as typeof import('leaflet');
+      const leafletModule = await import("leaflet");
+
+      const L = (leafletModule.default ?? leafletModule) as typeof import("leaflet");
       tileLayerRef.current?.remove();
       const cfg = TILE_LAYERS[activeTile];
       tileLayerRef.current = L.tileLayer(cfg.url, {
@@ -346,16 +346,15 @@ export default function LeafletMap({
         ...(cfg.subdomains ? { subdomains: cfg.subdomains } : {}),
       }).addTo(mapRef.current!);
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTile]);
 
   // Re-sync markers when they change (without remounting the whole map)
   useEffect(() => {
     if (!mapRef.current) return;
     (async () => {
-      const leafletModule = await import('leaflet');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const L = (leafletModule.default ?? leafletModule) as typeof import('leaflet');
+      const leafletModule = await import("leaflet");
+
+      const L = (leafletModule.default ?? leafletModule) as typeof import("leaflet");
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
       addMarkers(L, mapRef.current!, markers, draggable, onMarkerDrag, onMarkerClick);
@@ -364,7 +363,7 @@ export default function LeafletMap({
   }, [markers]);
 
   function addMarkers(
-    L: typeof import('leaflet'),
+    L: typeof import("leaflet"),
     map: L.Map,
     markers: MapMarker[],
     draggable: boolean,
@@ -378,21 +377,21 @@ export default function LeafletMap({
       let popupAnchor: [number, number];
 
       switch (m.variant) {
-        case 'state':
+        case "state":
           iconHtml = stateIconHtml(m.count);
           iconSize = [32, 32];
           iconAnchor = [16, 16];
           popupAnchor = [0, -20];
           break;
-        case 'listing':
+        case "listing":
           iconHtml = listingIconHtml();
           iconSize = [24, 24];
           iconAnchor = [12, 12];
           popupAnchor = [0, -16];
           break;
-        case 'priceLabel': {
-          const label = m.priceLabel ?? '';
-          const tone = m.tone ?? 'sale';
+        case "priceLabel": {
+          const label = m.priceLabel ?? "";
+          const tone = m.tone ?? "sale";
           iconHtml = priceLabelIconHtml(label, tone);
           // Width is dynamic; use a wide enough default. The icon itself
           // is absolutely positioned via the anchor — anchor at horizontal
@@ -402,7 +401,7 @@ export default function LeafletMap({
           popupAnchor = [0, -44];
           break;
         }
-        case 'pin':
+        case "pin":
         default:
           iconHtml = pinIconHtml();
           iconSize = [40, 52];
@@ -413,7 +412,7 @@ export default function LeafletMap({
 
       const icon = L.divIcon({
         html: iconHtml,
-        className: '', // clear Leaflet's default white box
+        className: "", // clear Leaflet's default white box
         iconSize,
         iconAnchor,
         popupAnchor,
@@ -421,17 +420,17 @@ export default function LeafletMap({
 
       const marker = L.marker(m.position, {
         icon,
-        draggable: m.variant === 'pin' && draggable,
+        draggable: m.variant === "pin" && draggable,
       });
 
-      if (m.variant === 'pin' && draggable && onMarkerDrag) {
-        marker.on('dragend', () => {
+      if (m.variant === "pin" && draggable && onMarkerDrag) {
+        marker.on("dragend", () => {
           const { lat, lng } = marker.getLatLng();
           onMarkerDrag([lat, lng]);
         });
       }
 
-      if (m.label && m.variant === 'state') {
+      if (m.label && m.variant === "state") {
         const tooltipHtml = `<div style="
           background:#1F1A14;
           color:#FDF8F0;
@@ -442,13 +441,13 @@ export default function LeafletMap({
           font-weight:600;
           white-space:nowrap;
           pointer-events:none;
-        ">${m.label}${m.count !== undefined ? `<span style="color:#E0A857;margin-left:6px;">${m.count}</span>` : ''}</div>`;
+        ">${m.label}${m.count !== undefined ? `<span style="color:#E0A857;margin-left:6px;">${m.count}</span>` : ""}</div>`;
 
         marker.bindTooltip(tooltipHtml, {
           permanent: false,
-          direction: 'top',
+          direction: "top",
           opacity: 1,
-          className: 'sukan-tooltip',
+          className: "sukan-tooltip",
         });
       }
 
@@ -456,7 +455,7 @@ export default function LeafletMap({
         marker.bindPopup(m.popupHtml, {
           minWidth: 260,
           maxWidth: 290,
-          className: 'sukan-popup sukan-listing-popup',
+          className: "sukan-popup sukan-listing-popup",
           // No padding — our card handles its own spacing
           autoPan: true,
           autoPanPadding: [20, 20],
@@ -465,24 +464,24 @@ export default function LeafletMap({
 
       // Click handling — priceLabel variant fires callback AND opens popup
       // State variant navigates to the listing page
-      if (m.variant === 'priceLabel' && onMarkerClick) {
-        marker.on('click', () => {
+      if (m.variant === "priceLabel" && onMarkerClick) {
+        marker.on("click", () => {
           onMarkerClick(m.id);
           if (m.popupHtml) {
             marker.openPopup();
           }
         });
-        marker.on('add', () => {
+        marker.on("add", () => {
           const el = marker.getElement();
-          if (el) el.style.cursor = 'pointer';
+          if (el) el.style.cursor = "pointer";
         });
-      } else if (m.href && m.variant === 'state') {
-        marker.on('click', () => {
+      } else if (m.href && m.variant === "state") {
+        marker.on("click", () => {
           window.location.href = m.href!;
         });
-        marker.on('add', () => {
+        marker.on("add", () => {
           const el = marker.getElement();
-          if (el) el.style.cursor = 'pointer';
+          if (el) el.style.cursor = "pointer";
         });
       }
 
@@ -603,38 +602,40 @@ export default function LeafletMap({
           animation: sukanPinPulse 2.4s ease-in-out infinite;
         }
       `}</style>
-      <div style={{ position: 'relative', height, width: '100%' }}>
+      <div style={{ position: "relative", height, width: "100%" }}>
         <div
           ref={containerRef}
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: "100%", width: "100%" }}
           className={`rounded-[var(--radius-card)] overflow-hidden ${className}`}
         />
         {/* Layer toggle button — bottom-end, only shown in interactive mode */}
         {interactive && (
           <button
-            onClick={() => setActiveTile((prev) => prev === 'satellite' ? 'street' : 'satellite')}
+            onClick={() => setActiveTile((prev) => (prev === "satellite" ? "street" : "satellite"))}
             style={{
-              position: 'absolute',
-              bottom: '16px',
-              right: '16px',
+              position: "absolute",
+              bottom: "16px",
+              right: "16px",
               zIndex: 1000,
-              background: 'rgba(18,16,12,0.88)',
-              border: '1.5px solid rgba(200,135,58,0.55)',
-              color: '#E0A857',
-              fontFamily: 'system-ui,-apple-system,sans-serif',
-              fontSize: '12px',
+              background: "rgba(18,16,12,0.88)",
+              border: "1.5px solid rgba(200,135,58,0.55)",
+              color: "#E0A857",
+              fontFamily: "system-ui,-apple-system,sans-serif",
+              fontSize: "12px",
               fontWeight: 700,
-              letterSpacing: '0.04em',
-              padding: '6px 14px',
-              borderRadius: '999px',
-              cursor: 'pointer',
-              backdropFilter: 'blur(6px)',
-              whiteSpace: 'nowrap',
-              transition: 'background 0.15s, border-color 0.15s',
+              letterSpacing: "0.04em",
+              padding: "6px 14px",
+              borderRadius: "999px",
+              cursor: "pointer",
+              backdropFilter: "blur(6px)",
+              whiteSpace: "nowrap",
+              transition: "background 0.15s, border-color 0.15s",
             }}
-            aria-label={activeTile === 'satellite' ? 'Switch to street map' : 'Switch to satellite view'}
+            aria-label={
+              activeTile === "satellite" ? "Switch to street map" : "Switch to satellite view"
+            }
           >
-            {activeTile === 'satellite' ? '🗺 Street' : '🛰 Satellite'}
+            {activeTile === "satellite" ? "🗺 Street" : "🛰 Satellite"}
           </button>
         )}
       </div>

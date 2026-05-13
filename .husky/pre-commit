@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+echo "🔍 Running pre-commit checks..."
+
+echo "  → Scanning for demo/test tokens..."
+pnpm run check:secrets || { echo "❌ BLOCKED: Demo/test tokens found."; exit 1; }
+
+echo "  → Linting staged files..."
+pnpm exec lint-staged || { echo "❌ BLOCKED: Lint errors."; exit 1; }
+
+echo "  → Type checking..."
+pnpm run typecheck || { echo "❌ BLOCKED: TypeScript errors."; exit 1; }
+
+echo "✅ Pre-commit checks passed."

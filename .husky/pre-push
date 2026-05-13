@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+echo "🚀 Running pre-push checks..."
+
+protected_branch='main'
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+if [ "$current_branch" = "$protected_branch" ]; then
+  echo "❌ BLOCKED: Don't push directly to main. Use a feature branch + PR."
+  exit 1
+fi
+
+echo "  → Scanning for secrets..."
+pnpm run check:secrets || { echo "❌ BLOCKED: Demo/test tokens or secrets found."; exit 1; }
+
+echo "  → Build..."
+pnpm run build || { echo "❌ BLOCKED: Build failed."; exit 1; }
+
+echo "✅ Pre-push checks passed."

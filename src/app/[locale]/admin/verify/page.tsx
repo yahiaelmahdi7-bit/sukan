@@ -22,7 +22,7 @@ type ProfileRow = {
 // ── Role badge ───────────────────────────────────────────────────────────────
 
 function RoleBadge({ role, isAgent }: { role: string | null; isAgent: boolean }) {
-  const label = isAgent ? "Agent" : role === "landlord" ? "Landlord" : role ?? "—";
+  const label = isAgent ? "Agent" : role === "landlord" ? "Landlord" : (role ?? "—");
   const cls = isAgent
     ? "bg-gold/15 text-gold-dk border-gold/30"
     : role === "landlord"
@@ -73,11 +73,7 @@ function StatsRow({
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function AdminVerifyPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function AdminVerifyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("adminVerify");
@@ -108,7 +104,12 @@ export default async function AdminVerifyPage({
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-        <GlassPanel variant="warm" radius="card" highlight className="p-10 text-center max-w-sm w-full">
+        <GlassPanel
+          variant="warm"
+          radius="card"
+          highlight
+          className="p-10 text-center max-w-sm w-full"
+        >
           <p className="font-display text-3xl text-ink mb-3">403</p>
           <p className="font-semibold text-ink mb-2">{t("notAuthorizedTitle")}</p>
           <p className="text-sm text-ink-mid">{t("notAuthorizedBody")}</p>
@@ -137,7 +138,7 @@ export default async function AdminVerifyPage({
     if (profileData) {
       // Fetch listing counts per owner in a single query
       const ownerIds = profileData.map((p) => p.id);
-      let listingCounts: Record<string, number> = {};
+      const listingCounts: Record<string, number> = {};
 
       if (ownerIds.length > 0) {
         const { data: listingData } = await supabase
@@ -222,7 +223,13 @@ export default async function AdminVerifyPage({
 
         {/* Table */}
         {!fetchError && profiles.length > 0 && (
-          <GlassPanel variant="cream" radius="glass" highlight shadow="lg" className="overflow-x-auto">
+          <GlassPanel
+            variant="cream"
+            radius="glass"
+            highlight
+            shadow="lg"
+            className="overflow-x-auto"
+          >
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/50">

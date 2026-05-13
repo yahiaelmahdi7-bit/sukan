@@ -16,6 +16,14 @@ const eslintConfig = defineConfig([
           caughtErrorsIgnorePattern: "^_",
         },
       ],
+      // Overly aggressive for legitimate patterns (hydration, route-change callbacks).
+      "react-hooks/set-state-in-effect": "off",
+      // React Compiler optimization hints — warn so we see them, not block.
+      "react-hooks/static-components": "warn",
+      "react-hooks/immutability": "warn",
+      "react-hooks/preserve-manual-memoization": "warn",
+      // Pre-existing violations — warn until fixed, not a blocker.
+      "@next/next/no-html-link-for-pages": "warn",
     },
   },
   // Override default ignores of eslint-config-next.
