@@ -4,11 +4,7 @@ import InquiryInboxList from "./_components/inquiry-inbox-list";
 import { getMockInquiries } from "../_data/mock-inquiries";
 import { getInquiriesForUser } from "../_data/inquiries";
 
-export default async function InquiriesPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function InquiriesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
@@ -25,8 +21,8 @@ export default async function InquiriesPage({
   const isReal = realInquiries.length > 0;
 
   // Batch-fetch last message per inquiry (single query, not N+1)
-  let lastMessageMap: Record<string, { body: string | null; created_at: string }> = {};
-  let unreadCountMap: Record<string, number> = {};
+  const lastMessageMap: Record<string, { body: string | null; created_at: string }> = {};
+  const unreadCountMap: Record<string, number> = {};
 
   if (user && isReal && inquiries.length > 0) {
     const inquiryIds = inquiries.map((i) => i.id);
@@ -49,10 +45,7 @@ export default async function InquiriesPage({
           };
         }
         // Count unread from counterparty
-        if (
-          msg.sender_id !== user.id &&
-          msg.read_at === null
-        ) {
+        if (msg.sender_id !== user.id && msg.read_at === null) {
           unreadCountMap[iid] = (unreadCountMap[iid] ?? 0) + 1;
         }
       }
