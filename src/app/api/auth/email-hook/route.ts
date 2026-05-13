@@ -13,23 +13,23 @@
  * Docs: https://supabase.com/docs/guides/auth/auth-hooks/send-email-hook
  */
 
-import { NextResponse } from "next/server";
-import { Resend } from "resend";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-import { Webhook } from "standardwebhooks";
+import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { Webhook } from 'standardwebhooks';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 type EmailActionType =
-  | "signup"
-  | "magiclink"
-  | "recovery"
-  | "invite"
-  | "email_change"
-  | "email_change_current"
-  | "email_change_new"
-  | "reauthentication";
+  | 'signup'
+  | 'magiclink'
+  | 'recovery'
+  | 'invite'
+  | 'email_change'
+  | 'email_change_current'
+  | 'email_change_new'
+  | 'reauthentication';
 
 type Payload = {
   user: { id: string; email: string };
@@ -44,11 +44,7 @@ type Payload = {
   };
 };
 
-const TEMPLATES_DIR = path.join(
-  process.cwd(),
-  "supabase",
-  "email-templates",
-);
+const TEMPLATES_DIR = path.join(process.cwd(), 'supabase', 'email-templates');
 
 // ─── Template + subject mapping ──────────────────────────────────────────────
 
@@ -57,31 +53,31 @@ function templateFor(action: EmailActionType): {
   subject: string;
 } | null {
   switch (action) {
-    case "signup":
+    case 'signup':
       return {
-        file: "confirm-signup.html",
-        subject: "Confirm your Sukan account · أكّد حسابك في سُكان",
+        file: 'confirm-signup.html',
+        subject: 'Confirm your Sukan account · أكّد حسابك في سُكان',
       };
-    case "magiclink":
+    case 'magiclink':
       return {
-        file: "magic-link.html",
-        subject: "Your Sukan sign-in link · رابط تسجيل الدخول",
+        file: 'magic-link.html',
+        subject: 'Your Sukan sign-in link · رابط تسجيل الدخول',
       };
-    case "recovery":
+    case 'recovery':
       return {
-        file: "reset-password.html",
-        subject: "Reset your Sukan password · إعادة تعيين كلمة المرور",
+        file: 'reset-password.html',
+        subject: 'Reset your Sukan password · إعادة تعيين كلمة المرور',
       };
     // email_change / invite / reauthentication fall back to the magic-link
     // shell; copy still reads correctly. Build dedicated templates when needed.
-    case "invite":
-    case "email_change":
-    case "email_change_current":
-    case "email_change_new":
-    case "reauthentication":
+    case 'invite':
+    case 'email_change':
+    case 'email_change_current':
+    case 'email_change_new':
+    case 'reauthentication':
       return {
-        file: "magic-link.html",
-        subject: "Action required on your Sukan account",
+        file: 'magic-link.html',
+        subject: 'Action required on your Sukan account',
       };
     default:
       return null;
@@ -90,13 +86,17 @@ function templateFor(action: EmailActionType): {
 
 // ─── Build the confirmation URL Supabase would have built itself ─────────────
 
-function buildConfirmationUrl(d: Payload["email_data"]): string {
-  // Supabase's internal verify endpoint — mirrors what {{ .ConfirmationURL }}
-  // expands to in the dashboard templates.
-  const url = new URL(`${d.site_url.replace(/\/$/, "")}/auth/v1/verify`);
-  url.searchParams.set("token", d.token_hash);
-  url.searchParams.set("type", d.email_action_type);
-  url.searchParams.set("redirect_to", d.redirect_to);
+function buildConfirmationUrl(d: Payload['email_data']): string {
+  // The verification endpoint lives on the Supabase project, NOT on the app
+  // domain. NEXT_PUBLIC_SUPABASE_URL gives us the correct base.
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!supabaseUrl) {
+    throw new Error('NEXT_PUBLIC_SUPABASE_URL is required');
+  }
+  const url = new URL(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/verify`);
+  url.searchParams.set('token', d.token_hash);
+  url.searchParams.set('type', d.email_action_type);
+  url.searchParams.set('redirect_to', d.redirect_to);
   return url.toString();
 }
 
@@ -105,50 +105,47 @@ function buildConfirmationUrl(d: Payload["email_data"]): string {
 export async function POST(req: Request) {
   const secret = process.env.SUPABASE_AUTH_HOOK_SECRET;
   const resendKey = process.env.RESEND_API_KEY;
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "Sukan <no-reply@sukansd.com>";
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'Sukan <no-reply@sukansd.com>';
 
   if (!secret || !resendKey) {
-    return NextResponse.json(
-      { error: "email hook not configured" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'email hook not configured' }, { status: 500 });
   }
 
   // Verify the webhook signature using Standard Webhooks (svix-compatible)
   const rawBody = await req.text();
   const headers = {
-    "webhook-id": req.headers.get("webhook-id") ?? "",
-    "webhook-timestamp": req.headers.get("webhook-timestamp") ?? "",
-    "webhook-signature": req.headers.get("webhook-signature") ?? "",
+    'webhook-id': req.headers.get('webhook-id') ?? '',
+    'webhook-timestamp': req.headers.get('webhook-timestamp') ?? '',
+    'webhook-signature': req.headers.get('webhook-signature') ?? '',
   };
 
   let payload: Payload;
   try {
     // Supabase stores the secret base64-encoded with a "v1,whsec_" prefix.
     // Standard Webhooks expects the raw base64 portion.
-    const cleanedSecret = secret.replace(/^v1,whsec_/, "");
+    const cleanedSecret = secret.replace(/^v1,whsec_/, '');
     const wh = new Webhook(cleanedSecret);
     payload = wh.verify(rawBody, headers) as Payload;
   } catch (err) {
-    console.error("[auth-email-hook] signature verification failed", err);
-    return NextResponse.json({ error: "invalid signature" }, { status: 401 });
+    console.error('[auth-email-hook] signature verification failed', err);
+    return NextResponse.json({ error: 'invalid signature' }, { status: 401 });
   }
 
   const action = payload.email_data?.email_action_type;
   const tpl = templateFor(action);
   if (!tpl) {
-    console.error("[auth-email-hook] unsupported action", action);
-    return NextResponse.json({ error: "unsupported action" }, { status: 400 });
+    console.error('[auth-email-hook] unsupported action', action);
+    return NextResponse.json({ error: 'unsupported action' }, { status: 400 });
   }
 
   const confirmationUrl = buildConfirmationUrl(payload.email_data);
 
   let html: string;
   try {
-    html = await readFile(path.join(TEMPLATES_DIR, tpl.file), "utf8");
+    html = await readFile(path.join(TEMPLATES_DIR, tpl.file), 'utf8');
   } catch (err) {
-    console.error("[auth-email-hook] template read failed", tpl.file, err);
-    return NextResponse.json({ error: "template missing" }, { status: 500 });
+    console.error('[auth-email-hook] template read failed', tpl.file, err);
+    return NextResponse.json({ error: 'template missing' }, { status: 500 });
   }
 
   // Supabase template variables aren't interpolated by Supabase when we
@@ -165,8 +162,8 @@ export async function POST(req: Request) {
   });
 
   if (sendError) {
-    console.error("[auth-email-hook] resend send failed", sendError);
-    return NextResponse.json({ error: "send failed" }, { status: 502 });
+    console.error('[auth-email-hook] resend send failed', sendError);
+    return NextResponse.json({ error: 'send failed' }, { status: 502 });
   }
 
   return NextResponse.json({});
