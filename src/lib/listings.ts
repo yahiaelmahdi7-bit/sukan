@@ -76,13 +76,10 @@ function toNumber(v: number | string | null | undefined): number | undefined {
 
 function mapDbListing(row: DbListing): Listing {
   const priceRaw = toNumber(row.price) ?? 0;
-  const priceUsd =
-    row.currency === "USD" ? priceRaw : priceRaw / SDG_PER_USD;
-  const priceSdg =
-    row.currency === "SDG" ? priceRaw : undefined;
+  const priceUsd = row.currency === "USD" ? priceRaw : priceRaw / SDG_PER_USD;
+  const priceSdg = row.currency === "SDG" ? priceRaw : undefined;
 
-  const ownerName =
-    row.profiles?.full_name?.trim() ?? "Owner";
+  const ownerName = row.profiles?.full_name?.trim() ?? "Owner";
   const ownerJoinedYear = row.profiles?.created_at
     ? new Date(row.profiles.created_at).getFullYear()
     : new Date().getFullYear();
@@ -123,6 +120,49 @@ function mapDbListing(row: DbListing): Listing {
 }
 
 /**
+ * Single batched query: fetches all listing_photos rows for the given listing
+ * ids, groups them by listing_id ordered by position, and merges the public
+ * URLs into the listings array as `photos`. Never issues N+1 queries — one
+ * SELECT covers all listings in one round-trip.
+ */
+async function attachListingPhotos(listings: Listing[]): Promise<Listing[]> {
+  if (listings.length === 0) return listings;
+
+  const listingIds = listings.map((l) => l.id);
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("listing_photos")
+      .select("listing_id, url, position")
+      .in("listing_id", listingIds)
+      .order("position", { ascending: true });
+
+    if (error || !data) return listings;
+
+    const photoMap = new Map<string, string[]>();
+    for (const row of data as {
+      listing_id: string;
+      url: string | null;
+      position: number;
+    }[]) {
+      if (!row.url) continue;
+      const arr = photoMap.get(row.listing_id) ?? [];
+      arr.push(row.url);
+      photoMap.set(row.listing_id, arr);
+    }
+
+    return listings.map((listing) => {
+      const photos = photoMap.get(listing.id);
+      if (!photos || photos.length === 0) return listing;
+      return { ...listing, photos, imageUrl: photos[0] };
+    });
+  } catch {
+    return listings;
+  }
+}
+
+/**
  * Single batched query: fetches rating rows for all listing ids, aggregates
  * avg + count in-process, and merges into the listings array.
  * Never issues N+1 queries — one SELECT covers all listings in one round-trip.
@@ -147,8 +187,7 @@ async function attachLandlordRatings(listings: Listing[]): Promise<Listing[]> {
       const existing = agg.get(row.listing_id);
       if (existing) {
         existing.avg_rating =
-          (existing.avg_rating * existing.review_count + row.rating) /
-          (existing.review_count + 1);
+          (existing.avg_rating * existing.review_count + row.rating) / (existing.review_count + 1);
         existing.review_count += 1;
       } else {
         agg.set(row.listing_id, {
@@ -188,7 +227,8 @@ export async function getActiveListings(): Promise<Listing[]> {
 
     if (error || !data) return [];
     const listings = (data as unknown as DbListing[]).map(mapDbListing);
-    return attachLandlordRatings(listings);
+    const withPhotos = await attachListingPhotos(listings);
+    return attachLandlordRatings(withPhotos);
   } catch {
     return [];
   }
@@ -219,7 +259,8 @@ export async function getMyListings(userId: string): Promise<Listing[]> {
 
     if (error || !data) return [];
     const listings = (data as unknown as DbListing[]).map(mapDbListing);
-    return attachLandlordRatings(listings);
+    const withPhotos = await attachListingPhotos(listings);
+    return attachLandlordRatings(withPhotos);
   } catch {
     return [];
   }
@@ -239,9 +280,8 @@ export async function getListingByIdAsync(id: string): Promise<Listing | undefin
       .maybeSingle();
 
     if (!error && data) {
-      const [withRating] = await attachLandlordRatings([
-        mapDbListing(data as unknown as DbListing),
-      ]);
+      const [withPhotos] = await attachListingPhotos([mapDbListing(data as unknown as DbListing)]);
+      const [withRating] = await attachLandlordRatings([withPhotos]);
       return withRating;
     }
   } catch {

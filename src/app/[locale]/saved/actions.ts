@@ -115,8 +115,46 @@ export async function getListingsByIds(ids: string[]): Promise<Listing[]> {
       .eq("status", "active");
 
     if (data) {
+      const dbIds: string[] = [];
       for (const row of data as unknown as DbListing[]) {
         byId.set(row.id, mapDbListing(row));
+        dbIds.push(row.id);
+      }
+
+      // Batched join: fetch all listing_photos for the resolved DB rows in one
+      // round-trip and merge their public URLs onto each listing as `photos`.
+      // Without this, ListingCard falls back to stock images and the user sees
+      // a placeholder instead of their uploaded photo.
+      if (dbIds.length > 0) {
+        const { data: photoRows } = await supabase
+          .from("listing_photos")
+          .select("listing_id, url, position")
+          .in("listing_id", dbIds)
+          .order("position", { ascending: true });
+
+        if (photoRows) {
+          const photoMap = new Map<string, string[]>();
+          for (const row of photoRows as {
+            listing_id: string;
+            url: string | null;
+            position: number;
+          }[]) {
+            if (!row.url) continue;
+            const arr = photoMap.get(row.listing_id) ?? [];
+            arr.push(row.url);
+            photoMap.set(row.listing_id, arr);
+          }
+          for (const [listingId, photos] of photoMap) {
+            const existing = byId.get(listingId);
+            if (existing) {
+              byId.set(listingId, {
+                ...existing,
+                photos,
+                imageUrl: photos[0],
+              });
+            }
+          }
+        }
       }
     }
   } catch {
@@ -139,7 +177,9 @@ export async function getListingsByIds(ids: string[]): Promise<Listing[]> {
 export async function clearAllSaved(): Promise<{ ok: boolean }> {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return { ok: false };
     await supabase.from("saved_listings").delete().eq("user_id", user.id);
     return { ok: true };
