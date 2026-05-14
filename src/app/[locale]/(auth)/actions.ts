@@ -70,11 +70,17 @@ export async function signUp(_prevState: ActionResult, formData: FormData): Prom
 
 // ─── Sign Out ────────────────────────────────────────────────────────────────
 
-export async function signOut(): Promise<never> {
+// Returns an ActionResult instead of redirecting. The client component drives
+// the navigation after this resolves, which is far more reliable than
+// throwing NEXT_REDIRECT from a server action invoked outside a <form>.
+export async function signOut(): Promise<ActionResult> {
   const supabase = await createClient();
-  await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    return { error: error.message };
+  }
   revalidatePath('/', 'layout');
-  redirect('/');
+  return { error: null };
 }
 
 // ─── Request Password Reset ──────────────────────────────────────────────────
