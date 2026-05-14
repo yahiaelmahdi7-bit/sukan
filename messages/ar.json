@@ -471,6 +471,8 @@
     },
     "settings": "الإعدادات",
     "signOut": "تسجيل الخروج",
+    "signingOut": "جارٍ تسجيل الخروج…",
+    "signOutError": "تعذّر تسجيل الخروج. حاول مرة أخرى.",
     "welcomeBack": "مرحباً، {name}",
     "newListing": "+ إعلان جديد",
     "editProfile": "تعديل الملف",

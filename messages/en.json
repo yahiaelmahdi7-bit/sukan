@@ -471,6 +471,8 @@
     },
     "settings": "Settings",
     "signOut": "Sign out",
+    "signingOut": "Signing out…",
+    "signOutError": "Couldn't sign out. Please try again.",
     "welcomeBack": "Hello, {name}",
     "newListing": "+ New listing",
     "editProfile": "Edit profile",
