@@ -1,18 +1,18 @@
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export type ActionResult = { error: string | null };
 
 // ─── Sign In ─────────────────────────────────────────────────────────────────
 
 export async function signIn(_prevState: ActionResult, formData: FormData): Promise<ActionResult> {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -21,18 +21,18 @@ export async function signIn(_prevState: ActionResult, formData: FormData): Prom
     return { error: error.message };
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/dashboard');
+  revalidatePath("/", "layout");
+  redirect("/dashboard");
 }
 
 // ─── Sign Up ─────────────────────────────────────────────────────────────────
 
 export async function signUp(_prevState: ActionResult, formData: FormData): Promise<ActionResult> {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const fullName = formData.get('full_name') as string;
-  const role = formData.get('role') as string;
-  const locale = (formData.get('locale') as string) ?? 'en';
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const fullName = formData.get("full_name") as string;
+  const role = formData.get("role") as string;
+  const locale = (formData.get("locale") as string) ?? "en";
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
@@ -52,7 +52,7 @@ export async function signUp(_prevState: ActionResult, formData: FormData): Prom
   // a user with `identities` length 0 when the email is a duplicate).
   if (data.user) {
     try {
-      await supabase.from('profiles').insert({
+      await supabase.from("profiles").insert({
         id: data.user.id,
         full_name: fullName || null,
         role: role || null,
@@ -60,7 +60,7 @@ export async function signUp(_prevState: ActionResult, formData: FormData): Prom
       });
     } catch (profileErr) {
       // Non-fatal: user can complete profile later.
-      console.error('[sign-up] profiles insert failed:', profileErr);
+      console.error("[sign-up] profiles insert failed:", profileErr);
     }
   }
 
@@ -70,21 +70,27 @@ export async function signUp(_prevState: ActionResult, formData: FormData): Prom
 
 // ─── Sign Out ────────────────────────────────────────────────────────────────
 
-export async function signOut(): Promise<never> {
+// Returns an ActionResult instead of redirecting. The client component drives
+// the navigation after this resolves, which is far more reliable than
+// throwing NEXT_REDIRECT from a server action invoked outside a <form>.
+export async function signOut(): Promise<ActionResult> {
   const supabase = await createClient();
-  await supabase.auth.signOut();
-  revalidatePath('/', 'layout');
-  redirect('/');
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    return { error: error.message };
+  }
+  revalidatePath("/", "layout");
+  return { error: null };
 }
 
 // ─── Request Password Reset ──────────────────────────────────────────────────
 
 export async function requestPasswordReset(
   _prevState: ActionResult,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResult> {
-  const email = formData.get('email') as string;
-  const locale = (formData.get('locale') as string) ?? 'en';
+  const email = formData.get("email") as string;
+  const locale = (formData.get("locale") as string) ?? "en";
 
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -102,9 +108,9 @@ export async function requestPasswordReset(
 
 export async function resetPassword(
   _prevState: ActionResult,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResult> {
-  const password = formData.get('password') as string;
+  const password = formData.get("password") as string;
 
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password });
@@ -113,18 +119,18 @@ export async function resetPassword(
     return { error: error.message };
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/');
+  revalidatePath("/", "layout");
+  redirect("/");
 }
 
 // ─── Magic Link ──────────────────────────────────────────────────────────────
 
 export async function signInWithMagicLink(
   _prevState: ActionResult,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResult> {
-  const email = formData.get('email') as string;
-  const locale = (formData.get('locale') as string) ?? 'en';
+  const email = formData.get("email") as string;
+  const locale = (formData.get("locale") as string) ?? "en";
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
