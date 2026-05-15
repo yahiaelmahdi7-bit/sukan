@@ -30,6 +30,7 @@ type DbListingForEdit = {
   price: number | string;
   currency: string;
   price_period: string | null;
+  amenities: string[] | null;
   tier: string;
   status: string;
   updated_at: string | null;
@@ -74,7 +75,7 @@ export default async function EditListingPage({
   const { data: listing, error } = await supabase
     .from("listings")
     .select(
-      "id, owner_id, title_en, title_ar, description_en, description_ar, property_type, purpose, state, city, neighborhood, address_line, latitude, longitude, bedrooms, bathrooms, area_sqm, price, currency, price_period, tier, status, updated_at",
+      "id, owner_id, title_en, title_ar, description_en, description_ar, property_type, purpose, state, city, neighborhood, address_line, latitude, longitude, bedrooms, bathrooms, area_sqm, price, currency, price_period, amenities, tier, status, updated_at",
     )
     .eq("id", id)
     .maybeSingle();
@@ -122,6 +123,7 @@ export default async function EditListingPage({
       (row.price_period as PostFormShape["period"]) || "month",
     descriptionEn: row.description_en ?? "",
     descriptionAr: row.description_ar ?? "",
+    amenities: (row.amenities ?? []) as PostFormShape["amenities"],
     state: (row.state as PostFormShape["state"]) || "",
     city: row.city ?? "",
     neighborhood: row.neighborhood ?? "",

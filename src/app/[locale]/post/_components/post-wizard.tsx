@@ -10,6 +10,8 @@ import { GlassSelect } from "@/components/ui/glass-select";
 import { GlassButton } from "@/components/ui/glass-button";
 import { PhotoUpload } from "@/components/photo-upload";
 import PostMap from "./post-map";
+import AmenitiesSection from "./amenities-section";
+import type { Amenity } from "@/lib/sample-listings";
 import { createListing, attachPhotos, updateListing } from "../actions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -62,6 +64,7 @@ export interface PostDraft {
   period: PeriodKey;
   descriptionEn: string;
   descriptionAr: string;
+  amenities: Amenity[];
   // Step 2
   state: StateKey | "";
   city: string;
@@ -88,6 +91,7 @@ const INITIAL_DRAFT: PostDraft = {
   period: "month",
   descriptionEn: "",
   descriptionAr: "",
+  amenities: [],
   state: "",
   city: "",
   neighborhood: "",
@@ -447,7 +451,7 @@ function Step1({
           areaSqm: draft.area ? Number(draft.area) : null,
           state: draft.state,
           city: draft.city,
-          amenities: [],
+          amenities: draft.amenities,
           purpose: draft.purpose,
           price: draft.price ? Number(draft.price) : null,
         }),
@@ -498,7 +502,7 @@ function Step1({
           areaSqm: draft.area ? Number(draft.area) : null,
           state: draft.state,
           city: draft.city,
-          amenities: [],
+          amenities: draft.amenities,
           purpose: draft.purpose,
         }),
       });
@@ -803,6 +807,12 @@ function Step1({
           />
         </div>
       </div>
+
+      {/* Amenities — collapsible, multi-select, grouped by category */}
+      <AmenitiesSection
+        selected={draft.amenities}
+        onChange={(amenities) => update({ amenities })}
+      />
     </div>
   );
 }
@@ -1067,6 +1077,12 @@ function Step4({
                       },
                     ]
                   : []),
+                {
+                  label: t("summaryAmenities"),
+                  value: t("summaryAmenitiesCount", {
+                    count: draft.amenities.length,
+                  }),
+                },
                 {
                   label: t("summaryPhotos"),
                   value: t("summaryPhotosCount", {
@@ -1681,7 +1697,7 @@ export default function PostWizard({
           price: Number(draft.price),
           currency: draft.currency,
           pricePeriod: draft.period,
-          amenities: [],
+          amenities: draft.amenities,
           whatsappContact: null,
         },
         draft.photoUrls,
@@ -1748,7 +1764,7 @@ export default function PostWizard({
         price: Number(draft.price),
         currency: draft.currency,
         pricePeriod: draft.period,
-        amenities: [],
+        amenities: draft.amenities,
         tier: draft.tier,
         whatsappContact: null,
       });
