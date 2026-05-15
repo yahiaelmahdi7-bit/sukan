@@ -59,18 +59,56 @@ export type PricePeriod = "month" | "year" | "total";
 export type Tier = "standard" | "featured";
 
 export type Amenity =
-  | "parking"
+  // Essentials
+  | "ac"
+  | "heating"
   | "generator"
   | "water_tank"
-  | "furnished"
-  | "garden"
-  | "security"
-  | "ac"
   | "solar"
   | "wifi"
-  | "elevator"
+  | "hot_water"
+  | "furnished"
+  | "semi_furnished"
+  | "unfurnished"
+  // Kitchen
+  | "fitted_kitchen"
+  | "refrigerator"
+  | "oven"
+  | "microwave"
+  | "dishwasher"
+  | "washing_machine"
+  // Comfort & indoor
   | "balcony"
-  | "rooftop";
+  | "builtin_wardrobes"
+  | "storage_room"
+  | "maid_room"
+  | "driver_room"
+  | "majlis"
+  | "dining_room"
+  | "study_room"
+  // Outdoor
+  | "private_garden"
+  | "shared_garden"
+  | "private_pool"
+  | "shared_pool"
+  | "rooftop"
+  | "bbq"
+  | "yard"
+  | "garden"
+  // Security & building
+  | "security"
+  | "cctv"
+  | "intercom"
+  | "gated_community"
+  | "elevator"
+  // Parking
+  | "parking"
+  | "covered_parking"
+  | "garage"
+  // Community
+  | "gym"
+  | "playground"
+  | "mosque_nearby";
 
 export type Listing = {
   id: string;
